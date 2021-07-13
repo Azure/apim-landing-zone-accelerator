@@ -8,7 +8,7 @@
         "vmazdevopsPassword": {
             "value": "$1test_password"
         },
-        "vstsAccount": {
+        "azureDevOpsAccount": {
             "value": "https://dev.azure.com/ORGNAME"
         },
         "personalAccessToken": {
