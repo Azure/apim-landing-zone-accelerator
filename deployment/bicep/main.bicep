@@ -14,6 +14,7 @@ param environment string
 var resourceSuffix = '${workloadName}-${environment}-${location}-001'
 // RG Names Declaration
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
+var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
 
 // Create resources name using these objects and pass it as a params in module
@@ -26,6 +27,10 @@ resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
+resource backendRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: backendResourceGroupName
+  location: location
+}
 
 resource sharedRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: sharedResourceGroupName
@@ -35,6 +40,15 @@ resource sharedRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 module networking 'networking.bicep' = {
   name: 'networkingresources'
   scope: resourceGroup(networkingRG.name)
+  params: {
+    workloadName: workloadName
+    environment: environment
+  }
+}
+
+module backend 'backend.bicep' = {
+  name: 'backendresources'
+  scope: resourceGroup(backendRG.name)
   params: {
     workloadName: workloadName
     environment: environment
