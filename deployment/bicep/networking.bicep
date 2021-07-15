@@ -329,9 +329,13 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
 output apimCSVNetName string = apimCSVNetName
 output apimCSVNetId string = vnetApimCs.id
 
-output bastionSubnetName string = bastionSubnetName
-output devOpsSubnetName string = devOpsSubnetName
-output jumpBoxSubnetName string = jumpBoxSubnetName
+output bastionSubnetName string = bastionSubnetName  
+output devOpsSubnetName string = devOpsSubnetName  
+output jumpBoxSubnetName string = jumpBoxSubnetName  
+output appGatewaySubnetName string = appGatewaySubnetName  
+output privateEndpointSubnetName string = privateEndpointSubnetName  
+output backEndSubnetName string = backEndSubnetName  
+output apimSubnetName string = apimSubnetName  
 
 output publicIp string = pip.id
 
