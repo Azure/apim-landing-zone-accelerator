@@ -30,6 +30,7 @@ var sharedResourceGroupResources = {
    'environmentName': environment
    'resourceSuffix' : resourceSuffix
    'vmSuffix' : vmSuffix
+   'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
 }
 
 
@@ -66,18 +67,8 @@ resource networkRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-module vnet_generic './vnettest/vnetWithOutBastian.bicep' = {
-  name: 'vnet'
-  scope: resourceGroup(networkRg.name)
-  params: {
-    namePrefix: 'test-vnet'
-  }
-}
-
-// this should be replaced with call to networking.. module
-var subnetId=vnet_generic.outputs.subnetId
-
-// end testing subnet
+var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
+var agentSubnetId=networking.outputs.devOpsSubnetid
 
 
 
@@ -88,7 +79,8 @@ module shared './shared/shared.bicep' = {
   params: {
     location: location
     sharedResourceGroupResources : sharedResourceGroupResources
-    subnetId: subnetId
+    jumpboxSubnetId: jumpboxSubnetId
+    agentSubnetId: agentSubnetId
     vmazdevopsPassword:vmazdevopsPassword
     vmazdevopsUsername: vmazdevopsUsername
     personalAccessToken: personalAccessToken
