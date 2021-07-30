@@ -1,0 +1,18 @@
+#varibles for the APIM-ESLZ default pipeline
+# Edit the values to match your desired configuration
+
+variables:
+- name: environmentName         # Creates an Azure DevOps Environment to track deployments and set checks and contraints
+  value: APIM-ESLZ
+- name: serviceConnectionName   # Name of the serviceconnection to the target ESLZ Azure subscription
+  value: my-ESLZ
+- name: deploymentLocation      # Azure region to deploy recources into
+  value: westeurope
+- name: deploymentName          # Name of deployment to label ARM deployments in the Azure Portal
+  value: 'api-management-ESLZ'
+- name: artifactName            # Name of the pipeline artifact to be created and deployed
+  value: 'apim-eslz-bicep-files'
+- name: workloadName            # Label for naming the workload in the portal as part of deployment
+  value: 'Api-Management-ESLZ'
+- name: eslzEnvironmentType     # Specifier for target environment type. Options ['dev', 'uat', 'prod', 'dr']
+  value: 'dev'
