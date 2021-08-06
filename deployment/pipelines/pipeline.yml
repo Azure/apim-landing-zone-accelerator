@@ -1,0 +1,58 @@
+# Base pipeline to deploy APIM ESLZ with default configuration
+# Instructions:
+# 1) Create a service connection in Azure Devops to Github so the remote repo where the Bicep files
+#    of APIM- ESLZ are located can be downloaded
+# 2) Enter the correct name of the APIM- ESLZ repo and the name of the just created 
+#    service endpoint for the Github on lines 22 and 23
+# 3) Substitute all variable values in the connected template apim-eslz-vars.yml 
+#    to align with your environment
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- template: apim-eslz-vars.yml
+
+resources:
+  repositories:
+  - repository: apimeslz
+    type: github
+    name: cykreng/Enterprise-Scale-APIM
+    endpoint: <Github service connection name>
+
+stages:
+  - stage: retrieve_template_from_github_and_publish
+    displayName: 'Fetch templates from github and store in pipeline'
+    jobs:
+      - job: publish_artifact_to_pipeline
+        displayName: 'Publish bicep files as artifact to pipeline'
+        steps:
+          - checkout: apimeslz
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: '$(Pipeline.Workspace)/s/deployment/bicep'
+              artifact: $(artifactName)
+              publishLocation: 'pipeline'
+  - stage: deploy_artifacts
+    displayName: 'Deploy all bicep artifacts'
+    jobs:
+      - deployment: 
+        displayName: 'Deploy APIM ESLZ artifacts to Azure subscription'
+        environment: $(environmentName)
+        strategy:
+         runOnce:
+           deploy:
+             steps:
+               - download: current
+                 artifact: $(artifactName)
+               - task: AzureCLI@2
+                 inputs:
+                   azureSubscription: $(serviceConnectionName)
+                   scriptType: 'pscore'
+                   scriptLocation: 'inlineScript'
+                   inlineScript: |
+                    echo "using serviceconnection :" $(serviceConnectionName)
+                    az deployment sub create --location $(deploymentLocation) --name $(deploymentName) --template-file $(Pipeline.Workspace)/$(artifactName)/main.bicep --parameters workloadName=$(workloadName) environment=$(eslzEnvironmentType)
+
