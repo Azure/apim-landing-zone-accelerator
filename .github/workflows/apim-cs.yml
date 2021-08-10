@@ -36,14 +36,56 @@ jobs:
       - name: Parse config.yaml as output to GitHub Actions matrix
         run: |
           echo "config=$(yq e ./deployment/bicep/config.yml -j -I=0)" >> $GITHUB_ENV  
+
       - name: Write deployment information to log
         run: |
           echo "Deploying to ${{ fromJson(env.config).AZURE_LOCATION }} with name prefix ${{ fromJson(env.config).ENVIRONMENT_TAG }}"
+
         # Log into Azure
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
+      - name: Generate random password and save to keyvault with Azure Powershell
+        uses: Azure/powershell@v1
+        with:
+          inlineScript: | 
+            Function GeneratePassword ([int]$Length) {
+              $CharSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{]+-[*=@:)}$^%;(_!&#?>/|.'.ToCharArray()
+              #Index1s 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456
+              #Index10s 0 1 2 3 4 5 6 7 8
+          
+              $rng = New-Object System.Security.Cryptography.RNGCryptoServiceProvider
+              $bytes = New-Object byte[]($Length)
+          
+              $rng.GetBytes($bytes)
+          
+              $Return = New-Object char[]($Length)
+          
+              For ($i = 0 ; $i -lt $Length ; $i++) {
+                  $Return[$i] = $CharSet[$bytes[$i]%$CharSet.Length]
+              }
+          
+              Return (-join $Return)
+          
+            }
+            $RGName = "rg-shared-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}-${{ fromJson(env.config).AZURE_LOCATION }}-001"
+            $KVName = "kv-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}"
+            New-AzResourceGroup -Name $RGName -Location ${{ fromJson(env.config).AZURE_LOCATION }}
+            New-AzKeyVault -Name $KVName -ResourceGroupName $RGName -Location ${{ fromJson(env.config).AZURE_LOCATION }}
+            Set-AzKeyVaultAccessPolicy -VaultName $KVName -ServicePrincipalName ${{ secrets.CLEINTID }} -PermissionsToSecrets set,get -PassThru
+            Set-AzKeyVaultAccessPolicy -VaultName $KVName -ResourceGroupName $RGName -EnabledForTemplateDeployment -EnabledForDeployment -PassThru
+            Set-AzKeyVaultSecret -VaultName $KVName -Name "vmpassword" -SecretValue $SecurePass
+          azPSVersion: latest
+      
+      - name: Get Secret from Key Vault
+        uses: Azure/get-keyvault-secrets@v1
+        with:
+          keyvault: "kv-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}"
+          secrets: 'vmpassword'
+        id: getVMPassword 
+      
         # Deploy Bicep file, need to point parameters to the main.parameters.json location
       - name: deploy
         uses: azure/arm-deploy@v1
@@ -51,9 +93,8 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           scope: subscription
           region: ${{ fromJson(env.config).AZURE_LOCATION }}
-          deploymentName:  ${{ fromJson(env.config).DEPLOYMENT_NAME }}
           template: ./deployment/bicep/main.bicep
           parameters: > 
             workloadName=${{ fromJson(env.config).RESOURCE_NAME_PREFIX }} environment=${{ fromJson(env.config).ENVIRONMENT_TAG }} 
-            vmazdevopsUsername=${{ fromJson(env.config).VMAZDEVOPS_USERNAME }} vmazdevopsPassword=${{ fromJson(env.config).VMAZDEVOPS_PW }} 
+            vmazdevopsUsername=${{ fromJson(env.config).VMAZDEVOPS_USERNAME }} vmazdevopsPassword=${{ steps.getVMPassword.outputs.vmpassword }} 
             azureDevOpsAccount=${{ fromJson(env.config).AZDEVOPS_ACCT }} personalAccessToken=${{ secrets.ADO_PAT }}
