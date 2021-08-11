@@ -73,7 +73,7 @@ jobs:
             $KVName = "kv-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}"
             New-AzResourceGroup -Name $RGName -Location ${{ fromJson(env.config).AZURE_LOCATION }}
             New-AzKeyVault -Name $KVName -ResourceGroupName $RGName -Location ${{ fromJson(env.config).AZURE_LOCATION }}
-            Set-AzKeyVaultAccessPolicy -VaultName $KVName -ServicePrincipalName ${{ secrets.CLEINTID }} -PermissionsToSecrets set,get -PassThru
+            Set-AzKeyVaultAccessPolicy -VaultName $KVName -ServicePrincipalName ${{ secrets.CLIENTID }} -PermissionsToSecrets set,get -PassThru
             Set-AzKeyVaultAccessPolicy -VaultName $KVName -ResourceGroupName $RGName -EnabledForTemplateDeployment -EnabledForDeployment -PassThru
             Set-AzKeyVaultSecret -VaultName $KVName -Name "vmpassword" -SecretValue $SecurePass
           azPSVersion: latest
