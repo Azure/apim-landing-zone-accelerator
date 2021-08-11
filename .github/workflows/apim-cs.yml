@@ -68,7 +68,6 @@ jobs:
               }
           
               Return (-join $Return)
-          
             }
             $RGName = "rg-shared-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}-${{ fromJson(env.config).AZURE_LOCATION }}-001"
             $KVName = "kv-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}"
