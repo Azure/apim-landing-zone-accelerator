@@ -75,6 +75,7 @@ jobs:
             New-AzKeyVault -Name $KVName -ResourceGroupName $RGName -Location ${{ fromJson(env.config).AZURE_LOCATION }}
             Set-AzKeyVaultAccessPolicy -VaultName $KVName -ServicePrincipalName ${{ secrets.CLIENTID }} -PermissionsToSecrets set,get -PassThru
             Set-AzKeyVaultAccessPolicy -VaultName $KVName -ResourceGroupName $RGName -EnabledForTemplateDeployment -EnabledForDeployment -PassThru
+            $SecurePass = GeneratePassword(15) | ConvertTo-SecureString -AsPlainText -Force
             Set-AzKeyVaultSecret -VaultName $KVName -Name "vmpassword" -SecretValue $SecurePass
           azPSVersion: latest
       
