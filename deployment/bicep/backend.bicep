@@ -146,7 +146,7 @@ resource serverfarms_appsvcplanAPIMCSBackend_name_resource 'Microsoft.Web/server
     perSiteScaling: false
     maximumElasticWorkerCount: 1
     isSpot: false
-    freeOfferExpirationTime: '7/18/2021 9:36:43 PM'
+    // freeOfferExpirationTime: '7/18/2021 9:36:43 PM'
     reserved: true
     isXenon: false
     hyperV: false
@@ -265,7 +265,7 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
     hostNamesDisabled: false
     containerSize: 1536
     dailyMemoryTimeQuota: 0
-    httpsOnly: false
+    httpsOnly: true
     redundancyMode: 'None'
   }
 }
@@ -305,7 +305,7 @@ resource sites_funcappAPIMCSBackendMicroServiceB_name_resource 'Microsoft.Web/si
     hostNamesDisabled: false
     containerSize: 1536
     dailyMemoryTimeQuota: 0
-    httpsOnly: false
+    httpsOnly: true
     redundancyMode: 'None'
   }
 }
@@ -327,7 +327,7 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_web 'Microsoft.Web/sites/c
       'default.aspx'
       'index.php'
     ]
-    netFrameworkVersion: 'v4.0'
+    // netFrameworkVersion: 'v4.0'
     linuxFxVersion: 'dotnet|3.1'
     requestTracingEnabled: false
     remoteDebuggingEnabled: false
@@ -397,7 +397,7 @@ resource sites_funcappAPIMCSBackendMicroServiceB_name_web 'Microsoft.Web/sites/c
       'default.aspx'
       'index.php'
     ]
-    netFrameworkVersion: 'v4.0'
+    // netFrameworkVersion: 'v4.0'
     linuxFxVersion: 'DOCKER|mcr.microsoft.com/azure-functions/dotnet:3.0-appservice-quickstart'
     requestTracingEnabled: false
     remoteDebuggingEnabled: false
