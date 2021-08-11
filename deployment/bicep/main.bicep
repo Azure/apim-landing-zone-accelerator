@@ -22,6 +22,7 @@ var vmSuffix=environment
 // RG Names Declaration
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
+var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
 // Create resources name using these objects and pass it as a params in module
 var sharedResourceGroupResources = {
@@ -39,9 +40,13 @@ resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-
 resource sharedRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: sharedResourceGroupName
+  location: location
+}
+
+resource apimRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: apimResourceGroupName
   location: location
 }
 
@@ -72,7 +77,6 @@ var agentSubnetId=networking.outputs.devOpsSubnetid
 
 
 
-
 module shared './shared/shared.bicep' = {
   name: 'sharedresources'
   scope: resourceGroup(sharedRG.name)
@@ -86,5 +90,18 @@ module shared './shared/shared.bicep' = {
     personalAccessToken: personalAccessToken
     azureDevOpsAccount: azureDevOpsAccount
     resourceGroupName: sharedRG.name
+  }
+}
+
+
+module apimModule 'apim/apim.bicep'  = {
+  name: 'apimDeploy'
+  scope: resourceGroup(apimRG.name)
+  params: {
+    apimSubnetId: networking.outputs.apimSubnetid
+    location: location
+    appInsightsName: shared.outputs.appInsightsName
+    appInsightsId: shared.outputs.appInsightsId
+    appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
   }
 }
