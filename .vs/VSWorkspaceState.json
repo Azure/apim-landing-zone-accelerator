@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\deployment",
+    "\\deployment\\azure-resource-manager",
+    "\\deployment\\bicep",
+    "\\deployment\\pipelines",
+    "\\docs"
+  ],
+  "SelectedNode": "\\deployment\\bicep\\backend.bicep",
+  "PreviewInSolutionExplorer": false
+}

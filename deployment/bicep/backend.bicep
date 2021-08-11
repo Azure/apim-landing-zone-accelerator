@@ -5,31 +5,90 @@
 // Contains:
 // - Storage Account for Azure Function Apps
 // - Application Service Plan for Azure Function Apps
-// - Azure Function App with Code Stack
-// - Azure Function App with Container
+// - Azure Function App with Code Stack (linux. dotnetcore)
+// - Azure Function App with Container (linux, container)
 //
 //  mbecker@microsoft.com, 2021
 //
 
 // Deploy as
 //
-// az deployment group create -f .\rgAPIMCSBackend.bicep -g <TargetResourceGroup>
+// az deployment group create -f .\backend.bicep -g <TargetResourceGroup>
 //
 // Sample
-// az deployment group create -f .\rgAPIMCSBackend.bicep -g rgAPIMCSBackend
+// az deployment group create -f .\backend.bicep -g rgAPIMCSBackend
 // *Target Resource Group must exist prior to deployment
 
 //
 // Parameters
 //
-// Azure Storage Account name: must be globally unique
+
+//
+// Azure Storage
+//
+// Azure Storage Sizing
+//
+// - name: must be globally unique
 param storageAccounts_saapimcsbackend_name string = 'saapimcsbackend1'
-// Azure Application Service Plan name
+// - location
+param storageAccounts_location string = 'westeurope'
+// - SKU name
+param storageAccounts_skuName string = 'Standard_LRS'
+// - SKU tier
+param storageAccounts_skuTier string = 'Standard'
+// - kind
+param storageAccounts_kind string = 'StorageV2'
+//
+// Azure Storage connectivity and security
+//
+// - min TLS version
+param storageAccounts_minTLSVersion string = 'TLS1_2'
+
+//
+// Azure Application Service Plan
+//
+// - name
 param serverfarms_appsvcplanAPIMCSBackend_name string = 'appsvcplanAPIMCSBackend'
-// Azure Function App name (Code Stack): must be globally unique
+// - location
+param serverfarms_appsvcplanAPIMCSBackend_location string = 'West Europe'
+// Azure Application Service Plan sizing
+// - SKU name
+param serverfarms_appsvcplanAPIMCSBackend_skuName string = 'P2v2' // dev - 'B1'
+// - SKU tier
+param serverfarms_appsvcplanAPIMCSBackend_skuTier string = 'PremiumV2' // dev - 'Basic'
+// - SKU size
+param serverfarms_appsvcplanAPIMCSBackend_skuSize string = 'P2v2' // dev - 'B1'
+// - SKU family
+param serverfarms_appsvcplanAPIMCSBackend_skuFamily string = 'Pv2' // dev - 'B'
+// - SKU capacity
+param serverfarms_appsvcplanAPIMCSBackend_skuCapacity int = 1
+
+//
+// Azure Functions
+//
+// Azure Function App (Code Stack)
+// - name: must be globally unique
 param sites_funcappAPIMCSBackendMicroServiceA_name string = 'funcappAPIMCSBackendMicroServiceA1'
-// Azure Function App name (Container): must be globally unique
+// - location
+param sites_funcappAPIMCSBackendMicroServiceA_location string = 'West Europe'
+// - site URL
+param sites_funcappAPIMCSBackendMicroServiceA_siteHostname string = 'funcappapimcsbackendmicroservicea.azurewebsites.net'
+// - repository URL
+param sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname string = 'funcappapimcsbackendmicroservicea.scm.azurewebsites.net'
+// - site name
+param sites_funcappAPIMCSBackendMicroServiceA_siteName string = 'funcappAPIMCSBackendMicroServiceA'
+
+// Azure Function App name (Container)
+// - name: must be globally unique
 param sites_funcappAPIMCSBackendMicroServiceB_name string = 'funcappAPIMCSBackendMicroServiceB1'
+// - location
+param sites_funcappAPIMCSBackendMicroServiceB_location string = 'West Europe'
+// - site URL
+param sites_funcappAPIMCSBackendMicroServiceB_siteHostname string = 'funcappapimcsbackendmicroserviceb.azurewebsites.net'
+// - repository URL
+param sites_funcappAPIMCSBackendMicroServiceB_repositoryHostname string = 'funcappapimcsbackendmicroserviceb.scm.azurewebsites.net'
+// - site name
+param sites_funcappAPIMCSBackendMicroServiceB_siteName string = 'funcappAPIMCSBackendMicroServiceB'
 
 //
 // Definitions
@@ -37,14 +96,14 @@ param sites_funcappAPIMCSBackendMicroServiceB_name string = 'funcappAPIMCSBacken
 // Azure Storage Account
 resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccounts_saapimcsbackend_name
-  location: 'westeurope'
+  location: storageAccounts_location // 'westeurope'
   sku: {
-    name: 'Standard_LRS'
-    tier: 'Standard'
+    name: storageAccounts_skuName // 'Standard_LRS'
+    tier: storageAccounts_skuTier // 'Standard'
   }
-  kind: 'StorageV2'
+  kind: storageAccounts_kind // 'StorageV2'
   properties: {
-    minimumTlsVersion: 'TLS1_2'
+    minimumTlsVersion: storageAccounts_minTLSVersion // 'TLS1_2'
     allowBlobPublicAccess: true
     allowSharedKeyAccess: true
     networkAcls: {
@@ -74,13 +133,13 @@ resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storag
 // Azure Application Service Plan
 resource serverfarms_appsvcplanAPIMCSBackend_name_resource 'Microsoft.Web/serverfarms@2018-02-01' = {
   name: serverfarms_appsvcplanAPIMCSBackend_name
-  location: 'West Europe'
+  location: serverfarms_appsvcplanAPIMCSBackend_location // 'West Europe'
   sku: {
-    name: 'B1'
-    tier: 'Basic'
-    size: 'B1'
-    family: 'B'
-    capacity: 1
+    name:  serverfarms_appsvcplanAPIMCSBackend_skuName // 'B1'
+    tier: serverfarms_appsvcplanAPIMCSBackend_skuTier // 'Basic'
+    size: serverfarms_appsvcplanAPIMCSBackend_skuSize // 'B1'
+    family: serverfarms_appsvcplanAPIMCSBackend_skuFamily // 'B'
+    capacity: serverfarms_appsvcplanAPIMCSBackend_skuCapacity // 1
   }
   kind: 'linux'
   properties: {
@@ -174,18 +233,18 @@ resource Microsoft_Storage_storageAccounts_tableServices_storageAccounts_saapimc
 // Azure Function App (Linux, .NET Core 3.1)
 resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/sites@2018-11-01' = {
   name: sites_funcappAPIMCSBackendMicroServiceA_name
-  location: 'West Europe'
+  location: sites_funcappAPIMCSBackendMicroServiceA_location // 'West Europe'
   kind: 'functionapp,linux'
   properties: {
     enabled: true
     hostNameSslStates: [
       {
-        name: 'funcappapimcsbackendmicroservicea.azurewebsites.net'
+        name: sites_funcappAPIMCSBackendMicroServiceA_siteHostname // 'funcappapimcsbackendmicroservicea.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: 'funcappapimcsbackendmicroservicea.scm.azurewebsites.net'
+        name: sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname // 'funcappapimcsbackendmicroservicea.scm.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Repository'
       }
@@ -214,18 +273,18 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
 // Azure Function App (Container)
 resource sites_funcappAPIMCSBackendMicroServiceB_name_resource 'Microsoft.Web/sites@2018-11-01' = {
   name: sites_funcappAPIMCSBackendMicroServiceB_name
-  location: 'West Europe'
+  location: sites_funcappAPIMCSBackendMicroServiceB_location // 'West Europe'
   kind: 'functionapp,linux,container'
   properties: {
     enabled: true
     hostNameSslStates: [
       {
-        name: 'funcappapimcsbackendmicroserviceb.azurewebsites.net'
+        name: sites_funcappAPIMCSBackendMicroServiceB_siteHostname // 'funcappapimcsbackendmicroserviceb.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: 'funcappapimcsbackendmicroserviceb.scm.azurewebsites.net'
+        name: sites_funcappAPIMCSBackendMicroServiceB_repositoryHostname // 'funcappapimcsbackendmicroserviceb.scm.azurewebsites.net'
         sslState: 'Disabled'
         hostType: 'Repository'
       }
@@ -415,7 +474,7 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_sites_funcappAPIMCSBackend
   // mb: this part generates an error on deployment ("location is read-only")
   // location: 'West Europe'
   properties: {
-    siteName: 'funcappAPIMCSBackendMicroServiceA'
+    siteName: sites_funcappAPIMCSBackendMicroServiceA_siteName // 'funcappAPIMCSBackendMicroServiceA'
     hostNameType: 'Verified'
   }
 }
@@ -427,7 +486,7 @@ resource sites_funcappAPIMCSBackendMicroServiceB_name_sites_funcappAPIMCSBackend
   // mb: this part generates an error on deployment ("location is read-only")  
   // location: 'West Europe'
   properties: {
-    siteName: 'funcappAPIMCSBackendMicroServiceB'
+    siteName: sites_funcappAPIMCSBackendMicroServiceB_siteName // 'funcappAPIMCSBackendMicroServiceB'
     hostNameType: 'Verified'
   }
 }
