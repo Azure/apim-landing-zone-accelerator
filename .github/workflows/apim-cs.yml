@@ -39,7 +39,7 @@ jobs:
 
       - name: Write deployment information to log
         run: |
-          echo "Deploying to ${{ fromJson(env.config).AZURE_LOCATION }} with name prefix ${{ fromJson(env.config).ENVIRONMENT_TAG }}"
+          echo "Deploying to ${{ fromJson(env.config).AZURE_LOCATION }} with name prefix ${{ fromJson(env.config).RESOURCE_NAME_PREFIX }} and environment tag ${{ fromJson(env.config).ENVIRONMENT_TAG }}"
 
         # Log into Azure
       - uses: azure/login@v1
