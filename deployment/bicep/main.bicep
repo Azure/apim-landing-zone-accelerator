@@ -16,6 +16,13 @@ param vmazdevopsPassword string
 param azureDevOpsAccount string
 param personalAccessToken string
 
+@secure()
+@description('The TLS pfx password file.')
+param appGatewayCertificatePassword string
+
+@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
+param appGatewayCertificateData     string
+
 // Variables
 var resourceSuffix = '${workloadName}-${environment}-${location}-001'
 var vmSuffix=environment
@@ -103,5 +110,18 @@ module apimModule 'apim/apim.bicep'  = {
     appInsightsName: shared.outputs.appInsightsName
     appInsightsId: shared.outputs.appInsightsId
     appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
+  }
+}
+
+module appgwModule 'gateway/appgw.bicep' = {
+  name: 'appgwDeploy'
+  scope: resourceGroup(apimRG.name)
+  params: {
+    appGatewayName:             'appgw-${resourceSuffix}'
+    location:                   location
+    appGatewaySubnetId:         networking.outputs.appGatewaySubnetid
+    primaryBackendEndFQDN:      '${apimModule.outputs.apimName}.azure-api.net'
+    domainCertificatePassword:  appGatewayCertificatePassword
+    domainCertificateData:      appGatewayCertificateData
   }
 }

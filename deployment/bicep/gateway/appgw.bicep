@@ -1,39 +1,35 @@
+/*
+ * Input parameters
+*/
+@description('The name of the Application Gateawy to be created.')
 param appGatewayName            string
+
+@description('The location of the Application Gateawy to be created')
 param location                  string = resourceGroup().location
-param primaryVnetName           string
-param primaryVnetResourceGroup  string
-param appGwSubnetName           string = 'AppGateway'
+
+@description('The subnet resource id to use for Application Gateway.')
+param appGatewaySubnetId        string
+
+@description('The backend URL of the APIM.')
 param primaryBackendEndFQDN     string = 'api.example.demo'
+
+@description('The Url for the Application Gateway Health Probe.')
 param probeUrl                  string = '/status-0123456789abcdef'
 
 @secure()
+@description('The TLS pfx password file.')
 param domainCertificatePassword string
+
+@description('The pfx password file for the Application Gataeway TLS listener.')
 param domainCertificateData     string
 
 var namingStandard          = '${appGatewayName}-prod-${location}-001'
 var appGatewayPrimaryPip    = 'pip-${namingStandard}'
-var appGatewayPrimaryNSG    = 'nsg-${namingStandard}'
-var subnetName              = '/subnets/${appGwSubnetName}'
-var primarySubnetId         = '${resourceId(primaryVnetResourceGroup, 'Microsoft.Network/virtualNetworks', primaryVnetName)}${subnetName}'
+var primarySubnetId         = appGatewaySubnetId
 
-module appgw_nsg_rules './modules/appgw_nsg_rules.bicep' = {
-  name: 'appgw-nsg-rules'
-  scope: resourceGroup(primaryVnetResourceGroup)
-  params: {
-    nsgName: appGatewayPrimaryNSG
-  }
-}
-
-module apply_nsg_to_subnet_primary './modules/apply_nsg_to_subnet_primary.bicep' = {
-  name: 'apply-nsg-to-subnet-primary'
-  scope: resourceGroup(primaryVnetResourceGroup)
-  params: {
-    appGatewayPrimaryNSG: appGatewayPrimaryNSG
-    primarySubnetName:    '${primaryVnetName}${subnetName}'
-    primarySubnetId:      primarySubnetId
-  }
-}
-
+/*
+ * Implementation
+*/
 resource appGatewayPublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-09-01' = {
   name: appGatewayPrimaryPip
   location: location
@@ -223,13 +219,10 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
     }
     enableHttp2: true
     autoscaleConfiguration: {
-      minCapacity: 1
-      maxCapacity: 2
+      minCapacity: 2
+      maxCapacity: 3
     }
   }
-  dependsOn: [
-    apply_nsg_to_subnet_primary
-  ]
 }
 
 output Primary_IP_Address string = appGatewayPublicIPAddress.properties.ipAddress
