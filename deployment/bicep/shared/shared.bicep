@@ -4,10 +4,10 @@ param sharedResourceGroupResources object
 
 param jumpboxSubnetId string
 param agentSubnetId string
-param vmazdevopsUsername string
-param vmazdevopsPassword string
-param azureDevOpsAccount string
-
+param vmdevopsUsername string
+param vmdevopsPassword string
+param accountname string
+param orgtype string
 
 param personalAccessToken string
 param resourceGroupName string
@@ -27,20 +27,19 @@ module appInsights './azmon.bicep' = {
   }
 }
 output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
-output appInsightsName string = appInsights.outputs.appInsightsName
-output appInsightsId string = appInsights.outputs.appInsightsId
-output appInsightsInstrumentationKey string = appInsights.outputs.appInsightsInstrumentationKey
 
-module vm_devopswinvm './createvmwindows.bicep' = {
-  name: 'azdevopsvm'
+
+module vm_devopswinvm './createvmwindows.bicep' = if (orgtype!='none') {
+  name: 'devopsvm'
   scope: resourceGroup(resourceGroupName)
   params: {
     subnetId: agentSubnetId
-    username: vmazdevopsUsername
-    password: vmazdevopsPassword
-    vmName: 'azdevops-${sharedResourceGroupResources.vmSuffix}'
-    azureDevOpsAccount: azureDevOpsAccount
+    username: vmdevopsUsername
+    password: vmdevopsPassword
+    vmName: '${orgtype}-${sharedResourceGroupResources.vmSuffix}'
+    accountname: accountname
     personalAccessToken: personalAccessToken
+    orgtype: orgtype
     deployAgent: true
   }
 }
@@ -50,8 +49,9 @@ module vm_jumpboxwinvm './createvmwindows.bicep' = {
   scope: resourceGroup(resourceGroupName)
   params: {
     subnetId: jumpboxSubnetId
-    username: vmazdevopsUsername
-    password: vmazdevopsPassword
+    username: vmdevopsUsername
+    password: vmdevopsPassword
+    orgtype: orgtype
     vmName: 'jumpbox-${sharedResourceGroupResources.vmSuffix}'
   }
 }
