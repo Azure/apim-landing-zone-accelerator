@@ -11,10 +11,18 @@ param location string =  deployment().location
 param environment string
 
 // parameters for azure devops agent 
-param vmazdevopsUsername string
-param vmazdevopsPassword string
-param azureDevOpsAccount string
+param vmUsername string
+param vmPassword string
+param accountName string
 param personalAccessToken string
+
+@description('The environment for which the deployment is being executed')
+@allowed([
+  'github'
+  'azuredevops'
+  'none'
+])
+param orgtype string
 
 // Variables
 var resourceSuffix = '${workloadName}-${environment}-${location}-001'
@@ -77,20 +85,23 @@ var agentSubnetId=networking.outputs.devOpsSubnetid
 
 
 
-module shared './shared/shared.bicep' = {
-  name: 'sharedresources'
-  scope: resourceGroup(sharedRG.name)
-  params: {
-    location: location
-    sharedResourceGroupResources : sharedResourceGroupResources
-    jumpboxSubnetId: jumpboxSubnetId
-    agentSubnetId: agentSubnetId
-    vmazdevopsPassword:vmazdevopsPassword
-    vmazdevopsUsername: vmazdevopsUsername
-    personalAccessToken: personalAccessToken
-    azureDevOpsAccount: azureDevOpsAccount
-    resourceGroupName: sharedRG.name
-  }
+module shared './shared/shared.bicep' = {  dependsOn: [
+  networking
+]
+name: 'sharedresources'
+scope: resourceGroup(sharedRG.name)
+params: {
+  location: location
+  sharedResourceGroupResources : sharedResourceGroupResources
+  jumpboxSubnetId: jumpboxSubnetId
+  agentSubnetId: agentSubnetId
+  vmdevopsPassword: vmPassword
+  vmdevopsUsername: vmUsername
+  personalAccessToken: personalAccessToken
+  accountname: accountName
+  orgtype: orgtype
+  resourceGroupName: sharedRG.name
+}
 }
 
 

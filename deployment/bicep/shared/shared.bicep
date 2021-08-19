@@ -27,6 +27,9 @@ module appInsights './azmon.bicep' = {
   }
 }
 output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
+output appInsightsName string = appInsights.outputs.appInsightsName
+output appInsightsId string = appInsights.outputs.appInsightsId
+output appInsightsInstrumentationKey string = appInsights.outputs.appInsightsInstrumentationKey
 
 
 module vm_devopswinvm './createvmwindows.bicep' = if (orgtype!='none') {
