@@ -17,6 +17,9 @@
         "workloadName" :{ 
             "value": "demoWL"
         },
+        "orgtype": {
+            "value": "azuredevops OR github OR none"
+        },
         "environment" :{ 
             "value": "dev"
         }
