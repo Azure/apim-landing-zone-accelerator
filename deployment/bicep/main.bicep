@@ -16,9 +16,8 @@ param vmazdevopsPassword string
 param azureDevOpsAccount string
 param personalAccessToken string
 
-@secure()
-@description('The TLS pfx password file.')
-param appGatewayCertificatePassword string
+@description('The FQDN for the Application Gateway. Example - api.example.com.')
+param appGatewayFqdn string
 
 @description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
 param appGatewayCertificateData     string
@@ -117,11 +116,13 @@ module appgwModule 'gateway/appgw.bicep' = {
   name: 'appgwDeploy'
   scope: resourceGroup(apimRG.name)
   params: {
-    appGatewayName:             'appgw-${resourceSuffix}'
-    location:                   location
-    appGatewaySubnetId:         networking.outputs.appGatewaySubnetid
-    primaryBackendEndFQDN:      '${apimModule.outputs.apimName}.azure-api.net'
-    domainCertificatePassword:  appGatewayCertificatePassword
-    domainCertificateData:      appGatewayCertificateData
+    appGatewayName:                 'appgw-${resourceSuffix}'
+    appGatewayFQDN:                 appGatewayFqdn
+    location:                       location
+    appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
+    primaryBackendEndFQDN:          '${apimModule.outputs.apimName}.azure-api.net'
+    appGatewayCertificateData:      appGatewayCertificateData
+    keyVaultName:                   shared.outputs.keyVaultName
+    keyVaultResourceGroupName:      sharedRG.name
   }
 }

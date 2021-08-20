@@ -4,6 +4,9 @@
 @description('The name of the Application Gateawy to be created.')
 param appGatewayName            string
 
+@description('The FQDN of the Application Gateawy.Must match the TLS Certificate.')
+param appGatewayFQDN            string = 'api.example.com'
+
 @description('The location of the Application Gateawy to be created')
 param location                  string = resourceGroup().location
 
@@ -11,25 +14,41 @@ param location                  string = resourceGroup().location
 param appGatewaySubnetId        string
 
 @description('The backend URL of the APIM.')
-param primaryBackendEndFQDN     string = 'api.example.demo'
+param primaryBackendEndFQDN     string = 'api-internal.example.com'
 
 @description('The Url for the Application Gateway Health Probe.')
 param probeUrl                  string = '/status-0123456789abcdef'
 
-@secure()
-@description('The TLS pfx password file.')
-param domainCertificatePassword string
+@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
+param appGatewayCertificateData     string
 
-@description('The pfx password file for the Application Gataeway TLS listener.')
-param domainCertificateData     string
+param keyVaultName                  string
+param keyVaultResourceGroupName     string
 
 var namingStandard          = '${appGatewayName}-prod-${location}-001'
 var appGatewayPrimaryPip    = 'pip-${namingStandard}'
+var appGatewayIdentityId    = 'identity-${namingStandard}'
 var primarySubnetId         = appGatewaySubnetId
 
 /*
  * Implementation
 */
+resource appGatewayIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name:     appGatewayIdentityId
+  location: location
+}
+
+module certificate 'certificate.bicep' = {
+  name: 'certificate'
+  scope: resourceGroup(keyVaultResourceGroupName)
+  params: {
+    objectId:       appGatewayIdentity.properties.principalId
+    tenantId:       appGatewayIdentity.properties.tenantId
+    keyVaultName:   keyVaultName
+    certData:       appGatewayCertificateData
+  }
+}
+
 resource appGatewayPublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-09-01' = {
   name: appGatewayPrimaryPip
   location: location
@@ -45,6 +64,17 @@ resource appGatewayPublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-09-
 resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-01' = {
   name: appGatewayName
   location: location
+  dependsOn: [
+    appGatewayPublicIPAddress
+    certificate
+    appGatewayIdentity
+  ]
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${resourceGroup().id}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${appGatewayIdentityId}': {}
+    }
+  }
   properties: {
     sku: {
       name: 'WAF_v2'
@@ -62,10 +92,9 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
     ]
     sslCertificates: [
       {
-        name: 'portal_us'
+        name: appGatewayFQDN
         properties: {
-          data: domainCertificateData
-          password: domainCertificatePassword
+          keyVaultSecretId: certificate.outputs.secretUri
         }
       }
     ]
@@ -160,7 +189,7 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
           }
           protocol: 'Https'
           sslCertificate: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGatewayName)}/sslCertificates/portal_us'
+            id: '${resourceId('Microsoft.Network/applicationGateways', appGatewayName)}/sslCertificates/${appGatewayFQDN}'
           }
           hostnames: []
           requireServerNameIndication: false
@@ -224,5 +253,3 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
     }
   }
 }
-
-output Primary_IP_Address string = appGatewayPublicIPAddress.properties.ipAddress
