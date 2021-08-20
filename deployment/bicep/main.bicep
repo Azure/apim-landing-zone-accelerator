@@ -115,6 +115,9 @@ module apimModule 'apim/apim.bicep'  = {
 module appgwModule 'gateway/appgw.bicep' = {
   name: 'appgwDeploy'
   scope: resourceGroup(apimRG.name)
+  dependsOn: [
+    apimModule
+  ]
   params: {
     appGatewayName:                 'appgw-${resourceSuffix}'
     appGatewayFQDN:                 appGatewayFqdn
