@@ -1,1 +1,2 @@
 deployment/bicep/localparam.json
+*.sqlite
