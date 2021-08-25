@@ -1,0 +1,61 @@
+# This is a basic workflow to deploy APIM ESLZ reference implementation
+
+name: deploy_APIM_ESLZ_bicep_templates
+
+# Controls when the workflow will run
+on:
+  # Triggers for push or pull are disabled, if you require, uncomment the next few lines
+  #push:
+    #branches: [ main ]
+  #pull_request:
+    #branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  APIMESLZ_PATH : ./apim-eslz
+  DEPLOYMENT_LOCATION: westeurope
+  DEPLOYMENT_NAME: apim-eslz
+  WORKLOAD_NAME: apim-eslz
+  ESLZ_ENVIRONMENT_TYPE: dev #options: dev, uat, prod, dr
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: 'DEV'
+    name: 'deploy to dev landing zone'
+    steps:
+      # Checks-out this repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      # Check out APIM ESLZ repo
+      - name: APIMESLZ
+        uses: actions/checkout@v2
+        with:
+          repository: cykreng/Enterprise-Scale-APIM
+          path: ${{ env.APIMESLZ_PATH }}
+        
+      # verify the Bicep 
+      - name: Run a multi-line script
+        run: |
+          echo you may opt to run Bicep verification here
+ 
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          # Allow Azure PowerShell Login in addition to Az CLI login
+          enable-AzPSSession: true
+          # Name of the environment. Supported values are azurecloud, azurestack, azureusgovernment, azurechinacloud, azuregermancloud. Default being azurecloud
+          environment: azurecloud
+          # Set this value to true to enable support for accessing tenants without subscriptions, we expect the ESLZ to be provisioned
+          allow-no-subscriptions: false
+      - name: Azure CLI Action
+        uses: Azure/cli@1.0.4
+        with:
+          # Azure CLI version to be used to execute the script. If not provided, latest version is used
+          azcliversion: latest
+          inlineScript: |
+            az deployment sub create --location ${{ env.DEPLOYMENT_LOCATION }} --name ${{ env.DEPLOYMENT_NAME }} --template-file $GITHUB_WORKSPACE/${{ env.APIMESLZ_PATH }}/deployment/bicep/main.bicep --parameters workloadName=${{ env.WORKLOAD_NAME }} environment=${{ env.ESLZ_ENVIRONMENT_TYPE }}
+            
