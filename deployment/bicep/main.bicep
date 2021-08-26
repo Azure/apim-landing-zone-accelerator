@@ -21,6 +21,7 @@ var resourceSuffix = '${workloadName}-${environment}-${location}-001'
 var vmSuffix=environment
 // RG Names Declaration
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
+var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
@@ -34,9 +35,13 @@ var sharedResourceGroupResources = {
    'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
 }
 
-
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: networkingResourceGroupName
+  location: location
+}
+
+resource backendRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: backendResourceGroupName
   location: location
 }
 
@@ -59,23 +64,29 @@ module networking 'networking.bicep' = {
   }
 }
 
-
-// shared resource group 
-
-
-//  for testing -- need a subnet.. 
-
-var NetworkResourceGroupName = 'rg-network-${resourceSuffix}'
-
-resource networkRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: NetworkResourceGroupName
-  location: location
+module backend 'backend.bicep' = {
+  name: 'backendresources'
+  scope: resourceGroup(backendRG.name)
+  params: {
+    workloadName: workloadName
+    environment: environment
+  }
 }
+
+// module shared 'shared.bicep' = {
+// dependsOn: [
+//    networking
+//  ]
+// shared resource group 
+//  for testing -- need a subnet.. 
+// var NetworkResourceGroupName = 'rg-network-${resourceSuffix}'
+// resource networkRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+//  name: NetworkResourceGroupName
+//  location: location
+// }
 
 var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
 var agentSubnetId=networking.outputs.devOpsSubnetid
-
-
 
 module shared './shared/shared.bicep' = {
   name: 'sharedresources'
