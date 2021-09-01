@@ -19,7 +19,7 @@ param primaryBackendEndFQDN     string = 'api-internal.example.com'
 @description('The Url for the Application Gateway Health Probe.')
 param probeUrl                  string = '/status-0123456789abcdef'
 
-@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
+@description('The pfx certificate file for the Application Gataeway TLS listener. (base64 encoded)')
 param appGatewayCertificateData     string
 
 param keyVaultName                  string
