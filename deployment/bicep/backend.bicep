@@ -22,7 +22,7 @@
 //
 // Parameters
 //
-// Parameters
+
 @description('A short name for the workload being deployed')
 param workloadName string
 
@@ -34,6 +34,11 @@ param workloadName string
   'dr'
 ])
 param environment string
+
+//
+// Variables
+//
+var location = resourceGroup().location
 
 //
 // Azure Storage
