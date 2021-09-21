@@ -22,6 +22,18 @@
 //
 // Parameters
 //
+// Parameters
+@description('A short name for the workload being deployed')
+param workloadName string
+
+@description('The environment for which the deployment is being executed')
+@allowed([
+  'dev'
+  'uat'
+  'prod'
+  'dr'
+])
+param environment string
 
 //
 // Azure Storage
