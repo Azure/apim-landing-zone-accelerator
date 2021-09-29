@@ -74,8 +74,6 @@ module backend 'backend.bicep' = {
   name: 'backendresources'
   scope: resourceGroup(backendRG.name)
   params: {
-    workloadName: workloadName
-    environment: environment
   }
 }
 
@@ -110,7 +108,6 @@ module shared './shared/shared.bicep' = {
   }
 }
 
-
 module apimModule 'apim/apim.bicep'  = {
   name: 'apimDeploy'
   scope: resourceGroup(apimRG.name)
@@ -123,11 +120,24 @@ module apimModule 'apim/apim.bicep'  = {
   }
 }
 
+//Creation of private DNS zones
+module dnsZoneModule 'shared/dnszone.bicep'  = {
+  name: 'apimDnsZoneDeploy'
+  scope: resourceGroup(sharedRG.name)
+  params: {
+    vnetName: networking.outputs.apimCSVNetName
+    vnetRG: networkingRG.name
+    apimName: apimModule.outputs.apimName
+    apimRG: apimRG.name
+  }
+}
+
 module appgwModule 'gateway/appgw.bicep' = {
   name: 'appgwDeploy'
   scope: resourceGroup(apimRG.name)
   dependsOn: [
     apimModule
+    dnsZoneModule
   ]
   params: {
     appGatewayName:                 'appgw-${resourceSuffix}'

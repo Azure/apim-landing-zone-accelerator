@@ -341,6 +341,19 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   properties: {
     securityRules: [
       {
+        name: 'apim-vnet'
+        properties: {
+          priority: 2000
+          sourceAddressPrefix: 'ApiManagement'
+          protocol: 'Tcp'
+          destinationPortRange: '3443'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
+      {
         name: 'default-allow-rdp'
         properties: {
           priority: 1000
