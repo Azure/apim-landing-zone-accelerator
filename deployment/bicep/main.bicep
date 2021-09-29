@@ -16,6 +16,12 @@ param vmazdevopsPassword string
 param azureDevOpsAccount string
 param personalAccessToken string
 
+@description('The FQDN for the Application Gateway. Example - api.example.com.')
+param appGatewayFqdn string
+
+@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
+param appGatewayCertificateData     string
+
 // Variables
 var resourceSuffix = '${workloadName}-${environment}-${location}-001'
 var vmSuffix=environment
@@ -123,5 +129,24 @@ module dnsZoneModule 'shared/dnszone.bicep'  = {
     vnetRG: networkingRG.name
     apimName: apimModule.outputs.apimName
     apimRG: apimRG.name
+  }
+}
+
+module appgwModule 'gateway/appgw.bicep' = {
+  name: 'appgwDeploy'
+  scope: resourceGroup(apimRG.name)
+  dependsOn: [
+    apimModule
+    dnsZoneModule
+  ]
+  params: {
+    appGatewayName:                 'appgw-${resourceSuffix}'
+    appGatewayFQDN:                 appGatewayFqdn
+    location:                       location
+    appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
+    primaryBackendEndFQDN:          '${apimModule.outputs.apimName}.azure-api.net'
+    appGatewayCertificateData:      appGatewayCertificateData
+    keyVaultName:                   shared.outputs.keyVaultName
+    keyVaultResourceGroupName:      sharedRG.name
   }
 }
