@@ -58,7 +58,7 @@ module appInsights './azmon.bicep' = {
   }
 }
 
-module vm_devopswinvm './createvmwindows.bicep' = if (CICDAgentType!='none') {
+module vm_devopswinvm './createvmwindows.bicep' = if (toLower(CICDAgentType)!='none') {
   name: 'devopsvm'
   scope: resourceGroup(resourceGroupName)
   params: {
@@ -124,5 +124,7 @@ resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
 output CICDAgentVmName string = vm_devopswinvm.name
 output jumpBoxvmName string = vm_jumpboxwinvm.name
-
+output appInsightsName string=appInsights.outputs.appInsightsName
+output appInsightsId string=appInsights.outputs.appInsightsId
+output appInsightsInstrumentationKey string=appInsights.outputs.appInsightsInstrumentationKey
 output keyVaultName string = key_vault.name

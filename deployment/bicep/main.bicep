@@ -1,7 +1,10 @@
 targetScope='subscription'
+
+// Parameters
+@description('A short name for the workload being deployed')
 param workloadName string
-param location string =  deployment().location
-@description('The-- environment for which the deployment is being executed')
+
+@description('The environment for which the deployment is being executed')
 @allowed([
   'dev'
   'uat'
@@ -10,19 +13,29 @@ param location string =  deployment().location
 ])
 param environment string
 
-// parameters for azure devops agent 
+@description('The user name to be used as the Administrator for all VMs created by this deployment')
 param vmUsername string
-param vmPassword string
-param accountName string
-param personalAccessToken string
 
-@description('The environment for which the deployment is being executed')
+@description('The password for the Administrator user for all VMs created by this deployment')
+param vmPassword string
+
+@description('The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')
 @allowed([
   'github'
   'azuredevops'
   'none'
 ])
-param orgtype string
+param CICDAgentType string
+
+@description('The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none')
+param accountName string
+
+@description('The Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent')
+@secure()
+param personalAccessToken string
+
+
+
 @description('The FQDN for the Application Gateway. Example - api.example.com.')
 param appGatewayFqdn string
 
@@ -30,12 +43,16 @@ param appGatewayFqdn string
 param appGatewayCertificateData     string
 
 // Variables
+var location = deployment().location
 var resourceSuffix = '${workloadName}-${environment}-${location}-001'
+var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
+var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
+
 var vmSuffix=environment
 // RG Names Declaration
-var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
+
 var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
-var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
+
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
 // Create resources name using these objects and pass it as a params in module
@@ -85,20 +102,10 @@ module backend 'backend.bicep' = {
   }
 }
 
-// module shared 'shared.bicep' = {
-// dependsOn: [
-//    networking
-//  ]
-// shared resource group 
-//  for testing -- need a subnet.. 
-// var NetworkResourceGroupName = 'rg-network-${resourceSuffix}'
-// resource networkRg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//  name: NetworkResourceGroupName
-//  location: location
-// }
+
 
 var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
-var agentSubnetId=networking.outputs.devOpsSubnetid
+var CICDAgentSubnetId = networking.outputs.CICDAgentSubnetId
 
 
 
@@ -108,16 +115,17 @@ module shared './shared/shared.bicep' = {  dependsOn: [
 name: 'sharedresources'
 scope: resourceGroup(sharedRG.name)
 params: {
-  location: location
-  sharedResourceGroupResources : sharedResourceGroupResources
+  accountName: accountName
+  CICDAgentSubnetId: CICDAgentSubnetId
+  CICDAgentType: CICDAgentType
+  environment: environment
   jumpboxSubnetId: jumpboxSubnetId
-  agentSubnetId: agentSubnetId
-  vmdevopsPassword: vmPassword
-  vmdevopsUsername: vmUsername
+  location: location
   personalAccessToken: personalAccessToken
-  accountname: accountName
-  orgtype: orgtype
   resourceGroupName: sharedRG.name
+  resourceSuffix: resourceSuffix
+  vmPassword: vmPassword
+  vmUsername: vmUsername
 }
 }
 
