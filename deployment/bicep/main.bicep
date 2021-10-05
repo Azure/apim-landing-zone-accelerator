@@ -16,6 +16,12 @@ param vmazdevopsPassword string
 param azureDevOpsAccount string
 param personalAccessToken string
 
+@description('The FQDN for the Application Gateway. Example - api.example.com.')
+param appGatewayFqdn string
+
+@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
+param appGatewayCertificateData     string
+
 // Variables
 var resourceSuffix = '${workloadName}-${environment}-${location}-001'
 var vmSuffix=environment
@@ -68,8 +74,6 @@ module backend 'backend.bicep' = {
   name: 'backendresources'
   scope: resourceGroup(backendRG.name)
   params: {
-    workloadName: workloadName
-    environment: environment
   }
 }
 
@@ -104,7 +108,6 @@ module shared './shared/shared.bicep' = {
   }
 }
 
-
 module apimModule 'apim/apim.bicep'  = {
   name: 'apimDeploy'
   scope: resourceGroup(apimRG.name)
@@ -114,5 +117,36 @@ module apimModule 'apim/apim.bicep'  = {
     appInsightsName: shared.outputs.appInsightsName
     appInsightsId: shared.outputs.appInsightsId
     appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
+  }
+}
+
+//Creation of private DNS zones
+module dnsZoneModule 'shared/dnszone.bicep'  = {
+  name: 'apimDnsZoneDeploy'
+  scope: resourceGroup(sharedRG.name)
+  params: {
+    vnetName: networking.outputs.apimCSVNetName
+    vnetRG: networkingRG.name
+    apimName: apimModule.outputs.apimName
+    apimRG: apimRG.name
+  }
+}
+
+module appgwModule 'gateway/appgw.bicep' = {
+  name: 'appgwDeploy'
+  scope: resourceGroup(apimRG.name)
+  dependsOn: [
+    apimModule
+    dnsZoneModule
+  ]
+  params: {
+    appGatewayName:                 'appgw-${resourceSuffix}'
+    appGatewayFQDN:                 appGatewayFqdn
+    location:                       location
+    appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
+    primaryBackendEndFQDN:          '${apimModule.outputs.apimName}.azure-api.net'
+    appGatewayCertificateData:      appGatewayCertificateData
+    keyVaultName:                   shared.outputs.keyVaultName
+    keyVaultResourceGroupName:      sharedRG.name
   }
 }

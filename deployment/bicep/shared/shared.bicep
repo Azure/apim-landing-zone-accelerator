@@ -91,3 +91,4 @@ resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 
 output devopsAgentvmName string = vm_devopswinvm.name
 output jumpBoxvmName string = vm_jumpboxwinvm.name
+output keyVaultName string = key_vault.name
