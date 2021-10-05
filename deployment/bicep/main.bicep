@@ -74,6 +74,8 @@ module backend 'backend.bicep' = {
   name: 'backendresources'
   scope: resourceGroup(backendRG.name)
   params: {
+    workloadName: workloadName
+    environment: environment    
   }
 }
 

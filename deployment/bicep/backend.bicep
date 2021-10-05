@@ -10,14 +10,23 @@
 //
 //  mbecker@microsoft.com, 2021
 //
-
 // Deploy as
 //
-// az deployment group create -f .\backend.bicep -g <TargetResourceGroup>
+// # Script start
 //
-// Sample
-// az deployment group create -f .\backend.bicep -g rgAPIMCSBackend
-// *Target Resource Group must exist prior to deployment
+// $RESOURCE_GROUP = "rgAPIMCSBackend"
+// $LOCATION = "westeurope"
+// $BICEP_FILE="backend.bicep"
+//
+// # delete a deployment
+//
+// az deployment group  delete --name testbackenddeployment -g $RESOURCE_GROUP 
+// 
+// # deploy the bicep file directly
+//
+// az deployment group create --name testbackenddeployment --template-file $BICEP_FILE --parameters parameters.json -g $RESOURCE_GROUP -o json
+// 
+// # Script end
 
 //
 // Parameters
@@ -38,6 +47,7 @@ param environment string
 //
 // Variables
 //
+var owner = 'APIM Const Set'
 var location = resourceGroup().location
 
 //
@@ -46,66 +56,66 @@ var location = resourceGroup().location
 // Azure Storage Sizing
 //
 // - name: must be globally unique
-param storageAccounts_saapimcsbackend_name string = 'saapimcsbackend1'
+var storageAccounts_saapimcsbackend_name  = 'stbackend'
 // - location
-param storageAccounts_location string = 'westeurope'
+var storageAccounts_location = location
 // - SKU name
-param storageAccounts_skuName string = 'Standard_LRS'
+var storageAccounts_skuName  = 'Standard_LRS'
 // - SKU tier
-param storageAccounts_skuTier string = 'Standard'
+var storageAccounts_skuTier  = 'Standard'
 // - kind
-param storageAccounts_kind string = 'StorageV2'
+var storageAccounts_kind  = 'StorageV2'
 //
 // Azure Storage connectivity and security
 //
 // - min TLS version
-param storageAccounts_minTLSVersion string = 'TLS1_2'
+var storageAccounts_minTLSVersion = 'TLS1_2'
 
 //
 // Azure Application Service Plan
 //
 // - name
-param serverfarms_appsvcplanAPIMCSBackend_name string = 'appsvcplanAPIMCSBackend'
+var serverfarms_appsvcplanAPIMCSBackend_name  = 'plan-be-${workloadName}-${environment}-${location}'
 // - location
-param serverfarms_appsvcplanAPIMCSBackend_location string = 'West Europe'
+var serverfarms_appsvcplanAPIMCSBackend_location  = location
 // Azure Application Service Plan sizing
 // - SKU name
-param serverfarms_appsvcplanAPIMCSBackend_skuName string = 'P2v2' // dev - 'B1'
+var serverfarms_appsvcplanAPIMCSBackend_skuName  = 'P2v2' // dev - 'B1'
 // - SKU tier
-param serverfarms_appsvcplanAPIMCSBackend_skuTier string = 'PremiumV2' // dev - 'Basic'
+var serverfarms_appsvcplanAPIMCSBackend_skuTier  = 'PremiumV2' // dev - 'Basic'
 // - SKU size
-param serverfarms_appsvcplanAPIMCSBackend_skuSize string = 'P2v2' // dev - 'B1'
+var serverfarms_appsvcplanAPIMCSBackend_skuSize  = 'P2v2' // dev - 'B1'
 // - SKU family
-param serverfarms_appsvcplanAPIMCSBackend_skuFamily string = 'Pv2' // dev - 'B'
+var serverfarms_appsvcplanAPIMCSBackend_skuFamily  = 'Pv2' // dev - 'B'
 // - SKU capacity
-param serverfarms_appsvcplanAPIMCSBackend_skuCapacity int = 1
+var serverfarms_appsvcplanAPIMCSBackend_skuCapacity  = 1
 
 //
 // Azure Functions
 //
 // Azure Function App (Code Stack)
 // - name: must be globally unique
-param sites_funcappAPIMCSBackendMicroServiceA_name string = 'funcappAPIMCSBackendMicroServiceA1'
+var sites_funcappAPIMCSBackendMicroServiceA_name = 'func-code-be-${workloadName}-${environment}-${location}'
 // - location
-param sites_funcappAPIMCSBackendMicroServiceA_location string = 'West Europe'
+var sites_funcappAPIMCSBackendMicroServiceA_location  = location
 // - site URL
-param sites_funcappAPIMCSBackendMicroServiceA_siteHostname string = 'funcappapimcsbackendmicroservicea.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceA_siteHostname   = 'func-code-be-${workloadName}-${environment}-${location}.azurewebsites.net'
 // - repository URL
-param sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname string = 'funcappapimcsbackendmicroservicea.scm.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname   = 'func-code-be-${workloadName}-${environment}-${location}.scm.azurewebsites.net'
 // - site name
-param sites_funcappAPIMCSBackendMicroServiceA_siteName string = 'funcappAPIMCSBackendMicroServiceA'
+var sites_funcappAPIMCSBackendMicroServiceA_siteName   = 'funccodebe${workloadName}${environment}${location}'
 
 // Azure Function App name (Container)
 // - name: must be globally unique
-param sites_funcappAPIMCSBackendMicroServiceB_name string = 'funcappAPIMCSBackendMicroServiceB1'
+var sites_funcappAPIMCSBackendMicroServiceB_name  = 'func-cont-be-${workloadName}-${environment}-${location}'
 // - location
-param sites_funcappAPIMCSBackendMicroServiceB_location string = 'West Europe'
+var sites_funcappAPIMCSBackendMicroServiceB_location  = location
 // - site URL
-param sites_funcappAPIMCSBackendMicroServiceB_siteHostname string = 'funcappapimcsbackendmicroserviceb.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceB_siteHostname  = 'func-cont-be-${workloadName}-${environment}-${location}.azurewebsites.net'
 // - repository URL
-param sites_funcappAPIMCSBackendMicroServiceB_repositoryHostname string = 'funcappapimcsbackendmicroserviceb.scm.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceB_repositoryHostname  = 'func-cont-be-${workloadName}-${environment}-${location}.scm.azurewebsites.net'
 // - site name
-param sites_funcappAPIMCSBackendMicroServiceB_siteName string = 'funcappAPIMCSBackendMicroServiceB'
+var sites_funcappAPIMCSBackendMicroServiceB_siteName  = 'funccontbe${workloadName}${environment}${location}'
 
 //
 // Definitions
@@ -114,6 +124,10 @@ param sites_funcappAPIMCSBackendMicroServiceB_siteName string = 'funcappAPIMCSBa
 resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccounts_saapimcsbackend_name
   location: storageAccounts_location // 'westeurope'
+  tags: {
+    Owner: owner
+    // CostCenter: costCenter
+  }
   sku: {
     name: storageAccounts_skuName // 'Standard_LRS'
     tier: storageAccounts_skuTier // 'Standard'
@@ -151,6 +165,10 @@ resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storag
 resource serverfarms_appsvcplanAPIMCSBackend_name_resource 'Microsoft.Web/serverfarms@2018-02-01' = {
   name: serverfarms_appsvcplanAPIMCSBackend_name
   location: serverfarms_appsvcplanAPIMCSBackend_location // 'West Europe'
+  tags: {
+    Owner: owner
+    // CostCenter: costCenter
+  }
   sku: {
     name:  serverfarms_appsvcplanAPIMCSBackend_skuName // 'B1'
     tier: serverfarms_appsvcplanAPIMCSBackend_skuTier // 'Basic'
@@ -251,6 +269,10 @@ resource Microsoft_Storage_storageAccounts_tableServices_storageAccounts_saapimc
 resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/sites@2018-11-01' = {
   name: sites_funcappAPIMCSBackendMicroServiceA_name
   location: sites_funcappAPIMCSBackendMicroServiceA_location // 'West Europe'
+  tags: {
+    Owner: owner
+    // CostCenter: costCenter
+  }  
   kind: 'functionapp,linux'
   properties: {
     enabled: true
@@ -291,6 +313,10 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
 resource sites_funcappAPIMCSBackendMicroServiceB_name_resource 'Microsoft.Web/sites@2018-11-01' = {
   name: sites_funcappAPIMCSBackendMicroServiceB_name
   location: sites_funcappAPIMCSBackendMicroServiceB_location // 'West Europe'
+  tags: {
+    Owner: owner
+    // CostCenter: costCenter
+  }  
   kind: 'functionapp,linux,container'
   properties: {
     enabled: true
@@ -468,7 +494,7 @@ resource sites_funcappAPIMCSBackendMicroServiceB_name_web 'Microsoft.Web/sites/c
 }
 
 /*
-// Azure Function with HttpTRigger1 must be deployed prior to this definition
+// Azure Function with HttpTrigger1 must be deployed prior to this definition
 resource sites_funcappAPIMCSBackendMicroServiceA_name_HttpTrigger1 'Microsoft.Web/sites/functions@2018-11-01' = {
   parent: sites_funcappAPIMCSBackendMicroServiceA_name_resource
   name: 'HttpTrigger1'
