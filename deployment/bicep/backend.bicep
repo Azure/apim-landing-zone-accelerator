@@ -62,7 +62,7 @@ var storageAccounts_location = location
 // - SKU name
 var storageAccounts_skuName  = 'Standard_LRS'
 // - SKU tier
-var storageAccounts_skuTier  = 'Standard'
+// var storageAccounts_skuTier  = 'Standard'
 // - kind
 var storageAccounts_kind  = 'StorageV2'
 //
@@ -130,7 +130,7 @@ resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storag
   }
   sku: {
     name: storageAccounts_skuName // 'Standard_LRS'
-    tier: storageAccounts_skuTier // 'Standard'
+    // tier: storageAccounts_skuTier // 'Standard'
   }
   kind: storageAccounts_kind // 'StorageV2'
   properties: {
