@@ -6,6 +6,4 @@
 /.vs/ProjectSettings.json
 /.vs/slnx.sqlite
 deployment/bicep/localparam.json
-=======
-deployment/bicep/localparam.json
->>>>>>> 82698149fdce0f95f9f17f7b9beead2a474e77f8
+
