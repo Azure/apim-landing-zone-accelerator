@@ -1,5 +1,9 @@
 # Enterprise-Scale-APIM
-![image](https://user-images.githubusercontent.com/37597107/123334898-9911f180-d4f8-11eb-8647-03a3e849a7a1.png)
+Architectural Diagram:
+![image](https://user-images.githubusercontent.com/37597107/133897334-13764cec-c279-4517-8218-a365c1524388.png)
+Resources Deployed:
+![image](https://user-images.githubusercontent.com/37597107/133897343-220a2e78-4f5a-4623-87bd-388a02949b96.png)
+
 
 - This is the way you can execute bicep deployment;
 

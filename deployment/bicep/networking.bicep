@@ -224,6 +224,71 @@ resource appGatewayNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           destinationAddressPrefix: '*'
         }
       }
+      {
+        name: 'HealthProbes'
+        properties: {
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '65200-65535'
+          sourceAddressPrefix: 'GatewayManager'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'Allow_TLS'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '443'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 110
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'Allow_HTTP'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '80'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 111
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'Allow_AzureLoadBalancer'
+        properties: {
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '*'
+          sourceAddressPrefix: 'AzureLoadBalancer'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 120
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'DenyAll'
+        properties: {
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Deny'
+          priority: 130
+          direction: 'Inbound'
+        }
+      }
     ]
   }
 }
@@ -275,6 +340,19 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
+      {
+        name: 'apim-vnet'
+        properties: {
+          priority: 2000
+          sourceAddressPrefix: 'ApiManagement'
+          protocol: 'Tcp'
+          destinationPortRange: '3443'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
       {
         name: 'default-allow-rdp'
         properties: {
@@ -329,9 +407,21 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
 output apimCSVNetName string = apimCSVNetName
 output apimCSVNetId string = vnetApimCs.id
 
-output bastionSubnetName string = bastionSubnetName
-output devOpsSubnetName string = devOpsSubnetName
-output jumpBoxSubnetName string = jumpBoxSubnetName
+output bastionSubnetName string = bastionSubnetName  
+output devOpsSubnetName string = devOpsSubnetName  
+output jumpBoxSubnetName string = jumpBoxSubnetName  
+output appGatewaySubnetName string = appGatewaySubnetName  
+output privateEndpointSubnetName string = privateEndpointSubnetName  
+output backEndSubnetName string = backEndSubnetName  
+output apimSubnetName string = apimSubnetName
+
+output bastionSubnetid string = '${vnetApimCs.id}/subnets/${bastionSubnetName}'  
+output devOpsSubnetid string = '${vnetApimCs.id}/subnets/${devOpsSubnetName}'  
+output jumpBoxSubnetid string = '${vnetApimCs.id}/subnets/${jumpBoxSubnetName}'  
+output appGatewaySubnetid string = '${vnetApimCs.id}/subnets/${appGatewaySubnetName}'  
+output privateEndpointSubnetid string = '${vnetApimCs.id}/subnets/${privateEndpointSubnetName}'  
+output backEndSubnetid string = '${vnetApimCs.id}/subnets/${backEndSubnetName}'  
+output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'  
 
 output publicIp string = pip.id
 
