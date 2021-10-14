@@ -3,10 +3,10 @@ param location string = resourceGroup().location
 param subnetId string
 param privateIPAddress string =  '10.0.0.4'
 
-param vmName string
+param nicName string
 
 resource nic 'Microsoft.Network/networkInterfaces@2020-08-01' = {
-  name: vmName
+  name: nicName
   location: location
   properties: {
     ipConfigurations: [

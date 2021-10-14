@@ -27,7 +27,6 @@ param enableAutologon bool = false
 param artifactsLocation string = 'https://raw.githubusercontent.com/ahmedsza/azdevopsagent/main/setupagent.ps1'
 
 
-
 var azureDevOpsAgentName = 'agent-${vmName}'
 
 // Bring in the nic
@@ -35,7 +34,7 @@ module nic './vm-nic.bicep' = {
   name: '${vmName}-nic'
   params: {
     subnetId: subnetId
-    vmName: vmName
+    nicName: '${vmName}-nic'
   }
 }
 
@@ -52,6 +51,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2019-07-01' = {
     }
     storageProfile: {
       osDisk: {
+        name: '${vmName}-osdisk'
         createOption: 'FromImage'
         managedDisk: {
           storageAccountType: osDiskType

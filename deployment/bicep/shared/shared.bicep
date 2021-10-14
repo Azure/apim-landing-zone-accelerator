@@ -23,22 +23,22 @@ module appInsights './azmon.bicep' = {
   params: {
     location: location
     sharedResourceGroupResources : sharedResourceGroupResources
-
   }
 }
+
 output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
 output appInsightsName string = appInsights.outputs.appInsightsName
 output appInsightsId string = appInsights.outputs.appInsightsId
 output appInsightsInstrumentationKey string = appInsights.outputs.appInsightsInstrumentationKey
 
 module vm_devopswinvm './createvmwindows.bicep' = {
-  name: 'azdevopsvm'
+  name: 'vm-azdevops'
   scope: resourceGroup(resourceGroupName)
   params: {
     subnetId: agentSubnetId
     username: vmazdevopsUsername
     password: vmazdevopsPassword
-    vmName: 'azdevops-${sharedResourceGroupResources.vmSuffix}'
+    vmName: 'vm-ado-${sharedResourceGroupResources.vmSuffix}'
     azureDevOpsAccount: azureDevOpsAccount
     personalAccessToken: personalAccessToken
     deployAgent: true
@@ -46,13 +46,13 @@ module vm_devopswinvm './createvmwindows.bicep' = {
 }
  
 module vm_jumpboxwinvm './createvmwindows.bicep' = {
-  name: 'jumpboxwinvm'
+  name: 'vm-jumpbox'
   scope: resourceGroup(resourceGroupName)
   params: {
     subnetId: jumpboxSubnetId
     username: vmazdevopsUsername
     password: vmazdevopsPassword
-    vmName: 'jumpbox-${sharedResourceGroupResources.vmSuffix}'
+    vmName: 'vm-jmpbx-${sharedResourceGroupResources.vmSuffix}'
   }
 }
 

@@ -35,10 +35,10 @@ var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 var sharedResourceGroupResources = {
   'appInsightsName':'appin-${resourceSuffix}'
   'logAnalyticsWorkspaceName': 'logananalyticsws-${resourceSuffix}'
-   'environmentName': environment
-   'resourceSuffix' : resourceSuffix
-   'vmSuffix' : vmSuffix
-   'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
+  'environmentName': environment
+  'resourceSuffix' : resourceSuffix
+  'vmSuffix' : vmSuffix
+  'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
 }
 
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
