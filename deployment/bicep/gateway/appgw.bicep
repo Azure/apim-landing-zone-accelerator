@@ -25,9 +25,8 @@ param appGatewayCertificateData     string
 param keyVaultName                  string
 param keyVaultResourceGroupName     string
 
-var namingStandard          = '${appGatewayName}-prod-${location}-001'
-var appGatewayPrimaryPip    = 'pip-${namingStandard}'
-var appGatewayIdentityId    = 'identity-${namingStandard}'
+var appGatewayPrimaryPip    = 'pip-${appGatewayName}'
+var appGatewayIdentityId    = 'identity-${appGatewayName}'
 var primarySubnetId         = appGatewaySubnetId
 
 /*
