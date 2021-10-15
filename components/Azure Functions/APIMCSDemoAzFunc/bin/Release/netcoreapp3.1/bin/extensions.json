@@ -1,0 +1,5 @@
+{
+  "extensions":[
+    { "name": "OpenApi", "typeName":"Microsoft.Azure.WebJobs.Extensions.OpenApi.OpenApiWebJobsStartup, Microsoft.Azure.WebJobs.Extensions.OpenApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"}
+  ]
+}
