@@ -98,16 +98,13 @@ module backend 'backend.bicep' = {
   name: 'backendresources'
   scope: resourceGroup(backendRG.name)
   params: {
-
+    workloadName: workloadName
+    environment: environment    
   }
 }
 
-
-
 var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
 var CICDAgentSubnetId = networking.outputs.CICDAgentSubnetId
-
-
 
 module shared './shared/shared.bicep' = {  dependsOn: [
   networking
