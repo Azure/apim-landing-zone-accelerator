@@ -85,7 +85,17 @@ jobs:
           keyvault: "kv-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}"
           secrets: 'vmpassword'
         id: getVMPassword 
-      
+
+      - name: Run Preflight Validation
+        working-directory: ./deployment/bicep
+        run: |
+            az deployment sub validate \
+              --location ${{ fromJson(env.config).AZURE_LOCATION }} \
+              --parameters workloadName=${{ fromJson(env.config).RESOURCE_NAME_PREFIX }} environment=${{ fromJson(env.config).ENVIRONMENT_TAG }} \
+            vmazdevopsUsername=${{ fromJson(env.config).VMAZDEVOPS_USERNAME }} vmazdevopsPassword=${{ steps.getVMPassword.outputs.vmpassword }} \
+            azureDevOpsAccount=${{ fromJson(env.config).AZDEVOPS_ACCT }} personalAccessToken=${{ secrets.ADO_PAT }} \
+              --template-file main.bicep
+
         # Deploy Bicep file, need to point parameters to the main.parameters.json location
       - name: deploy
         uses: azure/arm-deploy@v1
