@@ -1,0 +1,32 @@
+trigger: none
+
+pool: $(poolName)
+
+variables:
+  teamOneProjectGuid: $(System.TeamProjectId)
+steps:
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download artifacts for each team in a separate task'
+  inputs:
+    source: 'specific'
+    project: $(teamOneProjectGuid)
+    pipeline: $(teamOneBuildPipelineId)
+    runVersion: 'latestFromBranch'
+    runBranch: 'refs/heads/master'
+    path: $(Build.SourcesDirectory)/bin/teamone
+- script: |
+    echo Validating Tempaltes for each team
+    echo For ex. Path should be of a specific format
+  displayName: 'Validate the templates'
+- script: |
+    echo Injecting Org Policies for each team
+    echo For ex. All apis require subscription
+  displayName: 'Inject policies'
+- task: AzureCLI@2
+  displayName: 'Deploy to APIM'
+  inputs:
+    azureSubscription: $(armServiceConnection)
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+      az deployment group create --resource-group $(apimResourceGroup) --name teamone  --template-file $(Build.SourcesDirectory)/bin/teamone/ApiTemplates/definitions/Templates/todo.api.template.json --parameters ApimServiceName=$(apimName)  --parameters todo-ServiceUrl=$(todoServiceUrl)

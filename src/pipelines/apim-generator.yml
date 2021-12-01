@@ -1,0 +1,35 @@
+
+trigger: none
+
+pool: $(poolName)
+
+steps:  
+- task: UseDotNet@2      
+  inputs:
+    packageType: 'sdk'
+    version: '3.x'
+  displayName: 'Use .NET Core SDK 3.x'
+- script: |
+    git clone https://github.com/Azure/azure-api-management-devops-resource-kit
+    cd azure-api-management-devops-resource-kit/src/APIM_ARMTemplate/apimtemplate/
+    dotnet restore
+    dotnet pack -c Release
+    echo ^<?xml version="1.0" encoding="utf-8"?^>^<configuration^>^<disabledPackageSources^>^<add key="nuget.org" value="true" /^>^</disabledPackageSources^>^</configuration^> > disable_nuget.config
+    more disable_nuget.config
+    dotnet tool uninstall apimtemplate -g
+    dotnet tool install -g --configfile disable_nuget.config --add-source ./bin/Release apimtemplate
+  displayName: 'Install DevOps resourcekit'
+- script: |
+    cd definitions
+    mkdir Templates
+    apim-templates create --configFile apim-config.yml   
+    dir 
+  displayName: 'Create Templates'    
+- task: CopyFiles@2
+  inputs:
+    contents: 'definitions/**'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: ApiTemplates

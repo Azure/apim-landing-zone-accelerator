@@ -1,0 +1,9 @@
+version: 0.0.1
+apimServiceName: apim-cs
+apis:
+    - name: todo
+      openApiSpec: todo-openapi.yaml
+      suffix: todo
+      subscriptionRequired: false
+      serviceUrl: https://functionurl.net/api
+outputLocation: ./Templates

@@ -34,7 +34,7 @@ param accountName string=''
 param personalAccessToken string=''
 
 @description('The name Azure DevOps or GitHub pool for this build agent to join. Use \'Default\' if you don\'t have a separate pool.')
-param poolName string = 'Default'
+param poolName string = 'apim-cs'
 
 @description('The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')
 @allowed([
