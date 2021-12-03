@@ -1,12 +1,19 @@
+// Parameters
+@description('Azure location to which the resources are to be deployed')
+param location string
 
-param location string = resourceGroup().location
+@description('Id of the subnet within which the VM must be created')
 param subnetId string
+
+@description('The private IP address to associated with this VM')
 param privateIPAddress string =  '10.0.0.4'
 
-param nicName string
+@description('Name of the VM to be created')
+param vmName string
 
-resource nic 'Microsoft.Network/networkInterfaces@2020-08-01' = {
-  name: nicName
+// Resources
+resource nic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
+  name: vmName
   location: location
   properties: {
     ipConfigurations: [
@@ -31,5 +38,6 @@ resource nic 'Microsoft.Network/networkInterfaces@2020-08-01' = {
   }
 }
 
-
+// Outputs
 output nicId string = nic.id
+

@@ -1,45 +1,68 @@
+// Parameters
+@description('Azure location to which the resources are to be deployed')
+param location string
 
-param location string = resourceGroup().location
+@description('The full id string identifying the target subnet for the VM')
 param subnetId string
+
+@description('Disk type of the IS disk')
 param osDiskType string = 'Standard_LRS'
+
+@description('Valid SKU indicator for the VM')
 param vmSize string = 'Standard_D4_v3'
+
+@description('The user name to be used as the Administrator for all VMs created by this deployment')
 param username string
+
+@description('The password for the Administrator user for all VMs created by this deployment')
 param password string
+
+@description('Windows OS Version indicator')
 param windowsOSVersion string = '2016-Datacenter'
 
+@description('Name of the VM to be created')
 param vmName string
+
+@description('Indicator to guide whether the CI/CD agent script should be run or not')
 param deployAgent bool=false
 
-@description('The Azure DevOps account name]')
-param azureDevOpsAccount string=''
+@description('The Azure DevOps or GitHub account name')
+param accountName string=''
 
-@description('The personal access token to connect to Azure DevOps')
+@description('The personal access token to connect to Azure DevOps or Github')
 @secure()
 param personalAccessToken string=''
 
-@description('The Azure DevOps build agent pool for this build agent to join. Use \'Default\' if you don\'t have a separate pool.')
+@description('The name Azure DevOps or GitHub pool for this build agent to join. Use \'Default\' if you don\'t have a separate pool.')
 param poolName string = 'Default'
 
-@description('Enable autologon to run the build agent in interactive mode that can sustain machine reboots.<br>Set this to true if the agents will be used to run UI tests.')
-param enableAutologon bool = false
+@description('The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')
+@allowed([
+  'github'
+  'azuredevops'
+  'none'
+])
+param CICDAgentType string
 
-@description('The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.')
-param artifactsLocation string = 'https://raw.githubusercontent.com/ahmedsza/azdevopsagent/main/setupagent.ps1'
+@description('The base URI where the CI/CD agent artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.')
+param artifactsLocation string = 'https://raw.githubusercontent.com/cykreng/Enterprise-Scale-AppService/main/deployment/bicep/shared/agentsetup.ps1'
 
 
-var azureDevOpsAgentName = 'agent-${vmName}'
+// Variables
+var AgentName = 'agent-${vmName}'
 
 // Bring in the nic
 module nic './vm-nic.bicep' = {
   name: '${vmName}-nic'
   params: {
+    location: location
     subnetId: subnetId
     nicName: '${vmName}-nic'
   }
 }
 
 // Create the vm
-resource vm 'Microsoft.Compute/virtualMachines@2019-07-01' = {
+resource vm 'Microsoft.Compute/virtualMachines@2021-04-01' = {
   name: vmName
   location: location
   zones: [
@@ -79,7 +102,8 @@ resource vm 'Microsoft.Compute/virtualMachines@2019-07-01' = {
   }
 }
 
-resource vm_CustomScript 'Microsoft.Compute/virtualMachines/extensions@2018-06-01' = if (deployAgent) {
+// deploy CI/CD agent, if required
+resource vm_CustomScript 'Microsoft.Compute/virtualMachines/extensions@2021-04-01' = if (deployAgent) {
   parent: vm
   name: 'CustomScript'
   location: location
@@ -91,10 +115,10 @@ resource vm_CustomScript 'Microsoft.Compute/virtualMachines/extensions@2018-06-0
       fileUris: [
         artifactsLocation
       ]   
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command ./setupagent.ps1 -url ${azureDevOpsAccount} -pat ${personalAccessToken} -agent ${azureDevOpsAgentName} -pool ${poolName} -runAsAutoLogon ${enableAutologon} -vmAdminUserName ${username} -vmAdminPassword ${password}'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command ./agentsetup.ps1 -url ${accountName} -pat ${personalAccessToken} -agent ${AgentName} -pool ${poolName} -agenttype ${CICDAgentType} '
     }
   }
 }
 
-
+// outputs
 output id string = vm.id
