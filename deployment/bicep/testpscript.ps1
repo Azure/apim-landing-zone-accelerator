@@ -1,4 +1,3 @@
-$RESOURCE_GROUP = "tesatase"
 $LOCATION = "westeurope"
 $BICEP_FILE="main.bicep"
 
