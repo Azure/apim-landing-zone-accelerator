@@ -27,7 +27,9 @@ module appInsights './azmon.bicep' = {
   }
 }
 output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
-
+output appInsightsName string = appInsights.outputs.appInsightsName
+output appInsightsId string = appInsights.outputs.appInsightsId
+output appInsightsInstrumentationKey string = appInsights.outputs.appInsightsInstrumentationKey
 
 module vm_devopswinvm './createvmwindows.bicep' = {
   name: 'azdevopsvm'
@@ -89,3 +91,4 @@ resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 
 output devopsAgentvmName string = vm_devopswinvm.name
 output jumpBoxvmName string = vm_jumpboxwinvm.name
+output keyVaultName string = key_vault.name
