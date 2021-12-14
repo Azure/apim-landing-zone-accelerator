@@ -36,3 +36,4 @@ Deployment Details:
 1. This is a way you can execute bicep deployment:
     ```
     az deployment sub create --location eastus --name am --template-file main.bicep --parameters workloadName=am environment=dev
+2. Please leverage issues if you have any feedback or request on how we can improve on this repository
