@@ -45,46 +45,6 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
-
-      - name: Generate random password and save to keyvault with Azure Powershell
-        uses: Azure/powershell@v1
-        with:
-          inlineScript: | 
-            Function GeneratePassword ([int]$Length) {
-              $CharSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{]+-[*=@:)}$^%;(_!&#?>/|.'.ToCharArray()
-              #Index1s 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456
-              #Index10s 0 1 2 3 4 5 6 7 8
-          
-              $rng = New-Object System.Security.Cryptography.RNGCryptoServiceProvider
-              $bytes = New-Object byte[]($Length)
-          
-              $rng.GetBytes($bytes)
-          
-              $Return = New-Object char[]($Length)
-          
-              For ($i = 0 ; $i -lt $Length ; $i++) {
-                  $Return[$i] = $CharSet[$bytes[$i]%$CharSet.Length]
-              }
-          
-              Return (-join $Return)
-            }
-            $RGName = "rg-shared-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}-${{ fromJson(env.config).AZURE_LOCATION }}-001"
-            $KVName = "kv-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}"
-            New-AzResourceGroup -Name $RGName -Location ${{ fromJson(env.config).AZURE_LOCATION }}
-            New-AzKeyVault -Name $KVName -ResourceGroupName $RGName -Location ${{ fromJson(env.config).AZURE_LOCATION }}
-            Set-AzKeyVaultAccessPolicy -VaultName $KVName -ServicePrincipalName ${{ secrets.CLIENTID }} -PermissionsToSecrets set,get -PassThru
-            Set-AzKeyVaultAccessPolicy -VaultName $KVName -ResourceGroupName $RGName -EnabledForTemplateDeployment -EnabledForDeployment -PassThru
-            $SecurePass = GeneratePassword(15) | ConvertTo-SecureString -AsPlainText -Force
-            Set-AzKeyVaultSecret -VaultName $KVName -Name "vmpassword" -SecretValue $SecurePass
-          azPSVersion: latest
-      
-      - name: Get Secret from Key Vault
-        uses: Azure/get-keyvault-secrets@v1
-        with:
-          keyvault: "kv-${{ fromJson(env.config).RESOURCE_NAME_PREFIX }}-${{ fromJson(env.config).ENVIRONMENT_TAG }}"
-          secrets: 'vmpassword'
-        id: getVMPassword 
 
       - name: Run Preflight Validation
         working-directory: ./deployment/bicep
@@ -106,5 +66,5 @@ jobs:
           template: ./deployment/bicep/main.bicep
           parameters: > 
             workloadName=${{ fromJson(env.config).RESOURCE_NAME_PREFIX }} environment=${{ fromJson(env.config).ENVIRONMENT_TAG }} 
-            vmazdevopsUsername=${{ fromJson(env.config).VMAZDEVOPS_USERNAME }} vmazdevopsPassword=${{ steps.getVMPassword.outputs.vmpassword }} 
-            azureDevOpsAccount=${{ fromJson(env.config).AZDEVOPS_ACCT }} personalAccessToken=${{ secrets.ADO_PAT }}
+            vmUsername=${{ fromJson(env.config).VM_USERNAME }} vmPassword=${{ secrets.VM_PW }} 
+            accountName=${{ fromJson(env.config).ACCOUNT_NAME }} personalAccessToken=${{ secrets.PAT }} CICDAgentType=${{ fromJson(env.config).CICD_AGENT_TYPE}}
