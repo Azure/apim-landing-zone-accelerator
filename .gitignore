@@ -1,4 +1,5 @@
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
 deployment/bicep/localparam*.json
 deployment/bicep/localmain.bicep
 deployment/bicep/localtestscript.ps1
-
