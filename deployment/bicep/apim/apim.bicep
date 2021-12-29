@@ -4,6 +4,9 @@ targetScope='resourceGroup'
  * Input parameters
 */
 
+@description('The name of the API Management resource to be created.')
+param apimName            string
+
 @description('The subnet resource id to use for APIM.')
 @minLength(1)
 param apimSubnetId string
@@ -28,11 +31,6 @@ param location string = resourceGroup().location
 param appInsightsName string
 param appInsightsId string
 param appInsightsInstrumentationKey string
-
-/*
- * Variables
-*/
-var apimName = 'apim-${uniqueString(resourceGroup().id)}'
 
 /*
  * Resources
@@ -79,5 +77,3 @@ resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnosti
     }
   }
 }
-
-output apimName string = apimName

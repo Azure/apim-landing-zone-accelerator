@@ -56,7 +56,7 @@ module nic './vm-nic.bicep' = {
   params: {
     location: location
     subnetId: subnetId
-    vmName: vmName
+    nicName: '${vmName}-nic'
   }
 }
 
@@ -73,6 +73,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-04-01' = {
     }
     storageProfile: {
       osDisk: {
+        name: '${vmName}-osdisk'
         createOption: 'FromImage'
         managedDisk: {
           storageAccountType: osDiskType

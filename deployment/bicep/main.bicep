@@ -55,14 +55,18 @@ var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
+// Resource Names
+var apimName = 'apim-${resourceSuffix}'
+var appGatewayName = 'appgw-${resourceSuffix}'
+
 // Create resources name using these objects and pass it as a params in module
 var sharedResourceGroupResources = {
   'appInsightsName':'appin-${resourceSuffix}'
   'logAnalyticsWorkspaceName': 'logananalyticsws-${resourceSuffix}'
-   'environmentName': environment
-   'resourceSuffix' : resourceSuffix
-   'vmSuffix' : vmSuffix
-   'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
+  'environmentName': environment
+  'resourceSuffix' : resourceSuffix
+  'vmSuffix' : vmSuffix
+  'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
 }
 
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -130,6 +134,7 @@ module apimModule 'apim/apim.bicep'  = {
   name: 'apimDeploy'
   scope: resourceGroup(apimRG.name)
   params: {
+    apimName: apimName
     apimSubnetId: networking.outputs.apimSubnetid
     location: location
     appInsightsName: shared.outputs.appInsightsName
@@ -145,7 +150,7 @@ module dnsZoneModule 'shared/dnszone.bicep'  = {
   params: {
     vnetName: networking.outputs.apimCSVNetName
     vnetRG: networkingRG.name
-    apimName: apimModule.outputs.apimName
+    apimName: apimName
     apimRG: apimRG.name
   }
 }
@@ -158,11 +163,11 @@ module appgwModule 'gateway/appgw.bicep' = {
     dnsZoneModule
   ]
   params: {
-    appGatewayName:                 'appgw-${resourceSuffix}'
+    appGatewayName:                 appGatewayName
     appGatewayFQDN:                 appGatewayFqdn
     location:                       location
     appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
-    primaryBackendEndFQDN:          '${apimModule.outputs.apimName}.azure-api.net'
+    primaryBackendEndFQDN:          '${apimName}.azure-api.net'
     appGatewayCertificateData:      appGatewayCertificateData
     keyVaultName:                   shared.outputs.keyVaultName
     keyVaultResourceGroupName:      sharedRG.name
