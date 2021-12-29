@@ -65,7 +65,6 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
   name: appGatewayName
   location: location
   dependsOn: [
-    appGatewayPublicIPAddress
     certificate
     appGatewayIdentity
   ]

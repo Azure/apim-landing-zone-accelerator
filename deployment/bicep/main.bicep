@@ -48,13 +48,11 @@ var resourceSuffix = '${workloadName}-${environment}-${location}-001'
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
 
-var vmSuffix=environment
-// RG Names Declaration
-
 var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
+/*
 // Create resources name using these objects and pass it as a params in module
 var sharedResourceGroupResources = {
   'appInsightsName':'appin-${resourceSuffix}'
@@ -64,7 +62,7 @@ var sharedResourceGroupResources = {
    'vmSuffix' : vmSuffix
    'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
 }
-
+*/
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: networkingResourceGroupName
   location: location
@@ -106,24 +104,25 @@ module backend 'backend.bicep' = {
 var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
 var CICDAgentSubnetId = networking.outputs.CICDAgentSubnetId
 
-module shared './shared/shared.bicep' = {  dependsOn: [
-  networking
-]
-name: 'sharedresources'
-scope: resourceGroup(sharedRG.name)
-params: {
-  accountName: accountName
-  CICDAgentSubnetId: CICDAgentSubnetId
-  CICDAgentType: CICDAgentType
-  environment: environment
-  jumpboxSubnetId: jumpboxSubnetId
-  location: location
-  personalAccessToken: personalAccessToken
-  resourceGroupName: sharedRG.name
-  resourceSuffix: resourceSuffix
-  vmPassword: vmPassword
-  vmUsername: vmUsername
-}
+module shared './shared/shared.bicep' = {  
+  dependsOn: [
+    networking
+  ]
+  name: 'sharedresources'
+  scope: resourceGroup(sharedRG.name)
+  params: {
+    accountName: accountName
+    CICDAgentSubnetId: CICDAgentSubnetId
+    CICDAgentType: CICDAgentType
+    environment: environment
+    jumpboxSubnetId: jumpboxSubnetId
+    location: location
+    personalAccessToken: personalAccessToken
+    resourceGroupName: sharedRG.name
+    resourceSuffix: resourceSuffix
+    vmPassword: vmPassword
+    vmUsername: vmUsername
+  }
 }
 
 module apimModule 'apim/apim.bicep'  = {
