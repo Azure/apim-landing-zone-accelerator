@@ -22,6 +22,7 @@ param probeUrl                      string = '/status-0123456789abcdef'
 param keyVaultName                  string
 param keyVaultResourceGroupName     string
 
+
 var appGatewayPrimaryPip            = 'pip-${appGatewayName}'
 var appGatewayIdentityId            = 'identity-${appGatewayName}'
 
