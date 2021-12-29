@@ -75,7 +75,7 @@ module vm_devopswinvm './createvmwindows.bicep' = if (toLower(CICDAgentType)!='n
 }
  
 module vm_jumpboxwinvm './createvmwindows.bicep' = {
-  name: 'jumpboxwinvm'
+  name: 'vm-jumpbox'
   scope: resourceGroup(resourceGroupName)
   params: {
     location: location

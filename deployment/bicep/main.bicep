@@ -39,8 +39,8 @@ param personalAccessToken string
 @description('The FQDN for the Application Gateway. Example - api.example.com.')
 param appGatewayFqdn string
 
-@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
-param appGatewayCertificateData     string
+//@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
+//param appGatewayCertificateData     string
 
 // Variables
 var location = deployment().location
@@ -52,17 +52,10 @@ var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
-/*
-// Create resources name using these objects and pass it as a params in module
-var sharedResourceGroupResources = {
-  'appInsightsName':'appin-${resourceSuffix}'
-  'logAnalyticsWorkspaceName': 'logananalyticsws-${resourceSuffix}'
-   'environmentName': environment
-   'resourceSuffix' : resourceSuffix
-   'vmSuffix' : vmSuffix
-   'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
-}
-*/
+// Resource Names
+var apimName = 'apim-${resourceSuffix}'
+var appGatewayName = 'appgw-${resourceSuffix}'
+
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: networkingResourceGroupName
   location: location
@@ -129,6 +122,7 @@ module apimModule 'apim/apim.bicep'  = {
   name: 'apimDeploy'
   scope: resourceGroup(apimRG.name)
   params: {
+    apimName: apimName
     apimSubnetId: networking.outputs.apimSubnetid
     location: location
     appInsightsName: shared.outputs.appInsightsName
@@ -144,7 +138,7 @@ module dnsZoneModule 'shared/dnszone.bicep'  = {
   params: {
     vnetName: networking.outputs.apimCSVNetName
     vnetRG: networkingRG.name
-    apimName: apimModule.outputs.apimName
+    apimName: apimName
     apimRG: apimRG.name
   }
 }
@@ -157,12 +151,12 @@ module appgwModule 'gateway/appgw.bicep' = {
     dnsZoneModule
   ]
   params: {
-    appGatewayName:                 'appgw-${resourceSuffix}'
+    appGatewayName:                 appGatewayName
     appGatewayFQDN:                 appGatewayFqdn
     location:                       location
     appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
-    primaryBackendEndFQDN:          '${apimModule.outputs.apimName}.azure-api.net'
-    appGatewayCertificateData:      appGatewayCertificateData
+    primaryBackendEndFQDN:          '${apimName}.azure-api.net'
+    //appGatewayCertificateData:      appGatewayCertificateData
     keyVaultName:                   shared.outputs.keyVaultName
     keyVaultResourceGroupName:      sharedRG.name
   }

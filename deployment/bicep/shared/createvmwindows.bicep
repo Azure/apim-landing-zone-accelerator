@@ -47,6 +47,7 @@ param CICDAgentType string
 @description('The base URI where the CI/CD agent artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.')
 param artifactsLocation string = 'https://raw.githubusercontent.com/cykreng/Enterprise-Scale-AppService/main/deployment/bicep/shared/agentsetup.ps1'
 
+
 // Variables
 var AgentName = 'agent-${vmName}'
 
@@ -56,7 +57,7 @@ module nic './vm-nic.bicep' = {
   params: {
     location: location
     subnetId: subnetId
-    vmName: vmName
+    nicName: '${vmName}-nic'
   }
 }
 
@@ -73,6 +74,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-04-01' = {
     }
     storageProfile: {
       osDisk: {
+        name: '${vmName}-osdisk'
         createOption: 'FromImage'
         managedDisk: {
           storageAccountType: osDiskType
