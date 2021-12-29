@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
 /.vs/ProjectSettings.json
 /.vs/slnx.sqlite
-deployment/bicep/localparam.json
-
+deployment/bicep/localparam*.json
+deployment/bicep/localmain.bicep
+deployment/bicep/localtestscript.ps1
