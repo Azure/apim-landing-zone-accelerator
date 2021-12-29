@@ -57,7 +57,7 @@ module nic './vm-nic.bicep' = {
   params: {
     location: location
     subnetId: subnetId
-    nicName: '${vmName}-nic'
+    vmName: vmName
   }
 }
 
