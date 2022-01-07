@@ -24,6 +24,8 @@ function setupazdevops{
     #test if an old installation exists, if so, delete the folder
     if (test-path $azagentdir)
     {
+        
+        Write-Host "clean out old directory"
         set-location $azagentdir
         $servicename=(Get-Content .service)
         Stop-Service $servicename -ErrorAction SilentlyContinue
@@ -31,6 +33,7 @@ function setupazdevops{
         Remove-Item -Path $azagentdir -Force -Confirm:$false -Recurse
     }
     
+    Write-Host "create directory"
     #create a new folder
     new-item -ItemType Directory -Force -Path $azagentdir
     set-location $azagentdir
@@ -42,6 +45,7 @@ function setupazdevops{
     
     $ProgressPreference = 'SilentlyContinue'
     #get the latest build agent version
+    Write-Host "download agent"
     $wr = Invoke-WebRequest https://api.github.com/repos/Microsoft/azure-pipelines-agent/releases/latest -UseBasicParsing
     $tag = ($wr | ConvertFrom-Json)[0].tag_name
     $tag = $tag.Substring(1)
@@ -59,6 +63,11 @@ function setupazdevops{
     Write-Output "--unattended --url $URL --auth pat --token "$PAT" --pool $POOL --agent $AGENT --acceptTeeEula --runAsService"
     #run the config script of the build agent
     .\config.cmd --unattended --url $URL --auth pat --token "$PAT" --pool $POOL --agent $AGENT --acceptTeeEula --runAsService --replace
+    
+    Write-Host "About to start Azure DevOps Agent"
+    set-location $azagentdir
+    $servicename=(Get-Content .service)
+    Start-Service $servicename -ErrorAction SilentlyContinue
     
     #exit
     Stop-Transcript
