@@ -2,37 +2,30 @@
  * Input parameters
 */
 @description('The name of the Application Gateawy to be created.')
-param appGatewayName            string
+param appGatewayName                string
 
 @description('The FQDN of the Application Gateawy.Must match the TLS Certificate.')
-param appGatewayFQDN            string = 'api.example.com'
+param appGatewayFQDN                string = 'api.example.com'
 
 @description('The location of the Application Gateawy to be created')
-param location                  string = resourceGroup().location
+param location                      string = resourceGroup().location
 
 @description('The subnet resource id to use for Application Gateway.')
-param appGatewaySubnetId        string
+param appGatewaySubnetId            string
 
 @description('The backend URL of the APIM.')
-param primaryBackendEndFQDN     string = 'api-internal.example.com'
+param primaryBackendEndFQDN         string = 'api-internal.example.com'
 
 @description('The Url for the Application Gateway Health Probe.')
-param probeUrl                  string = '/status-0123456789abcdef'
-
-@description('The pfx certificate file for the Application Gataeway TLS listener. (base64 encoded)')
-param appGatewayCertificateData     string
+param probeUrl                      string = '/status-0123456789abcdef'
 
 param keyVaultName                  string
 param keyVaultResourceGroupName     string
 
-var namingStandard          = '${appGatewayName}-prod-${location}-001'
-var appGatewayPrimaryPip    = 'pip-${namingStandard}'
-var appGatewayIdentityId    = 'identity-${namingStandard}'
-var primarySubnetId         = appGatewaySubnetId
 
-/*
- * Implementation
-*/
+var appGatewayPrimaryPip            = 'pip-${appGatewayName}'
+var appGatewayIdentityId            = 'identity-${appGatewayName}'
+
 resource appGatewayIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name:     appGatewayIdentityId
   location: location
@@ -42,10 +35,10 @@ module certificate 'certificate.bicep' = {
   name: 'certificate'
   scope: resourceGroup(keyVaultResourceGroupName)
   params: {
-    objectId:       appGatewayIdentity.properties.principalId
-    tenantId:       appGatewayIdentity.properties.tenantId
-    keyVaultName:   keyVaultName
-    certData:       appGatewayCertificateData
+    objectId:           appGatewayIdentity.properties.principalId
+    tenantId:           appGatewayIdentity.properties.tenantId
+    keyVaultName:       keyVaultName
+    keyVaultSecretName: replace(appGatewayFQDN,'.', '-')
   }
 }
 
@@ -85,7 +78,7 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
         name: 'appGatewayIpConfig'
         properties: {
           subnet: {
-            id: primarySubnetId
+            id: appGatewaySubnetId
           }
         }
       }
@@ -94,7 +87,7 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
       {
         name: appGatewayFQDN
         properties: {
-          keyVaultSecretId: certificate.outputs.secretUri
+          keyVaultSecretId:  certificate.outputs.secretUri
         }
       }
     ]
