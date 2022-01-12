@@ -91,8 +91,6 @@ az ad sp create-for-rbac --name "enterprise-scale-apim-app" --role contributor \
 ```
 <img src= /docs/images/secrets.png width=800 height=425>
 
-<img src= /docs/images/repo-secrets.png width=650 height=150>
-
 
 ### 5. Run the workflow 
 
