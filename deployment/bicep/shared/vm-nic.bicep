@@ -8,12 +8,12 @@ param subnetId string
 @description('The private IP address to associated with this VM')
 param privateIPAddress string =  '10.0.0.4'
 
-@description('Name of the VM to be created')
-param vmName string
+@description('Name of the Network Interface to be created')
+param nicName string
 
 // Resources
 resource nic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
-  name: vmName
+  name: nicName
   location: location
   properties: {
     ipConfigurations: [

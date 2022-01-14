@@ -5,21 +5,20 @@ var resourceSuffix =                '${workload}-${environment}-${location}-001'
 
 var apimRG =                        'ES-AppGateway_RG'
 var appgw =                         'appgw-${resourceSuffix}'
-var appgwFqdn =                     'api.example.com'
-var appgwSubnet =                   'snet-apgw-${resourceSuffix}'
+var appgwFqdn =                     'api.contoso.com'
+var appgwSubnet =                   'snet-apgw-${workload}'
 var virtualNetworkName =            'vnet-apim-cs-${resourceSuffix}'
 var appgwSubnetId =                 '${subscription().id}/resourceGroups/DevSub01_Network_RG/providers/Microsoft.Network/virtualNetworks/${virtualNetworkName}/subnets/${appgwSubnet}'
-var apimFqdn =                      'api-internal.example.com'
+var apimFqdn =                      'api-internal.constoso.com'
 
-var keyVaultName =                  'kv-example-prod-centralus-001'
-var keyVaultRG =                    'rg-shared-example-prod-centralus-001'
+var keyVaultName =                  'kv-${workload}-${environment}-002'
+var keyVaultRG =                    'ES-AppGateway_RG'
 
-module appgwModule 'appgw.bicep' = {
+var certPassword =                  '123456'
+
+module appgwModule '../appgw.bicep' = {
   name: 'appgwDeploy'
   scope: resourceGroup(apimRG)
-  dependsOn: [
-    apimModule
-  ]
   params: {
     appGatewayName:                 appgw
     appGatewayFQDN:                 appgwFqdn
@@ -28,5 +27,6 @@ module appgwModule 'appgw.bicep' = {
     primaryBackendEndFQDN:          apimFqdn
     keyVaultName:                   keyVaultName
     keyVaultResourceGroupName:      keyVaultRG
+    certPassword:                   certPassword
   }
 }
