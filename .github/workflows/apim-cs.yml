@@ -22,6 +22,8 @@ jobs:
 
   build-and-deploy:
       runs-on: ubuntu-latest
+      needs: validate_bicep
+
       steps:
 
         # Checkout code
