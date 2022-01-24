@@ -1,12 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\deployment",
+    "\\components",
+    "\\components\\Azure Functions",
+    "\\components\\Azure Functions\\APIMCSDemoAzFunc",
     "\\deployment\\azure-resource-manager",
     "\\deployment\\bicep",
-    "\\deployment\\pipelines",
-    "\\docs"
+    "\\deployment\\pipelines"
   ],
-  "SelectedNode": "\\deployment\\bicep\\backend.bicep",
+  "SelectedNode": "\\components\\Azure Functions\\APIMCSDemoAzFunc\\APIMCSDemoAzFunc.sln",
   "PreviewInSolutionExplorer": false
 }
