@@ -140,12 +140,14 @@ There will be four resource groups created as follows -
    <img src= /docs/images/resource_groups.png>
 </p>  
 
-_TO BE UPDATED_
-
 - Outputs from Backend :
+<img src= /docs/images/backend.png>
 
 - Outputs from Shared module :
+<img src= /docs/images/shared.png>
 
 - Outputs from APIM module :
+<img src= /docs/images/apim.png>
 
 - Outputs from Networking module :
+<img src= /docs/images/networking.png>
