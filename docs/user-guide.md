@@ -86,8 +86,8 @@ az ad sp create-for-rbac --name "enterprise-scale-apim-app" --role contributor \
                         --sdk-auth
 ```
 
-[replace {subscription-id} with the subscription details]
-[the above command should output a JSON object like this]
+  - _Replace {subscription-id} with the subscription details_
+    - _the above command should output a JSON object like below_
 
 ```
   {
