@@ -34,7 +34,7 @@ param accountName string=''
 param personalAccessToken string=''
 
 @description('The name Azure DevOps or GitHub pool for this build agent to join. Use \'Default\' if you don\'t have a separate pool.')
-param poolName string = 'apim-cs'
+param poolName string = 'Default'
 
 @description('The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')
 @allowed([
@@ -45,7 +45,7 @@ param poolName string = 'apim-cs'
 param CICDAgentType string
 
 @description('The base URI where the CI/CD agent artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.')
-param artifactsLocation string = 'https://raw.githubusercontent.com/cykreng/Enterprise-Scale-AppService/main/deployment/bicep/shared/agentsetup.ps1'
+param artifactsLocation string = 'https://raw.githubusercontent.com/cykreng/Enterprise-Scale-APIM/main/deployment/bicep/shared/agentsetup.ps1'
 
 // Variables
 var AgentName = 'agent-${vmName}'
