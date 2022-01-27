@@ -13,6 +13,9 @@ param location                      string = resourceGroup().location
 @description('The subnet resource id to use for Application Gateway.')
 param appGatewaySubnetId            string
 
+@description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and copy the pfx file to deployment/bicep/gateway/certs/appgw.pfx if custom certificates are to be used')
+param appGatewayCertType string
+
 @description('The backend URL of the APIM.')
 param primaryBackendEndFQDN         string = 'api-internal.example.com'
 
@@ -41,6 +44,7 @@ module certificate './modules/certificate.bicep' = {
     keyVaultName:       keyVaultName
     location:           location
     appGatewayFQDN:     appGatewayFQDN
+    appGatewayCertType: appGatewayCertType
     certPassword:       certPassword
   }
 }

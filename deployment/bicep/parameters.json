@@ -22,7 +22,12 @@
         },
         "environment" :{ 
             "value": "dev"
+        },
+        "appGatewayFqdn" :{ 
+            "value": "ENTER FQDN"
+        },
+        "appGatewayCertType" :{
+            "value": "selfsigned or custom"
         }
-
     }
 }

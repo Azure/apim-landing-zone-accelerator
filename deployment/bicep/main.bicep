@@ -34,13 +34,15 @@ param accountName string
 @secure()
 param personalAccessToken string
 
-
 @description('The FQDN for the Application Gateway. Example - api.contoso.com.')
 param appGatewayFqdn string
 
 @description('The password for the TLS certificate for the Application Gateway.  The pfx file needs to be copied to deployment/bicep/gateway/certs/appgw.pfx')
 @secure()
 param certificatePassword string
+
+@description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and copy the pfx file to deployment/bicep/gateway/certs/appgw.pfx if custom certificates are to be used')
+param appGatewayCertType string
 
 // Variables
 var location = deployment().location
@@ -89,16 +91,16 @@ resource apimRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-module networking 'networking.bicep' = {
+module networking './networking/networking.bicep' = {
   name: 'networkingresources'
   scope: resourceGroup(networkingRG.name)
   params: {
     workloadName: workloadName
-    environment: environment
+    deploymentEnvironment: environment
   }
 }
 
-module backend 'backend.bicep' = {
+module backend './backend/backend.bicep' = {
   name: 'backendresources'
   scope: resourceGroup(backendRG.name)
   params: {
@@ -148,6 +150,9 @@ module apimModule 'apim/apim.bicep'  = {
 module dnsZoneModule 'shared/dnszone.bicep'  = {
   name: 'apimDnsZoneDeploy'
   scope: resourceGroup(sharedRG.name)
+  dependsOn: [
+    apimModule
+  ]  
   params: {
     vnetName: networking.outputs.apimCSVNetName
     vnetRG: networkingRG.name
@@ -171,6 +176,7 @@ module appgwModule 'gateway/appgw.bicep' = {
     primaryBackendEndFQDN:          '${apimName}.azure-api.net'
     keyVaultName:                   shared.outputs.keyVaultName
     keyVaultResourceGroupName:      sharedRG.name
+    appGatewayCertType:             appGatewayCertType
     certPassword:                   certificatePassword
   }
 }
