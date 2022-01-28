@@ -1,3 +1,25 @@
+//
+//   ***@microsoft.com, 2021
+//
+// Deploy as
+//
+// # Script start
+//
+// $RESOURCE_GROUP = "rgAPIMCSBackend"
+// $LOCATION = "westeurope"
+// $BICEP_FILE="networking.bicep"
+//
+// # delete a deployment
+//
+// az deployment group  delete --name testnetworkingdeployment -g $RESOURCE_GROUP 
+// 
+// # deploy the bicep file directly
+//
+// az deployment group create --name testnetworkingdeployment --template-file $BICEP_FILE --parameters parameters.json -g $RESOURCE_GROUP -o json
+// 
+// # Script end
+
+
 // Parameters
 @description('A short name for the workload being deployed')
 param workloadName string
@@ -9,7 +31,7 @@ param workloadName string
   'prod'
   'dr'
 ])
-param environment string
+param deploymentEnvironment string
 
 param apimCSVNetNameAddressPrefix string = '10.2.0.0/16'
 
@@ -21,7 +43,7 @@ param privateEndpointAddressPrefix string = '10.2.5.0/24'
 param backEndAddressPrefix string = '10.2.6.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
 
-@description('A short name for the PL that will created between Funcs')
+@description('A short name for the PL that will be created between Funcs')
 param privateLinkName string = 'myPL'
 
 @description('Func id for PL to create')
@@ -33,27 +55,28 @@ var owner = 'APIM Const Set'
 var location = resourceGroup().location
 
 
-var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${environment}-${location}'
+var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${deploymentEnvironment}-${location}'
 
-var bastionSubnetName = 'snet-bast-${workloadName}-${environment}-${location}'
-var devOpsSubnetName = 'snet-devops-${workloadName}-${environment}-${location}'
-var jumpBoxSubnetName = 'snet-jbox-${workloadName}-${environment}-${location}-001'
-var appGatewaySubnetName = 'snet-apgw-${workloadName}-${environment}-${location}-001'
-var privateEndpointSubnetName = 'snet-prep-${workloadName}-${environment}-${location}-001'
-var backEndSubnetName = 'snet-bcke-${workloadName}-${environment}-${location}-001'
-var apimSubnetName = 'snet-apim-${workloadName}-${environment}-${location}-001'
+var bastionSubnetName = 'AzureBastionSubnet' // Azure Bastion subnet must have AzureBastionSubnet name, not 'snet-bast-${workloadName}-${deploymentEnvironment}-${location}'
+var devOpsSubnetName = 'snet-devops-${workloadName}-${deploymentEnvironment}-${location}'
+var jumpBoxSubnetName = 'snet-jbox-${workloadName}-${deploymentEnvironment}-${location}-001'
+var appGatewaySubnetName = 'snet-apgw-${workloadName}-${deploymentEnvironment}-${location}-001'
+var privateEndpointSubnetName = 'snet-prep-${workloadName}-${deploymentEnvironment}-${location}-001'
+var backEndSubnetName = 'snet-bcke-${workloadName}-${deploymentEnvironment}-${location}-001'
+var apimSubnetName = 'snet-apim-${workloadName}-${deploymentEnvironment}-${location}-001'
+var bastionName = 'bastion-${workloadName}-${deploymentEnvironment}-${location}'	
+var bastionIPConfigName = 'bastionipcfg-${workloadName}-${deploymentEnvironment}-${location}'
 
-var bastionSNNSG = 'nsg-bast-${workloadName}-${environment}-${location}'
-var devOpsSNNSG = 'nsg-devops-${workloadName}-${environment}-${location}'
-var jumpBoxSNNSG = 'nsg-jbox-${workloadName}-${environment}-${location}'
-var appGatewaySNNSG = 'nsg-apgw-${workloadName}-${environment}-${location}'
-var privateEndpointSNNSG = 'nsg-prep-${workloadName}-${environment}-${location}'
-var backEndSNNSG = 'nsg-bcke-${workloadName}-${environment}-${location}'
-var apimSNNSG = 'nsg-apim-${workloadName}-${environment}-${location}'
+var bastionSNNSG = 'nsg-bast-${workloadName}-${deploymentEnvironment}-${location}'
+var devOpsSNNSG = 'nsg-devops-${workloadName}-${deploymentEnvironment}-${location}'
+var jumpBoxSNNSG = 'nsg-jbox-${workloadName}-${deploymentEnvironment}-${location}'
+var appGatewaySNNSG = 'nsg-apgw-${workloadName}-${deploymentEnvironment}-${location}'
+var privateEndpointSNNSG = 'nsg-prep-${workloadName}-${deploymentEnvironment}-${location}'
+var backEndSNNSG = 'nsg-bcke-${workloadName}-${deploymentEnvironment}-${location}'
+var apimSNNSG = 'nsg-apim-${workloadName}-${deploymentEnvironment}-${location}'
 
-
-var publicIPAddressName = 'publicIp'
-
+var publicIPAddressName = 'pip-apimcs-${workloadName}-${deploymentEnvironment}-${location}' // 'publicIp'
+var publicIPAddressNameBastion = 'pip-bastion-${workloadName}-${deploymentEnvironment}-${location}'
 
 // Resources - VNet - SubNets
 resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
@@ -142,11 +165,14 @@ resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
 }
 
 // Network Security Groups (NSG)
+
+// Bastion NSG must have mininal set of rules below
 resource bastionNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   name: bastionSNNSG
   location: location
   properties: {
     securityRules: [
+/* 
       {
         name: 'default-allow-rdp'
         properties: {
@@ -158,8 +184,135 @@ resource bastionNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           direction: 'Inbound'
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
+          }
+        } 
+*/
+        {
+          name: 'AllowHttpsInbound'
+          properties: {
+            priority: 120
+            protocol: 'Tcp'
+            destinationPortRange: '443'
+            access: 'Allow'
+            direction: 'Inbound'
+            sourcePortRange: '*'
+            sourceAddressPrefix: 'Internet'
+            destinationAddressPrefix: '*'
+          }              
         }
-      }
+        {
+          name: 'AllowGatewayManagerInbound'
+          properties: {
+            priority: 130
+            protocol: 'Tcp'
+            destinationPortRange: '443'
+            access: 'Allow'
+            direction: 'Inbound'
+            sourcePortRange: '*'
+            sourceAddressPrefix: 'GatewayManager'
+            destinationAddressPrefix: '*'
+          }              
+        }
+        {
+            name: 'AllowAzureLoadBalancerInbound'
+            properties: {
+              priority: 140
+              protocol: 'Tcp'
+              destinationPortRange: '443'
+              access: 'Allow'
+              direction: 'Inbound'
+              sourcePortRange: '*'
+              sourceAddressPrefix: 'AzureLoadBalancer'
+              destinationAddressPrefix: '*'
+            }         
+          }     
+          {
+              name: 'AllowBastionHostCommunicationInbound'
+              properties: {
+                priority: 150
+                protocol: '*'
+                destinationPortRanges:[
+                  '8080'
+                  '5701'                
+                ] 
+                access: 'Allow'
+                direction: 'Inbound'
+                sourcePortRange: '*'
+                sourceAddressPrefix: 'VirtualNetwork'
+                destinationAddressPrefix: 'VirtualNetwork'
+              }              
+          }                    
+          {
+            name: 'DenyAllInbound'
+            properties: {
+              priority: 4096
+              protocol: '*'
+              destinationPortRange:'*'
+              access: 'Deny'
+              direction: 'Inbound'
+              sourcePortRange: '*'
+              sourceAddressPrefix: '*'
+              destinationAddressPrefix: '*'
+            }             
+          } 
+          {
+            name: 'AllowSshRdpOutbound'
+            properties: {
+              priority: 100
+              protocol: '*'
+              destinationPortRanges:[
+                '22'
+                '3389'
+              ]
+              access: 'Allow'
+              direction: 'Outbound'
+              sourcePortRange: '*'
+              sourceAddressPrefix: '*'
+              destinationAddressPrefix: 'VirtualNetwork'
+            }              
+          }       
+          {
+            name: 'AllowAzureCloudOutbound'
+            properties: {
+              priority: 110
+              protocol: 'Tcp'
+              destinationPortRange:'443'              
+              access: 'Allow'
+              direction: 'Outbound'
+              sourcePortRange: '*'
+              sourceAddressPrefix: '*'
+              destinationAddressPrefix: 'AzureCloud'
+            }              
+          }                                                         
+          {
+            name: 'AllowBastionCommunication'
+            properties: {
+              priority: 120
+              protocol: '*'
+              destinationPortRanges: [  
+                '8080'
+                '5701'
+              ]
+              access: 'Allow'
+              direction: 'Outbound'
+              sourcePortRange: '*'
+              sourceAddressPrefix: 'VirtualNetwork'
+              destinationAddressPrefix: 'VirtualNetwork'
+            }              
+          }                     
+          {
+            name: 'AllowGetSessionInformation'
+            properties: {
+              priority: 130
+              protocol: '*'
+              destinationPortRange: '80'
+              access: 'Allow'
+              direction: 'Outbound'
+              sourcePortRange: '*'
+              sourceAddressPrefix: '*'
+              destinationAddressPrefix: 'Internet'
+            }              
+          }                                                                   
     ]
   }
 }
@@ -400,6 +553,44 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
     publicIPAllocationMethod: 'Dynamic'
   }
 }
+
+// Mind the PIP for bastion being Standard SKU, Static IP
+resource pipBastion 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
+  name: publicIPAddressNameBastion
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Regional'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+    publicIPAddressVersion: 'IPv4'
+  }  
+}
+
+resource bastion 'Microsoft.Network/bastionHosts@2020-07-01' = {
+  name: bastionName
+  location: location 
+  tags:  {
+    Owner: owner
+  }
+  properties: {
+    ipConfigurations: [
+      {
+        name: bastionIPConfigName
+        properties: {
+          privateIPAllocationMethod: 'Dynamic'
+          publicIPAddress: {
+            id: pipBastion.id             
+          }
+          subnet: {
+            id: '${vnetApimCs.id}/subnets/${bastionSubnetName}' 
+          }
+        }
+      }
+    ]
+  }
+} 
 
 
 
