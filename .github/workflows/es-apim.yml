@@ -19,7 +19,7 @@ jobs:
 
       - name: Validate that bicep builds
         run: az bicep build -f main.bicep
-        working-directory: ./deployment/bicep
+        working-directory: ./reference-implementations/AppGW-IAPIM-Func/bicep
 
   build-and-deploy:
       runs-on: ubuntu-latest
