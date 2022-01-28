@@ -23,7 +23,7 @@ OR
 ```
 git clone https://github.com/cykreng/Enterprise-Scale-APIM.git
 ```
-<img src= /docs/images/clone-repo.png>
+![Clone Repo](/docs/images/clone-repo.png)
 
 
 ### 2. Authentication from GitHub to Azure 
@@ -62,13 +62,13 @@ az account show
 
 b) Sign-in using Cloud Shell
 
-<img src= /docs/images/cloud_shell.png>
+![Cloud Shell](/docs/images/cloud_shell.png)
 
 ```
 az account show
 ```
 
-<img src= /docs/images/az-account-show.jpg>
+![Az Show Account](/docs/images/az-account-show.jpg)
 
 ### 4. Configure Deployment Credentials 
 
@@ -98,7 +98,7 @@ az ad sp create-for-rbac --name "enterprise-scale-apim-app" --role contributor \
     (...)
   }
 ```
-<img src= /docs/images/secrets.png>
+![Secrets](/docs/images/secrets.png)
 
 
 ### 5. Run the workflow 
@@ -129,7 +129,7 @@ c. Push the latest changes to your **feature** branch and create a Pull Request 
 
 Alternatively, you can also trigger the workflow by going to **Actions** tab and run the `AzureBicepDeploy` workflow manually
 
-<img src= /docs/images/manual_trigger.png>
+![Manual Trigger](/docs/images/manual_trigger.png)
 
 
 ### 6. Deployed Resources
