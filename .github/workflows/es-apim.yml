@@ -36,7 +36,7 @@ jobs:
     
       - name: Parse config.yaml as output to GitHub Actions matrix
         run: |
-          echo "config=$(yq e ./deployment/bicep/config.yml -j -I=0)" >> $GITHUB_ENV  
+          echo "config=$(yq e ./reference-implementations/AppGW-IAPIM-Func/bicep/config.yml -j -I=0)" >> $GITHUB_ENV  
   
       - name: Write deployment information to log
         run: |
