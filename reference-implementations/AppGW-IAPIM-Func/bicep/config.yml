@@ -1,0 +1,8 @@
+AZURE_LOCATION: 'westus2'
+RESOURCE_NAME_PREFIX: 'apimdemo'
+ENVIRONMENT_TAG: 'dev'
+DEPLOYMENT_NAME: 'ase-demo-deployment'
+VM_USERNAME: 'agent'
+ACCOUNT_NAME: 'repalce me in repo secrets'
+CICD_AGENT_TYPE: 'azuredevops'
+CERT_TYPE: 'selfsigned'

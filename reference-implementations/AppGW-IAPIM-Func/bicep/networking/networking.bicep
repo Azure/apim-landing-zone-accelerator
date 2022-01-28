@@ -43,12 +43,13 @@ param privateEndpointAddressPrefix string = '10.2.5.0/24'
 param backEndAddressPrefix string = '10.2.6.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
 
+/*
 @description('A short name for the PL that will be created between Funcs')
 param privateLinkName string = 'myPL'
 
 @description('Func id for PL to create')
 param functionId string = '123131'
-
+*/
 
 // Variables
 var owner = 'APIM Const Set'
