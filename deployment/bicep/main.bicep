@@ -34,13 +34,15 @@ param accountName string
 @secure()
 param personalAccessToken string
 
-
-
-@description('The FQDN for the Application Gateway. Example - api.example.com.')
+@description('The FQDN for the Application Gateway. Example - api.contoso.com.')
 param appGatewayFqdn string
 
-@description('The pfx password file for the Application Gataeway TLS listener. (base64 encoded)')
-param appGatewayCertificateData     string
+@description('The password for the TLS certificate for the Application Gateway.  The pfx file needs to be copied to deployment/bicep/gateway/certs/appgw.pfx')
+@secure()
+param certificatePassword string
+
+@description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and copy the pfx file to deployment/bicep/gateway/certs/appgw.pfx if custom certificates are to be used')
+param appGatewayCertType string
 
 // Variables
 var location = deployment().location
@@ -55,14 +57,18 @@ var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
+// Resource Names
+var apimName = 'apim-${resourceSuffix}'
+var appGatewayName = 'appgw-${resourceSuffix}'
+
 // Create resources name using these objects and pass it as a params in module
 var sharedResourceGroupResources = {
   'appInsightsName':'appin-${resourceSuffix}'
   'logAnalyticsWorkspaceName': 'logananalyticsws-${resourceSuffix}'
-   'environmentName': environment
-   'resourceSuffix' : resourceSuffix
-   'vmSuffix' : vmSuffix
-   'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
+  'environmentName': environment
+  'resourceSuffix' : resourceSuffix
+  'vmSuffix' : vmSuffix
+  'keyVaultName':'kv-${workloadName}-${environment}' // Must be between 3-24 alphanumeric characters 
 }
 
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -85,16 +91,16 @@ resource apimRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
-module networking 'networking.bicep' = {
+module networking './networking/networking.bicep' = {
   name: 'networkingresources'
   scope: resourceGroup(networkingRG.name)
   params: {
     workloadName: workloadName
-    environment: environment
+    deploymentEnvironment: environment
   }
 }
 
-module backend 'backend.bicep' = {
+module backend './backend/backend.bicep' = {
   name: 'backendresources'
   scope: resourceGroup(backendRG.name)
   params: {
@@ -106,30 +112,32 @@ module backend 'backend.bicep' = {
 var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
 var CICDAgentSubnetId = networking.outputs.CICDAgentSubnetId
 
-module shared './shared/shared.bicep' = {  dependsOn: [
-  networking
-]
-name: 'sharedresources'
-scope: resourceGroup(sharedRG.name)
-params: {
-  accountName: accountName
-  CICDAgentSubnetId: CICDAgentSubnetId
-  CICDAgentType: CICDAgentType
-  environment: environment
-  jumpboxSubnetId: jumpboxSubnetId
-  location: location
-  personalAccessToken: personalAccessToken
-  resourceGroupName: sharedRG.name
-  resourceSuffix: resourceSuffix
-  vmPassword: vmPassword
-  vmUsername: vmUsername
-}
+module shared './shared/shared.bicep' = {  
+  dependsOn: [
+    networking
+  ]
+  name: 'sharedresources'
+  scope: resourceGroup(sharedRG.name)
+  params: {
+    accountName: accountName
+    CICDAgentSubnetId: CICDAgentSubnetId
+    CICDAgentType: CICDAgentType
+    environment: environment
+    jumpboxSubnetId: jumpboxSubnetId
+    location: location
+    personalAccessToken: personalAccessToken
+    resourceGroupName: sharedRG.name
+    resourceSuffix: resourceSuffix
+    vmPassword: vmPassword
+    vmUsername: vmUsername
+  }
 }
 
 module apimModule 'apim/apim.bicep'  = {
   name: 'apimDeploy'
   scope: resourceGroup(apimRG.name)
   params: {
+    apimName: apimName
     apimSubnetId: networking.outputs.apimSubnetid
     location: location
     appInsightsName: shared.outputs.appInsightsName
@@ -142,10 +150,13 @@ module apimModule 'apim/apim.bicep'  = {
 module dnsZoneModule 'shared/dnszone.bicep'  = {
   name: 'apimDnsZoneDeploy'
   scope: resourceGroup(sharedRG.name)
+  dependsOn: [
+    apimModule
+  ]  
   params: {
     vnetName: networking.outputs.apimCSVNetName
     vnetRG: networkingRG.name
-    apimName: apimModule.outputs.apimName
+    apimName: apimName
     apimRG: apimRG.name
   }
 }
@@ -158,13 +169,14 @@ module appgwModule 'gateway/appgw.bicep' = {
     dnsZoneModule
   ]
   params: {
-    appGatewayName:                 'appgw-${resourceSuffix}'
+    appGatewayName:                 appGatewayName
     appGatewayFQDN:                 appGatewayFqdn
     location:                       location
     appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
-    primaryBackendEndFQDN:          '${apimModule.outputs.apimName}.azure-api.net'
-    appGatewayCertificateData:      appGatewayCertificateData
+    primaryBackendEndFQDN:          '${apimName}.azure-api.net'
     keyVaultName:                   shared.outputs.keyVaultName
     keyVaultResourceGroupName:      sharedRG.name
+    appGatewayCertType:             appGatewayCertType
+    certPassword:                   certificatePassword
   }
 }

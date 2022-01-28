@@ -1,0 +1,3 @@
+is_global = true
+build_property.RootNamespace = APIMCSDemoAzFunc
+build_property.ProjectDir = T:\PROJECTS\Azure\APIMCS\ES-APIM-CS\Enterprise-Scale-APIM\components\Azure Functions\APIMCSDemoAzFunc\
