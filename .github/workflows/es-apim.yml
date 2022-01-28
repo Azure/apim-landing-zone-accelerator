@@ -6,8 +6,10 @@ on:
   push:
     branches:
     - workflow-new
-    - main
+
   pull_request:
+    branches:
+    - main
  
 jobs:
   validate_bicep:
