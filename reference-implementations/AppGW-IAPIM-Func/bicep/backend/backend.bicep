@@ -20,19 +20,20 @@
 //
 // # delete a deployment
 //
-// az deployment group  delete --name testbackenddeployment -g $RESOURCE_GROUP 
-// 
+// az deployment group  delete --name testbackenddeployment -g $RESOURCE_GROUP
+//
 // # deploy the bicep file directly
 //
 // az deployment group create --name testbackenddeployment --template-file $BICEP_FILE --parameters parameters.json -g $RESOURCE_GROUP -o json
-// 
+//
 // # Script end
 
 //
 // Parameters
 //
 
-@description('A short name for the workload being deployed')
+@description('A short name for the workload being deployed alphanumberic only')
+@maxLength(8)
 param workloadName string
 
 @description('The environment for which the deployment is being executed')
@@ -56,7 +57,7 @@ var location = resourceGroup().location
 // Azure Storage Sizing
 //
 // - name: must be globally unique
-var storageAccounts_saapimcsbackend_name  = toLower(take('stbackend${workloadName}${environment}${location}', 24))
+var storageAccounts_saapimcsbackend_name  = toLower(take(replace('stbknd${workloadName}${environment}${location}', '-',''), 24))
 // - location
 var storageAccounts_location = location
 // - SKU name
@@ -121,7 +122,7 @@ var sites_funcappAPIMCSBackendMicroServiceB_siteName  = 'funccontbe${workloadNam
 // Definitions
 //
 // Azure Storage Account
-resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageAccounts_saapimcsbackend_name
   location: storageAccounts_location // 'westeurope'
   tags: {
@@ -272,7 +273,7 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
   tags: {
     Owner: owner
     // CostCenter: costCenter
-  }  
+  }
   kind: 'functionapp,linux'
   properties: {
     enabled: true
@@ -316,7 +317,7 @@ resource sites_funcappAPIMCSBackendMicroServiceB_name_resource 'Microsoft.Web/si
   tags: {
     Owner: owner
     // CostCenter: costCenter
-  }  
+  }
   kind: 'functionapp,linux,container'
   properties: {
     enabled: true
@@ -526,7 +527,7 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_sites_funcappAPIMCSBackend
 resource sites_funcappAPIMCSBackendMicroServiceB_name_sites_funcappAPIMCSBackendMicroServiceB_name_azurewebsites_net 'Microsoft.Web/sites/hostNameBindings@2018-11-01' = {
   parent: sites_funcappAPIMCSBackendMicroServiceB_name_resource
   name: '${sites_funcappAPIMCSBackendMicroServiceB_name}.azurewebsites.net'
-  // mb: this part generates an error on deployment ("location is read-only")  
+  // mb: this part generates an error on deployment ("location is read-only")
   // location: 'West Europe'
   properties: {
     siteName: sites_funcappAPIMCSBackendMicroServiceB_siteName // 'funcappAPIMCSBackendMicroServiceB'
