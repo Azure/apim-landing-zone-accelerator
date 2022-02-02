@@ -4,7 +4,7 @@
 
 ```
 .
-└──deployment
+└──reference-implementations/AppGW-IAPIM-Func
     ├── terraform
     │   ├── backend
     │   ├── shared
