@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmUsername": {
+            "value": "ENTERUSERNAME"
+        },
+        "vmPassword": {
+            "value": "ENTERPASSWORD"
+        },
+        "accountName": {
+            "value": "https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none"
+        },
+        "personalAccessToken": {
+            "value": "ENTERPAT"
+        },
+        "workloadName" :{ 
+            "value": "demoWL"
+        },
+        "CICDAgentType": {
+            "value": "azuredevops OR github OR none"
+        },
+        "environment" :{ 
+            "value": "dev"
+        },
+        "appGatewayFqdn" :{ 
+            "value": "ENTER FQDN"
+        },
+        "appGatewayCertType" :{
+            "value": "selfsigned or custom"
+        }
+    }
+}
