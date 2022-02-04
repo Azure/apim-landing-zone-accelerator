@@ -25,9 +25,9 @@ Resources Deployed:
 ![image](https://user-images.githubusercontent.com/37597107/133897343-220a2e78-4f5a-4623-87bd-388a02949b96.png)
 
 Deployment Details:
-| Deployment Methodology| GitHub Action YAML|
-|--------------|--------------|
-| [Bicep](/reference-implementations/AppGW-IAPIM-Func/bicep) |[es-apim.yml](/.github/workflows/es-apim.yml)|
+| Deployment Methodology| GitHub Action YAML| User Guide|
+|--------------|--------------|--------------|
+| [Bicep](/reference-implementations/AppGW-IAPIM-Func/bicep) |[es-apim.yml](/.github/workflows/es-apim.yml)| [README](/docs/README.md)
 | ARM (Coming soon) ||
 | Terraform (Coming soon)||
 ---
