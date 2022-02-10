@@ -16,7 +16,7 @@ module "shared" {
   tenant_id                 = data.azurerm_client_config.current.tenant_id
   resource_group_name       = azurerm_resource_group.hub_rg.name
   resource_group_location   = azurerm_resource_group.hub_rg.location
-  workload_name             = "pm-t"
+  workload_name             = var.workload_name
   resource_suffix           = local.resource_suffix
   deployment_environment    = "dev"
 }
@@ -42,10 +42,4 @@ module "apim" {
   workload_name = var.workload_name
 }
 
-#-------------------------------
-# calling the shared module
-#-------------------------------
-module "shared" {
-  source = "./shared"
-  workload_name = var.workload_name
-}
+

@@ -17,7 +17,7 @@
     └── outputs.tf
 
 ```
-## Naming convention 
+## Naming convention
 
 resource_suffix = ${workloadName}-${environment}-${location}-001
 
