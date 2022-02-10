@@ -1,3 +1,6 @@
+#-------------------------------
+# Common variables
+#-------------------------------
 variable "workload_name" {
   description = "The name of the workload"
   type        = string

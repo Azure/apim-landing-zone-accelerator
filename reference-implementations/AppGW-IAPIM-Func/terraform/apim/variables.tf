@@ -1,5 +1,9 @@
+#-------------------------------
+# Common variables
+#-------------------------------
+
 variable "workload_name" {
-  description = "The name of the workload"
+  description = "The name of the workload to deploy"
   type        = string
 }
 
@@ -15,6 +19,9 @@ variable "location" {
     default = "westus2"
 }
 
+#-------------------------------
+# APIM specific variables
+#-------------------------------
 variable "publisher_name" {
     description = "The name of the publisher/company"
     type = string
@@ -33,8 +40,6 @@ variable "sku_name" {
     default = "Developer_1"
 }
   
-
-  # remove it 
 variable "apim_subnet_id" {
     description = "The subnet id of the apim instance"
     type = string
@@ -42,9 +47,10 @@ variable "apim_subnet_id" {
 
 variable "workspace_id" {
   type    = string
+  description = "The workspace id of the log analytics workspace"
 }
 
 variable "instrumentation_key" {
   type = string
-  description = "(optional) describe your variable"
+  description = "App insights instrumentation key"
 }

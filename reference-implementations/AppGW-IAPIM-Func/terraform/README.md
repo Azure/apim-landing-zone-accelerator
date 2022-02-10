@@ -19,13 +19,13 @@
 ```
 ## Naming convention 
 
-resourceSuffix = ${workloadName}-${environment}-${location}-001
+resource_suffix = ${workloadName}-${environment}-${location}-001
 
 _Resource Group_
 
-    rg-<module-name>-${resourceSuffix} [e.g. rg-shared-apidemo-dev-eastus-001]
+    rg-<module>-${resource_suffix} [e.g. rg-shared-apidemo-dev-eastus-001]
 
 _Resource Name Example_
 
-    apim = apim-${resourceSuffix}
-    app_insights = appi-${resourceSuffix}
+    apim = apim-${resource_suffix}
+    app_insights = appi-${resource_suffix}

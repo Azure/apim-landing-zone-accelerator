@@ -1,6 +1,6 @@
 
 locals {
-  resourceSuffix = "${var.workload_name}-${var.environment}-${var.location}-001"
+  resource_suffix = "${var.workload_name}-${var.environment}-${var.location}-001"
 }
 
 #-------------------------------
@@ -8,7 +8,7 @@ locals {
 #-------------------------------
 
 resource "azurerm_resource_group" "apim_internal_rg" {
-  name     = "rg-apim-${local.resourceSuffix}"
+  name     = "rg-apim-${local.resource_suffix}"
   location = var.location
 }
 
@@ -18,7 +18,7 @@ resource "azurerm_resource_group" "apim_internal_rg" {
 
 
 resource "azurerm_api_management" "apim_internal" {
-  name                = "apim-${local.resourceSuffix}"
+  name                = "apim-${local.resource_suffix}"
   location            = azurerm_resource_group.apim_internal_rg.location
   resource_group_name = azurerm_resource_group.apim_internal_rg.name
   publisher_name      = var.publisher_name

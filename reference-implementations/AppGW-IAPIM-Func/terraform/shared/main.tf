@@ -1,12 +1,12 @@
 locals {
-  resourceSuffix = "${var.workload_name}-${var.environment}-${var.location}-001"
+  resource_suffix = "${var.workload_name}-${var.environment}-${var.location}-001"
 }
 
 #-------------------------------
 # Shared Resource group creation
 #-------------------------------
 resource "azurerm_resource_group" "shared_rg" {
-  name     = "rg-shared-${local.resourceSuffix}"
+  name     = "rg-shared-${local.resource_suffix}"
   location = var.location
 }
 
@@ -15,7 +15,7 @@ resource "azurerm_resource_group" "shared_rg" {
 #-------------------------------
 
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
-  name                = "laws-${local.resourceSuffix}"
+  name                = "laws-${local.resource_suffix}"
   location            = azurerm_resource_group.shared_rg.location
   resource_group_name = azurerm_resource_group.shared_rg.name
   sku                 = "PerGB2018"
@@ -27,7 +27,7 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 #-------------------------------
 
 resource "azurerm_application_insights" "shared_apim_insight" {
-  name                = "appi-${local.resourceSuffix}"
+  name                = "appi-${local.resource_suffix}"
   location            = azurerm_resource_group.shared_rg.location
   resource_group_name = azurerm_resource_group.shared_rg.name
   application_type    = "web"

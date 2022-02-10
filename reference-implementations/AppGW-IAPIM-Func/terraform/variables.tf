@@ -1,5 +1,4 @@
 variable "workload_name" {
-   # default = "pr-workload"
     description = "The name of the workload"
     type = string
   
