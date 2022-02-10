@@ -16,7 +16,7 @@ resource "azurerm_resource_group" "shared_rg" {
 #-------------------------------
 
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
-  name                = "laws-${local.resource_suffix}"
+  name                = "log-${local.resource_suffix}"
   location            = azurerm_resource_group.shared_rg.location
   resource_group_name = azurerm_resource_group.shared_rg.name
   sku                 = "PerGB2018"
