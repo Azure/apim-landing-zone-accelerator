@@ -17,3 +17,15 @@
     └── outputs.tf
 
 ```
+## Naming convention 
+
+resourceSuffix = ${workloadName}-${environment}-${location}-001
+
+_Resource Group_
+
+    rg-<module-name>-${resourceSuffix} [e.g. rg-shared-apidemo-dev-eastus-001]
+
+_Resource Name Example_
+
+    apim = apim-${resourceSuffix}
+    app_insights = appi-${resourceSuffix}
