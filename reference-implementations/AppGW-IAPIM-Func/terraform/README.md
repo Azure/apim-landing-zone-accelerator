@@ -11,7 +11,7 @@
     │   ├── networking
     │   ├── apim
     │   └── gateway
-    ├── backend.tf
+    ├── provider.tf
     ├── main.tf
     ├── variables.tf
     └── outputs.tf
@@ -27,5 +27,5 @@ _Resource Group_
 
 _Resource Name Example_
 
-    apim = apim-${resource_suffix}
-    app_insights = appi-${resource_suffix}
+    apim = apim-${resource_suffix} [e.g. apim-apidemo-dev-eastus-001]
+    app_insights = appi-${resource_suffix} [e.g. appi-apidemo-dev-eastus-001]
