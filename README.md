@@ -1,17 +1,17 @@
 # Enterprise-Scale-APIM
 
-This is a repository ([aka.ms/EnterpriseScale-APIM](https://aka.ms/EnterpriseScale-APIM)) that contains both enteprrise architecture (proven recommendations and considerations) and reference implementaion (deployable artifacts for a common implementations). 
+This is a repository ([aka.ms/EnterpriseScale-APIM](https://aka.ms/EnterpriseScale-APIM)) that contains both enterprise architecture (proven recommendations and considerations) and reference implementaion (deployable artifacts for a common implementations). 
 
 ## Enterprise-Scale Architecture
 The enterprise architecture is broken down into six different design areas, where you can find the links to each at:
-| Design Area|
-|------|
-|[Identity and Access Management](https://github.com/cykreng/Enterprise-Scale-APIM/blob/main/docs/Design-Areas/identity-access-mgmt.md)|
-|[Network Topology and Connectvity](https://github.com/cykreng/Enterprise-Scale-APIM/blob/main/docs/Design-Areas/networking.md)|
-|[Management and Monitoring](https://github.com/cykreng/Enterprise-Scale-APIM/blob/main/docs/Design-Areas/mgmt-monitoring.md)|
-|[Business Continuity and Disaster Recovery](https://github.com/cykreng/Enterprise-Scale-APIM/blob/main/docs/Design-Areas/BCDR.md)|
-|[Security, Governance, and Compliance](https://github.com/cykreng/Enterprise-Scale-APIM/blob/main/docs/Design-Areas/security-governance-compliance.md)|
-|[Application Automation and DevOps](https://github.com/cykreng/Enterprise-Scale-APIM/blob/main/docs/Design-Areas/automation-devops.md)|
+| Design Area|Considerations|Recommendations|
+|:--------------:|:--------------:|:--------------:|
+| Identity and Access Management|[Design Considerations](/docs/Design-Areas/identity-access-mgmt.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/identity-access-mgmt.md#design-recommendations)|
+| Network Topology and Connectivity|[Design Considerations](/docs/Design-Areas/networking.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/networking.md#design-recommendations)|
+| Management and Monitoring|[Design Considerations](/docs/Design-Areas/mgmt-monitoring.md#design-consideration)|[Design Recommendations](/docs/Design-Areas/mgmt-monitoring.md#design-recommendation)|
+| Business Continuity and Disaster Recovery|[Design Considerations](/docs/Design-Areas/BCDR.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/BCDR.md#design-recommendations)|
+| Security, Governance, and Compliance|[Design Considerations](/docs/Design-Areas/security-governance-compliance.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/security-governance-compliance.md#design-recommendations)|
+| Application Automation and DevOps|[Design Considerations](/docs/Design-Areas/automation-devops.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/automation-devops.md#design-recommendations)|
 
 ## Enterprise-Scale Reference Implementation
 In this repo you will also find reference implementations with supporting Infrastructe as Code templates. More reference implementations will be added as they become available. 
@@ -25,9 +25,9 @@ Resources Deployed:
 ![image](https://user-images.githubusercontent.com/37597107/133897343-220a2e78-4f5a-4623-87bd-388a02949b96.png)
 
 Deployment Details:
-| Deployment Methodology| GitHub Action YAML|
-|--------------|--------------|
-| [Bicep](https://github.com/cykreng/Enterprise-Scale-APIM/tree/main/deployment/bicep) |[apim-cs.yml](https://github.com/cykreng/Enterprise-Scale-APIM/blob/workflow/.github/workflows/apim-cs.yml)|
+| Deployment Methodology| GitHub Action YAML| User Guide|
+|--------------|--------------|--------------|
+| [Bicep](/reference-implementations/AppGW-IAPIM-Func/bicep) |[es-apim.yml](/.github/workflows/es-apim.yml)| [README](/docs/README.md)
 | ARM (Coming soon) ||
 | Terraform (Coming soon)||
 ---

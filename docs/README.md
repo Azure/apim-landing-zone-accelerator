@@ -2,8 +2,6 @@
 
 The `Enterprise-scale-APIM` - acrhitecture solution template is intended to provision a single region premium API Management instance within an internal VNet exposed through Application Gateway for external traffic with Azure Functions as the backend (exposed through private endpoint) 
 
-In order to Deploy an Azure Application Gateway standalone instance, which is not a part of the overall Enterprise Scale APIM solution, follow these [steps here](/reference-implementations/AppGW-IAPIM-Func/bicep/gateway/README.md)
-
 
 ## Pre-Requisites 
 -	An Azure Subscription 
