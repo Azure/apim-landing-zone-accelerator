@@ -14,7 +14,7 @@ module "networking" {
 }
 
 #-------------------------------
-# Calling the APIM module
+# calling the APIM module
 #-------------------------------
 
 module "apim" {
@@ -25,6 +25,9 @@ module "apim" {
   workload_name = var.workload_name
 }
 
+#-------------------------------
+# calling the shared module
+#-------------------------------
 module "shared" {
   source = "./shared"
   workload_name = var.workload_name

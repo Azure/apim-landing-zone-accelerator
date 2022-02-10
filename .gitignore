@@ -276,6 +276,7 @@ __pycache__/
 
 #Local .terraform directories
 **/.terraform/*
+.terraform/
 
 # .tfstate files
 *.tfstate
