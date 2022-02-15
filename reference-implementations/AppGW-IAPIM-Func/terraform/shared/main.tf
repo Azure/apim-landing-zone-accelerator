@@ -1,13 +1,8 @@
-locals {
-  resource_suffix = "${var.workload_name}-${var.environment}-${var.location}-001"
-  key_vault_name = substr("kv-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}-${var.resource_suffix}", 0, 24)
-}
-
 #-------------------------------
 # Shared Resource group creation
 #-------------------------------
 resource "azurerm_resource_group" "shared_rg" {
-  name     = "rg-shared-${local.resource_suffix}"
+  name     = "rg-shared-${var.resource_suffix}"
   location = var.location
 }
 
@@ -16,7 +11,7 @@ resource "azurerm_resource_group" "shared_rg" {
 #-------------------------------
 
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
-  name                = "log-${local.resource_suffix}"
+  name                = "log-${var.resource_suffix}"
   location            = azurerm_resource_group.shared_rg.location
   resource_group_name = azurerm_resource_group.shared_rg.name
   sku                 = "PerGB2018"
@@ -28,7 +23,7 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 #-------------------------------
 
 resource "azurerm_application_insights" "shared_apim_insight" {
-  name                = "appi-${local.resource_suffix}"
+  name                = "appi-${var.resource_suffix}"
   location            = azurerm_resource_group.shared_rg.location
   resource_group_name = azurerm_resource_group.shared_rg.name
   application_type    = "web"
@@ -37,10 +32,10 @@ resource "azurerm_application_insights" "shared_apim_insight" {
 
 
 # Note: This needs to be updated as the resource name is 'example' and the name does not match with the naming convention
-resource "azurerm_key_vault" "example" {
-  name                        = local.key_vault_name
-  location                    = var.resource_group_location
-  resource_group_name         = var.resource_group_name
+resource "azurerm_key_vault" "key_vault" {
+  name                        = "kv-${var.resource_suffix}"
+  location                    = azurerm_resource_group.shared_rg.location
+  resource_group_name         = azurerm_resource_group.shared_rg.name
   tenant_id                   = var.tenant_id
   sku_name                    = "standard"
 }

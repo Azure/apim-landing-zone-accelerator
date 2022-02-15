@@ -1,16 +1,9 @@
 #-------------------------------
 # Common variables
 #-------------------------------
-
-variable "workload_name" {
-  description = "The name of the workload to deploy"
+variable "resource_suffix" {
+  description = ""
   type        = string
-}
-
-variable "environment" {
-  description = "The environment to deploy to"
-  type        = string
-  default     = "dev"
 }
   
 variable "location" {

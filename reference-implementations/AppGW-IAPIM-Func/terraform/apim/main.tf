@@ -1,24 +1,16 @@
-
-locals {
-  resource_suffix = "${var.workload_name}-${var.environment}-${var.location}-001"
-}
-
 #-------------------------------
 # APIM Resource group creation
 #-------------------------------
-
 resource "azurerm_resource_group" "apim_internal_rg" {
-  name     = "rg-apim-${local.resource_suffix}"
+  name     = "rg-apim-${var.resource_suffix}"
   location = var.location
 }
 
 #-------------------------------
 # Creation of an internal APIM instance 
 #-------------------------------
-
-
 resource "azurerm_api_management" "apim_internal" {
-  name                = "apim-${local.resource_suffix}"
+  name                = "apim-${var.resource_suffix}"
   location            = azurerm_resource_group.apim_internal_rg.location
   resource_group_name = azurerm_resource_group.apim_internal_rg.name
   publisher_name      = var.publisher_name
@@ -40,8 +32,6 @@ resource "azurerm_api_management" "apim_internal" {
 #-------------------------------
 # Creation of the apim logger entity
 #-------------------------------
-
-
 resource "azurerm_api_management_logger" "apim_logger" {
   name                = "apim-logger"
   api_management_name = azurerm_api_management.apim_internal.name
@@ -57,8 +47,6 @@ resource "azurerm_api_management_logger" "apim_logger" {
 #-------------------------------
 # API management service diagnostic
 #-------------------------------
-
-
 resource "azurerm_api_management_diagnostic" "apim_diagnostic" {
   identifier               = "applicationinsights"
   resource_group_name      = azurerm_resource_group.apim_internal_rg.name

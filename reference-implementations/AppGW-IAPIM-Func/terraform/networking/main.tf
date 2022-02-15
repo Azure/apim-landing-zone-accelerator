@@ -1,31 +1,39 @@
 locals {
-  owner = "APIM Const Set"
-  apim_cs_vnet_name                 = "vnet-apim-cs-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
+  resource_suffix                   = "${var.workload_name}-${var.deployment_environment}-${var.location}"
+  resource_suffix_id                = "001"
+  resource_group_name               = "rg-networking-${local.resource_suffix}"
+  owner                             = "APIM Const Set"
+  apim_cs_vnet_name                 = "vnet-apim-cs-${local.resource_suffix}"
   bastion_subnet_name               = "AzureBastionSubnet"
-  devops_subnet_name                = "snet-devops-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  jumpbox_subnet_name                = "snet-jbox-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}-001"
-  appgateway_subnet_name            = "snet-apgw-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}-001"
-  private_endpoint_subnet_name      = "snet-prep-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}-001"
-  backend_subnet_name                = "snet-bcke-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}-001"
-  apim_subnet_name                  = "snet-apim-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}-001"
-  bastion_name                      = "bastion-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  bastion_ip_configName             = "bastionipcfg-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  bastion_snnsg                     = "nsg-bast-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  devops_snnsg                      = "nsg-devops-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  jumpbox_snnsg                     = "nsg-jbox-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  appgateway_snnsg                  = "nsg-apgw-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  private_endpoint_snnsg            = "nsg-prep-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  backend_snnsg                     = "nsg-bcke-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  apim_snnsg                        = "nsg-apim-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  public_ip_address_name            = "pip-apimcs-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
-  public_ip_address_name_bastion    = "pip-bastion-${var.workload_name}-${var.deployment_environment}-${var.resource_group_location}"
+  devops_subnet_name                = "snet-devops-${local.resource_suffix}"
+  jumpbox_subnet_name                = "snet-jbox-${local.resource_suffix}-${local.resource_suffix_id}"
+  appgateway_subnet_name            = "snet-apgw-${local.resource_suffix}-${local.resource_suffix_id}"
+  private_endpoint_subnet_name      = "snet-prep-${local.resource_suffix}-${local.resource_suffix_id}"
+  backend_subnet_name                = "snet-bcke-${local.resource_suffix}-${local.resource_suffix_id}"
+  apim_subnet_name                  = "snet-apim-${local.resource_suffix}-${local.resource_suffix_id}"
+  bastion_name                      = "bastion-${local.resource_suffix}"
+  bastion_ip_configName             = "bastionipcfg-${local.resource_suffix}"
+  bastion_snnsg                     = "nsg-bast-${local.resource_suffix}"
+  devops_snnsg                      = "nsg-devops-${local.resource_suffix}"
+  jumpbox_snnsg                     = "nsg-jbox-${local.resource_suffix}"
+  appgateway_snnsg                  = "nsg-apgw-${local.resource_suffix}"
+  private_endpoint_snnsg            = "nsg-prep-${local.resource_suffix}"
+  backend_snnsg                     = "nsg-bcke-${local.resource_suffix}"
+  apim_snnsg                        = "nsg-apim-${local.resource_suffix}"
+  public_ip_address_name            = "pip-apimcs-${local.resource_suffix}"
+  public_ip_address_name_bastion    = "pip-bastion-${local.resource_suffix}"
+}
+
+resource "azurerm_resource_group" "networking_resourece_group" {
+  name     = local.resource_group_name
+  location = var.location
 }
 
 //Vnet
 resource "azurerm_virtual_network" "apim_cs_vnet" {
   name                = local.apim_cs_vnet_name
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
   address_space       = [var.apim_cs_vnet_name_address_prefix]
   //enableVmProtection: false
   //ddos_protection_plan false
@@ -80,8 +88,8 @@ resource "azurerm_virtual_network" "apim_cs_vnet" {
 //Bastion NSG
 resource "azurerm_network_security_group" "bastion_nsg" {
   name                = local.bastion_subnet_name
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   security_rule {
     name                          = "AllowHttpsInbound"
@@ -195,8 +203,8 @@ resource "azurerm_network_security_group" "bastion_nsg" {
 //DevOps NSG
 resource "azurerm_network_security_group" "jumpbox_nsg" {
   name                = local.jumpbox_subnet_name
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   security_rule {
     name                          = "AllowRdpInbound"
@@ -214,8 +222,8 @@ resource "azurerm_network_security_group" "jumpbox_nsg" {
 //Jumpbox NSG
 resource "azurerm_network_security_group" "devops_nsg" {
   name                = local.devops_subnet_name
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   security_rule {
     name                          = "AllowRdpInbound"
@@ -233,8 +241,8 @@ resource "azurerm_network_security_group" "devops_nsg" {
 //App Gateway NSG
 resource "azurerm_network_security_group" "appgateway_nsg" {
   name                = local.appgateway_subnet_name
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   security_rule {
     name                          = "AllowRdpInbound"
@@ -312,8 +320,8 @@ resource "azurerm_network_security_group" "appgateway_nsg" {
 //Private Endpoint SNNSG NSG
 resource "azurerm_network_security_group" "private_endpoint_snnsg_nsg" {
   name                = local.private_endpoint_snnsg
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   security_rule {
     name                          = "AllowRdpInbound"
@@ -331,8 +339,8 @@ resource "azurerm_network_security_group" "private_endpoint_snnsg_nsg" {
 //Backend SNNSG NSG
 resource "azurerm_network_security_group" "backend_snnsg_nsg" {
   name                = local.backend_snnsg
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   security_rule {
     name                          = "AllowRdpInbound"
@@ -350,8 +358,8 @@ resource "azurerm_network_security_group" "backend_snnsg_nsg" {
 //APIM SNNSG NSG
 resource "azurerm_network_security_group" "apim_snnsg_nsg" {
   name                = local.apim_snnsg
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   security_rule {
     name                          = "AllowApimVnetInbound"
@@ -381,16 +389,16 @@ resource "azurerm_network_security_group" "apim_snnsg_nsg" {
 //Public IP
 resource "azurerm_public_ip" "public_ip" {
   name                = local.public_ip_address_name
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
+  location            = azurerm_resource_group.networking_resourece_group.location
   allocation_method   = "Dynamic"
 }
 
 //Bastion public IP
 resource "azurerm_public_ip" "bastion_public_ip" {
   name                = local.public_ip_address_name_bastion
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
+  location            = azurerm_resource_group.networking_resourece_group.location
   sku                 = "Standard"
   sku_tier            = "Regional"
   allocation_method   = "Static"
@@ -400,8 +408,8 @@ resource "azurerm_public_ip" "bastion_public_ip" {
 //Bastion host
 resource "azurerm_bastion_host" "bastion_host" {
   name                = local.bastion_name
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
+  location            = azurerm_resource_group.networking_resourece_group.location
+  resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
   ip_configuration {
     //privateIPAllocationMethod: 'Dynamic'
