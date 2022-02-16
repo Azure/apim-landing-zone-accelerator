@@ -109,6 +109,7 @@ a) Generate the following secrets in your GitHub repository settings
   - `AZURE_SUBSCRIPTION` - Azure target subscription id
   - `PAT` -  Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent
   - `VM_PW` - The password to be used as the Administrator for all VMs created by this deployment
+  - `ACCOUNT_NAME` - The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none
 
 
 b) In order to run the deployment successfully we will need to modify the values in **config.yml** file located [here](/reference-implementations/AppGW-IAPIM-Func/bicep/config.yml) 
@@ -120,7 +121,6 @@ b) In order to run the deployment successfully we will need to modify the values
 | `ENVIRONMENT_TAG` | 'The environment for which the deployment is being executed'  |  
 | `DEPLOYMENT_NAME` | 'Unique name of the Bicep Deployment' |
 | `VM_USERNAME`     | 'The user name to be used as the Administrator for all VMs created by this deployment' | 
-| `ACCOUNT_NAME`    |  'The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none' |  
 | `CICD_AGENT_TYPE` |  'The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')  |
 
 c) Push the latest changes to your **feature** branch and create a Pull Request to **main** branch which will trigger the workflow
