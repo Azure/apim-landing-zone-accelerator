@@ -19,7 +19,7 @@ OR
 ### 1. Clone the repository to your Organisation/Repository
 
 ```
-git clone https://github.com/cykreng/Enterprise-Scale-APIM.git
+git clone https://github.com/Azure/apim-landing-zone-accelerator.git
 ```
 <img src= /docs/images/clone-repo.png>
 
