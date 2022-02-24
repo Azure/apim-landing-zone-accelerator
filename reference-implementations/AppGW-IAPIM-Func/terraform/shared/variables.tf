@@ -14,7 +14,13 @@ variable "location" {
 #-------------------------------
 # Note: Key vault variables, needs to be updated to keep consistency
 #-------------------------------
-variable "tenant_id" {
+# variable "tenant_id" {
+#   type        = string
+#   description = ""
+# }
+
+variable "key_vault_sku"{
   type        = string
-  description = ""
+  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
+  default = "standard"
 }

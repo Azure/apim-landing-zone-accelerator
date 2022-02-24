@@ -31,11 +31,33 @@ resource "azurerm_application_insights" "shared_apim_insight" {
 }
 
 
-# Note: This needs to be updated as the resource name is 'example' and the name does not match with the naming convention
+#-------------------------------
+# Creation of a key vault instance
+#-------------------------------
+
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_key_vault" "key_vault" {
-  name                        = "kv-${var.resource_suffix}"
+  name                        =    trim(substr("kv-${var.resource_suffix}", 0, 24), "-")
   location                    = azurerm_resource_group.shared_rg.location
   resource_group_name         = azurerm_resource_group.shared_rg.name
-  tenant_id                   = var.tenant_id
-  sku_name                    = "standard"
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  sku_name                    = var.key_vault_sku
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Get",
+    ]
+
+    secret_permissions = [
+      "Get",
+    ]
+
+    storage_permissions = [
+      "Get",
+    ]
+  }
 }
