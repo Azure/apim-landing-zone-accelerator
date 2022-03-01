@@ -69,3 +69,10 @@ variable "certificate_secret_name" {
   description = ""
   default     = "root-ca"
 }
+
+# Backend resource variables 
+variable "os_type" {
+  type = string
+  description = "A string indicating the Operating System type for this function app"
+  default = "linux"
+}

@@ -38,7 +38,7 @@ resource "azurerm_application_insights" "shared_apim_insight" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "key_vault" {
-  name                        =    trim(substr("kv-${var.resource_suffix}", 0, 24), "-")
+  name                        = trim(substr("kv-${var.resource_suffix}", 0, 24), "-")
   location                    = azurerm_resource_group.shared_rg.location
   resource_group_name         = azurerm_resource_group.shared_rg.name
   tenant_id                   = data.azurerm_client_config.current.tenant_id
