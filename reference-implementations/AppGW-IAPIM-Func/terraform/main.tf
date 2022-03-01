@@ -6,8 +6,7 @@ locals {
 # calling the Resource Naming module
 #-------------------------------
 module "resource_suffix" {
-  source = "./modules/service-suffix"
-
+  source                 = "./modules/service-suffix"
   workload_name          = var.workload_name
   deployment_environment = var.deployment_environment
   location               = local.resource_location
@@ -27,8 +26,7 @@ module "shared" {
 # calling the Network module
 #-------------------------------
 module "networking" {
-  source = "./networking"
-
+  source                 = "./networking"
   location               = local.resource_location
   workload_name          = var.workload_name
   deployment_environment = var.deployment_environment
@@ -38,8 +36,7 @@ module "networking" {
 # calling the APIM module
 #-------------------------------
 module "apim" {
-  source = "./apim"
-
+  source              = "./apim"
   resource_suffix     = var.resource_suffix
   workspace_id        = module.shared.workspace_id
   instrumentation_key = module.shared.instrumentation_key
@@ -50,8 +47,7 @@ module "apim" {
 # calling the App Gateway module
 #-------------------------------
 module "application_gateway" {
-  source = "./gateway"
-
+  source                  = "./gateway"
   resource_suffix         = var.resource_suffix
   resource_group_name     = module.apim.apim_resource_group_name
   resource_group_location = module.apim.apim_resource_group_location
@@ -69,10 +65,10 @@ module "application_gateway" {
 #-------------------------------
 
 module "backend" {
-  source              = "./backend"
-  resource_suffix     = module.resource_suffix.name
-  workload_name       = var.workload_name
-  os_type             = var.os_type
-  location            = local.resource_location
-  backend_subnet_id   = module.networking.backend_subnet_id
+  source            = "./backend"
+  resource_suffix   = module.resource_suffix.name
+  workload_name     = var.workload_name
+  os_type           = var.os_type
+  location          = local.resource_location
+  backend_subnet_id = module.networking.backend_subnet_id
 }
