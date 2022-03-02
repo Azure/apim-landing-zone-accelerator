@@ -17,9 +17,11 @@ module "resource_suffix" {
 # calling the Shared module
 #-------------------------------
 module "shared" {
-  source          = "./shared"
-  resource_suffix = module.resource_suffix.name
-  location        = local.resource_location
+  source            = "./shared"
+  resource_suffix   = module.resource_suffix.name
+  location          = local.resource_location
+  environment       = var.deployment_environment
+  jumpbox_subnet_id = module.networking.jumpbox_subnet_id
 }
 
 #-------------------------------
@@ -63,7 +65,6 @@ module "application_gateway" {
 #-------------------------------
 # Calling the Backend module
 #-------------------------------
-
 module "backend" {
   source            = "./backend"
   resource_suffix   = module.resource_suffix.name

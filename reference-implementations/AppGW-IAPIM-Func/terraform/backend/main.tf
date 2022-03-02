@@ -4,7 +4,8 @@
  - Storage Account for Azure Function Apps
  - Application Service Plan for Azure Function Apps
  - Azure Function App with Code Stack (linux. dotnetcore)
- - Azure Function App with Container (linux, container)*/
+ - Azure Function App with Container (linux, container)
+ */
 
 
 #-------------------------------
@@ -50,12 +51,15 @@ resource "azurerm_app_service_plan" "function_app_asp" {
 #-------------------------------
 
 resource "azurerm_function_app" "function_app" {
-  name                       = "func-${var.resource_suffix}"
+  name                       = "func-code-${var.resource_suffix}"
   resource_group_name        = azurerm_resource_group.backend_rg.name
   location                   = azurerm_resource_group.backend_rg.location
   app_service_plan_id        = azurerm_app_service_plan.function_app_asp.id
   https_only                 = true
   os_type                    = var.os_type
+  storage_account_name       = azurerm_storage_account.backend_storage_account.name
+  storage_account_access_key = azurerm_storage_account.backend_storage_account.primary_access_key
+  version                    = "~3"
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "",
     "FUNCTIONS_WORKER_RUNTIME" = "dotnet",
@@ -70,14 +74,10 @@ resource "azurerm_function_app" "function_app" {
       virtual_network_subnet_id = var.backend_subnet_id
     }
   }
-  
-  storage_account_name          = azurerm_storage_account.backend_storage_account.name
-  version                       = "~3"
-
 
   lifecycle {
     ignore_changes = [
-      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+    app_settings["WEBSITE_RUN_FROM_PACKAGE"],
     ]
   }
 }
@@ -85,3 +85,36 @@ resource "azurerm_function_app" "function_app" {
 #-------------------------------
 # Azure function app (Container)
 #-------------------------------
+
+resource "azurerm_function_app" "function_app_container" {
+  name                       = "func-cont-${var.resource_suffix}"
+  resource_group_name        = azurerm_resource_group.backend_rg.name
+  location                   = azurerm_resource_group.backend_rg.location
+  app_service_plan_id        = azurerm_app_service_plan.function_app_asp.id
+  https_only                 = true
+  os_type                    = var.os_type
+  storage_account_name          = azurerm_storage_account.backend_storage_account.name
+  storage_account_access_key = azurerm_storage_account.backend_storage_account.primary_access_key
+  version                       = "~3"
+
+  app_settings = {
+    "WEBSITE_RUN_FROM_PACKAGE" = "",
+    "FUNCTIONS_WORKER_RUNTIME" = "dotnet",
+  }
+  
+  
+  site_config {
+    linux_fx_version            = "DOCKER|mcr.microsoft.com/azure-functions/dotnet"
+    use_32_bit_worker_process   = false
+
+    ip_restriction {
+      virtual_network_subnet_id = var.backend_subnet_id
+    }
+  }
+  lifecycle {
+    ignore_changes = [
+    app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+    ]
+  }
+}
+

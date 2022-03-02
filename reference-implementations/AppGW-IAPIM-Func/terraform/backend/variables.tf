@@ -40,3 +40,15 @@ variable "backend_subnet_id" {
   description = "Backend resources subnet id"
   type = string
 }
+
+/* These variables are not being used, but would like to do some interpolation to have once function app resource block
+variable "function_app_name" {
+  type = list
+  default = ["func-code", "func-cont"]
+}
+
+variable "linux_fx_version" {
+  type = list
+  default = ["dotnetcore|3.1","DOCKER|mcr.microsoft.com/azure-functions/dotnet"]
+
+} */
