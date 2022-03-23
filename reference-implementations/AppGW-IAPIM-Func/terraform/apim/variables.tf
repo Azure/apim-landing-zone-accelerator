@@ -9,7 +9,7 @@ variable "resource_suffix" {
 variable "location" {
     description = "The location of the apim instance"
     type = string
-    default = "westus2"
+    default = ""
 }
 
 #-------------------------------

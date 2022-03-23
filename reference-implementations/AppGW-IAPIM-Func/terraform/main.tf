@@ -17,11 +17,15 @@ module "resource_suffix" {
 # calling the Shared module
 #-------------------------------
 module "shared" {
-  source            = "./shared"
-  resource_suffix   = module.resource_suffix.name
-  location          = local.resource_location
-  environment       = var.deployment_environment
-  jumpbox_subnet_id = module.networking.jumpbox_subnet_id
+  source               = "./shared"
+  resource_suffix      = module.resource_suffix.name
+  location             = local.resource_location
+  environment          = var.deployment_environment
+  jumpbox_subnet_id    = module.networking.jumpbox_subnet_id
+  cicd_agent_subnet_id = module.networking.cicd_agent_subnet_id
+  cicd_agent_type      = var.cicd_agent_type
+  private_ip_address   = module.apim.private_ip_addresses
+  apim_name            = module.apim.name
 }
 
 #-------------------------------
@@ -39,7 +43,8 @@ module "networking" {
 #-------------------------------
 module "apim" {
   source              = "./apim"
-  resource_suffix     = var.resource_suffix
+  resource_suffix     = module.resource_suffix.name
+  location            = local.resource_location
   workspace_id        = module.shared.workspace_id
   instrumentation_key = module.shared.instrumentation_key
   apim_subnet_id      = module.networking.apim_subnet_id

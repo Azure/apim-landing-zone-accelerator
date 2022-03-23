@@ -43,3 +43,53 @@ variable "copy_paste_enabled" {
 variable "jumpbox_subnet_id" {
   description = "Subnet id of the bastion host"
 }
+
+variable "cicd_agent_subnet_id" {
+  description = "Subnet id of the ci/cd agent"
+}
+
+variable "vm_username" {
+  description = ""
+  type = string
+  default = ""
+
+}
+
+variable "vm_password" {
+  description = ""
+  type = string
+  default = ""
+}
+
+variable "cicd_agent_type" {
+  type = string
+  description = ""
+  default = ""
+}
+
+variable "personal_access_token" {
+  type = string
+  default = ""
+}
+
+variable "account_name" {
+  type = string
+  default = ""
+  description = ""
+}
+
+variable "pool_name" {
+  type = string
+  default = ""
+  description = ""
+  
+}
+
+variable "private_ip_address" {
+  default = ""
+  description = "Private ip address of the apim instance"
+}
+
+variable "apim_name" {
+  description = "Resource name of the deployed internal apim instance"
+}

@@ -76,3 +76,9 @@ variable "os_type" {
   description = "A string indicating the Operating System type for this function app"
   default     = "linux"
 }
+
+variable "cicd_agent_type" {
+  type        = string
+  description = "value"
+  default     = ""
+}

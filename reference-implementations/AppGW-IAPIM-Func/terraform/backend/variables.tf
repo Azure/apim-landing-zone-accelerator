@@ -3,10 +3,6 @@ variable "location" {
     type = string
 }
 
-variable "workload_name" {
-    type = string
-}
-
 variable "storage_account_tier" {
     description = "Defines the Tier to use for this storage account. Valid options are Standard and Premium. For BlockBlobStorage and FileStorage accounts only Premium is valid. Changing this forces a new resource to be created."
     default = "standard"
@@ -27,12 +23,12 @@ variable "resource_suffix" {
 }
 
 variable "asp_tier" {
-  default = "PremiumV2"
+  default = "premium"
   type = string
 }
 
 variable "asp_size" {
-  default = "P1v2"
+  default = "p1v2"
   type = string
 }
 
@@ -41,14 +37,7 @@ variable "backend_subnet_id" {
   type = string
 }
 
-/* These variables are not being used, but would like to do some interpolation to have once function app resource block
-variable "function_app_name" {
-  type = list
-  default = ["func-code", "func-cont"]
-}
 
-variable "linux_fx_version" {
-  type = list
-  default = ["dotnetcore|3.1","DOCKER|mcr.microsoft.com/azure-functions/dotnet"]
 
-} */
+  count = length(var.function_app_name)
+  name  = "${var.function_app_name}-${var.resource_suffix}[count.index]}"
