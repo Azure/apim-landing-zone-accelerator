@@ -25,6 +25,8 @@ jobs:
 
   build-and-deploy:
       runs-on: ubuntu-latest
+      needs: validate_bicep
+
       steps:
 
         # Checkout code
@@ -72,3 +74,39 @@ jobs:
             vmUsername=${{ fromJson(env.config).VM_USERNAME }} vmPassword=${{ secrets.VM_PW }} 
             accountName=${{ secrets.ACCOUNT_NAME }} personalAccessToken=${{ secrets.PAT }} CICDAgentType=${{ fromJson(env.config).CICD_AGENT_TYPE}}
             appGatewayFqdn=${{ secrets.FQDN }} certificatePassword=${{ secrets.CERTPW }} appGatewayCertType=${{ fromJson(env.config).CERT_TYPE }}
+
+  Generate-ARM:
+    name: "Generate ARM Template"
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      # Exporting ARM template from the bicep file
+      - name: Export ARM template
+        working-directory: ./reference-implementations/AppGW-IAPIM-Func/bicep
+        run : |
+          pwd
+          az bicep build --file main.bicep --outfile ../azure-resource-manager/apim-arm.json
+          ls -al
+
+      # Uploading exported ARM template to GitHub's artifact 
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: apim-arm
+          path: /reference-implementations/AppGW-IAPIM-Func/azure-resource-manager/apim-arm.json
+          retention-days: 2
+
+      # Committing and pushing exported ARM template to the same repo.
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: APIM-Action
+          author_email: cenkc@microsoft.com
+          message: 'ARM template updated'
+          cwd: '/reference-implementations/AppGW-IAPIM-Func/azure-resource-manager/'
+          branch_mode: create
+          branch: 'arm-${{github.run_number}}'
+          add: 'apim-arm.json'
