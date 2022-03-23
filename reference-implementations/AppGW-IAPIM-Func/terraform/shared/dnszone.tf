@@ -37,7 +37,7 @@ resource "azurerm_private_dns_zone" "scm" {
 #-------------------------------
 # A records for the DNS zones
 #-------------------------------
-resource "azurerm_dns_a_record" "gateway_record" {
+resource "azurerm_private_dns_a_record" "gateway_record" {
   name                = "azure-api.net/${var.apim_name}"
   zone_name           = azurerm_private_dns_zone.gateway.name
   resource_group_name = azurerm_resource_group.shared_rg.name
@@ -45,7 +45,7 @@ resource "azurerm_dns_a_record" "gateway_record" {
   records             = var.private_ip_address
 }
 
-resource "azurerm_dns_a_record" "dev_portal_record" {
+resource "azurerm_private_dns_a_record" "dev_portal_record" {
   name                = "portal.azure-api.net/${var.apim_name}"
   zone_name           = azurerm_private_dns_zone.dev_portal.name
   resource_group_name = azurerm_resource_group.shared_rg.name
@@ -53,7 +53,7 @@ resource "azurerm_dns_a_record" "dev_portal_record" {
   records             = var.private_ip_address
 }
 
-resource "azurerm_dns_a_record" "new_dev_portal_record" {
+resource "azurerm_private_dns_a_record" "new_dev_portal_record" {
   name                = "developer.azure-api.net/${var.apim_name}"
   zone_name           = azurerm_private_dns_zone.new_dev_portal.name
   resource_group_name = azurerm_resource_group.shared_rg.name
@@ -61,7 +61,7 @@ resource "azurerm_dns_a_record" "new_dev_portal_record" {
   records             = var.private_ip_address
 }
 
-resource "azurerm_dns_a_record" "mgmt_portal_record" {
+resource "azurerm_private_dns_a_record" "mgmt_portal_record" {
   name                = "management.azure-api.net/${var.apim_name}"
   zone_name           = azurerm_private_dns_zone.mgmt_portal.name
   resource_group_name = azurerm_resource_group.shared_rg.name
@@ -69,7 +69,7 @@ resource "azurerm_dns_a_record" "mgmt_portal_record" {
   records             = var.private_ip_address
 }
 
-resource "azurerm_dns_a_record" "scm_record" {
+resource "azurerm_private_dns_a_record" "scm_record" {
   name                = "scm.azure-api.net/${var.apim_name}"
   zone_name           = azurerm_private_dns_zone.scm.name
   resource_group_name = azurerm_resource_group.shared_rg.name
@@ -80,3 +80,37 @@ resource "azurerm_dns_a_record" "scm_record" {
 #-------------------------------
 # Vnet links
 #-------------------------------
+resource "azurerm_private_dns_zone_virtual_network_link" "gateway_vnetlink" {
+  name                  = "test"
+  resource_group_name   = azurerm_resource_group.shared_rg
+  private_dns_zone_name = azurerm_private_dns_zone.gateway.name
+  virtual_network_id    = var.apim_vnet_id
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "dev_portal_vnetlink" {
+  name                  = "test"
+  resource_group_name   = azurerm_resource_group.shared_rg
+  private_dns_zone_name = azurerm_private_dns_zone.dev_portal.name
+  virtual_network_id    = var.apim_vnet_id
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "new_dev_portal_vnetlink" {
+  name                  = "test"
+  resource_group_name   = azurerm_resource_group.shared_rg
+  private_dns_zone_name = azurerm_private_dns_zone.new_dev_portal.name
+  virtual_network_id    = var.apim_vnet_id
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "mgmt_vnetlink" {
+  name                  = "test"
+  resource_group_name   = azurerm_resource_group.shared_rg
+  private_dns_zone_name = azurerm_private_dns_zone.mgmt_portal.name
+  virtual_network_id    = var.apim_vnet_id
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "scm_vnetlink" {
+  name                  = "test"
+  resource_group_name   = azurerm_resource_group.shared_rg
+  private_dns_zone_name = azurerm_private_dns_zone.scm.name
+  virtual_network_id    = var.apim_vnet_id
+}

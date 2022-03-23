@@ -93,3 +93,7 @@ variable "private_ip_address" {
 variable "apim_name" {
   description = "Resource name of the deployed internal apim instance"
 }
+
+variable "apim_vnet_id" {
+  description = "APIM vnet id"
+}

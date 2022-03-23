@@ -26,6 +26,7 @@ module "shared" {
   cicd_agent_type      = var.cicd_agent_type
   private_ip_address   = module.apim.private_ip_addresses
   apim_name            = module.apim.name
+  apim_vnet_id         = module.networking.apim_cs_vnet_id
 }
 
 #-------------------------------
