@@ -489,6 +489,7 @@ resource backEndNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
     ]
   }
 }
+// https://docs.microsoft.com/en-us/azure/api-management/virtual-network-reference?tabs=stv2#required-ports
 resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   name: apimSNNSG
   location: location
@@ -573,7 +574,7 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
         }
       }
       {
-        name: 'apim-redis'
+        name: 'apim-redis-in'
         properties: {
           priority: 150
           sourceAddressPrefix: 'VirtualNetwork'
@@ -756,7 +757,7 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
         }
       }
       {
-        name: 'apim-redis'
+        name: 'apim-redis-out'
         properties: {
           priority: 230
           sourceAddressPrefix: 'VirtualNetwork'

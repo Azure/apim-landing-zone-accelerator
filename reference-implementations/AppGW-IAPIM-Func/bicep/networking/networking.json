@@ -1,0 +1,847 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1008.15138",
+      "templateHash": "17768440303350554052"
+    }
+  },
+  "parameters": {
+    "workloadName": {
+      "type": "string",
+      "metadata": {
+        "description": "A short name for the workload being deployed"
+      }
+    },
+    "deploymentEnvironment": {
+      "type": "string",
+      "allowedValues": [
+        "dev",
+        "uat",
+        "prod",
+        "dr"
+      ],
+      "metadata": {
+        "description": "The environment for which the deployment is being executed"
+      }
+    },
+    "apimCSVNetNameAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.0.0/16"
+    },
+    "bastionAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.1.0/24"
+    },
+    "devOpsNameAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.2.0/24"
+    },
+    "jumpBoxAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.3.0/24"
+    },
+    "appGatewayAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.4.0/24"
+    },
+    "privateEndpointAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.5.0/24"
+    },
+    "backEndAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.6.0/24"
+    },
+    "apimAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.2.7.0/24"
+    }
+  },
+  "functions": [],
+  "variables": {
+    "owner": "APIM Const Set",
+    "location": "[resourceGroup().location]",
+    "apimCSVNetName": "[format('vnet-apim-cs-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "bastionSubnetName": "AzureBastionSubnet",
+    "devOpsSubnetName": "[format('snet-devops-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "jumpBoxSubnetName": "[format('snet-jbox-{0}-{1}-{2}-001', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "appGatewaySubnetName": "[format('snet-apgw-{0}-{1}-{2}-001', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "privateEndpointSubnetName": "[format('snet-prep-{0}-{1}-{2}-001', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "backEndSubnetName": "[format('snet-bcke-{0}-{1}-{2}-001', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "apimSubnetName": "[format('snet-apim-{0}-{1}-{2}-001', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "bastionName": "[format('bastion-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "bastionIPConfigName": "[format('bastionipcfg-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "bastionSNNSG": "[format('nsg-bast-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "devOpsSNNSG": "[format('nsg-devops-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "jumpBoxSNNSG": "[format('nsg-jbox-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "appGatewaySNNSG": "[format('nsg-apgw-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "privateEndpointSNNSG": "[format('nsg-prep-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "backEndSNNSG": "[format('nsg-bcke-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "apimSNNSG": "[format('nsg-apim-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "publicIPAddressName": "[format('pip-apimcs-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]",
+    "publicIPAddressNameBastion": "[format('pip-bastion-{0}-{1}-{2}', parameters('workloadName'), parameters('deploymentEnvironment'), variables('location'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2021-02-01",
+      "name": "[variables('apimCSVNetName')]",
+      "location": "[variables('location')]",
+      "tags": {
+        "Owner": "[variables('owner')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('apimCSVNetNameAddressPrefix')]"
+          ]
+        },
+        "enableVmProtection": false,
+        "enableDdosProtection": false,
+        "subnets": [
+          {
+            "name": "[variables('bastionSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('bastionAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('bastionSNNSG'))]"
+              }
+            }
+          },
+          {
+            "name": "[variables('devOpsSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('devOpsNameAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('devOpsSNNSG'))]"
+              }
+            }
+          },
+          {
+            "name": "[variables('jumpBoxSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('jumpBoxAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('jumpBoxSNNSG'))]"
+              }
+            }
+          },
+          {
+            "name": "[variables('appGatewaySubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('appGatewayAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('appGatewaySNNSG'))]"
+              }
+            }
+          },
+          {
+            "name": "[variables('privateEndpointSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('privateEndpointAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('privateEndpointSNNSG'))]"
+              },
+              "privateEndpointNetworkPolicies": "Disabled"
+            }
+          },
+          {
+            "name": "[variables('backEndSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('backEndAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('backEndSNNSG'))]"
+              }
+            }
+          },
+          {
+            "name": "[variables('apimSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('apimAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('apimSNNSG'))]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('apimSNNSG'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('appGatewaySNNSG'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('backEndSNNSG'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('bastionSNNSG'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('devOpsSNNSG'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('jumpBoxSNNSG'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('privateEndpointSNNSG'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('bastionSNNSG')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "AllowHttpsInbound",
+            "properties": {
+              "priority": 120,
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*"
+            }
+          },
+          {
+            "name": "AllowGatewayManagerInbound",
+            "properties": {
+              "priority": 130,
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "GatewayManager",
+              "destinationAddressPrefix": "*"
+            }
+          },
+          {
+            "name": "AllowAzureLoadBalancerInbound",
+            "properties": {
+              "priority": 140,
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "AzureLoadBalancer",
+              "destinationAddressPrefix": "*"
+            }
+          },
+          {
+            "name": "AllowBastionHostCommunicationInbound",
+            "properties": {
+              "priority": 150,
+              "protocol": "*",
+              "destinationPortRanges": [
+                "8080",
+                "5701"
+              ],
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "DenyAllInbound",
+            "properties": {
+              "priority": 4096,
+              "protocol": "*",
+              "destinationPortRange": "*",
+              "access": "Deny",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*"
+            }
+          },
+          {
+            "name": "AllowSshRdpOutbound",
+            "properties": {
+              "priority": 100,
+              "protocol": "*",
+              "destinationPortRanges": [
+                "22",
+                "3389"
+              ],
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "AllowAzureCloudOutbound",
+            "properties": {
+              "priority": 110,
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "AzureCloud"
+            }
+          },
+          {
+            "name": "AllowBastionCommunication",
+            "properties": {
+              "priority": 120,
+              "protocol": "*",
+              "destinationPortRanges": [
+                "8080",
+                "5701"
+              ],
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "AllowGetSessionInformation",
+            "properties": {
+              "priority": 130,
+              "protocol": "*",
+              "destinationPortRange": "80",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "Internet"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('devOpsSNNSG')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('jumpBoxSNNSG')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('appGatewaySNNSG')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "default-allow-rdp",
+            "properties": {
+              "priority": 1000,
+              "sourceAddressPrefix": "*",
+              "protocol": "Tcp",
+              "destinationPortRange": "3389",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*"
+            }
+          },
+          {
+            "name": "HealthProbes",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "65200-65535",
+              "sourceAddressPrefix": "GatewayManager",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "Allow_TLS",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "Allow_HTTP",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 111,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "Allow_AzureLoadBalancer",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "AzureLoadBalancer",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 120,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "DenyAll",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Deny",
+              "priority": 130,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('privateEndpointSNNSG')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('backEndSNNSG')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": []
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('apimSNNSG')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "apim-vnet",
+            "properties": {
+              "priority": 100,
+              "sourceAddressPrefix": "ApiManagement",
+              "protocol": "Tcp",
+              "destinationPortRange": "3443",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "apim-client-comm80",
+            "properties": {
+              "priority": 110,
+              "sourceAddressPrefix": "Internet",
+              "protocol": "Tcp",
+              "destinationPortRange": "80",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "apim-client-comm443",
+            "properties": {
+              "priority": 120,
+              "sourceAddressPrefix": "Internet",
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "apim-alb",
+            "properties": {
+              "priority": 130,
+              "sourceAddressPrefix": "AzureLoadBalancer",
+              "protocol": "Tcp",
+              "destinationPortRange": "6390",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "apim-sync-count",
+            "properties": {
+              "priority": 140,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Udp",
+              "destinationPortRange": "4290",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "apim-redis",
+            "properties": {
+              "priority": 150,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "6381-6383",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "apim-storage",
+            "properties": {
+              "priority": 100,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "Storage"
+            }
+          },
+          {
+            "name": "apim-sql",
+            "properties": {
+              "priority": 110,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "1433",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "SQL"
+            }
+          },
+          {
+            "name": "apim-kv",
+            "properties": {
+              "priority": 120,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "AzureKeyVault"
+            }
+          },
+          {
+            "name": "apim-eventhubs1",
+            "properties": {
+              "priority": 130,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "5671-5672",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "EventHub"
+            }
+          },
+          {
+            "name": "apim-eventhubs2",
+            "properties": {
+              "priority": 140,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "EventHub"
+            }
+          },
+          {
+            "name": "apim-gitfile",
+            "properties": {
+              "priority": 150,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "445",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "Storage"
+            }
+          },
+          {
+            "name": "apim-health1",
+            "properties": {
+              "priority": 160,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "AzureCloud"
+            }
+          },
+          {
+            "name": "apim-health2",
+            "properties": {
+              "priority": 170,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "12000",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "AzureCloud"
+            }
+          },
+          {
+            "name": "apim-logs-metr1",
+            "properties": {
+              "priority": 180,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "1886",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "AzureMonitor"
+            }
+          },
+          {
+            "name": "apim-logs-metr2",
+            "properties": {
+              "priority": 190,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "443",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "AzureMonitor"
+            }
+          },
+          {
+            "name": "apim-smtp1",
+            "properties": {
+              "priority": 200,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "25",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "Internet"
+            }
+          },
+          {
+            "name": "apim-smtp2",
+            "properties": {
+              "priority": 210,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "587",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "Internet"
+            }
+          },
+          {
+            "name": "apim-smtp3",
+            "properties": {
+              "priority": 220,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "25028",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "Internet"
+            }
+          },
+          {
+            "name": "apim-redis",
+            "properties": {
+              "priority": 230,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Tcp",
+              "destinationPortRange": "6381-6383",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          },
+          {
+            "name": "apim-sync-count",
+            "properties": {
+              "priority": 230,
+              "sourceAddressPrefix": "VirtualNetwork",
+              "protocol": "Udp",
+              "destinationPortRange": "4290",
+              "access": "Allow",
+              "direction": "Outbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "VirtualNetwork"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-07-01",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-07-01",
+      "name": "[variables('publicIPAddressNameBastion')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Standard",
+        "tier": "Regional"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static",
+        "publicIPAddressVersion": "IPv4"
+      }
+    },
+    {
+      "type": "Microsoft.Network/bastionHosts",
+      "apiVersion": "2020-07-01",
+      "name": "[variables('bastionName')]",
+      "location": "[variables('location')]",
+      "tags": {
+        "Owner": "[variables('owner')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[variables('bastionIPConfigName')]",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressNameBastion'))]"
+              },
+              "subnet": {
+                "id": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('bastionSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressNameBastion'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "apimCSVNetName": {
+      "type": "string",
+      "value": "[variables('apimCSVNetName')]"
+    },
+    "apimCSVNetId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName'))]"
+    },
+    "bastionSubnetName": {
+      "type": "string",
+      "value": "[variables('bastionSubnetName')]"
+    },
+    "devOpsSubnetName": {
+      "type": "string",
+      "value": "[variables('devOpsSubnetName')]"
+    },
+    "jumpBoxSubnetName": {
+      "type": "string",
+      "value": "[variables('jumpBoxSubnetName')]"
+    },
+    "appGatewaySubnetName": {
+      "type": "string",
+      "value": "[variables('appGatewaySubnetName')]"
+    },
+    "privateEndpointSubnetName": {
+      "type": "string",
+      "value": "[variables('privateEndpointSubnetName')]"
+    },
+    "backEndSubnetName": {
+      "type": "string",
+      "value": "[variables('backEndSubnetName')]"
+    },
+    "apimSubnetName": {
+      "type": "string",
+      "value": "[variables('apimSubnetName')]"
+    },
+    "bastionSubnetid": {
+      "type": "string",
+      "value": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('bastionSubnetName'))]"
+    },
+    "CICDAgentSubnetId": {
+      "type": "string",
+      "value": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('devOpsSubnetName'))]"
+    },
+    "jumpBoxSubnetid": {
+      "type": "string",
+      "value": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('jumpBoxSubnetName'))]"
+    },
+    "appGatewaySubnetid": {
+      "type": "string",
+      "value": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('appGatewaySubnetName'))]"
+    },
+    "privateEndpointSubnetid": {
+      "type": "string",
+      "value": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('privateEndpointSubnetName'))]"
+    },
+    "backEndSubnetid": {
+      "type": "string",
+      "value": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('backEndSubnetName'))]"
+    },
+    "apimSubnetid": {
+      "type": "string",
+      "value": "[format('{0}/subnets/{1}', resourceId('Microsoft.Network/virtualNetworks', variables('apimCSVNetName')), variables('apimSubnetName'))]"
+    },
+    "publicIp": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+    }
+  }
+}
