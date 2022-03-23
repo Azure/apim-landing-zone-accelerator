@@ -106,7 +106,7 @@ resource "azurerm_windows_virtual_machine" "agent_vm" {
 # Deploy CI/CD agent if required
 #-------------------------------
 resource "azurerm_virtual_machine_extension" "deploy_agent" {
-  name                 = "devops_agent_test"
+  name                 = "devops_agent"
   virtual_machine_id   = azurerm_windows_virtual_machine.agent_vm.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"

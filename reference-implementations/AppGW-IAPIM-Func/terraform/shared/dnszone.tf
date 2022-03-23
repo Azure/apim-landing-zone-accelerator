@@ -5,7 +5,6 @@ The new developer portal	contosointernalvnet.developer.azure-api.net
 Direct management endpoint	contosointernalvnet.management.azure-api.net
 Git	                        contosointernalvnet.scm.azure-api.net */
 
-
 #-------------------------------
 # DNS zones 
 #-------------------------------
@@ -82,35 +81,35 @@ resource "azurerm_private_dns_a_record" "scm_record" {
 #-------------------------------
 resource "azurerm_private_dns_zone_virtual_network_link" "gateway_vnetlink" {
   name                  = "test"
-  resource_group_name   = azurerm_resource_group.shared_rg
+  resource_group_name   = azurerm_resource_group.shared_rg.name
   private_dns_zone_name = azurerm_private_dns_zone.gateway.name
   virtual_network_id    = var.apim_vnet_id
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "dev_portal_vnetlink" {
   name                  = "test"
-  resource_group_name   = azurerm_resource_group.shared_rg
+  resource_group_name   = azurerm_resource_group.shared_rg.name
   private_dns_zone_name = azurerm_private_dns_zone.dev_portal.name
   virtual_network_id    = var.apim_vnet_id
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "new_dev_portal_vnetlink" {
   name                  = "test"
-  resource_group_name   = azurerm_resource_group.shared_rg
+  resource_group_name   = azurerm_resource_group.shared_rg.name
   private_dns_zone_name = azurerm_private_dns_zone.new_dev_portal.name
   virtual_network_id    = var.apim_vnet_id
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "mgmt_vnetlink" {
   name                  = "test"
-  resource_group_name   = azurerm_resource_group.shared_rg
+  resource_group_name   = azurerm_resource_group.shared_rg.name
   private_dns_zone_name = azurerm_private_dns_zone.mgmt_portal.name
   virtual_network_id    = var.apim_vnet_id
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "scm_vnetlink" {
   name                  = "test"
-  resource_group_name   = azurerm_resource_group.shared_rg
+  resource_group_name   = azurerm_resource_group.shared_rg.name
   private_dns_zone_name = azurerm_private_dns_zone.scm.name
   virtual_network_id    = var.apim_vnet_id
 }

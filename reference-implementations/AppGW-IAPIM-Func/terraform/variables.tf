@@ -79,6 +79,6 @@ variable "os_type" {
 
 variable "cicd_agent_type" {
   type        = string
-  description = "value"
-  default     = ""
+  description = "The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify 'none' if no agent needed')"
+  default     = "none"
 }
