@@ -3,6 +3,11 @@ variable "location" {
     type = string
 }
 
+variable "workload_name" {
+  type        = string
+  description = ""
+}
+
 variable "storage_account_tier" {
     description = "Defines the Tier to use for this storage account. Valid options are Standard and Premium. For BlockBlobStorage and FileStorage accounts only Premium is valid. Changing this forces a new resource to be created."
     default = "standard"
@@ -36,8 +41,3 @@ variable "backend_subnet_id" {
   description = "Backend resources subnet id"
   type = string
 }
-
-
-
-  count = length(var.function_app_name)
-  name  = "${var.function_app_name}-${var.resource_suffix}[count.index]}"

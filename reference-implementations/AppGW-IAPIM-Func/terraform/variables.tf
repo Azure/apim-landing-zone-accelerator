@@ -55,19 +55,19 @@ variable "app_gateway_fqdn" {
 variable "certificate_path" {
   type        = string
   description = ""
-  default     = "C:/Microsoft/Demo/sslcerts/rootcert.pfx"
+  default     = null
 }
 
 variable "certificate_password" {
   type        = string
   description = ""
-  default     = "password"
+  default     = null
 }
 
 variable "certificate_secret_name" {
   type        = string
   description = ""
-  default     = "root-ca"
+  default     = null
 }
 
 # Backend resource variables 
@@ -81,4 +81,9 @@ variable "cicd_agent_type" {
   type        = string
   description = "The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify 'none' if no agent needed')"
   default     = "none"
+}
+
+variable "vm_username" {
+  type        = string
+  description = ""
 }
