@@ -42,6 +42,7 @@ param appGatewayAddressPrefix string = '10.2.4.0/24'
 param privateEndpointAddressPrefix string = '10.2.5.0/24'
 param backEndAddressPrefix string = '10.2.6.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
+param location string
 
 /*
 @description('A short name for the PL that will be created between Funcs')
@@ -53,7 +54,6 @@ param functionId string = '123131'
 
 // Variables
 var owner = 'APIM Const Set'
-var location = resourceGroup().location
 
 
 var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${deploymentEnvironment}-${location}'

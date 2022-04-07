@@ -10,6 +10,8 @@ on:
   pull_request:
     branches:
     - main
+    paths:
+    - 'reference-implementations/AppGW-IAPIM-Func/**'
  
 jobs:
   validate_bicep:

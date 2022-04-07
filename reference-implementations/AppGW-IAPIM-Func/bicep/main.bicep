@@ -44,8 +44,9 @@ param certificatePassword string
 @description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and copy the pfx file to deployment/bicep/gateway/certs/appgw.pfx if custom certificates are to be used')
 param appGatewayCertType string
 
+param location string = deployment().location
+
 // Variables
-var location = deployment().location
 var resourceSuffix = '${workloadName}-${environment}-${location}-001'
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
@@ -86,6 +87,7 @@ module networking './networking/networking.bicep' = {
   params: {
     workloadName: workloadName
     deploymentEnvironment: environment
+    location: location
   }
 }
 
@@ -94,7 +96,8 @@ module backend './backend/backend.bicep' = {
   scope: resourceGroup(backendRG.name)
   params: {
     workloadName: workloadName
-    environment: environment    
+    environment: environment
+    location: location    
   }
 }
 
