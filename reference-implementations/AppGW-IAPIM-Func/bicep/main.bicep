@@ -1,7 +1,8 @@
 targetScope='subscription'
 
 // Parameters
-@description('A short name for the workload being deployed')
+@description('A short name for the workload being deployed alphanumberic only')
+@maxLength(8)
 param workloadName string
 
 @description('The environment for which the deployment is being executed')
@@ -104,7 +105,7 @@ module backend './backend/backend.bicep' = {
 var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
 var CICDAgentSubnetId = networking.outputs.CICDAgentSubnetId
 
-module shared './shared/shared.bicep' = {  
+module shared './shared/shared.bicep' = {
   dependsOn: [
     networking
   ]
@@ -144,7 +145,7 @@ module dnsZoneModule 'shared/dnszone.bicep'  = {
   scope: resourceGroup(sharedRG.name)
   dependsOn: [
     apimModule
-  ]  
+  ]
   params: {
     vnetName: networking.outputs.apimCSVNetName
     vnetRG: networkingRG.name

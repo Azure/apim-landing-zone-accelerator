@@ -46,7 +46,7 @@ param CICDAgentType string
 
 @description('The base URI where the CI/CD agent artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.')
 
-param artifactsLocation string = 'https://raw.githubusercontent.com/cykreng/Enterprise-Scale-Apim/main/reference-implementations/AppGW-IAPIM-Func/bicep/shared/agentsetup.ps1'
+param artifactsLocation string = 'https://raw.githubusercontent.com/Azure/apim-landing-zone-accelerator/main/reference-implementations/AppGW-IAPIM-Func/bicep/shared/agentsetup.ps1'
 // Variables
 var AgentName = 'agent-${vmName}'
 

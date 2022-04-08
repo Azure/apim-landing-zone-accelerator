@@ -1,8 +1,6 @@
 # Deploying Enterprise-Scale-APIM in your own environment 
 
-The `Enterprise-scale-APIM` - acrhitecture solution template is intended to provision a single region premium API Management instance within an internal VNet exposed through Application Gateway for external traffic with Azure Functions as the backend (exposed through private endpoint). 
-
-In order to Deploy an Azure Application Gateway standalone instance, which is not a part of the overall Enterprise Scale APIM solution, follow these [steps here](/deployment/bicep/gateway/readme.md)
+The `Enterprise-scale-APIM` - acrhitecture solution template is intended to provision a single region premium API Management instance within an internal VNet exposed through Application Gateway for external traffic with Azure Functions as the backend (exposed through private endpoint) 
 
 
 ## Pre-Requisites 
@@ -21,9 +19,9 @@ OR
 ### 1. Clone the repository to your Organisation/Repository
 
 ```
-git clone https://github.com/cykreng/Enterprise-Scale-APIM.git
+git clone https://github.com/Azure/apim-landing-zone-accelerator.git
 ```
-![Clone Repo](/docs/images/clone-repo.png)
+<img src= /docs/images/clone-repo.png>
 
 
 ### 2. Authentication from GitHub to Azure 
@@ -62,13 +60,13 @@ az account show
 
 b) Sign-in using Cloud Shell
 
-![Cloud Shell](/docs/images/cloud_shell.png)
+<img src= /docs/images/cloud_shell.png>
 
 ```
 az account show
 ```
 
-![Az Show Account](/docs/images/az-account-show.jpg)
+<img src= /docs/images/az-account-show.jpg>
 
 ### 4. Configure Deployment Credentials 
 
@@ -76,7 +74,7 @@ For using credentials like a Service Principal we will need to add them as [GitH
 
 Follow the below steps to configure secrets for the authentication within the GitHub workflow :
 
-   -	Go to your GitHub repository settings  and a ‘New repository secrets’ from Secrets menu
+   -	Go to your GitHub repository settings and add a new Actions secrets by clicking ‘New repository secrets’ from the Secrets menu 
    -	Store the output of the below [az cli](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#:~:text=%20Create%20an%20Azure%20service%20principal%20with%20the,role%20for%20a%20service%20principal%20is...%20See%20More.) command as a secret (e.g. AZURE_CREDENTIALS). This will be referenced back in the workflow file
 
 
@@ -98,12 +96,12 @@ az ad sp create-for-rbac --name "enterprise-scale-apim-app" --role contributor \
     (...)
   }
 ```
-![Secrets](/docs/images/secrets.png)
+<img src= /docs/images/secrets.png>
 
 
 ### 5. Run the workflow 
 
-There is  a workflow file apim-cs.yml created under .github/workflows 
+There is a workflow file **es-apim.yml** created under [.github/workflows](/.github/workflows/es-apim.yml)
 
 a) Generate the following secrets in your GitHub repository settings
 
@@ -113,7 +111,7 @@ a) Generate the following secrets in your GitHub repository settings
   - `VM_PW` - The password to be used as the Administrator for all VMs created by this deployment
 
 
-b) In order to run the deployment successfully we will need modify the **config.yml** file located in /deployment/bicep folder
+b) In order to run the deployment successfully we will need to modify the values in **config.yml** file located [here](/reference-implementations/AppGW-IAPIM-Func/bicep/config.yml) 
 
 |                   |          |
 |:------------------|:--------:|
@@ -125,11 +123,11 @@ b) In order to run the deployment successfully we will need modify the **config.
 | `ACCOUNT_NAME`    |  'The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none' |  
 | `CICD_AGENT_TYPE` |  'The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')  |
 
-c. Push the latest changes to your **feature** branch and create a Pull Request to **main** branch which will trigger the workflow
+c) Push the latest changes to your **feature** branch and create a Pull Request to **main** branch which will trigger the workflow
 
 Alternatively, you can also trigger the workflow by going to **Actions** tab and run the `AzureBicepDeploy` workflow manually
 
-![Manual Trigger](/docs/images/manual_trigger.png)
+<img src= /docs/images/manual_trigger.png>
 
 
 ### 6. Deployed Resources
