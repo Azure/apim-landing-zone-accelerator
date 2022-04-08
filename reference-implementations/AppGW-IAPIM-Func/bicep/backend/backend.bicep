@@ -45,11 +45,12 @@ param workloadName string
 ])
 param environment string
 
+param location string
+
 //
 // Variables
 //
 var owner = 'APIM Const Set'
-var location = resourceGroup().location
 
 //
 // Azure Storage
