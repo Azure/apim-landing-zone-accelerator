@@ -1,9 +1,3 @@
----
-title: generating and validating the ARM template
-author: Cenk Caglar (cenkc@microsoft.com) github: cenkms
-date: 04/14/2022
----
-
 # Generating the ARM Template
 
 ## Process
