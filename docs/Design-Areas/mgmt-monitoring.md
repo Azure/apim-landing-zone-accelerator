@@ -18,7 +18,7 @@
 - The Uri /status-0123456789abcdef can be used as a common health endpoint for the APIM service.
 - The APIM Service is not a WAF. Deploy Azure App Gateway in front to add additional layers of protection
 - Client certificate negotiation is enabled is a per-gateway configuration 
-- certificates updated in the key vault are automatically rotated in API Management and is updated within 4 hours. 
+- Certificates updated in the key vault are automatically rotated in API Management and is updated within 4 hours. 
 - Secret in Key Vault is updated within 4 hours after being set. You can also manually refresh the secret using the Azure portal or via the management REST API.
 - [Custom Domains](https://docs.microsoft.com/en-us/azure/api-management/configure-custom-domain) can be applied to all endpoints or just a subset. The Premium tier supports setting multiple host names for the Gateway endpoint.
 - APIM can be backed up using its Management REST API. Backups expire after 30 days. Be aware of what APIM does not back up.

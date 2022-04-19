@@ -1,45 +1,75 @@
-Architecture Guides don't have specific content guidelines (except for the three sections at the end), but they should follow all Microsoft and Docs style and pull request criteria.
+> The H1 title is the same as the title metadata. Don't enter it here, but as the **name** value in the corresponding YAML file.
+
+_Brief introduction goes here._ [**Deploy this solution**.](#deploy-the-solution)
+
+![alt text.](./media/folder_name/architecture-diagram.png)
+
+_Download a [Visio file](https://arch-center.azureedge.net/architecture.vsdx) that contains this architecture diagram. This file must be uploaded to `https://arch-center.azureedge.net/`_
 
 ## Architecture
 
-<Architecture diagram goes here.>
+### Workflow
 
-*Download a [Visio file](https://arch-center.azureedge.net/DiagramName.vsdx) of this architecture.*
+The architecture consists of the following components:
 
-- If the diagram has Visio or PowerPoint source uploaded to the CDN, include the download link.
-- A numbered or bulleted list describing the architecture usually follows the diagram.
-- However, the Architecture Guide template doesn't require a section named Architecture, nor a bulleted or numbered list.
+- **Thing 1**. Description
 
-The Architecture Guide template requires the following sections at the end of the article:
-  
-## Contributors
+- **Thing 2**. Description
 
-> (Expected, but this section is optional if all the contributors would prefer to not include it)
+### Components
 
-> Start with the explanation text (same for every article), in italics. This makes it clear that Microsoft takes responsibility for the article (not the one contributor). Then include the "Pricipal authors" list and the "Additional contributors" list (if there are additional contributors). Link each contributor's name to the person's LinkedIn profile. After the name, place a pipe symbol ("|") with spaces, and then enter the person's title. We don't include the person's company, MVP status, or links to additional profiles (to minimize edits/updates). (The profiles can be linked to from the person's LinkedIn page, and we hope to automate that on the platform in the future). 
-> Implement this format:
+> A bullet list of components in the architecture (including all relevant Azure services) with links to the product service pages. This is for lead generation (what business, marketing, and PG want). It helps drive revenue.
 
-*This article is maintained by Microsoft. It was originally written by the following contributors.*
+## Recommendations
 
-**Principal authors:** > Only the primary authors. List them alphabetically, by last name. Use this format: Fname Lname. If the article gets rewritten, keep the original authors and add in the new one(s).
+The following recommendations apply for most scenarios. Follow these recommendations unless you have a specific requirement that overrides them.
 
- * [Author 1 Name](http://linkedin.com/ProfileURL) | (Title, such as "Cloud Solution Architect")
- * [Author 2 Name](http://linkedin.com/ProfileURL) | (Title, such as "Cloud Solution Architect")
- * > Continue for each primary author (even if there are 10 of them).
+_Include considerations for deploying or configuring the elements of this architecture._
 
-**Other contributors:** > Include contributing (but not primary) authors, major editors (not minor edits), and technical reviewers. List them alphabetically, by last name. Use this format: Fname Lname. It's okay to add in newer contributors.
+## Scalability considerations
 
- * [Contributor 1 Name](http://linkedin.com/ProfileURL) | (Title, such as "Cloud Solution Architect")
- * [Contributor 2 Name](http://linkedin.com/ProfileURL) | (Title, such as "Cloud Solution Architect")
+_Identify and address scalability concerns relevant to the architecture in this scenario._
+
+## Availability considerations
+
+_Identify and address availability concerns relevant to the architecture in this scenario._
+
+## Manageability considerations
+
+_Identify and address manageability concerns relevant to the architecture in this scenario._
+
+## Security considerations
+
+_Identify and address security concerns relevant to the architecture in this scenario._
+
+## Deploy this scenario
+
+_Describe a step-by-step process for implementing the reference architecture solution. Best practices are to add the solution to GitHub, provide a link (use boilerplate text below), and explain how to roll out the solution._
+
+A deployment for a reference architecture that implements these recommendations and considerations is available on [GitHub](https://www.github.com/path-to-repo).
+
+1. First step
+2. Second step
+3. Third step ...
 
 ## Next steps
 
-- Bulleted list of third-party and other Docs and Microsoft links.
-- Links shouldn't include en-us locale unless they don't work without it.
-- Docs links should be site-relative, for example (/azure/feature/article-name).
-- Don't include trailing slash in any links.
+Link to Docs and Learn articles. Could also be to appropriate sources outside of Docs, such as GitHub repos, third-party documentation, or an official technical blog post.
+
+Examples:
+* [Azure Machine Learning documentation](/azure/machine-learning)
+* [What are Azure Cognitive Services?](/azure/cognitive-services/what-are-cognitive-services)
 
 ## Related resources
 
-- Related Azure Architecture Center articles.
-- Links should be repo-relative, for example (../../solution-ideas/articles/article-name.yml).
+Use "Related resources" for architecture information that's relevant to the current article. It must be content that the Azure Architecture Center TOC refers to, but may be from a repo other than the AAC repo.
+
+Links to articles in the AAC repo should be repo-relative, for example (../../solution-ideas/articles/article-name.yml).
+
+Here is an example section:
+
+Fully deployable architectures:
+
+* [Chatbot for hotel reservations](/azure/architecture/example-scenario/ai/commerce-chatbot)
+* [Build an enterprise-grade conversational bot](/azure/architecture/reference-architectures/ai/conversational-bot)
+* [Speech-to-text conversion](/azure/architecture/reference-architectures/ai/speech-ai-ingestion)
