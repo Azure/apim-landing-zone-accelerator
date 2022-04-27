@@ -77,7 +77,7 @@ resource "azurerm_private_dns_a_record" "scm_record" {
 }
 
 #-------------------------------
-# Vnet links //change the name
+# Vnet links
 #-------------------------------
 resource "azurerm_private_dns_zone_virtual_network_link" "gateway_vnetlink" {
   name                  = "gateway-vnet-link"
