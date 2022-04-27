@@ -16,11 +16,13 @@ variable "secret_name" {
 variable "keyvault_id" {
   type        = string
   description = ""
+  default = null
 }
 
 variable "certificate_path" {
   type        = string
   description = ""
+  default = null
 }
 
 variable "certificate_password" {

@@ -3,6 +3,8 @@ locals {
   app_gateway_primary_pip       = "pip-${local.app_gateway_name}"
   app_gateway_identity_id       = "identity-${local.app_gateway_name}"
   https_backend_probe_name      = "APIM"
+  is_local_certificate          = var.certificate_path != null && var.certificate_password != null
+  certificate_secret_id         = local.is_local_certificate ? azurerm_key_vault_certificate.kv_domain_certs[0].secret_id : azurerm_key_vault_certificate.local_domain_certs[0].secret_id
 }
 
 resource "azurerm_user_assigned_identity" "user_assigned_identity" {
@@ -32,6 +34,7 @@ resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_perm
 }
 
 resource "azurerm_key_vault_certificate" "kv_domain_certs" {
+  count        = local.is_local_certificate ? 1 : 0
   name         = var.secret_name
   key_vault_id = var.keyvault_id
 
@@ -55,6 +58,49 @@ resource "azurerm_key_vault_certificate" "kv_domain_certs" {
 
     secret_properties {
       content_type = "application/x-pkcs12"
+    }
+  }
+}
+
+resource "azurerm_key_vault_certificate" "local_domain_certs" {
+  count        = !local.is_local_certificate ? 1 : 0
+  name         = "generated-cert"
+  key_vault_id = var.keyvault_id
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = true
+    }
+
+    lifetime_action {
+      action {
+        action_type = "AutoRenew"
+      }
+
+      trigger {
+        days_before_expiry = 30
+      }
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+
+    x509_certificate_properties {
+      extended_key_usage = ["1.3.6.1.5.5.7.3.1"]
+      key_usage = [
+        "digitalSignature",
+        "keyEncipherment"
+      ]
+      subject            = "CN=${var.fqdn}"
+      validity_in_months = 12
     }
   }
 }
@@ -90,7 +136,7 @@ resource "azurerm_application_gateway" "network" {
 
   ssl_certificate {
     name                  = var.fqdn
-    key_vault_secret_id   = azurerm_key_vault_certificate.kv_domain_certs.secret_id
+    key_vault_secret_id   = local.certificate_secret_id
   }
   
   gateway_ip_configuration {
