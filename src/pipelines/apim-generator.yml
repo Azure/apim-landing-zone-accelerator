@@ -7,17 +7,17 @@ steps:
 - task: UseDotNet@2      
   inputs:
     packageType: 'sdk'
-    version: '3.x'
-  displayName: 'Use .NET Core SDK 3.x'
+    version: '6.x'
+  displayName: 'Use .NET Core SDK 6.x'
 - script: |
     git clone https://github.com/Azure/azure-api-management-devops-resource-kit
-    cd azure-api-management-devops-resource-kit/src/APIM_ARMTemplate/apimtemplate/
+    cd azure-api-management-devops-resource-kit
     dotnet restore
     dotnet pack -c Release
     echo ^<?xml version="1.0" encoding="utf-8"?^>^<configuration^>^<disabledPackageSources^>^<add key="nuget.org" value="true" /^>^</disabledPackageSources^>^</configuration^> > disable_nuget.config
     more disable_nuget.config
-    dotnet tool uninstall apimtemplate -g
-    dotnet tool install -g --configfile disable_nuget.config --add-source ./bin/Release apimtemplate
+    dotnet tool uninstall armtemplates -g
+    dotnet tool install -g --configfile disable_nuget.config --add-source ./src/ArmTemplates/bin/Release armtemplates
   displayName: 'Install DevOps resourcekit'
 - script: |
     cd definitions
@@ -29,7 +29,11 @@ steps:
   inputs:
     contents: 'definitions/**'
     targetFolder: $(Build.ArtifactStagingDirectory)
-- task: PublishBuildArtifacts@1
+- task: UniversalPackages@0
+  displayName: Universal Publish
   inputs:
-    pathToPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: ApiTemplates
+    command: publish
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'
+    vstsFeedPublish: $(System.TeamProject)/$(artifacts-feed)
+    vstsFeedPackagePublish: 'todo-apis'
+    packagePublishDescription: 'Templates for the todo APIs' 

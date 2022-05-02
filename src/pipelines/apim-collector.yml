@@ -5,15 +5,13 @@ pool: $(poolName)
 variables:
   teamOneProjectGuid: $(System.TeamProjectId)
 steps:
-- task: DownloadPipelineArtifact@2
-  displayName: 'Download artifacts for each team in a separate task'
+- task: UniversalPackages@0
+  displayName: Download extractor
   inputs:
-    source: 'specific'
-    project: $(teamOneProjectGuid)
-    pipeline: $(teamOneBuildPipelineId)
-    runVersion: 'latestFromBranch'
-    runBranch: 'refs/heads/master'
-    path: $(Build.SourcesDirectory)/bin/teamone
+    downloadDirectory: $(Build.SourcesDirectory)/bin/teamone
+    vstsFeed: $(System.TeamProject)/$(artifacts-feed)
+    vstsFeedPackage: 'todo-apis'
+    vstsPackageVersion: '*'
 - script: |
     echo Validating Tempaltes for each team
     echo For ex. Path should be of a specific format
@@ -29,4 +27,4 @@ steps:
     scriptType: ps
     scriptLocation: inlineScript
     inlineScript: |
-      az deployment group create --resource-group $(apimResourceGroup) --name teamone  --template-file $(Build.SourcesDirectory)/bin/teamone/ApiTemplates/definitions/Templates/todo.api.template.json --parameters ApimServiceName=$(apimName)  --parameters todo-ServiceUrl=$(todoServiceUrl)
+      az deployment group create --resource-group $(apimResourceGroup) --name teamone  --template-file $(Build.SourcesDirectory)/bin/teamone/definitions/Templates/todo.api.template.json --parameters apimServiceName=$(apimName)  --parameters todo-ServiceUrl=$(todoServiceUrl)

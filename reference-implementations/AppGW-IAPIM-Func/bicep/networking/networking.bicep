@@ -147,6 +147,15 @@ resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         name: backEndSubnetName
         properties: {
           addressPrefix: backEndAddressPrefix
+          delegations: [
+            {
+              name: 'delegation'
+              properties: {
+                serviceName: 'Microsoft.Web/serverfarms'
+              }
+            }
+          ]
+          privateEndpointNetworkPolicies: 'Enabled'
           networkSecurityGroup: {
             id: backEndNSG.id
           }
@@ -173,21 +182,6 @@ resource bastionNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-/* 
-      {
-        name: 'default-allow-rdp'
-        properties: {
-          priority: 1000
-          sourceAddressPrefix: '*'
-          protocol: 'Tcp'
-          destinationPortRange: '3389'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-          }
-        } 
-*/
         {
           name: 'AllowHttpsInbound'
           properties: {
@@ -243,19 +237,6 @@ resource bastionNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
                 destinationAddressPrefix: 'VirtualNetwork'
               }              
           }                    
-          {
-            name: 'DenyAllInbound'
-            properties: {
-              priority: 4096
-              protocol: '*'
-              destinationPortRange:'*'
-              access: 'Deny'
-              direction: 'Inbound'
-              sourcePortRange: '*'
-              sourceAddressPrefix: '*'
-              destinationAddressPrefix: '*'
-            }             
-          } 
           {
             name: 'AllowSshRdpOutbound'
             properties: {
@@ -323,19 +304,6 @@ resource devOpsNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-      {
-        name: 'default-allow-rdp'
-        properties: {
-          priority: 1000
-          sourceAddressPrefix: '*'
-          protocol: 'Tcp'
-          destinationPortRange: '3389'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-        }
-      }
     ]
   }
 }
@@ -344,19 +312,6 @@ resource jumpBoxNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-      {
-        name: 'default-allow-rdp'
-        properties: {
-          priority: 1000
-          sourceAddressPrefix: '*'
-          protocol: 'Tcp'
-          destinationPortRange: '3389'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-        }
-      }
     ]
   }
 }
@@ -365,19 +320,6 @@ resource appGatewayNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-      {
-        name: 'default-allow-rdp'
-        properties: {
-          priority: 1000
-          sourceAddressPrefix: '*'
-          protocol: 'Tcp'
-          destinationPortRange: '3389'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-        }
-      }
       {
         name: 'HealthProbes'
         properties: {
@@ -430,19 +372,6 @@ resource appGatewayNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           direction: 'Inbound'
         }
       }
-      {
-        name: 'DenyAll'
-        properties: {
-          protocol: '*'
-          sourcePortRange: '*'
-          destinationPortRange: '*'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          access: 'Deny'
-          priority: 130
-          direction: 'Inbound'
-        }
-      }
     ]
   }
 }
@@ -451,19 +380,6 @@ resource privateEndpointNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01'
   location: location
   properties: {
     securityRules: [
-      {
-        name: 'default-allow-rdp'
-        properties: {
-          priority: 1000
-          sourceAddressPrefix: '*'
-          protocol: 'Tcp'
-          destinationPortRange: '3389'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-        }
-      }
     ]
   }
 }
@@ -473,19 +389,6 @@ resource backEndNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-      {
-        name: 'default-allow-rdp'
-        properties: {
-          priority: 1000
-          sourceAddressPrefix: '*'
-          protocol: 'Tcp'
-          destinationPortRange: '3389'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-        }
-      }
     ]
   }
 }
@@ -495,7 +398,7 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   properties: {
     securityRules: [
       {
-        name: 'apim-vnet'
+        name: 'apim-mgmt-endpoint-for-portal'
         properties: {
           priority: 2000
           sourceAddressPrefix: 'ApiManagement'
@@ -508,43 +411,60 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
         }
       }
       {
-        name: 'default-allow-rdp'
+        name: 'apim-azure-infra-lb'
         properties: {
-          priority: 1000
-          sourceAddressPrefix: '*'
+          priority: 2010
+          sourceAddressPrefix: 'AzureLoadBalancer'
           protocol: 'Tcp'
-          destinationPortRange: '3389'
+          destinationPortRange: '6390'
           access: 'Allow'
           direction: 'Inbound'
           sourcePortRange: '*'
-          destinationAddressPrefix: '*'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
+      {
+        name: 'apim-azure-storage'
+        properties: {
+          priority: 2000
+          sourceAddressPrefix: 'VirtualNetwork'
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'Storage'
+        }
+      }
+      {
+        name: 'apim-azure-sql'
+        properties: {
+          priority: 2010
+          sourceAddressPrefix: 'VirtualNetwork'
+          protocol: 'Tcp'
+          destinationPortRange: '1433'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'SQL'
+        }
+      }
+      {
+        name: 'apim-azure-kv'
+        properties: {
+          priority: 2020
+          sourceAddressPrefix: 'VirtualNetwork'
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'AzureKeyVault'
         }
       }
     ]
   }
 }
-
-// Private Endpoint
-// // resource privateEndPoint 'Microsoft.Network/privateEndpoints@2021-02-01' = {
-// //   name: 'PE'
-// //   location:location
-// //   properties:{
-// //     subnet: {
-// //       id: resourceId('Microsoft.Network/virtualNetworks/subnets',privateEndpointSubnetName,apimCSVNetName)
-// //     }
-// //     privateLinkServiceConnections: [
-// //       {
-// //         name: privateLinkName
-// //         properties: {
-// //           privateLinkServiceId: functionId
-// //           groupIds: [
-// //             'AzureFunc'
-// //           ]
-// //         }
-// //       }
-// //     ]
-// //   }
-// // }
 
 // Public IP 
 resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
