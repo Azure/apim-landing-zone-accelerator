@@ -32,7 +32,7 @@ Deployment Details:
 | Deployment Methodology| GitHub Action YAML| User Guide|
 |--------------|--------------|--------------|
 | [Bicep](/reference-implementations/AppGW-IAPIM-Func/bicep) |[es-apim.yml](/.github/workflows/es-apim.yml)| [README](/docs/README.md)
-| ARM (Coming soon) ||
+|[ARM](/reference-implementations/LOB-ILB-ASEv3/azure-resource-manager/apim-arm.json) (In specific branch) |N/A| this file 
 | Terraform (Coming soon)||
 ---
 
