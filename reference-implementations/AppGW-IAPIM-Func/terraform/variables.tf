@@ -70,6 +70,17 @@ variable "certificate_secret_name" {
   default     = null
 }
 
+variable "app_gateway_certificate_type" {
+  type        = string
+  description = "The certificate type used for the app gateway. Either custom or selfsigned"
+  default     = "custom"
+
+  validation {
+    condition     = contains(["custom", "selfsigned"], var.app_gateway_certificate_type)
+    error_message = "Valid values for var: app_gateway_certificate_type are (custom, selfsigned)."
+  }
+}
+
 # Backend resource variables 
 variable "os_type" {
   type        = string
