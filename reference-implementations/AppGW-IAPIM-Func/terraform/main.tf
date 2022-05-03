@@ -70,14 +70,14 @@ module "application_gateway" {
   subnet_id                     = module.networking.appgateway_subnet_id
 }
 
-#-------------------------------
-# Calling the Backend module
-#-------------------------------
-module "backend" {
-  source            = "./backend"
-  resource_suffix   = module.resource_suffix.name
-  workload_name     = var.workload_name
-  os_type           = var.os_type
-  location          = local.resource_location
-  backend_subnet_id = module.networking.backend_subnet_id
-}
+# #-------------------------------
+# # Calling the Backend module
+# #-------------------------------
+ module "backend" {
+   source            = "./backend"
+   resource_suffix   = module.resource_suffix.name
+   workload_name     = var.workload_name
+   os_type           = var.os_type
+   location          = local.resource_location
+   backend_subnet_id = module.networking.backend_subnet_id
+ }

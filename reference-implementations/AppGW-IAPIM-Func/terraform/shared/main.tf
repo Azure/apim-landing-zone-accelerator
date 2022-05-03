@@ -83,8 +83,11 @@ resource "azurerm_windows_virtual_machine" "agent_vm" {
   resource_group_name = azurerm_resource_group.shared_rg.name
   location            = azurerm_resource_group.shared_rg.location
   size                = "Standard_F2" 
-  admin_username      = var.vm_username
-  admin_password      = var.vm_password 
+  # admin_username      = var.vm_username
+  # admin_password      = var.vm_password 
+  admin_username      = "adminuser"
+  admin_password      = "P@ssw0rd1234!"
+
   network_interface_ids = [
     azurerm_network_interface.vm_nic.id,
   ]
@@ -114,7 +117,7 @@ resource "azurerm_virtual_machine_extension" "deploy_agent" {
  
   settings = <<SETTINGS
     {
-      "fileUris" : "https://raw.githubusercontent.com/Azure/apim-landing-zone-accelerator/main/reference-implementations/AppGW-IAPIM-Func/bicep/shared/agentsetup.ps1",
+      "fileUris" : ["https://raw.githubusercontent.com/Azure/apim-landing-zone-accelerator/main/reference-implementations/AppGW-IAPIM-Func/bicep/shared/agentsetup.ps1"],
       "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File agentsetup.ps1 -PAT \"${var.personal_access_token}\" -URL \"${var.account_name}\" -POOl \"${var.pool_name}\" -AGENT \"${azurerm_windows_virtual_machine.agent_vm.name}\" -AGENTTYPE \"${var.cicd_agent_type}\""
     }
 SETTINGS

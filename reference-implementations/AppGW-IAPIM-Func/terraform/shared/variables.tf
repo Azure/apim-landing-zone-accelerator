@@ -86,7 +86,6 @@ variable "pool_name" {
 }
 
 variable "private_ip_address" {
-  default = ""
   description = "Private ip address of the apim instance"
 }
 
