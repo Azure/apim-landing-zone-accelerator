@@ -139,9 +139,6 @@ module queueStoragePrivateEndpoint './networking.bicep' = {
     vnetRG: vnetRG
     subnetId: privateEndpointSubnetid
   }
-  dependsOn: [
-    storageAccounts_saapimcsbackend_name_resource
-  ]
 }
 
 module blobStoragePrivateEndpoint './networking.bicep' = {
@@ -157,9 +154,6 @@ module blobStoragePrivateEndpoint './networking.bicep' = {
     vnetRG: vnetRG
     subnetId: privateEndpointSubnetid
   }
-  dependsOn: [
-    storageAccounts_saapimcsbackend_name_resource
-  ]
 }
 
 module tableStoragePrivateEndpoint './networking.bicep' = {
@@ -175,9 +169,6 @@ module tableStoragePrivateEndpoint './networking.bicep' = {
     vnetRG: vnetRG
     subnetId: privateEndpointSubnetid
   }
-  dependsOn: [
-    storageAccounts_saapimcsbackend_name_resource
-  ]
 }
 
 module fileStoragePrivateEndpoint './networking.bicep' = {
@@ -193,16 +184,10 @@ module fileStoragePrivateEndpoint './networking.bicep' = {
     vnetRG: vnetRG
     subnetId: privateEndpointSubnetid
   }
-  dependsOn: [
-    storageAccounts_saapimcsbackend_name_resource
-  ]
 }
 
 resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-04-01' = {
   name: '${storageAccounts_saapimcsbackend_name_resource.name}/default/${functionContentShareName}'
-  dependsOn: [
-    storageAccounts_saapimcsbackend_name_resource
-  ]
 }
 
 // Azure Application Service Plan
@@ -356,9 +341,6 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-03-01' = {
       }
     ]
   }
-  dependsOn:[
-    sites_funcappAPIMCSBackendMicroServiceA_name_resource
-  ]
 }
 
 resource privateDnsZones 'Microsoft.Network/privateDnsZones@2018-09-01' = {
