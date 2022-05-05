@@ -19,6 +19,11 @@ variable "keyvault_id" {
   default = null
 }
 
+variable "app_gateway_certificate_type" {
+  type        = string
+  description = "The certificate type used for the app gateway. Either custom or selfsigned"
+}
+
 variable "certificate_path" {
   type        = string
   description = ""

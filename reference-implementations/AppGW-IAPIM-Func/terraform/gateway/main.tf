@@ -3,7 +3,7 @@ locals {
   app_gateway_primary_pip       = "pip-${local.app_gateway_name}"
   app_gateway_identity_id       = "identity-${local.app_gateway_name}"
   https_backend_probe_name      = "APIM"
-  is_local_certificate          = var.certificate_path != null && var.certificate_password != null
+  is_local_certificate          = var.app_gateway_certificate_type == "custom"
   certificate_secret_id         = local.is_local_certificate ? azurerm_key_vault_certificate.kv_domain_certs[0].secret_id : azurerm_key_vault_certificate.local_domain_certs[0].secret_id
 }
 
