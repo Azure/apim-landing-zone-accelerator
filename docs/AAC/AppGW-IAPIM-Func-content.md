@@ -2,9 +2,9 @@
 
 # DRAFT
 
-_Brief introduction goes here._ [**Deploy this solution**.](#deploy-the-solution)
+This solution deploys the Enterprise Scale API Management Landing Zone a secure, opinionated accelerator enabling developers to rapidly onboard APIs to API management  [**Deploy this solution**.](#deploy-the-solution)
 
-![alt text.](./media/folder_name/architecture-diagram.png)
+![alt text.](./docs/images/arch.png)
 
 _Download a [Visio file](https://arch-center.azureedge.net/architecture.vsdx) that contains this architecture diagram. This file must be uploaded to `https://arch-center.azureedge.net/`_
 
