@@ -14,7 +14,7 @@
 - Each team can use the APIM Reskit  or the VS Code APIM extension to extract the relevant artifacts from their development APIM instance. These artifacts are based on ARM and should be committed to the API team’s Git repo. 
     - Do not use the [Git integration](https://docs.microsoft.com/en-us/azure/api-management/api-management-configuration-repository-git)
 - Service Templates and Shared templates should be in a separate repo
-- Use the [“Extract all APIs with seperated api folders“ option](https://github.com/Azure/azure-api-management-devops-resource-kit/blob/master/src/APIM_ARMTemplate/README.md#extractor)
+- Use the [“Extract all APIs with seperated api folders“ option](https://github.com/Azure/azure-api-management-devops-resource-kit/blob/master/src/README.md#extractor)
 - Changes to artifacts should be done to the extracted artifacts and then committed to Git. These should be deployed to a dev environment 
 - To promote to the centralized environments (staging, production), API teams can submit a pull request (PR) to merge their changes to the publisher repo. 
 - The APIM admin team validates the PR.
