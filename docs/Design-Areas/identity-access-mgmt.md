@@ -1,5 +1,7 @@
 # Identity and Access Management
+
 ## Design Considerations
+
 - Decide on the access management for APIM services through all possible channels like portal, ARM REST API, DevOps etc.
 - Decide on the access management for APIM entities.
 - Decide on [how to sign up and authorize the developer accounts](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-create-or-invite-developers).
@@ -8,6 +10,7 @@
 - Decide on access revocation policies.
 - Decide on reporting requirements for access control.
 ## Design Recommendations
+
 - Using [built-in roles](https://docs.microsoft.com/en-us/azure/api-management/api-management-role-based-access-control#built-in-roles) to control access to APIM service to delegate responsibilities across teams to manage the APIM instance.
 - Using custom roles using API Management [RBAC Operations](https://docs.microsoft.com/en-us/azure/role-based-access-control/resource-provider-operations#microsoftapimanagement) to set fine-grained access to APIM entities. For example. API developers, Backup operators, DevOps Automation, etc.
 - Associate subscriptions at the appropriate scope like products.
