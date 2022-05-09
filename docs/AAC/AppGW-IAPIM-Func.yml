@@ -1,22 +1,29 @@
 ### YamlMime:Architecture
 metadata:
-  title: <Article title, which becomes the title metadata>
-  description: <Write a 100-160 character description that ends with a period and ideally starts with a call to action. This becomes the browse card description.>
-  author: <Contributor's GitHub username. If no GitHub account, use EdPrice-MSFT>
-  ms.author: <Contributor's Microsoft alias. Can include multiple contributors, separated by commas. If no alias, use edprice.>
+  title: API Management Landing Zone Accelerator
+  description: An opionated accelerator to deploy a secure enterprise ready API Management solution and CI/CD pipeline.
+  author: cykreng
+  ms.author: Cynthia.Kreng@microsoft.com
   ms.date: <Publish or major update date - mm/dd/yyyy>
-  ms.topic: conceptual
+  ms.topic: solution accelerator
   ms.service: architecture-center
   ms.subservice: azure-guide
 azureCategories:
-  - <Choose at least one category from the list at https://review.docs.microsoft.com/en-us/help/contribute/architecture-center/aac-browser-authoring#azure-categories>
-  - <There can be more than one category>
+#  - <Choose at least one category from the list at https://review.docs.microsoft.com/en-us/help/contribute/architecture-center/aac-browser-authoring#azure-categories>
+  - developer-tools
+  - integration
+  - hybrid
+
 products:
-  - <Choose 1-5 products from the list at https://review.docs.microsoft.com/en-us/help/contribute/architecture-center/aac-browser-authoring#products>
-  - <1-5 products>
-  - <1-5 products>
-name: <The H1 title at the top of the article>
-summary: <Write a summary. Can be same as description.>
-thumbnailUrl: /azure/architecture/browse/thumbs/<browse-png-filename>.png
+#  - <Choose 1-5 products from the list at https://review.docs.microsoft.com/en-us/help/contribute/architecture-center/aac-browser-authoring#products>
+  - azure-api-management
+  - azure-application-gateway
+  - azure-dev-tool-integrations
+  - azure-functions
+  - dotnet-core
+
+name: API Management Landing Zone Accelerator
+summary: An opionated accelerator to deploy a secure enterprise ready API Management solution and CI/CD pipeline.
+thumbnailUrl: docs\images\arch.png
 content: |
   [!include[](<guide>-content.md)]
