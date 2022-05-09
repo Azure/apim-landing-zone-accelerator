@@ -96,6 +96,20 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
         }
       }
     ]
+    sslPolicy: {
+      minProtocolVersion: 'TLSv1_2'
+      policyType: 'Custom'
+      cipherSuites: [        
+         'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256'
+         'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384'
+         'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256'
+         'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'
+         'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256'
+         'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384'
+         'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256'
+         'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384'
+      ]      
+    }    
     trustedRootCertificates: []
     frontendIPConfigurations: [
       {
