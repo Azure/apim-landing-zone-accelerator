@@ -36,6 +36,7 @@ The following recommendations apply for most scenarios. Follow these recommendat
 
 _Include considerations for deploying or configuring the elements of this architecture._
 
+<<<<<<< HEAD
 ## Identity and Access Management
 
 [Design Recommendations](/docs/Design-Areas/identity-access-mgmt.md)
@@ -64,13 +65,30 @@ _Include considerations for deploying or configuring the elements of this archit
 
 ### Design Considerations
 
+=======
+## Scalability considerations
+
+- Utilize [Availability Zones](https://docs.microsoft.com/en-us/azure/api-management/zone-redundancy), the number of Units selected must distribute evenly across the zones
+- Be aware of maximum[ throughput limits](https://azure.microsoft.com/en-us/pricing/details/api-management/) of each APIM SKU
+- Be aware of the maximum number of [scale-out units](https://azure.microsoft.com/en-us/pricing/details/api-management/) per APIM SKU
+- Be aware of the maximum throughputs are approximate and not guarantees
+- Consider the number of service units required through [configuration](https://docs.microsoft.com/en-us/azure/api-management/upgrade-and-scale#scale-your-api-management-service) or [auto-scaling](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-autoscale)
+- APIM does not scale-out automatically, additional configuration is required.
+- There is no downtime during a scale-out event
+- Be aware of the possible performance impact of AppInsights logging at high loads.
+- Be aware that the number of inbound and outbound policies applied and their impact to performance
+
+## Availability considerations
+
+- Determine the Recovery Time Objective (RTO) and Recovery Point Objective (RPO) for the APIM instance(s) that we want to protect and the value chains they support (consumers &amp; providers). Consider the feasibility of deploying fresh instances or having a hot / cold standby.
+- APIM can be [backed up using its Management REST API](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-disaster-recovery-backup-restore#calling-the-backup-and-restore-operations). Backups expire after 30 days. Be aware of [what APIM does not back up](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-disaster-recovery-backup-restore#what-is-not-backed-up)
+>>>>>>> 154c99267106e7657e01dc3020227e92fe6a1eb8
 - Decide if the APIs are accessible externally or internally
-- Decide if there should be multiple gateways deployed (and how these are load balanced) e.g. by using AppGateway
-- Decide if the network setup requires cross region connectivity
 - Decide if private end point connectivity is required
 - Decide how to connect to external (3rd party) workloads
 - Decide whether [virtual network connection](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-vnet?tabs=stv2#enable-vnet-connection) is required and the access type for virtual network connection ([external](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-vnet?tabs=stv2#enable-vnet-connection) or [internal](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-internal-vnet)).
 - Decide whether connectivity to on-premises or multi-cloud environments is required.
+<<<<<<< HEAD
 - Decide if [multi-region deployment](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region) is required to service geographically distributed API consumers.
 - Consider using a load balancing solution such as [Application Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/overview) or [Azure Front Door](https://docs.microsoft.com/en-us/azure/frontdoor/front-door-overview).
 
@@ -104,6 +122,18 @@ _Include considerations for deploying or configuring the elements of this archit
 - APIM's built-in cache is shared by all units in the same region in the same API Management service.
 - Utilize [Availability Zones](https://docs.microsoft.com/en-us/azure/api-management/zone-redundancy), the number of Units selected must distribute evenly across the zones
 - Self-hosted gateway's credentials expire every 30 days and must be rotated.
+=======
+
+## Manageability considerations
+
+- Each API team can push updates from their own developer repo to their own development APIM instance.
+  - What does this mean from a network planning perspective?
+  - What about other non prod environments (QA, Staging etc)
+  - Consider how products etc. should be managed/versioned especially if multiple teams use the same products.
+  - Consider the testing strategy for API and policies.
+- Consider using policies for [access restriction](https://docs.microsoft.com/en-us/azure/api-management/api-management-access-restriction-policies#AccessRestrictionPolicies), [authentication](https://docs.microsoft.com/en-us/azure/api-management/api-management-authentication-policies#AuthenticationPolicies), [caching](https://docs.microsoft.com/en-us/azure/api-management/api-management-caching-policies#CachingPolicies), [cross domain](https://docs.microsoft.com/en-us/azure/api-management/api-management-cross-domain-policies#CrossDomainPolicies), [transformation](https://docs.microsoft.com/en-us/azure/api-management/api-management-transformation-policies#TransformationPolicies), [Dapr integration](https://docs.microsoft.com/en-us/azure/api-management/api-management-dapr-policies), and [validation](https://docs.microsoft.com/en-us/azure/api-management/validation-policies)
+- Policies are code and should be under version control
+>>>>>>> 154c99267106e7657e01dc3020227e92fe6a1eb8
 - The Uri /status-0123456789abcdef can be used as a common health endpoint for the APIM service.
 - The APIM Service is not a WAF. Deploy Azure App Gateway in front to add additional layers of protection
 - Client certificate negotiation is enabled is a per-gateway configuration
@@ -114,6 +144,7 @@ _Include considerations for deploying or configuring the elements of this archit
 - [Named values](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-properties?tabs=azure-portal) are global in scope.
 - API Operations can be grouped into [Products](https://docs.microsoft.com/en-us/azure/api-management/api-management-terminology#term-definitions) and Subscriptions. The design will be based on actual business requirements.
 
+<<<<<<< HEAD
 ### Design Recommendations
 
 - Apply custom domains to the Gateway endpoint only
@@ -163,6 +194,10 @@ _Include considerations for deploying or configuring the elements of this archit
 
 ### Design Considerations
 
+=======
+## Security considerations
+
+>>>>>>> 154c99267106e7657e01dc3020227e92fe6a1eb8
 - Research the available [built-in RBAC roles](https://docs.microsoft.com/en-us/azure/api-management/api-management-role-based-access-control#built-in-roles) available for the API Management service
 - Consider using [built-in Azure Policies](https://docs.microsoft.com/en-us/azure/api-management/policy-reference) to govern the APIM instance
 - Consider what level of logging is necessary to meet your organization’s compliance requirements.
@@ -173,6 +208,7 @@ _Include considerations for deploying or configuring the elements of this archit
 - Consider which identity providers besides Azure AD need to be supported.
 - Consider how non-compliance should be detected.
 - Consider how to standardize error responses returned by APIs.
+<<<<<<< HEAD
 
 ### Design Recommendations
 
@@ -215,6 +251,15 @@ _Include considerations for deploying or configuring the elements of this archit
 - The IAC templates should be in a different repo – and deployed in a deployment pipeline
   - Separate infrastructure deployment from application deployment. Core infrastructure changes less than applications. Treat each type of deployment as a separate flow and pipeline.
 - Once changes are approved and merged successfully, the APIM admin team can deploy the changes to the centrally managed environment (staging, production) in coordination with agreed-upon API team schedules.
+=======
+- Decide on the access management for APIM services through all possible channels like portal, ARM REST API, DevOps etc.
+- Decide on the access management for APIM entities.
+- Decide on [how to sign up and authorize the developer accounts](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-create-or-invite-developers).
+- Decide on how subscriptions are used.
+- Decide on the visibility of [products](https://docs.microsoft.com/en-us/azure/api-management/api-management-key-concepts#--products) and APIs on the developer portal using [groups](https://docs.microsoft.com/en-us/azure/api-management/api-management-key-concepts#--groups).
+- Decide on access revocation policies.
+- Decide on reporting requirements for access control.
+>>>>>>> 154c99267106e7657e01dc3020227e92fe6a1eb8
 
 ## Deploy this scenario
 
