@@ -47,7 +47,6 @@ param location string
 /*
 @description('A short name for the PL that will be created between Funcs')
 param privateLinkName string = 'myPL'
-
 @description('Func id for PL to create')
 param functionId string = '123131'
 */
@@ -536,4 +535,3 @@ output backEndSubnetid string = '${vnetApimCs.id}/subnets/${backEndSubnetName}'
 output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'  
 
 output publicIp string = pip.id
-
