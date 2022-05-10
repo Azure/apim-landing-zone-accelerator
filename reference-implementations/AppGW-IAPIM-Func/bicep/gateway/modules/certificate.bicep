@@ -9,7 +9,8 @@ param appGatewayCertType      string
 var secretName = replace(appGatewayFQDN,'.', '-')
 var subjectName='CN=${appGatewayFQDN}'
 
-var certData   = loadFileAsBase64('../certs/appgw.pfx')
+var certData = appGatewayCertType == 'selfsigned' ? 'null' : loadFileAsBase64('../certs/appgw.pfx')
+var certPwd = appGatewayCertType == 'selfsigned' ? 'null' : certPassword
 
 resource accessPolicyGrant 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01' = {
   name: '${keyVaultName}/add'
@@ -45,7 +46,7 @@ resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2020-10-01
   kind: 'AzurePowerShell'
   properties: {
     azPowerShellVersion: '6.6'
-    arguments: ' -vaultName ${keyVaultName} -certificateName ${secretName} -subjectName ${subjectName} -certPwd ${certPassword} -certDataString ${certData} -certType ${appGatewayCertType}'
+    arguments: ' -vaultName ${keyVaultName} -certificateName ${secretName} -subjectName ${subjectName} -certPwd ${certPwd} -certDataString ${certData} -certType ${appGatewayCertType}'
     scriptContent: '''
       param(
       [string] [Parameter(Mandatory=$true)] $vaultName,

@@ -99,6 +99,10 @@ module backend './backend/backend.bicep' = {
     workloadName: workloadName
     environment: environment
     location: location    
+    vnetName: networking.outputs.apimCSVNetName
+    vnetRG: networkingRG.name
+    backendSubnetId: networking.outputs.backEndSubnetid
+    privateEndpointSubnetid: networking.outputs.privateEndpointSubnetid
   }
 }
 
