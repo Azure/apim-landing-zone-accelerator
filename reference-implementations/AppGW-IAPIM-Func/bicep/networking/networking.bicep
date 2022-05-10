@@ -323,19 +323,19 @@ resource devOpsNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-      // {
-      //   name: 'default-allow-rdp'
-      //   properties: {
-      //     priority: 1000
-      //     sourceAddressPrefix: '*'
-      //     protocol: 'Tcp'
-      //     destinationPortRange: '3389'
-      //     access: 'Allow'
-      //     direction: 'Inbound'
-      //     sourcePortRange: '*'
-      //     destinationAddressPrefix: '*'
-      //   }
-      // }
+      {
+        name: 'default-allow-rdp'
+        properties: {
+          priority: 1000
+          sourceAddressPrefix: '*'
+          protocol: 'Tcp'
+          destinationPortRange: '3389'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
     ]
   }
 }
@@ -344,19 +344,19 @@ resource jumpBoxNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-      // {
-      //   name: 'default-allow-rdp'
-      //   properties: {
-      //     priority: 1000
-      //     sourceAddressPrefix: '*'
-      //     protocol: 'Tcp'
-      //     destinationPortRange: '3389'
-      //     access: 'Allow'
-      //     direction: 'Inbound'
-      //     sourcePortRange: '*'
-      //     destinationAddressPrefix: '*'
-      //   }
-      // }
+      {
+        name: 'default-allow-rdp'
+        properties: {
+          priority: 1000
+          sourceAddressPrefix: '*'
+          protocol: 'Tcp'
+          destinationPortRange: '3389'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
     ]
   }
 }
@@ -451,19 +451,19 @@ resource privateEndpointNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01'
   location: location
   properties: {
     securityRules: [
-      // {
-      //   name: 'default-allow-rdp'
-      //   properties: {
-      //     priority: 1000
-      //     sourceAddressPrefix: '*'
-      //     protocol: 'Tcp'
-      //     destinationPortRange: '3389'
-      //     access: 'Allow'
-      //     direction: 'Inbound'
-      //     sourcePortRange: '*'
-      //     destinationAddressPrefix: '*'
-      //   }
-      // }
+      {
+        name: 'default-allow-rdp'
+        properties: {
+          priority: 1000
+          sourceAddressPrefix: '*'
+          protocol: 'Tcp'
+          destinationPortRange: '3389'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
     ]
   }
 }
@@ -473,23 +473,22 @@ resource backEndNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-      // {
-      //   name: 'default-allow-rdp'
-      //   properties: {
-      //     priority: 1000
-      //     sourceAddressPrefix: '*'
-      //     protocol: 'Tcp'
-      //     destinationPortRange: '3389'
-      //     access: 'Allow'
-      //     direction: 'Inbound'
-      //     sourcePortRange: '*'
-      //     destinationAddressPrefix: '*'
-      //   }
-      // }
+      {
+        name: 'default-allow-rdp'
+        properties: {
+          priority: 1000
+          sourceAddressPrefix: '*'
+          protocol: 'Tcp'
+          destinationPortRange: '3389'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
     ]
   }
 }
-// https://docs.microsoft.com/en-us/azure/api-management/virtual-network-reference?tabs=stv2#required-ports
 resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   name: apimSNNSG
   location: location
@@ -498,7 +497,7 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
       {
         name: 'apim-vnet'
         properties: {
-          priority: 100
+          priority: 2000
           sourceAddressPrefix: 'ApiManagement'
           protocol: 'Tcp'
           destinationPortRange: '3443'
@@ -508,278 +507,17 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           destinationAddressPrefix: 'VirtualNetwork'
         }
       }
-      // {
-      //   name: 'default-allow-rdp'
-      //   properties: {
-      //     priority: 1000
-      //     sourceAddressPrefix: '*'
-      //     protocol: 'Tcp'
-      //     destinationPortRange: '3389'
-      //     access: 'Allow'
-      //     direction: 'Inbound'
-      //     sourcePortRange: '*'
-      //     destinationAddressPrefix: '*'
-      //   }
-      // }
       {
-        name: 'apim-client-comm80'
+        name: 'default-allow-rdp'
         properties: {
-          priority: 110
-          sourceAddressPrefix: 'Internet'
+          priority: 1000
+          sourceAddressPrefix: '*'
           protocol: 'Tcp'
-          destinationPortRange: '80'
+          destinationPortRange: '3389'
           access: 'Allow'
           direction: 'Inbound'
           sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'apim-client-comm443'
-        properties: {
-          priority: 120
-          sourceAddressPrefix: 'Internet'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'apim-alb'
-        properties: {
-          priority: 130
-          sourceAddressPrefix: 'AzureLoadBalancer'
-          protocol: 'Tcp'
-          destinationPortRange: '6390'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'apim-sync-count'
-        properties: {
-          priority: 140
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Udp'
-          destinationPortRange: '4290'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'apim-redis-in'
-        properties: {
-          priority: 150
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '6381-6383'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      // END OF INBOUND
-      {
-        name: 'apim-storage'
-        properties: {
-          priority: 100
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'Storage'
-        }
-      }
-      {
-        name: 'apim-sql'
-        properties: {
-          priority: 110
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '1433'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'SQL'
-        }
-      }
-      {
-        name: 'apim-kv'
-        properties: {
-          priority: 120
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'AzureKeyVault'
-        }
-      }
-      {
-        name: 'apim-eventhubs1'
-        properties: {
-          priority: 130
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '5671-5672'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'EventHub'
-        }
-      }
-      {
-        name: 'apim-eventhubs2'
-        properties: {
-          priority: 140
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'EventHub'
-        }
-      }
-      {
-        name: 'apim-gitfile'
-        properties: {
-          priority: 150
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '445'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'Storage'
-        }
-      }
-      {
-        name: 'apim-health1'
-        properties: {
-          priority: 160
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'AzureCloud'
-        }
-      }
-      {
-        name: 'apim-health2'
-        properties: {
-          priority: 170
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '12000'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'AzureCloud'
-        }
-      }
-      {
-        name: 'apim-logs-metr1'
-        properties: {
-          priority: 180
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '1886'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'AzureMonitor'
-        }
-      }
-      {
-        name: 'apim-logs-metr2'
-        properties: {
-          priority: 190
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'AzureMonitor'
-        }
-      }
-      {
-        name: 'apim-smtp1'
-        properties: {
-          priority: 200
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '25'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'Internet'
-        }
-      }
-      {
-        name: 'apim-smtp2'
-        properties: {
-          priority: 210
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '587'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'Internet'
-        }
-      }
-      {
-        name: 'apim-smtp3'
-        properties: {
-          priority: 220
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '25028'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'Internet'
-        }
-      }
-      {
-        name: 'apim-redis-out'
-        properties: {
-          priority: 230
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '6381-6383'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'apim-sync-count'
-        properties: {
-          priority: 230
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Udp'
-          destinationPortRange: '4290'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: '*'
         }
       }
     ]
