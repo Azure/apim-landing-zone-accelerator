@@ -47,7 +47,7 @@ _Include considerations for deploying or configuring the elements of this archit
 - There is no downtime during a scale-out event
 - Be aware of the possible performance impact of AppInsights logging at high loads.
 - Be aware that the number of inbound and outbound policies applied and their impact to performance
-- 
+
 ## Availability considerations
 
 - Determine the Recovery Time Objective (RTO) and Recovery Point Objective (RPO) for the APIM instance(s) that we want to protect and the value chains they support (consumers &amp; providers). Consider the feasibility of deploying fresh instances or having a hot / cold standby.
