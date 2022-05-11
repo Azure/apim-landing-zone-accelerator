@@ -21,7 +21,7 @@ OR
 git clone https://github.com/Azure/apim-landing-zone-accelerator.git
 ```
 
-<img src= /docs/images/clone-repo.png>
+![Clone Repo](/docs/images/clone-repo.png)
 
 ### 2. Authentication from GitHub to Azure
 
@@ -59,31 +59,32 @@ az account show
 
 b) Sign-in using Cloud Shell
 
-<img src= /docs/images/cloud_shell.png>
+![cloud shell](/docs/images/cloud_shell.png)
 
-```
+```Powershell
 az account show
 ```
 
-<img src= /docs/images/az-account-show.jpg>
+![account show](/docs/images/az-account-show.jpg)
 
 ### 4. Configure Deployment Credentials
 
 For using credentials like a Service Principal we will need to add them as [GitHub secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-encrypted-secrets-for-your-repository-and-organization-for-codespaces) in your GitHub repository
 
-Follow the below steps to configure secrets for the authentication within the GitHub workflow :
+#### Follow the below steps to configure secrets for the authentication within the GitHub workflow :
 
-    - Go to your GitHub repository settings and add a new Actions secrets by clicking ‘New repository secrets’ from the Secrets menu
-    - Store the output of the below [az cli](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#:~:text=%20Create%20an%20Azure%20service%20principal%20with%20the,role%20for%20a%20service%20principal%20is...%20See%20More.) command as a secret (e.g. AZURE_CREDENTIALS). This will be referenced back in the workflow file
+- Open Azure CLI
+- Run the following command via [az cli](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#:~:text=%20Create%20an%20Azure%20service%20principal%20with%20the,role%20for%20a%20service%20principal%20is...%20See%20More.)
 
 ```PowerShell
+# Replace {subscription-id} with your subscription details
 az ad sp create-for-rbac --name "enterprise-scale-apim-app" --role contributor \
                         --scopes /subscriptions/{subscription-id} \
                         --sdk-auth
 ```
 
-- _Replace {subscription-id} with the subscription details_
-  - _the above command should output a JSON object like below_
+- This command should output a json object, store that output as a secret (e.g. AZURE_CREDENTIALS).  This will be referenced back in the workflow file.
+- _Sample JSON output to be stored as a secret in Github_
 
 ```Powershell
   {
@@ -95,7 +96,8 @@ az ad sp create-for-rbac --name "enterprise-scale-apim-app" --role contributor \
   }
 ```
 
-<img src= /docs/images/secrets.png>
+- Go to your GitHub repository settings and add a new Actions secrets by clicking ‘New repository secrets’ from the Secrets menu
+![secrets](/docs/images/secrets.png)
 
 ### 5. Run the workflow
 
@@ -123,24 +125,26 @@ c) Push the latest changes to your **feature** branch and create a Pull Request 
 
 Alternatively, you can also trigger the workflow by going to **Actions** tab and run the `AzureBicepDeploy` workflow manually
 
-<img src= /docs/images/manual_trigger.png>
+![manual trigger](/docs/images/manual_trigger.png)
 
 ### 6. Deployed Resources
 
-There will be four resource groups created as follows -
+#### There will be four resource groups created as follows
 
-<p align="center">
-   <img src= /docs/images/resource_groups.png>
-</p>
+![resource group](/docs/images/resource_groups.png)
 
-- Outputs from Backend :
-<img src= /docs/images/backend.png>
+#### Outputs from Backend
 
-- Outputs from Shared module :
-<img src= /docs/images/shared.png>
+![backend module](/docs/images/backend.png)
 
-- Outputs from APIM module :
-<img src= /docs/images/apim.png>
+#### Outputs from Shared module
 
-- Outputs from Networking module :
-<img src= /docs/images/networking.png>
+![shared module](/docs/images/shared.png)
+
+#### Outputs from APIM module
+
+![apim module](/docs/images/apim.png)
+
+#### Outputs from Networking module
+
+![networking module](/docs/images/networking.png)

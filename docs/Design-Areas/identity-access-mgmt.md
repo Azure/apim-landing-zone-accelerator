@@ -9,6 +9,7 @@
 - Decide on the visibility of [products](https://docs.microsoft.com/en-us/azure/api-management/api-management-key-concepts#--products) and APIs on the developer portal using [groups](https://docs.microsoft.com/en-us/azure/api-management/api-management-key-concepts#--groups).
 - Decide on access revocation policies.
 - Decide on reporting requirements for access control.
+
 ## Design Recommendations
 
 - Using [built-in roles](https://docs.microsoft.com/en-us/azure/api-management/api-management-role-based-access-control#built-in-roles) to control access to APIM service to delegate responsibilities across teams to manage the APIM instance.

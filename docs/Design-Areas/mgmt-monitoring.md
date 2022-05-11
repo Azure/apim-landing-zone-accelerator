@@ -2,7 +2,7 @@
 
 ## Design Considerations
 
-- Be aware of maximum[ throughput limits](https://azure.microsoft.com/en-us/pricing/details/api-management/) of each APIM SKU
+- Be aware of maximum[throughput limits](https://azure.microsoft.com/en-us/pricing/details/api-management/) of each APIM SKU
 - Be aware of the maximum number of [scale-out units](https://azure.microsoft.com/en-us/pricing/details/api-management/) per APIM SKU
 - Be aware of the maximum throughputs are approximate and not guarantees
 - Be aware of the time required to scale-out, deploy into another region, or convert from deployment types
