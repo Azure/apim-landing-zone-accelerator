@@ -52,17 +52,25 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 - Consider the CI/CD service you will use for deploying the reference implementation. As this reference implementation is an internal API Management, a self-hosted agent is needed to execute the deployment pipelines.  As such the choice is to use either a DevOps Agent or a GitHub Runner. Refer to the [user guide](../README.md) on specific configuration values required for each.
 - Consider the region to which you intend deploying this reference implementation, and consult the [API Management Regions list](https://docs.microsoft.com/en-us/azure/api-management/zone-redundancy) to ensure the selected region has support for zone redundancy.
 
-### Scalability considerations
+### Reliability
 
 - Deploy at least two scale units spread over two AZs per region to maximize availability and performance
 
-### Availability considerations
 
+### Security 
+
+- API Management [validation policies](https://docs.microsoft.com/en-us/azure/api-management/validation-policies) are available to validate API requests and responses against an OpenAPI schema. These are not a replacement for a [Web Application Firewall](https://docs.microsoft.com/en-us/azure/web-application-firewall/overview) but can provide additional protection against some threats. Note that adding validation policies can have performance implications, so we recommend performance load tests to assess their impact on API throughput.
+- Deploy a Web Application Firewall (WAF) in front of API Management to provide protection against common web application exploits and vulnerabilities.
+- [Leverage named values with Key Vault secrets](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-properties?tabs=azure-portal) to protect sensitive information in APIM policies
 - Use [Application Gateway for external access of an internal APIM instance](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-integrate-internal-vnet-appgateway) to protect APIM instance and enable hybrid connectivity
 - Deploy the gateway in a VNet to supporting hybrid connectivity and increasing security
 - VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use a [hub spoke design ](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or [Azure vWAN](https://microsoft.sharepoint.com/:p:/t/MSUSFY22TSICertCommunity/EcUBpRDWPOhAjYwZ8H9pkr0BTw9X0wSTEGGQKgT5UBwXMg?e=gwvip9)
 
-### Manageability considerations
+### Cost optimization
+- Due to the need of availability zone and virtual network support, the Premium tier is selected following the [pricing for each region](https://azure.microsoft.com/en-gb/pricing/details/api-management/). 
+- For proof of concept or porotypes, other tiers of APIM (Developer, Standard, etc.) are recommended. 
+
+### Operational excellence 
 
 - APIM configurations are represented as ARM templates and an infrastructure-as-code mindset should be embraced.
 - A CI/CD process should be leveraged to manage, version and update APIM configurations.
@@ -70,12 +78,6 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 - Client certificate negotiation is enabled is a per-gateway configuration.
 - Certificates updated in the key vault are automatically rotated in API Management and is updated within 4 hours.
 - Utilize Key Vault for Certificate storage, notification, and rotation.
-
-### Security considerations
-
-- API Management [validation policies](https://docs.microsoft.com/en-us/azure/api-management/validation-policies) are available to validate API requests and responses against an OpenAPI schema. These are not a replacement for a [Web Application Firewall](https://docs.microsoft.com/en-us/azure/web-application-firewall/overview) but can provide additional protection against some threats. Note that adding validation policies can have performance implications, so we recommend performance load tests to assess their impact on API throughput.
-- Deploy a Web Application Firewall (WAF) in front of API Management to provide protection against common web application exploits and vulnerabilities.
-- [Leverage named values with Key Vault secrets](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-properties?tabs=azure-portal) to protect sensitive information in APIM policies
 
 ## Deploy this accelerator
 
