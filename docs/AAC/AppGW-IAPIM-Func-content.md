@@ -30,23 +30,21 @@ The architecture leverages the following components :
 
 - **[Azure Bastion](https://docs.microsoft.com/en-us/azure/bastion/bastion-overview)** is a Platform-as-a-Service service provisioned within the developer's virtual network which provides secure RDP/SSH connectivity to the developer's virtual machines over TLS from the Azure portal. With Azure Bastion, virtual machines no longer require a public IP address to connect via RDP/SSH. This reference architecture uses Azure Bastion to access the DevOps Agent / GitHub Runner server or the management jump box server.
 
-### Recommendations
+## Considerations
 
 The following recommendations apply for most scenarios. Follow these recommendations unless you have a specific requirement that overrides them.
 
-_Include considerations for deploying or configuring the elements of this architecture._
-
-## Scalability considerations
+### Scalability considerations
 
 - Deploy at least two scale units spread over two AZs per region for best availability and performance
 
-## Availability considerations
+### Availability considerations
 
 - Use [Application Gateway for external access of an internal APIM instance](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-integrate-internal-vnet-appgateway)
 - Deploy the gateway in a vnet to allow access to backend services in the network
 - VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use [hub spoke](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or PLE
 
-## Manageability considerations
+### Manageability considerations
 
 - APIM configurations are represented as ARM templates and an infrastructure-as-code mindset should be embraced.
 - The Uri /status-0123456789abcdef can be used as a common health endpoint for the APIM service.
@@ -55,7 +53,7 @@ _Include considerations for deploying or configuring the elements of this archit
 - Certificates updated in the key vault are automatically rotated in API Management and is updated within 4 hours.
 - Utilize Key Vault for Certificate storage, notification, and rotation
 
-## Security considerations
+### Security considerations
 
 - API Management [validation policies](https://docs.microsoft.com/en-us/azure/api-management/validation-policies) are available to validate API requests and responses against an OpenAPI schema. These are not a replacement for a [Web Application Firewall](https://docs.microsoft.com/en-us/azure/web-application-firewall/overview) but can provide additional protection against some threats. Note that adding validation policies can have performance implications, so we recommend performance load tests to assess their impact on API throughput.
 - Deploy a Web Application Firewall (WAF) in front of API Management to provide protection against common web application exploits and vulnerabilities.
