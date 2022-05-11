@@ -32,7 +32,13 @@ The architecture leverages the following components :
 
 ## Considerations
 
-The following recommendations apply for most scenarios. Follow these recommendations unless you have a specific requirement that overrides them.
+These considerations implement the pillars of the Azure Well-Architected Framework, which is a set of guiding tenets that can be used to improve the quality of a workload. For more information, see [Microsoft Azure Well-Architected Framework](/azure/architecture/framework).
+
+- Review the reference implementation resources at [LOB-ILB-ASEv3](../../reference-implementations/LOB-ILB-ASEv3/) to better understand the specifics of this implementation.
+- It is recommended that you clone this repo and modify the reference implementation resources to suit your requirements and your organization's specific landing zone guidelines.
+- Ensure that the service principal used to deploy the solution has the required permissions to create the resource types listed above.
+- Consider the CI/CD service you will use for deploying the reference implementation. As this reference implementation is an internal API Management, a self-hosted agent is needed to execute the deployment pipelines.  As such the choice is to use either a DevOps Agent or a GitHub Runner. Refer to the [user guide](../README.md) on specific configuration values required for each.
+- Consider the region to which you intend deploying this reference implementation, and consult the [API Management Regions list](https://docs.microsoft.com/en-us/azure/api-management/zone-redundancy) to ensure the selected region has support for zone redundancy.
 
 ### Scalability considerations
 
@@ -70,23 +76,10 @@ To deploy the API management landing zone accelerator there are several methodol
 
 ## Next steps
 
-Link to Docs and Learn articles. Could also be to appropriate sources outside of Docs, such as GitHub repos, third-party documentation, or an official technical blog post.
-
-Examples:
-
-- [Azure Machine Learning documentation](/azure/machine-learning)
-- [What are Azure Cognitive Services?](/azure/cognitive-services/what-are-cognitive-services)
+* [Identity and access management for the Azure API Management landing zone accelerator](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/identity-and-access-management)
+* [CI/CD for API Management using Azure Resource Manager templates](/azure/api-management/devops-api-development-templates)
 
 ## Related resources
 
-Use "Related resources" for architecture information that's relevant to the current article. It must be content that the Azure Architecture Center TOC refers to, but may be from a repo other than the AAC repo.
-
-Links to articles in the AAC repo should be repo-relative, for example (../../solution-ideas/articles/article-name.yml).
-
-Here is an example section:
-
-Fully deployable architectures:
-
-- [Chatbot for hotel reservations](/azure/architecture/example-scenario/ai/commerce-chatbot)
-- [Build an enterprise-grade conversational bot](/azure/architecture/reference-architectures/ai/conversational-bot)
-- [Speech-to-text conversion](/azure/architecture/reference-architectures/ai/speech-ai-ingestion)
+* [Recommendations and Considerations](docs/README.md#enterprise-scale-architecture)
+* [API Ops](https://github.com/Azure/apiops)
