@@ -38,29 +38,30 @@ The following recommendations apply for most scenarios. Follow these recommendat
 
 ### Scalability considerations
 
-- Deploy at least two scale units spread over two AZs per region for best availability and performance
+- Deploy at least two scale units spread over two AZs per region to maximize availability and performance
 
 ### Availability considerations
 
-- Use [Application Gateway for external access of an internal APIM instance](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-integrate-internal-vnet-appgateway)
-- Deploy the gateway in a vnet to allow access to backend services in the network
+- Use [Application Gateway for external access of an internal APIM instance](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-integrate-internal-vnet-appgateway) to protect APIM instance and enable hybrid connectivity
+- Deploy the gateway in a vnet to supporting hybrid connectivity and increasing security
 - VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use [hub spoke](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or PLE
 
 ### Manageability considerations
 
 - APIM configurations are represented as ARM templates and an infrastructure-as-code mindset should be embraced.
-- The Uri /status-0123456789abcdef can be used as a common health endpoint for the APIM service.
-- The APIM Service is not a WAF. Deploy Azure App Gateway in front to add additional layers of protection
-- Client certificate negotiation is enabled is a per-gateway configuration
+- A CI/CD process should be leveraged to manage, version and update APIM configurations.
+- The Uri `/status-0123456789abcdef` can be used as a common health endpoint for the APIM service.
+- Client certificate negotiation is enabled is a per-gateway configuration.
 - Certificates updated in the key vault are automatically rotated in API Management and is updated within 4 hours.
-- Utilize Key Vault for Certificate storage, notification, and rotation
+- Utilize Key Vault for Certificate storage, notification, and rotation.
 
 ### Security considerations
 
 - API Management [validation policies](https://docs.microsoft.com/en-us/azure/api-management/validation-policies) are available to validate API requests and responses against an OpenAPI schema. These are not a replacement for a [Web Application Firewall](https://docs.microsoft.com/en-us/azure/web-application-firewall/overview) but can provide additional protection against some threats. Note that adding validation policies can have performance implications, so we recommend performance load tests to assess their impact on API throughput.
 - Deploy a Web Application Firewall (WAF) in front of API Management to provide protection against common web application exploits and vulnerabilities.
+- [Leverage named values with Key Vault secrets](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-properties?tabs=azure-portal) to protect sensitive information in APIM policies
 
-## Deploy this scenario
+## Deploy this accelerator
 
 To deploy the API management landing zone accelerator there are several methodologies you can choose from. Select one from the list below and follow the deployment steps.
 
@@ -72,12 +73,19 @@ To deploy the API management landing zone accelerator there are several methodol
 
 ## Next steps
 
-Link to Docs and Learn articles. Could also be to appropriate sources outside of Docs, such as GitHub repos, third-party documentation, or an official technical blog post.
+Learn:
 
-Examples:
+- [Intro to API Management](https://docs.microsoft.com/en-us/learn/modules/introduction-to-azure-api-management/)
+- [Manage APIs with APIM](https://docs.microsoft.com/en-us/learn/modules/publish-manage-apis-with-azure-api-management/)
+- [API Design eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/api-design/Azure_API-Design_Guide_eBook.pdf)
+- [APIs and MicroServices eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/apis-microservices-ebook/Azure_API-Microservices_eBook.pdf)
 
-- [Azure Machine Learning documentation](/azure/machine-learning)
-- [What are Azure Cognitive Services?](/azure/cognitive-services/what-are-cognitive-services)
+Reference:
+
+- [Azure API Management Documentation](https://docs.microsoft.com/en-us/azure/api-management/api-management-terminology)
+- [Application Gateway Documentation](https://docs.microsoft.com/en-us/azure/application-gateway/overview)
+- [Azure API Management landing zone accelerator](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/landing-zone-accelerator)
+
 
 ## Related resources
 
