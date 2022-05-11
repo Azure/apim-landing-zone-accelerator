@@ -43,8 +43,8 @@ The following recommendations apply for most scenarios. Follow these recommendat
 ### Availability considerations
 
 - Use [Application Gateway for external access of an internal APIM instance](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-integrate-internal-vnet-appgateway) to protect APIM instance and enable hybrid connectivity
-- Deploy the gateway in a vnet to supporting hybrid connectivity and increasing security
-- VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use [hub spoke](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or PLE
+- Deploy the gateway in a VNet to supporting hybrid connectivity and increasing security
+- VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use a [hub spoke] design (https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or [Azure vWAN](https://microsoft.sharepoint.com/:p:/t/MSUSFY22TSICertCommunity/EcUBpRDWPOhAjYwZ8H9pkr0BTw9X0wSTEGGQKgT5UBwXMg?e=gwvip9)
 
 ### Manageability considerations
 
@@ -85,7 +85,6 @@ Reference:
 - [Azure API Management Documentation](https://docs.microsoft.com/en-us/azure/api-management/api-management-terminology)
 - [Application Gateway Documentation](https://docs.microsoft.com/en-us/azure/application-gateway/overview)
 - [Azure API Management landing zone accelerator](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/landing-zone-accelerator)
-
 
 ## Related resources
 
