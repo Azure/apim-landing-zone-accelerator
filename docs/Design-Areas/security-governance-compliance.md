@@ -17,7 +17,6 @@
 
 - Deploy a Web Application Firewall (WAF) in front of API Management to provide protection against common web application exploits and vulnerabilities.
 - Use [Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general/basic-concepts) to securely store and manage secrets and make them available through named values within API Management.
-- Create a system assigned Managed Identity within API Management to establish trust relationships between the service and other resources protected by Azure Active Directory, including Key Vault and backend services.
 - Use Azure [built-in roles](https://docs.microsoft.com/en-us/azure/api-management/api-management-role-based-access-control#built-in-roles) to provide least privilege permissions to manage the API Management service.
 - Configure diagnostics settings within API Management to output logs and metrics to Azure Monitor.
 - APIs should only be accessible over HTTPS to protect data in-transit and ensure its integrity.

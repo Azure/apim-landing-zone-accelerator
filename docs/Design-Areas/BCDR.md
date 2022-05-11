@@ -11,6 +11,5 @@
 
 ## Design Recommendation
 
-- Use User assigned managed identity for APIM to prevent downtime during redeployment of APIM from ARM templates
 - Use automated DevOps pipelines to run backups
 - Decide on whether [multi-region deployment](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region) is required
