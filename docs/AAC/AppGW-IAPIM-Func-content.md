@@ -1,10 +1,12 @@
-> The H1 title is the same as the title metadata. Don't enter it here, but as the **name** value in the corresponding YAML file.
+
 
 This solution deploys the Enterprise Scale API Management Landing Zone a secure, opinionated accelerator enabling developers to rapidly onboard APIs to API management  [**Deploy this solution**.](#deploy-the-solution)
 
 ![Architecture](./../images/arch.png)
 
-_Download a [Visio file](https://arch-center.azureedge.net/architecture.vsdx) that contains this architecture diagram. This file must be uploaded to `https://arch-center.azureedge.net/`_
+Download a [Visio file](../images/APIM.vsdx) that contains this architecture diagram.
+
+_This file must be uploaded to `https://arch-center.azureedge.net/`_ ##TODO MOVE FILE##
 
 ## Architecture
 
