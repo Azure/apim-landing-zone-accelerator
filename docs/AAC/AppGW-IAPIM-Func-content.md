@@ -1,10 +1,12 @@
-> The H1 title is the same as the title metadata. Don't enter it here, but as the **name** value in the corresponding YAML file.
+
 
 This solution deploys the Enterprise Scale API Management Landing Zone a secure, opinionated accelerator enabling developers to rapidly onboard APIs to API management  [**Deploy this solution**.](#deploy-the-solution)
 
 ![Architecture](./../images/arch.png)
 
-_Download a [Visio file](https://arch-center.azureedge.net/architecture.vsdx) that contains this architecture diagram. This file must be uploaded to `https://arch-center.azureedge.net/`_
+Download a [Visio file](../images/APIM.vsdx) that contains this architecture diagram.
+
+_This file must be uploaded to `https://arch-center.azureedge.net/`_ ##TODO MOVE FILE##
 
 ## Architecture
 
@@ -42,29 +44,30 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 
 ### Scalability considerations
 
-- Deploy at least two scale units spread over two AZs per region for best availability and performance
+- Deploy at least two scale units spread over two AZs per region to maximize availability and performance
 
 ### Availability considerations
 
-- Use [Application Gateway for external access of an internal APIM instance](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-integrate-internal-vnet-appgateway)
-- Deploy the gateway in a vnet to allow access to backend services in the network
+- Use [Application Gateway for external access of an internal APIM instance](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-integrate-internal-vnet-appgateway) to protect APIM instance and enable hybrid connectivity
+- Deploy the gateway in a vnet to supporting hybrid connectivity and increasing security
 - VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use [hub spoke](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or PLE
 
 ### Manageability considerations
 
 - APIM configurations are represented as ARM templates and an infrastructure-as-code mindset should be embraced.
-- The Uri /status-0123456789abcdef can be used as a common health endpoint for the APIM service.
-- The APIM Service is not a WAF. Deploy Azure App Gateway in front to add additional layers of protection
-- Client certificate negotiation is enabled is a per-gateway configuration
+- A CI/CD process should be leveraged to manage, version and update APIM configurations.
+- The Uri `/status-0123456789abcdef` can be used as a common health endpoint for the APIM service.
+- Client certificate negotiation is enabled is a per-gateway configuration.
 - Certificates updated in the key vault are automatically rotated in API Management and is updated within 4 hours.
-- Utilize Key Vault for Certificate storage, notification, and rotation
+- Utilize Key Vault for Certificate storage, notification, and rotation.
 
 ### Security considerations
 
 - API Management [validation policies](https://docs.microsoft.com/en-us/azure/api-management/validation-policies) are available to validate API requests and responses against an OpenAPI schema. These are not a replacement for a [Web Application Firewall](https://docs.microsoft.com/en-us/azure/web-application-firewall/overview) but can provide additional protection against some threats. Note that adding validation policies can have performance implications, so we recommend performance load tests to assess their impact on API throughput.
 - Deploy a Web Application Firewall (WAF) in front of API Management to provide protection against common web application exploits and vulnerabilities.
+- [Leverage named values with Key Vault secrets](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-properties?tabs=azure-portal) to protect sensitive information in APIM policies
 
-## Deploy this scenario
+## Deploy this accelerator
 
 To deploy the API management landing zone accelerator there are several methodologies you can choose from. Select one from the list below and follow the deployment steps.
 
@@ -78,8 +81,17 @@ To deploy the API management landing zone accelerator there are several methodol
 
 * [Identity and access management for the Azure API Management landing zone accelerator](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/identity-and-access-management)
 * [CI/CD for API Management using Azure Resource Manager templates](/azure/api-management/devops-api-development-templates)
+* [Identity and access management for the Azure API Management landing zone accelerator](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/identity-and-access-management)
+* [CI/CD for API Management using Azure Resource Manager templates](/azure/api-management/devops-api-development-templates)
+* [Intro to API Management](https://docs.microsoft.com/en-us/learn/modules/introduction-to-azure-api-management/)
+* [Manage APIs with APIM](https://docs.microsoft.com/en-us/learn/modules/publish-manage-apis-with-azure-api-management/)
+* [API Design eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/api-design/Azure_API-Design_Guide_eBook.pdf)
+* [APIs and MicroServices eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/apis-microservices-ebook/Azure_API-Microservices_eBook.pdf)
 
 ## Related resources
 
 * [Recommendations and Considerations](docs/README.md#enterprise-scale-architecture)
 * [API Ops](https://github.com/Azure/apiops)
+* [Azure API Management Documentation](https://docs.microsoft.com/en-us/azure/api-management/api-management-terminology)
+* [Application Gateway Documentation](https://docs.microsoft.com/en-us/azure/application-gateway/overview)
+* [Azure API Management landing zone accelerator](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/landing-zone-accelerator)
