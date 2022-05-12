@@ -35,12 +35,12 @@ The architecture leverages the following components :
 ### Alternatives
 For the backend services that the API Management instance connects to, there are several alternatives in addition to Azure Functions that is used in this reference implementation:
 
-- [**Azure App Service**](https://docs.microsoft.com/en-us/azure/app-service/overview) is a fully managed HTTP-based service to build, deploy, and scale web apps. .NET, .NET Core, Java, Ruby, Node.js, PHP, and Python are all suported. Applications can run and scale in either Windows or Linux based environment. 
+- [**Azure App Service**](https://docs.microsoft.com/en-us/azure/app-service/overview) is a fully managed HTTP-based service to build, deploy, and scale web apps. .NET, .NET Core, Java, Ruby, Node.js, PHP, and Python are all suported. Applications can run and scale in either Windows or Linux based environment.
 - [**Azure Kubernetes Service**](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) offers fully managed Kubernetes clusters for integrated continuous intgration and continupous delivery (CI/CD) experience, governace, and security.
-- [**Azure Logic Apps**](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview) is a cloud based platform for creating and running automated workflows. 
-- [**Azure Container Apps**](https://docs.microsoft.com/en-us/azure/container-apps/overview) enables you to run microservices and contanerized applications on a serverless platform. 
+- [**Azure Logic Apps**](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview) is a cloud based platform for creating and running automated workflows.
+- [**Azure Container Apps**](https://docs.microsoft.com/en-us/azure/container-apps/overview) enables you to run microservices and contanerized applications on a serverless platform.
 
-For multi-region deployments, consider using [**Azure Front Door**](https://docs.microsoft.com/en-us/azure/frontdoor/front-door-overview) to deliver high aviability, lower latency and scale. 
+For multi-region deployments, consider using [**Azure Front Door**](https://docs.microsoft.com/en-us/azure/frontdoor/front-door-overview) to deliver high aviability, lower latency and scale.
 
 ## Considerations
 
@@ -57,7 +57,7 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 - Deploy at least two scale units spread over two AZs per region to maximize availability and performance
 
 
-### Security 
+### Security
 
 - API Management [validation policies](https://docs.microsoft.com/en-us/azure/api-management/validation-policies) are available to validate API requests and responses against an OpenAPI schema. These are not a replacement for a [Web Application Firewall](https://docs.microsoft.com/en-us/azure/web-application-firewall/overview) but can provide additional protection against some threats. Note that adding validation policies can have performance implications, so we recommend performance load tests to assess their impact on API throughput.
 - Deploy a Web Application Firewall (WAF) in front of API Management to provide protection against common web application exploits and vulnerabilities.
@@ -67,10 +67,10 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 - VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use a [hub spoke design ](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or [Azure vWAN](https://microsoft.sharepoint.com/:p:/t/MSUSFY22TSICertCommunity/EcUBpRDWPOhAjYwZ8H9pkr0BTw9X0wSTEGGQKgT5UBwXMg?e=gwvip9)
 
 ### Cost optimization
-- Due to the need of availability zone and virtual network support, the Premium tier is selected following the [pricing for each region](https://azure.microsoft.com/en-gb/pricing/details/api-management/). 
-- For proof of concept or porotypes, other tiers of APIM (Developer, Standard, etc.) are recommended. 
+- Due to the need of availability zone and virtual network support, the Premium tier is selected following the [pricing for each region](https://azure.microsoft.com/en-gb/pricing/details/api-management/).
+- For proof of concept or porotypes, other tiers of APIM (Developer, Standard, etc.) are recommended.
 
-### Operational excellence 
+### Operational excellence
 
 - APIM configurations are represented as ARM templates and an infrastructure-as-code mindset should be embraced.
 - A CI/CD process should be leveraged to manage, version and update APIM configurations.
@@ -81,7 +81,7 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 
 ## Deploy this accelerator
 
-A deployment for the reference architecture that implements these recommendations and considerations is available on [GitHub](../README.md) 
+A deployment for the reference architecture that implements these recommendations and considerations is available on [GitHub](../README.md)
 
 ## Next steps
 
