@@ -33,14 +33,15 @@ The architecture leverages the following components :
 - **[Azure Bastion](https://docs.microsoft.com/en-us/azure/bastion/bastion-overview)** is a Platform-as-a-Service service provisioned within the developer's virtual network which provides secure RDP/SSH connectivity to the developer's virtual machines over TLS from the Azure portal. With Azure Bastion, virtual machines no longer require a public IP address to connect via RDP/SSH. This reference architecture uses Azure Bastion to access the DevOps Agent / GitHub Runner server or the management jump box server.
 
 ### Alternatives
+
 For the backend services that the API Management instance connects to, there are several alternatives in addition to Azure Functions that is used in this reference implementation:
 
-- [**Azure App Service**](https://docs.microsoft.com/en-us/azure/app-service/overview) is a fully managed HTTP-based service to build, deploy, and scale web apps. .NET, .NET Core, Java, Ruby, Node.js, PHP, and Python are all suported. Applications can run and scale in either Windows or Linux based environment.
-- [**Azure Kubernetes Service**](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) offers fully managed Kubernetes clusters for integrated continuous intgration and continupous delivery (CI/CD) experience, governace, and security.
+- [**Azure App Service**](https://docs.microsoft.com/en-us/azure/app-service/overview) is a fully managed HTTP-based service to build, deploy, and scale web apps. .NET, .NET Core, Java, Ruby, Node.js, PHP, and Python are all supported. Applications can run and scale in either Windows or Linux based environment.
+- [**Azure Kubernetes Service**](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) offers fully managed Kubernetes clusters for integrated continuous intgration and continupous delivery (CI/CD) experience, governance, and security.
 - [**Azure Logic Apps**](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview) is a cloud based platform for creating and running automated workflows.
-- [**Azure Container Apps**](https://docs.microsoft.com/en-us/azure/container-apps/overview) enables you to run microservices and contanerized applications on a serverless platform.
+- [**Azure Container Apps**](https://docs.microsoft.com/en-us/azure/container-apps/overview) enables you to run microservices and containerized applications on a serverless platform.
 
-For multi-region deployments, consider using [**Azure Front Door**](https://docs.microsoft.com/en-us/azure/frontdoor/front-door-overview) to deliver high aviability, lower latency and scale.
+For multi-region deployments, consider using [**Azure Front Door**](https://docs.microsoft.com/en-us/azure/frontdoor/front-door-overview) to deliver high availbility, lower latency and scale.
 
 ## Considerations
 
@@ -56,7 +57,6 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 
 - Deploy at least two scale units spread over two AZs per region to maximize availability and performance
 
-
 ### Security
 
 - API Management [validation policies](https://docs.microsoft.com/en-us/azure/api-management/validation-policies) are available to validate API requests and responses against an OpenAPI schema. These are not a replacement for a [Web Application Firewall](https://docs.microsoft.com/en-us/azure/web-application-firewall/overview) but can provide additional protection against some threats. Note that adding validation policies can have performance implications, so we recommend performance load tests to assess their impact on API throughput.
@@ -67,6 +67,7 @@ These considerations implement the pillars of the Azure Well-Architected Framewo
 - VNet peering provides great performance in a region but has a scalability limit of max 500 networks, if you require more workloads to be connected, use a [hub spoke design ](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke?tabs=cli) or [Azure vWAN](https://microsoft.sharepoint.com/:p:/t/MSUSFY22TSICertCommunity/EcUBpRDWPOhAjYwZ8H9pkr0BTw9X0wSTEGGQKgT5UBwXMg?e=gwvip9)
 
 ### Cost optimization
+
 - Due to the need of availability zone and virtual network support, the Premium tier is selected following the [pricing for each region](https://azure.microsoft.com/en-gb/pricing/details/api-management/).
 - For proof of concept or porotypes, other tiers of APIM (Developer, Standard, etc.) are recommended.
 
@@ -85,17 +86,17 @@ A deployment for the reference architecture that implements these recommendation
 
 ## Next steps
 
-* [Identity and access management for the Azure API Management landing zone accelerator](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/identity-and-access-management)
-* [CI/CD for API Management using Azure Resource Manager templates](/azure/api-management/devops-api-development-templates)
-* [Intro to API Management](https://docs.microsoft.com/en-us/learn/modules/introduction-to-azure-api-management/)
-* [Manage APIs with APIM](https://docs.microsoft.com/en-us/learn/modules/publish-manage-apis-with-azure-api-management/)
-* [API Design eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/api-design/Azure_API-Design_Guide_eBook.pdf)
-* [APIs and MicroServices eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/apis-microservices-ebook/Azure_API-Microservices_eBook.pdf)
+- [Identity and access management for the Azure API Management landing zone accelerator](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/identity-and-access-management)
+- [CI/CD for API Management using Azure Resource Manager templates](/azure/api-management/devops-api-development-templates)
+- [Intro to API Management](https://docs.microsoft.com/en-us/learn/modules/introduction-to-azure-api-management/)
+- [Manage APIs with APIM](https://docs.microsoft.com/en-us/learn/modules/publish-manage-apis-with-azure-api-management/)
+- [API Design eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/api-design/Azure_API-Design_Guide_eBook.pdf)
+- [APIs and MicroServices eBook](https://azure.microsoft.com/mediahandler/files/resourcefiles/apis-microservices-ebook/Azure_API-Microservices_eBook.pdf)
 
 ## Related resources
 
-* [Recommendations and Considerations](docs/README.md#enterprise-scale-architecture)
-* [API Ops](https://github.com/Azure/apiops)
-* [Azure API Management Documentation](https://docs.microsoft.com/en-us/azure/api-management/api-management-terminology)
-* [Application Gateway Documentation](https://docs.microsoft.com/en-us/azure/application-gateway/overview)
-* [Azure API Management landing zone accelerator](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/landing-zone-accelerator)
+- [Recommendations and Considerations](docs/README.md#enterprise-scale-architecture)
+- [API Ops](https://github.com/Azure/apiops)
+- [Azure API Management Documentation](https://docs.microsoft.com/en-us/azure/api-management/api-management-terminology)
+- [Application Gateway Documentation](https://docs.microsoft.com/en-us/azure/application-gateway/overview)
+- [Azure API Management landing zone accelerator](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/landing-zone-accelerator)
