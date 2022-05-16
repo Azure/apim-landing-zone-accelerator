@@ -105,6 +105,7 @@ There is a workflow file **es-apim.yml** created under [.github/workflows](/.git
 
 a) Generate the following secrets in your GitHub repository settings
 
+- `AZURE_CREDENTIALS` - Service principal credentials used to access Azure resources
 - `AZURE_SUBSCRIPTION` - Azure target subscription id
 - `PAT` -  Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent
 - `VM_PW` - The password to be used as the Administrator for all VMs created by this deployment
@@ -113,13 +114,14 @@ b) In order to run the deployment successfully we will need to modify the values
 
 |                   |          |
 |:------------------|:--------:|
-| `AZURE_LOCATION`  | 'Azure ergion where you want to deploy the resources|
+| `AZURE_LOCATION`  | 'Azure region where you want to deploy the resources|
 | `RESOURCE_NAME_PREFIX`| 'Standardized suffix text to be added to resource names' |
 | `ENVIRONMENT_TAG` | 'The environment for which the deployment is being executed'  |
 | `DEPLOYMENT_NAME` | 'Unique name of the Bicep Deployment' |
 | `VM_USERNAME`     | 'The user name to be used as the Administrator for all VMs created by this deployment' |
 | `ACCOUNT_NAME`    |  'The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format <https://dev.azure.com/ORGNAME> OR github.com/ORGUSERNAME OR none' |
 | `CICD_AGENT_TYPE` |  'The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')  |
+| `CERT_TYPE`  | 'The type of certificate utilized in the deployment process. You can enter selfsigned to have utilize a key vault aut generated certificate or custom to access your organizations pfx file.' |
 
 c) Push the latest changes to your **feature** branch and create a Pull Request to **main** branch which will trigger the workflow
 
