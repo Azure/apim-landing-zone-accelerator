@@ -73,8 +73,8 @@ For using credentials like a Service Principal we will need to add them as [GitH
 
 Follow the below steps to configure secrets for the authentication within the GitHub workflow :
 
-    - Go to your GitHub repository settings and add a new Actions secrets by clicking ‘New repository secrets’ from the Secrets menu
-    - Store the output of the below [az cli](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#:~:text=%20Create%20an%20Azure%20service%20principal%20with%20the,role%20for%20a%20service%20principal%20is...%20See%20More.) command as a secret (e.g. AZURE_CREDENTIALS). This will be referenced back in the workflow file
+- Go to your GitHub repository settings and add a new Actions secrets by clicking ‘New repository secrets’ from the Secrets menu
+- Store the output of the below [az cli](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#:~:text=%20Create%20an%20Azure%20service%20principal%20with%20the,role%20for%20a%20service%20principal%20is...%20See%20More.) command as a secret (e.g. AZURE_CREDENTIALS). This will be referenced back in the workflow file
 
 ```PowerShell
 az ad sp create-for-rbac --name "enterprise-scale-apim-app" --role contributor \
