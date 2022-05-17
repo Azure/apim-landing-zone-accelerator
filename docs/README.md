@@ -15,7 +15,7 @@ OR
 
 ## Deployment Steps
 
-### 1. Clone the repository to your Organization/Repository
+### 1. Fork the repository to your Organization and then clone to repository. 
 
 ```Powershell
 git clone https://github.com/Azure/apim-landing-zone-accelerator.git
