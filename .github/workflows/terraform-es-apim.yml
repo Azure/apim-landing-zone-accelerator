@@ -26,6 +26,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: ./reference-implementations/AppGW-IAPIM-Func/terraform 
     
   
     steps:
