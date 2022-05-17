@@ -29,9 +29,9 @@ You can automate workflows using Azure [Login Action](https://github.com/Azure/l
 
 The Azure login action supports two different ways of authenticating with Azure :
 
-- _Service principal with [secrets](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-a-service-principal-secret)_
+- Service principal with [secrets](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-a-service-principal-secret)
 
-- _OpenID Connect (OIDC) with a Azure service principal using a [Federated Identity Credential](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-openid-connect)_
+- OpenID Connect (OIDC) with a Azure service principal using a [Federated Identity Credential](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-openid-connect)
 
 ### 3. Create a Service Principal using Az CLI commands by signing-in interactively OR using Cloud Shell
 
