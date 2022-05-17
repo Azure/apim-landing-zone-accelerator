@@ -7,12 +7,12 @@ This is a repository ([aka.ms/EnterpriseScale-APIM](https://aka.ms/EnterpriseSca
 The enterprise architecture is broken down into six different design areas, where you can find the links to each at:
 | Design Area|Considerations|Recommendations|
 |:--------------:|:--------------:|:--------------:|
-| Identity and Access Management|[Design Considerations](/docs/Design-Areas/identity-access-mgmt.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/identity-access-mgmt.md#design-recommendations)|
-| Network Topology and Connectivity|[Design Considerations](/docs/Design-Areas/networking.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/networking.md#design-recommendations)|
-| Management and Monitoring|[Design Considerations](/docs/Design-Areas/mgmt-monitoring.md#design-consideration)|[Design Recommendations](/docs/Design-Areas/mgmt-monitoring.md#design-recommendation)|
-| Business Continuity and Disaster Recovery|[Design Considerations](/docs/Design-Areas/BCDR.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/BCDR.md#design-recommendations)|
-| Security, Governance, and Compliance|[Design Considerations](/docs/Design-Areas/security-governance-compliance.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/security-governance-compliance.md#design-recommendations)|
-| Application Automation and DevOps|[Design Considerations](/docs/Design-Areas/automation-devops.md#design-considerations)|[Design Recommendations](/docs/Design-Areas/automation-devops.md#design-recommendations)|
+| Identity and Access Management|[Design Considerations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/identity-and-access-management#design-considerations)|[Design Recommendations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/identity-and-access-management#design-recommendations)|
+| Network Topology and Connectivity|[Design Considerations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/network-topology-and-connectivity#design-considerations)|[Design Recommendations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/network-topology-and-connectivity#design-recommendations)|
+| Security|[Design Considerations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/security#design-considerations)|[Design Recommendations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/security#design-recommendations)|
+| Management|[Design Considerations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/management#design-considerations)|[Design Recommendations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/management#design-recommendation)|
+| Governance|[Design Considerations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-considerations)|[Design Recommendations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-recommendations)|
+| Platform Automation and DevOps|[Design Considerations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-considerations)|[Design Recommendations](/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-recommendations)|
 
 ## Enterprise-Scale Reference Implementation
 
@@ -55,6 +55,7 @@ After the ARM Template is generated, we create a branch from the main branch and
 Again, you can find the details in [Action yaml file](/.github/workflows/es-apim.yml)
 
 ### Generated ARM Template Validation
+
 ---
 There are several ways to **Validate** an ARM Template;
 
