@@ -54,9 +54,12 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
+      - name: Terraform Plan 
         id: plan
-        run: terraform plan -no-color -lock=false
+        run: terraform plan -no-color -var 'client_id=${{secrets.client_id}}' -var 'client_secret=${{secrets.client_secret}}' 
+         -var 'subscription_id=${{secrets.subscription_id}}' -var 'tenant_id=${{secrets.tenant_id}}' -var 'account_name=${{secrets.account_name}}' 
+         -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' 
+         -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
         continue-on-error: false
 
       # [Placeholder] Outputs comment on the pull request:
