@@ -28,14 +28,13 @@ jobs:
         shell: bash
         working-directory: ./reference-implementations/AppGW-IAPIM-Func/terraform 
     
-  
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - uses: Azure/login@v1.1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+       #Authenticate using service principal
+      - name: Run Az Login 
+        run: az login --service-principal -u ${{secrets.client_id}} -p ${{secrets.client_secret}} --tenant ${{secrets.tenant_id}}
       
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -57,8 +56,8 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
-        continue-on-error: true
+        run: terraform plan -no-color -lock=false
+        continue-on-error: false
 
       # [Placeholder] Outputs comment on the pull request:
 
