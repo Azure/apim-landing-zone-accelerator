@@ -48,7 +48,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -backend-config='access_key=${{secrets.storage_key}}'
 
       - name: Terraform Validate
         id: validate
