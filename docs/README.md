@@ -29,9 +29,9 @@ You can automate workflows using Azure [Login Action](https://github.com/Azure/l
 
 The Azure login action supports two different ways of authenticating with Azure :
 
-- _Service principal with [secrets](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-a-service-principal-secret)_
+- Service principal with [secrets](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-a-service-principal-secret)
 
-- _OpenID Connect (OIDC) with a Azure service principal using a [Federated Identity Credential](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-openid-connect)_
+- OpenID Connect (OIDC) with a Azure service principal using a [Federated Identity Credential](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-openid-connect)
 
 ### 3. Create a Service Principal using Az CLI commands by signing-in interactively OR using Cloud Shell
 
@@ -73,8 +73,9 @@ For using credentials like a Service Principal we will need to add them as [GitH
 
 #### Follow the below steps to configure secrets for the authentication within the GitHub workflow :
 
-- Open Azure CLI
-- Run the following command via [az cli](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#:~:text=%20Create%20an%20Azure%20service%20principal%20with%20the,role%20for%20a%20service%20principal%20is...%20See%20More.)
+- Go to your GitHub repository settings and add a new Actions secrets by clicking ‘New repository secrets’ from the Secrets menu
+- Store the output of the below [az cli](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli#:~:text=%20Create%20an%20Azure%20service%20principal%20with%20the,role%20for%20a%20service%20principal%20is...%20See%20More.) command as a secret (e.g. AZURE_CREDENTIALS). This will be referenced back in the workflow file
+
 
 ```PowerShell
 # Replace {subscription-id} with your subscription details
