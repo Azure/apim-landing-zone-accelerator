@@ -1,0 +1,106 @@
+name: 'Terraform ES-APIM Deploy'
+ 
+on:
+  workflow_dispatch: 
+  
+  push:
+    branches:
+    - pr/terraform
+    
+  pull_request:
+    branches:
+    - main
+    
+    paths: 
+    - '/reference-implementations/AppGW-IAPIM-Func/terraform/**'
+    
+jobs:
+  deploy_azure:
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./apim-landing-zone-accelerator/reference-implementations/AppGW-IAPIM-Func/terraform 
+  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+               
+      - name: Run Az Login 
+        run: az login --service-principal -u ${{secrets.client_id}} -p ${{secrets.client_secret}} --tenant ${{secrets.tenant_id}}
+    
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.1.7
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+   
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-config='access_key=${{secrets.storage_key}}'
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+  
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -var 'client_id=${{secrets.client_id}}' -var 'client_secret=${{secrets.client_secret}}' 
+         -var 'subscription_id=${{secrets.subscription_id}}' -var 'tenant_id=${{secrets.tenant_id}}' -var 'account_name=${{secrets.account_name}}' 
+         -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' 
+         -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
+        continue-on-error: false
+        
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.My_PAT}}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ steps.validate.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+            
+      - name: Terraform apply 
+        if: github.ref == 'refs/heads/main' 
+        id: apply
+        run: terraform apply -auto-approve -var 'client_id=${{secrets.client_id}}' -var 'client_secret=${{secrets.client_secret}}' 
+         -var 'subscription_id=${{secrets.subscription_id}}' -var 'tenant_id=${{secrets.tenant_id}}' -var 'account_name=${{secrets.account_name}}' 
+         -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' 
+         -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
