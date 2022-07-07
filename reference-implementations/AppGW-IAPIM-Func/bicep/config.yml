@@ -1,4 +1,4 @@
-AZURE_LOCATION: 'centralus'
+AZURE_LOCATION: 'eastus2'
 RESOURCE_NAME_PREFIX: 'apimlz'
 ENVIRONMENT_TAG: 'dev'
 DEPLOYMENT_NAME: 'apimlz-demo-deployment'
