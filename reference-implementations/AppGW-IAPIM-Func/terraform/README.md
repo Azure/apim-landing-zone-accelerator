@@ -3,18 +3,18 @@
 ## Table of Contents
 
 - [Overview](#overview)
-  * [Folder Structure](#folder-structure)
-    + [Deployment Files](#deployment-files)
-    + [Modules](#modules)
-  * [Naming convention](#naming-convention)
+  - [Folder Structure](#folder-structure)
+    - [Deployment Files](#deployment-files)
+    - [Modules](#modules)
+  - [Naming convention](#naming-convention)
 - [:rocket: Getting started](#-rocket--getting-started)
-  * [Setting up your environment](#setting-up-your-environment)
-    + [Configure Terraform](#configure-terraform)
-    + [Configure Remote Storage Account](#configure-remote-storage-account)
-  * [Deploy the API Management Landing Zone](#deploy-the-api-management-landing-zone)
-    + [Configure Terraform Remote State](#configure-terraform-remote-state)
-    + [Provide Parameters Required for Deployment](#provide-parameters-required-for-deployment)
-    + [Deploy](#deploy)
+  - [Setting up your environment](#setting-up-your-environment)
+    - [Configure Terraform](#configure-terraform)
+    - [Configure Remote Storage Account](#configure-remote-storage-account)
+  - [Deploy the API Management Landing Zone](#deploy-the-api-management-landing-zone)
+    - [Configure Terraform Remote State](#configure-terraform-remote-state)
+    - [Provide Parameters Required for Deployment](#provide-parameters-required-for-deployment)
+    - [Deploy](#deploy)
 
 ## Pre-requisites
 
@@ -44,22 +44,22 @@
 
 #### Deployment Files
 
-* [`module.md`](./module.md) - Terraform implementation summary document generated via [pre-commit hooks](../../../.pre-commit-config.yaml).
-* [`main.tf`](./main.tf) - Main deployment file, specifies module references, dependency chains, and manages input arguments.
-* [`provider.tf`](./provider.tf) - Configure remote backend state storage and required provider versions.
-* [`variables.tf`](./variables.tf) - Input variable declarations with descriptions.
+- [`module.md`](./module.md) - Terraform implementation summary document generated via [pre-commit hooks](../../../.pre-commit-config.yaml).
+- [`main.tf`](./main.tf) - Main deployment file, specifies module references, dependency chains, and manages input arguments.
+- [`provider.tf`](./provider.tf) - Configure remote backend state storage and required provider versions.
+- [`variables.tf`](./variables.tf) - Input variable declarations with descriptions.
 
 #### Modules
 
 Each module has a `module.md` document that aims to give a quick overview of the module arguments, and terraform resources that are being leveraged when the module is being deployed.
 This document is automatically generated based upon the configuration found in the `*.tf` files in the module directory.
 
-* [`apim`](./modules/apim/module.md) - Deploys API Management and monitoring resources, as well as the resource group
-* [`backend`](./modules/backend/module.md) - Deploys the backend resources for the application (Function, Storage Account, App Service Plan)
-* [`gateway`](./modules/gateway/module.md) - Deploys the application gateway with its associated dependencies.
-* [`networking`](./modules/networking/module.md) - Deploys networking configuration for the APIM deployment.
-* [`service-suffix`](./modules/service-suffix/module.md) - Constructs suffix to support naming standards (see [Naming Convention](#naming-convention))
-* [`shared`](./modules/shared/module.md) - Deploys Private DNS with a Windows VM
+- [`apim`](./modules/apim/module.md) - Deploys API Management and monitoring resources, as well as the resource group
+- [`backend`](./modules/backend/module.md) - Deploys the backend resources for the application (Function, Storage Account, App Service Plan)
+- [`gateway`](./modules/gateway/module.md) - Deploys the application gateway with its associated dependencies.
+- [`networking`](./modules/networking/module.md) - Deploys networking configuration for the APIM deployment.
+- [`service-suffix`](./modules/service-suffix/module.md) - Constructs suffix to support naming standards (see [Naming Convention](#naming-convention))
+- [`shared`](./modules/shared/module.md) - Deploys Private DNS with a Windows VM
 
 ### Naming convention
 
@@ -88,10 +88,10 @@ Examples:
 
 If you haven't already done so, configure Terraform using one of the following options:
 
-* [Configure Terraform in Azure Cloud Shell with Bash](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash)
-* [Configure Terraform in Azure Cloud Shell with PowerShell](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-powershell)
-* [Configure Terraform in Windows with Bash](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-windows-bash)
-* [Configure Terraform in Windows with PowerShell](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-windows-powershell)
+- [Configure Terraform in Azure Cloud Shell with Bash](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash)
+- [Configure Terraform in Azure Cloud Shell with PowerShell](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-powershell)
+- [Configure Terraform in Windows with Bash](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-windows-bash)
+- [Configure Terraform in Windows with PowerShell](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-windows-powershell)
 
 #### Configure Remote Storage Account
 
@@ -130,8 +130,8 @@ env:
 
 For additional reading around remote state:
 
-* [MS Doc: Store Terraform state in Azure Storage](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
-* [TF Doc: AzureRM Provider Configuration Documentation](https://www.terraform.io/language/settings/backends/azurerm)
+- [MS Doc: Store Terraform state in Azure Storage](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
+- [TF Doc: AzureRM Provider Configuration Documentation](https://www.terraform.io/language/settings/backends/azurerm)
 
 ### Deploy the API Management Landing Zone
 
@@ -147,9 +147,9 @@ To configure your Terraform deployment to use the newly provisioned storage acco
   }
 ```
 
-* `storage_account_name`: Name of the Azure Storage Account to be used to hold remote state.
-* `container_name`: Name of the Azure Storage Account Blob Container to store and retrieve remote state.
-* `key`: Path and filename for the remote state file to be placed in the Storage Account Container. If the state file does not exist in this path, Terraform will automatically generate one for you.
+- `storage_account_name`: Name of the Azure Storage Account to be used to hold remote state.
+- `container_name`: Name of the Azure Storage Account Blob Container to store and retrieve remote state.
+- `key`: Path and filename for the remote state file to be placed in the Storage Account Container. If the state file does not exist in this path, Terraform will automatically generate one for you.
 
 #### Provide Parameters Required for Deployment
 
@@ -157,13 +157,13 @@ As you configured the backend remote state with your live Azure infrastructure r
 
 1. Review the available variables with their descriptions and default values in the [variables.tf](./variables.tf) file.
 2. Provide any custom values to the defined variables by creating a `terraform.tfvars` file in this direcotry (`reference-implementations/AppGW-IAPIM-Func/terraform/terraform.tfvars`)
-    * [TF Docs: Variable Definitions (.tfvars) Files](https://www.terraform.io/language/values/variables#variable-definitions-tfvars-files)
+    - [TF Docs: Variable Definitions (.tfvars) Files](https://www.terraform.io/language/values/variables#variable-definitions-tfvars-files)
 
 #### Deploy
 
 1. Navigate to the Terraform directory `reference-implementations/AppGW-IAPIM-Func/terraform`
 1. Initialize Terraform to install `required_providers` specified within the `backend.tf` and to initialize the backend remote state
-    * to run locally without the remote state, comment out the `backend "azurerm"` block in `backend.tf` (lines 8-13)
+    - to run locally without the remote state, comment out the `backend "azurerm"` block in `backend.tf` (lines 8-13)
 
     ```bash
     terraform init
