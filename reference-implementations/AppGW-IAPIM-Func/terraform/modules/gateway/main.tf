@@ -1,10 +1,10 @@
 locals {
-  app_gateway_name              = "appgw-${var.resource_suffix}"
-  app_gateway_primary_pip       = "pip-${local.app_gateway_name}"
-  app_gateway_identity_id       = "identity-${local.app_gateway_name}"
-  https_backend_probe_name      = "APIM"
-  is_local_certificate          = var.app_gateway_certificate_type == "custom"
-  certificate_secret_id         = local.is_local_certificate ? azurerm_key_vault_certificate.kv_domain_certs[0].secret_id : azurerm_key_vault_certificate.local_domain_certs[0].secret_id
+  app_gateway_name         = "appgw-${var.resource_suffix}"
+  app_gateway_primary_pip  = "pip-${local.app_gateway_name}"
+  app_gateway_identity_id  = "identity-${local.app_gateway_name}"
+  https_backend_probe_name = "APIM"
+  is_local_certificate     = var.app_gateway_certificate_type == "custom"
+  certificate_secret_id    = local.is_local_certificate ? azurerm_key_vault_certificate.kv_domain_certs[0].secret_id : azurerm_key_vault_certificate.local_domain_certs[0].secret_id
 }
 
 resource "azurerm_user_assigned_identity" "user_assigned_identity" {
@@ -118,27 +118,27 @@ resource "azurerm_application_gateway" "network" {
   name                = local.app_gateway_name
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
-  
+
   depends_on = [
     azurerm_key_vault_access_policy.user_assigned_identity_keyvault_permissions,
     azurerm_key_vault_certificate.kv_domain_certs
   ]
 
   identity {
-    type          = "UserAssigned"
-    identity_ids  = [azurerm_user_assigned_identity.user_assigned_identity.id]
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.user_assigned_identity.id]
   }
 
   sku {
-    name     = "WAF_v2"
-    tier     = "WAF_v2"
+    name = "WAF_v2"
+    tier = "WAF_v2"
   }
 
   ssl_certificate {
-    name                  = var.fqdn
-    key_vault_secret_id   = local.certificate_secret_id
+    name                = var.fqdn
+    key_vault_secret_id = local.certificate_secret_id
   }
-  
+
   gateway_ip_configuration {
     name      = "appGatewayIpConfig"
     subnet_id = var.subnet_id
@@ -159,7 +159,7 @@ resource "azurerm_application_gateway" "network" {
     name = "port_443"
     port = 443
   }
-  
+
   backend_address_pool {
     name  = "apim"
     fqdns = [var.primary_backendend_fqdn]
@@ -169,18 +169,18 @@ resource "azurerm_application_gateway" "network" {
     name                                = "default"
     port                                = 80
     protocol                            = "Http"
-    cookie_based_affinity                 = "Disabled"
+    cookie_based_affinity               = "Disabled"
     pick_host_name_from_backend_address = false
     affinity_cookie_name                = "ApplicationGatewayAffinity"
     request_timeout                     = 20
-    
+
   }
 
   backend_http_settings {
     name                                = "https"
     port                                = 443
     protocol                            = "Https"
-    cookie_based_affinity                 = "Disabled"
+    cookie_based_affinity               = "Disabled"
     host_name                           = var.primary_backendend_fqdn
     pick_host_name_from_backend_address = false
     request_timeout                     = 20
@@ -213,15 +213,15 @@ resource "azurerm_application_gateway" "network" {
   }
 
   probe {
-    name = "APIM"
-    protocol = "Https"
+    name                                      = "APIM"
+    protocol                                  = "Https"
     host                                      = var.primary_backendend_fqdn
     path                                      = var.probe_url
     interval                                  = 30
     timeout                                   = 30
     unhealthy_threshold                       = 3
     pick_host_name_from_backend_http_settings = false
-    minimum_servers = 0
+    minimum_servers                           = 0
 
     match {
       status_code = ["200-399"]
@@ -229,13 +229,13 @@ resource "azurerm_application_gateway" "network" {
   }
 
   waf_configuration {
-    enabled = true
-    firewall_mode             = "Detection"
-    rule_set_type             = "OWASP"
-    rule_set_version          = "3.0"
+    enabled                  = true
+    firewall_mode            = "Detection"
+    rule_set_type            = "OWASP"
+    rule_set_version         = "3.0"
     request_body_check       = true
-    max_request_body_size_kb  = 128
-    file_upload_limit_mb      = 100
+    max_request_body_size_kb = 128
+    file_upload_limit_mb     = 100
   }
 
   enable_http2 = true

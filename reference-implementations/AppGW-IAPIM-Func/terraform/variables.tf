@@ -95,7 +95,7 @@ variable "vm_username" {
 
 variable "vm_password" {
   description = "Agent VM Password"
-  type = string
+  type        = string
 }
 
 variable "cicd_agent_type" {
@@ -104,16 +104,16 @@ variable "cicd_agent_type" {
 }
 
 variable "personal_access_token" {
-  type = string
+  type        = string
   description = "Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent"
 }
 
 variable "account_name" {
-  type = string
+  type        = string
   description = "The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none"
 }
 
 variable "pool_name" {
-  type = string
+  type        = string
   description = "The name Azure DevOps or GitHub pool for this build agent to join. Use 'Default' if you don't have a separate pool"
 }

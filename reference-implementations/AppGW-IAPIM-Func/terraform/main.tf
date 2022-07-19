@@ -38,7 +38,7 @@ module "shared" {
 # calling the Network module
 #-------------------------------
 module "networking" {
-  source                 = "./networking"
+  source                 = "./modules/networking"
   location               = local.resource_location
   workload_name          = var.workload_name
   deployment_environment = var.deployment_environment
@@ -48,7 +48,7 @@ module "networking" {
 # calling the APIM module
 #-------------------------------
 module "apim" {
-  source              = "./apim"
+  source              = "./modules/apim"
   resource_suffix     = module.resource_suffix.name
   location            = local.resource_location
   workspace_id        = module.shared.workspace_id
@@ -60,28 +60,28 @@ module "apim" {
 # calling the App Gateway module
 #-------------------------------
 module "application_gateway" {
-  source                        = "./gateway"
-  resource_suffix               = var.resource_suffix
-  resource_group_name           = module.apim.apim_resource_group_name
-  resource_group_location       = module.apim.apim_resource_group_location
-  secret_name                   = var.certificate_secret_name
-  keyvault_id                   = module.shared.key_vault_id
-  app_gateway_certificate_type  = var.app_gateway_certificate_type
-  certificate_path              = var.certificate_path
-  certificate_password          = var.certificate_password
-  fqdn                          = var.app_gateway_fqdn
-  primary_backendend_fqdn       = "${module.apim.name}.azure-api.net"
-  subnet_id                     = module.networking.appgateway_subnet_id
+  source                       = "./modules/gateway"
+  resource_suffix              = var.resource_suffix
+  resource_group_name          = module.apim.apim_resource_group_name
+  resource_group_location      = module.apim.apim_resource_group_location
+  secret_name                  = var.certificate_secret_name
+  keyvault_id                  = module.shared.key_vault_id
+  app_gateway_certificate_type = var.app_gateway_certificate_type
+  certificate_path             = var.certificate_path
+  certificate_password         = var.certificate_password
+  fqdn                         = var.app_gateway_fqdn
+  primary_backendend_fqdn      = "${module.apim.name}.azure-api.net"
+  subnet_id                    = module.networking.appgateway_subnet_id
 }
 
 # #-------------------------------
 # # Calling the Backend module
 # #-------------------------------
- module "backend" {
-   source            = "./backend"
-   resource_suffix   = module.resource_suffix.name
-   workload_name     = var.workload_name
-   os_type           = var.os_type
-   location          = local.resource_location
-   backend_subnet_id = module.networking.backend_subnet_id
- }
+module "backend" {
+  source            = "./modules/backend"
+  resource_suffix   = module.resource_suffix.name
+  workload_name     = var.workload_name
+  os_type           = var.os_type
+  location          = local.resource_location
+  backend_subnet_id = module.networking.backend_subnet_id
+}

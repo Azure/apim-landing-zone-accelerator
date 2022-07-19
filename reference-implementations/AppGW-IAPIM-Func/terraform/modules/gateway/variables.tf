@@ -16,7 +16,7 @@ variable "secret_name" {
 variable "keyvault_id" {
   type        = string
   description = ""
-  default = null
+  default     = null
 }
 
 variable "app_gateway_certificate_type" {
@@ -27,7 +27,7 @@ variable "app_gateway_certificate_type" {
 variable "certificate_path" {
   type        = string
   description = ""
-  default = null
+  default     = null
 }
 
 variable "certificate_password" {

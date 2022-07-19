@@ -42,8 +42,8 @@ resource "azurerm_app_service_plan" "function_app_asp" {
     size = var.asp_size
   }
 
-  kind                = "Linux"
-  reserved            = true
+  kind     = "Linux"
+  reserved = true
 }
 
 #-------------------------------
@@ -64,11 +64,11 @@ resource "azurerm_function_app" "function_app" {
     "WEBSITE_RUN_FROM_PACKAGE" = "",
     "FUNCTIONS_WORKER_RUNTIME" = "dotnet",
   }
-  
-  
+
+
   site_config {
-    linux_fx_version            = "dotnetcore|3.1" # az webapp list-runtimes --linux
-    use_32_bit_worker_process   = false
+    linux_fx_version          = "dotnetcore|3.1" # az webapp list-runtimes --linux
+    use_32_bit_worker_process = false
 
     ip_restriction {
       virtual_network_subnet_id = var.backend_subnet_id
@@ -77,7 +77,7 @@ resource "azurerm_function_app" "function_app" {
 
   lifecycle {
     ignore_changes = [
-    app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
     ]
   }
 }
@@ -93,19 +93,19 @@ resource "azurerm_function_app" "function_app_container" {
   app_service_plan_id        = azurerm_app_service_plan.function_app_asp.id
   https_only                 = true
   os_type                    = var.os_type
-  storage_account_name          = azurerm_storage_account.backend_storage_account.name
+  storage_account_name       = azurerm_storage_account.backend_storage_account.name
   storage_account_access_key = azurerm_storage_account.backend_storage_account.primary_access_key
-  version                       = "~3"
+  version                    = "~3"
 
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "",
     "FUNCTIONS_WORKER_RUNTIME" = "dotnet",
   }
-  
-  
+
+
   site_config {
-    linux_fx_version            = "DOCKER|mcr.microsoft.com/azure-functions/dotnet"
-    use_32_bit_worker_process   = false
+    linux_fx_version          = "DOCKER|mcr.microsoft.com/azure-functions/dotnet"
+    use_32_bit_worker_process = false
 
     ip_restriction {
       virtual_network_subnet_id = var.backend_subnet_id
@@ -113,7 +113,7 @@ resource "azurerm_function_app" "function_app_container" {
   }
   lifecycle {
     ignore_changes = [
-    app_settings["WEBSITE_RUN_FROM_PACKAGE"],
+      app_settings["WEBSITE_RUN_FROM_PACKAGE"],
     ]
   }
 }

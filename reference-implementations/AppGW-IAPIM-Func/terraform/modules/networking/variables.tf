@@ -15,7 +15,7 @@ variable "deployment_environment" {
   validation {
     condition     = contains(["dev", "uat", "prod", "dr"], var.deployment_environment)
     error_message = "Valid values for var: deployment_environment are (dev, uat, prod, dr)."
-  } 
+  }
 }
 
 variable "apim_cs_vnet_name_address_prefix" {

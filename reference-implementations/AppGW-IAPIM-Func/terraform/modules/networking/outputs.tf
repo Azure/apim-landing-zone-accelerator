@@ -3,7 +3,7 @@ output "apim_cs_vnet_name" {
 }
 
 output "apim_cs_vnet_id" {
-    value = azurerm_virtual_network.apim_cs_vnet.id
+  value = azurerm_virtual_network.apim_cs_vnet.id
 }
 
 output "bastion_subnet_name" {
