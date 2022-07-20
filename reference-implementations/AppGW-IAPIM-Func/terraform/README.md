@@ -26,7 +26,7 @@
 
 ### Folder Structure
 
-```json
+```bash
 .
 └──reference-implementations/AppGW-IAPIM-Func/terraform
     ├── modules
