@@ -74,10 +74,9 @@ resource_suffix = ${workloadName}-${environment}-${location}-001
 Examples:
 
 ```bash
-    
-    ResourceGroupName = rg-${module}-${resource_suffix} [e.g. rg-shared-apidemo-dev-eastus-001]
-    APIMName = apim-${resource_suffix} [e.g. apim-apidemo-dev-eastus-001]
-    AppInsightsName = appi-${resource_suffix} [e.g. appi-apidemo-dev-eastus-001]
+ResourceGroupName = rg-${module}-${resource_suffix} [e.g. rg-shared-apidemo-dev-eastus-001]
+APIMName = apim-${resource_suffix} [e.g. apim-apidemo-dev-eastus-001]
+AppInsightsName = appi-${resource_suffix} [e.g. appi-apidemo-dev-eastus-001]
 ```
 
 ## :rocket: Getting started
@@ -101,7 +100,6 @@ Run the following commands or configuration to create an Azure storage account a
 Powershell
 
 ```powershell
-
 $RESOURCE_GROUP_NAME='tfstate'
 $STORAGE_ACCOUNT_NAME="tfstate$(Get-Random)"
 $CONTAINER_NAME='tfstate'
@@ -114,7 +112,6 @@ $storageAccount = New-AzStorageAccount -ResourceGroupName $RESOURCE_GROUP_NAME -
 
 # Create blob container
 New-AzStorageContainer -Name $CONTAINER_NAME -Context $storageAccount.context -Permission blob
-
 ```
 
 Alternatively, the [Terraform Dependencies](../../../.github/workflows/terraform-dependencies.yml) actions workflow can provision the Terraform remote state storage account and container. Customize the deployment by updating the `environment variables` on lines 6-11:
