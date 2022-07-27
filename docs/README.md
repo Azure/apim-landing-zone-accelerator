@@ -110,6 +110,8 @@ a) Generate the following secrets in your GitHub repository settings
 - `AZURE_SUBSCRIPTION` - Azure target subscription id
 - `PAT` -  Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent
 - `VM_PW` - The password to be used as the Administrator for all VMs created by this deployment
+- `FQDN` - Fully qualified domain name that will be used for the application gateway
+- `CERTPW` - Required if *CERT_TYPE* is *custom*. The certificate should be available as appgw.pfx in the [certs](/reference-implementations/AppGW-IAPIM-Func/bicep/gateway/certs/) folder  
 
 b) In order to run the deployment successfully we will need to modify the values in **config.yml** file located [here](/reference-implementations/AppGW-IAPIM-Func/bicep/config.yml)
 
