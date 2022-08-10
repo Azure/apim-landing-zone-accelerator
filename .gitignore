@@ -5,6 +5,8 @@ deployment/bicep/localparam*.json
 deployment/bicep/localmain.bicep
 deployment/bicep/localtestscript.ps1
 
+.terraform.lock.hcl
+
 # Azure Functions localsettings file
 local.settings.json
 

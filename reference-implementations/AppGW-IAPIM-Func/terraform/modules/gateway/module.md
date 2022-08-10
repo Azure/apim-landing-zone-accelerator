@@ -45,5 +45,9 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_id"></a> [id](#output\_id) | Resource ID for the provisioned Application Gateway. |
+| <a name="output_pip_address"></a> [pip\_address](#output\_pip\_address) | Resource ID for the Application Gateway associated Public IP. |
+| <a name="output_pip_id"></a> [pip\_id](#output\_pip\_id) | Resource ID for the Application Gateway associated Public IP. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
