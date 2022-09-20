@@ -3,11 +3,12 @@
 - [Import](https://docs.microsoft.com/en-us/azure/devops/repos/git/import-git-repository?view=azure-devops) this repo to an Azure DevOps Repo
 - Create two [ARM service connections](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops) each scoped to the apim resource group and the fucntion app resource group
 - Make sure that the *Default* agent pool has _Grant access to all pipelines_ selected
+- Create an [Artifacts Feed](https://docs.microsoft.com/en-us/azure/devops/artifacts/get-started-nuget?view=azure-devops&tabs=windows#create-a-feed). For ex, name as todo-apis
 
 ## Deploy the backend
 
 - Create a pipeline using the deploy-function.yml file
-- Add [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#access-variables-through-the-environment) to the pipeline 
+- Add [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#access-variables-through-the-environment) to the pipeline
   - armServiceConnection - the service connection scoped to the backend resource group
   - functionAppName - name of the funciton app in the backend resource group
   - poolName
@@ -22,9 +23,11 @@ _note: pool name is Default if using the construction set scripts_
 - Create a pipeline using the apim-generator.yml file. This generates the ARM templates from open api specification
 - Add variables for
   - poolName
+  - artifacts-feed
 - Run the pipeline
 
 _note:pool name is Default if using the construction set scripts_
+_note:artifacts-feed is the name created in the first step_
 
 ### Collector pipeline
 
@@ -33,7 +36,12 @@ _note:pool name is Default if using the construction set scripts_
   - poolName
   - apimResourceGroup
   - apimName
-  - todoServiceUrl - url of the function app
+  - artifacts-feed
+  - todoServiceUrl - url of the function app (ex. https://{funcappname}.azurewebsites.net/api)
   - armServiceConnection - the service connection scoped to the apim resource group
-  - teamOneBuildPipelineId - Id of the generator pipeline which can be seen in the url
+
 - Run the pipeline
+
+### Test
+
+Access the api at https://{application gateway hostname}/todo/todo

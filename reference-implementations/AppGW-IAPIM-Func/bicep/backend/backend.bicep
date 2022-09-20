@@ -1,34 +1,4 @@
 //
-// APIM Construction Set
-// Backend Resource Group
-//
-// Contains:
-// - Storage Account for Azure Function Apps
-// - Application Service Plan for Azure Function Apps
-// - Azure Function App with Code Stack (linux. dotnetcore)
-// - Azure Function App with Container (linux, container)
-//
-//  mbecker@microsoft.com, 2021
-//
-// Deploy as
-//
-// # Script start
-//
-// $RESOURCE_GROUP = "rgAPIMCSBackend"
-// $LOCATION = "westeurope"
-// $BICEP_FILE="backend.bicep"
-//
-// # delete a deployment
-//
-// az deployment group  delete --name testbackenddeployment -g $RESOURCE_GROUP
-//
-// # deploy the bicep file directly
-//
-// az deployment group create --name testbackenddeployment --template-file $BICEP_FILE --parameters parameters.json -g $RESOURCE_GROUP -o json
-//
-// # Script end
-
-//
 // Parameters
 //
 
@@ -45,11 +15,18 @@ param workloadName string
 ])
 param environment string
 
+@description('Backend subnet id')
+param backendSubnetId string
+param privateEndpointSubnetid string
+param vnetName string
+param vnetRG string
+
+param location string
+
 //
 // Variables
 //
 var owner = 'APIM Const Set'
-var location = resourceGroup().location
 
 //
 // Azure Storage
@@ -66,11 +43,17 @@ var storageAccounts_skuName  = 'Standard_LRS'
 // var storageAccounts_skuTier  = 'Standard'
 // - kind
 var storageAccounts_kind  = 'StorageV2'
+var functionContentShareName = 'func-contents'
+
 //
 // Azure Storage connectivity and security
 //
 // - min TLS version
 var storageAccounts_minTLSVersion = 'TLS1_2'
+var privateEndpoint_storageaccount_queue_Name = 'pep-sa-queue-${workloadName}-${environment}-${location}'
+var privateEndpoint_storageaccount_blob_Name = 'pep-sa-blob-${workloadName}-${environment}-${location}'
+var privateEndpoint_storageaccount_file_Name = 'pep-sa-file-${workloadName}-${environment}-${location}'
+var privateEndpoint_storageaccount_table_Name = 'pep-sa-table-${workloadName}-${environment}-${location}'
 
 //
 // Azure Application Service Plan
@@ -91,32 +74,14 @@ var serverfarms_appsvcplanAPIMCSBackend_skuFamily  = 'Pv2' // dev - 'B'
 // - SKU capacity
 var serverfarms_appsvcplanAPIMCSBackend_skuCapacity  = 1
 
-//
-// Azure Functions
-//
-// Azure Function App (Code Stack)
-// - name: must be globally unique
-var sites_funcappAPIMCSBackendMicroServiceA_name = 'func-code-be-${workloadName}-${environment}-${location}'
-// - location
-var sites_funcappAPIMCSBackendMicroServiceA_location  = location
-// - site URL
-var sites_funcappAPIMCSBackendMicroServiceA_siteHostname   = 'func-code-be-${workloadName}-${environment}-${location}.azurewebsites.net'
-// - repository URL
-var sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname   = 'func-code-be-${workloadName}-${environment}-${location}.scm.azurewebsites.net'
-// - site name
-var sites_funcappAPIMCSBackendMicroServiceA_siteName   = 'funccodebe${workloadName}${environment}${location}'
 
-// Azure Function App name (Container)
-// - name: must be globally unique
-var sites_funcappAPIMCSBackendMicroServiceB_name  = 'func-cont-be-${workloadName}-${environment}-${location}'
-// - location
-var sites_funcappAPIMCSBackendMicroServiceB_location  = location
-// - site URL
-var sites_funcappAPIMCSBackendMicroServiceB_siteHostname  = 'func-cont-be-${workloadName}-${environment}-${location}.azurewebsites.net'
-// - repository URL
-var sites_funcappAPIMCSBackendMicroServiceB_repositoryHostname  = 'func-cont-be-${workloadName}-${environment}-${location}.scm.azurewebsites.net'
-// - site name
-var sites_funcappAPIMCSBackendMicroServiceB_siteName  = 'funccontbe${workloadName}${environment}${location}'
+var sites_funcappAPIMCSBackendMicroServiceA_name = 'func-code-be-${workloadName}-${environment}-${location}'
+var sites_funcappAPIMCSBackendMicroServiceA_location  = location
+var sites_funcappAPIMCSBackendMicroServiceA_siteHostname   = 'func-code-be-${workloadName}-${environment}-${location}.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname   = 'func-code-be-${workloadName}-${environment}-${location}.scm.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceA_siteName   = 'funccodebe${workloadName}${environment}${location}'
+var privateEndpoint_funcappAPIMCSBackendMicroServiceA_name   = 'pep-func-code-be-${workloadName}-${environment}-${location}'
+
 
 //
 // Definitions
@@ -124,18 +89,16 @@ var sites_funcappAPIMCSBackendMicroServiceB_siteName  = 'funccontbe${workloadNam
 // Azure Storage Account
 resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageAccounts_saapimcsbackend_name
-  location: storageAccounts_location // 'westeurope'
+  location: storageAccounts_location
   tags: {
     Owner: owner
-    // CostCenter: costCenter
   }
   sku: {
-    name: storageAccounts_skuName // 'Standard_LRS'
-    // tier: storageAccounts_skuTier // 'Standard'
+    name: storageAccounts_skuName
   }
-  kind: storageAccounts_kind // 'StorageV2'
+  kind: storageAccounts_kind
   properties: {
-    minimumTlsVersion: storageAccounts_minTLSVersion // 'TLS1_2'
+    minimumTlsVersion: storageAccounts_minTLSVersion
     allowBlobPublicAccess: true
     allowSharedKeyAccess: true
     networkAcls: {
@@ -162,107 +125,95 @@ resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storag
   }
 }
 
+
+module queueStoragePrivateEndpoint './networking.bicep' = {
+  name: privateEndpoint_storageaccount_queue_Name
+  params: {
+    location: location
+    privateEndpointName: privateEndpoint_storageaccount_queue_Name
+    privateDnsZoneName: 'queueDnsZone'
+    storageAcountName: storageAccounts_saapimcsbackend_name
+    groupId: 'queue'
+    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    vnetName: vnetName
+    vnetRG: vnetRG
+    subnetId: privateEndpointSubnetid
+  }
+}
+
+module blobStoragePrivateEndpoint './networking.bicep' = {
+  name: privateEndpoint_storageaccount_blob_Name
+  params: {
+    location: location
+    privateEndpointName: privateEndpoint_storageaccount_blob_Name
+    privateDnsZoneName: 'blobDnsZone'
+    storageAcountName: storageAccounts_saapimcsbackend_name
+    groupId: 'blob'
+    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    vnetName: vnetName
+    vnetRG: vnetRG
+    subnetId: privateEndpointSubnetid
+  }
+}
+
+module tableStoragePrivateEndpoint './networking.bicep' = {
+  name: privateEndpoint_storageaccount_table_Name
+  params: {
+    location: location
+    privateEndpointName: privateEndpoint_storageaccount_table_Name
+    privateDnsZoneName: 'tableDnsZone'
+    storageAcountName: storageAccounts_saapimcsbackend_name
+    groupId: 'table'
+    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    vnetName: vnetName
+    vnetRG: vnetRG
+    subnetId: privateEndpointSubnetid
+  }
+}
+
+module fileStoragePrivateEndpoint './networking.bicep' = {
+  name: privateEndpoint_storageaccount_file_Name
+  params: {
+    location: location
+    privateEndpointName: privateEndpoint_storageaccount_file_Name
+    privateDnsZoneName: 'fileDnsZone'
+    storageAcountName: storageAccounts_saapimcsbackend_name
+    groupId: 'file'
+    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    vnetName: vnetName
+    vnetRG: vnetRG
+    subnetId: privateEndpointSubnetid
+  }
+}
+
+resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2021-04-01' = {
+  name: '${storageAccounts_saapimcsbackend_name_resource.name}/default/${functionContentShareName}'
+}
+
 // Azure Application Service Plan
 resource serverfarms_appsvcplanAPIMCSBackend_name_resource 'Microsoft.Web/serverfarms@2018-02-01' = {
   name: serverfarms_appsvcplanAPIMCSBackend_name
-  location: serverfarms_appsvcplanAPIMCSBackend_location // 'West Europe'
+  location: serverfarms_appsvcplanAPIMCSBackend_location
   tags: {
     Owner: owner
-    // CostCenter: costCenter
   }
   sku: {
-    name:  serverfarms_appsvcplanAPIMCSBackend_skuName // 'B1'
-    tier: serverfarms_appsvcplanAPIMCSBackend_skuTier // 'Basic'
-    size: serverfarms_appsvcplanAPIMCSBackend_skuSize // 'B1'
-    family: serverfarms_appsvcplanAPIMCSBackend_skuFamily // 'B'
-    capacity: serverfarms_appsvcplanAPIMCSBackend_skuCapacity // 1
+    name:  serverfarms_appsvcplanAPIMCSBackend_skuName
+    tier: serverfarms_appsvcplanAPIMCSBackend_skuTier
+    size: serverfarms_appsvcplanAPIMCSBackend_skuSize
+    family: serverfarms_appsvcplanAPIMCSBackend_skuFamily
+    capacity: serverfarms_appsvcplanAPIMCSBackend_skuCapacity
   }
   kind: 'linux'
   properties: {
     perSiteScaling: false
     maximumElasticWorkerCount: 1
     isSpot: false
-    // freeOfferExpirationTime: '7/18/2021 9:36:43 PM'
     reserved: true
     isXenon: false
     hyperV: false
     targetWorkerCount: 0
     targetWorkerSizeId: 0
-  }
-}
-
-// Azure Blob Service for Azure Storage Account
-resource storageAccounts_saapimcsbackend_name_default 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
-  parent: storageAccounts_saapimcsbackend_name_resource
-  name: 'default'
-  // mb: this part generates an error on deployment ("sku is read-only")
-  //sku: {
-    //name: 'Standard_LRS'
-    //tier: 'Standard'
-  //}
-  properties: {
-    changeFeed: {
-      enabled: false
-    }
-    restorePolicy: {
-      enabled: false
-    }
-    containerDeleteRetentionPolicy: {
-      enabled: false
-    }
-    cors: {
-      corsRules: []
-    }
-    deleteRetentionPolicy: {
-      enabled: false
-    }
-    isVersioningEnabled: false
-  }
-}
-
-// Azure File Service for Azure Storage Account
-resource Microsoft_Storage_storageAccounts_fileServices_storageAccounts_saapimcsbackend_name_default 'Microsoft.Storage/storageAccounts/fileServices@2021-04-01' = {
-  parent: storageAccounts_saapimcsbackend_name_resource
-  name: 'default'
-    // mb: this part generates an error on deployment ("sku is read-only")
-  //sku: {
-  //    name: 'Standard_LRS'
-  //    tier: 'Standard'
-  //  }
-  properties: {
-  // mb: this part generates an error on deployment ("XML not valid")
-  //    protocolSettings: {
-  //      smb: {}
-  //    }
-    cors: {
-      corsRules: []
-    }
-    shareDeleteRetentionPolicy: {
-      enabled: false
-      days: 0
-    }
-  }
-}
-
-// Azure Queue Service for Azure Storage Account
-resource Microsoft_Storage_storageAccounts_queueServices_storageAccounts_saapimcsbackend_name_default 'Microsoft.Storage/storageAccounts/queueServices@2021-04-01' = {
-  parent: storageAccounts_saapimcsbackend_name_resource
-  name: 'default'
-  properties: {
-    cors: {
-      corsRules: []
-    }
-  }
-}
-
-// Azure Table Service for Azure Storage Account
-resource Microsoft_Storage_storageAccounts_tableServices_storageAccounts_saapimcsbackend_name_default 'Microsoft.Storage/storageAccounts/tableServices@2021-04-01' = {
-  parent: storageAccounts_saapimcsbackend_name_resource
-  name: 'default'
-  properties: {
-    cors: {
-      corsRules: []
-    }
   }
 }
 
@@ -272,19 +223,18 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
   location: sites_funcappAPIMCSBackendMicroServiceA_location // 'West Europe'
   tags: {
     Owner: owner
-    // CostCenter: costCenter
   }
   kind: 'functionapp,linux'
   properties: {
     enabled: true
     hostNameSslStates: [
       {
-        name: sites_funcappAPIMCSBackendMicroServiceA_siteHostname // 'funcappapimcsbackendmicroservicea.azurewebsites.net'
+        name: sites_funcappAPIMCSBackendMicroServiceA_siteHostname
         sslState: 'Disabled'
         hostType: 'Standard'
       }
       {
-        name: sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname // 'funcappapimcsbackendmicroservicea.scm.azurewebsites.net'
+        name: sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname
         sslState: 'Disabled'
         hostType: 'Repository'
       }
@@ -298,6 +248,36 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
       linuxFxVersion: 'dotnet|3.1'
       alwaysOn: true
       http20Enabled: false
+      appSettings: [
+        {
+          name: 'AzureWebJobsStorage'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccounts_saapimcsbackend_name};AccountKey=${storageAccounts_saapimcsbackend_name_resource.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccounts_saapimcsbackend_name};AccountKey=${storageAccounts_saapimcsbackend_name_resource.listKeys().keys[0].value}'
+        }
+        {
+          name: 'FUNCTIONS_EXTENSION_VERSION'
+          value: '~3'
+        }
+        {
+          name: 'FUNCTIONS_WORKER_RUNTIME'
+          value: 'dotnet'
+        }
+        {
+          name: 'WEBSITE_CONTENTOVERVNET'
+          value: '1'
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: functionContentShareName
+        }
+        {
+          name: 'WEBSITE_VNET_ROUTE_ALL'
+          value: '1'
+        }
+      ]      
     }
     scmSiteAlsoStopped: false
     clientAffinityEnabled: false
@@ -308,229 +288,94 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
     httpsOnly: true
     redundancyMode: 'None'
   }
+  dependsOn: [
+    queueStoragePrivateEndpoint
+    blobStoragePrivateEndpoint
+    tableStoragePrivateEndpoint
+    fileStoragePrivateEndpoint
+  ]
 }
-
-// Azure Function App (Container)
-resource sites_funcappAPIMCSBackendMicroServiceB_name_resource 'Microsoft.Web/sites@2018-11-01' = {
-  name: sites_funcappAPIMCSBackendMicroServiceB_name
-  location: sites_funcappAPIMCSBackendMicroServiceB_location // 'West Europe'
-  tags: {
-    Owner: owner
-    // CostCenter: costCenter
-  }
-  kind: 'functionapp,linux,container'
-  properties: {
-    enabled: true
-    hostNameSslStates: [
-      {
-        name: sites_funcappAPIMCSBackendMicroServiceB_siteHostname // 'funcappapimcsbackendmicroserviceb.azurewebsites.net'
-        sslState: 'Disabled'
-        hostType: 'Standard'
-      }
-      {
-        name: sites_funcappAPIMCSBackendMicroServiceB_repositoryHostname // 'funcappapimcsbackendmicroserviceb.scm.azurewebsites.net'
-        sslState: 'Disabled'
-        hostType: 'Repository'
-      }
-    ]
-    serverFarmId: serverfarms_appsvcplanAPIMCSBackend_name_resource.id
-    reserved: true
-    isXenon: false
-    hyperV: false
-    siteConfig: {
-      numberOfWorkers: 1
-      linuxFxVersion: 'DOCKER|mcr.microsoft.com/azure-functions/dotnet:3.0-appservice-quickstart'
-      alwaysOn: true
-      http20Enabled: false
-    }
-    scmSiteAlsoStopped: false
-    clientAffinityEnabled: false
-    clientCertEnabled: false
-    hostNamesDisabled: false
-    containerSize: 1536
-    dailyMemoryTimeQuota: 0
-    httpsOnly: true
-    redundancyMode: 'None'
-  }
-}
-
-// Azure Web App for Azure Function App (Linux, .NET Core 3.1)
-resource sites_funcappAPIMCSBackendMicroServiceA_name_web 'Microsoft.Web/sites/config@2018-11-01' = {
-  parent: sites_funcappAPIMCSBackendMicroServiceA_name_resource
-  name: 'web'
-  // location: 'West Europe'
-  properties: {
-    numberOfWorkers: 1
-    defaultDocuments: [
-      'Default.htm'
-      'Default.html'
-      'Default.asp'
-      'index.htm'
-      'index.html'
-      'iisstart.htm'
-      'default.aspx'
-      'index.php'
-    ]
-    // netFrameworkVersion: 'v4.0'
-    linuxFxVersion: 'dotnet|3.1'
-    requestTracingEnabled: false
-    remoteDebuggingEnabled: false
-    httpLoggingEnabled: false
-    logsDirectorySizeLimit: 35
-    detailedErrorLoggingEnabled: false
-    publishingUsername: '$funcappAPIMCSBackendMicroServiceA'
-    azureStorageAccounts: {}
-    scmType: 'None'
-    use32BitWorkerProcess: false
-    webSocketsEnabled: false
-    alwaysOn: true
-    managedPipelineMode: 'Integrated'
-    virtualApplications: [
-      {
-        virtualPath: '/'
-        physicalPath: 'site\\wwwroot'
-        preloadEnabled: true
-      }
-    ]
-    loadBalancing: 'LeastRequests'
-    experiments: {
-      rampUpRules: []
-    }
-    autoHealEnabled: false
-    localMySqlEnabled: false
-    ipSecurityRestrictions: [
-      {
-        ipAddress: 'Any'
-        action: 'Allow'
-        priority: 1
-        name: 'Allow all'
-        description: 'Allow all access'
-      }
-    ]
-    scmIpSecurityRestrictions: [
-      {
-        ipAddress: 'Any'
-        action: 'Allow'
-        priority: 1
-        name: 'Allow all'
-        description: 'Allow all access'
-      }
-    ]
-    scmIpSecurityRestrictionsUseMain: false
-    http20Enabled: false
-    minTlsVersion: '1.2'
-    ftpsState: 'AllAllowed'
-    reservedInstanceCount: 0
-  }
-}
-
-// Azure Web App for Azure Function App (Container)
-resource sites_funcappAPIMCSBackendMicroServiceB_name_web 'Microsoft.Web/sites/config@2018-11-01' = {
-  parent: sites_funcappAPIMCSBackendMicroServiceB_name_resource
-  name: 'web'
-  //location: 'West Europe'
-  properties: {
-    numberOfWorkers: 1
-    defaultDocuments: [
-      'Default.htm'
-      'Default.html'
-      'Default.asp'
-      'index.htm'
-      'index.html'
-      'iisstart.htm'
-      'default.aspx'
-      'index.php'
-    ]
-    // netFrameworkVersion: 'v4.0'
-    linuxFxVersion: 'DOCKER|mcr.microsoft.com/azure-functions/dotnet:3.0-appservice-quickstart'
-    requestTracingEnabled: false
-    remoteDebuggingEnabled: false
-    httpLoggingEnabled: false
-    logsDirectorySizeLimit: 35
-    detailedErrorLoggingEnabled: false
-    publishingUsername: '$funcappAPIMCSBackendMicroServiceB'
-    azureStorageAccounts: {}
-    scmType: 'None'
-    use32BitWorkerProcess: false
-    webSocketsEnabled: false
-    alwaysOn: true
-    managedPipelineMode: 'Integrated'
-    virtualApplications: [
-      {
-        virtualPath: '/'
-        physicalPath: 'site\\wwwroot'
-        preloadEnabled: true
-      }
-    ]
-    loadBalancing: 'LeastRequests'
-    experiments: {
-      rampUpRules: []
-    }
-    autoHealEnabled: false
-    localMySqlEnabled: false
-    ipSecurityRestrictions: [
-      {
-        ipAddress: 'Any'
-        action: 'Allow'
-        priority: 1
-        name: 'Allow all'
-        description: 'Allow all access'
-      }
-    ]
-    scmIpSecurityRestrictions: [
-      {
-        ipAddress: 'Any'
-        action: 'Allow'
-        priority: 1
-        name: 'Allow all'
-        description: 'Allow all access'
-      }
-    ]
-    scmIpSecurityRestrictionsUseMain: false
-    http20Enabled: false
-    minTlsVersion: '1.2'
-    ftpsState: 'AllAllowed'
-    reservedInstanceCount: 0
-  }
-}
-
-/*
-// Azure Function with HttpTrigger1 must be deployed prior to this definition
-resource sites_funcappAPIMCSBackendMicroServiceA_name_HttpTrigger1 'Microsoft.Web/sites/functions@2018-11-01' = {
-  parent: sites_funcappAPIMCSBackendMicroServiceA_name_resource
-  name: 'HttpTrigger1'
-  // location: 'West Europe'
-  properties: {
-    script_root_path_href: 'https://funcappapimcsbackendmicroservicea.azurewebsites.net/admin/vfs/home/site/wwwroot/HttpTrigger1/'
-    script_href: 'https://funcappapimcsbackendmicroservicea.azurewebsites.net/admin/vfs/home/site/wwwroot/HttpTrigger1/run.csx'
-    config_href: 'https://funcappapimcsbackendmicroservicea.azurewebsites.net/admin/vfs/home/site/wwwroot/HttpTrigger1/function.json'
-    href: 'https://funcappapimcsbackendmicroservicea.azurewebsites.net/admin/functions/HttpTrigger1'
-    config: {}
-    test_data: '{"method":"post","queryStringParams":[],"headers":[],"body":{"name":"Azure"}}'
-  }
-}
-*/
 
 // Hostname binding for Azure Function App (Linux, .NET Core 3.1)
 resource sites_funcappAPIMCSBackendMicroServiceA_name_sites_funcappAPIMCSBackendMicroServiceA_name_azurewebsites_net 'Microsoft.Web/sites/hostNameBindings@2018-11-01' = {
   parent: sites_funcappAPIMCSBackendMicroServiceA_name_resource
   name: '${sites_funcappAPIMCSBackendMicroServiceA_name}.azurewebsites.net'
-  // mb: this part generates an error on deployment ("location is read-only")
-  // location: 'West Europe'
   properties: {
-    siteName: sites_funcappAPIMCSBackendMicroServiceA_siteName // 'funcappAPIMCSBackendMicroServiceA'
+    siteName: sites_funcappAPIMCSBackendMicroServiceA_siteName
     hostNameType: 'Verified'
   }
 }
 
-// Hostname binding for Azure Function App (Container)
-resource sites_funcappAPIMCSBackendMicroServiceB_name_sites_funcappAPIMCSBackendMicroServiceB_name_azurewebsites_net 'Microsoft.Web/sites/hostNameBindings@2018-11-01' = {
-  parent: sites_funcappAPIMCSBackendMicroServiceB_name_resource
-  name: '${sites_funcappAPIMCSBackendMicroServiceB_name}.azurewebsites.net'
-  // mb: this part generates an error on deployment ("location is read-only")
-  // location: 'West Europe'
+resource planNetworkConfig 'Microsoft.Web/sites/networkConfig@2021-01-01' = {
+  parent: sites_funcappAPIMCSBackendMicroServiceA_name_resource
+  name: 'virtualNetwork'
   properties: {
-    siteName: sites_funcappAPIMCSBackendMicroServiceB_siteName // 'funcappAPIMCSBackendMicroServiceB'
-    hostNameType: 'Verified'
+    subnetResourceId: backendSubnetId
+    swiftSupported: true
   }
+}
+
+var privateDNSZoneName = 'privatelink.azurewebsites.net'
+
+resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
+  name: vnetName
+  scope: resourceGroup(vnetRG)
+}
+
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-03-01' = {
+  name: privateEndpoint_funcappAPIMCSBackendMicroServiceA_name
+  location: location
+  properties: {
+    subnet: {
+      id: privateEndpointSubnetid
+    }
+    privateLinkServiceConnections: [
+      {
+        name: privateEndpoint_funcappAPIMCSBackendMicroServiceA_name
+        properties: {
+          privateLinkServiceId: sites_funcappAPIMCSBackendMicroServiceA_name_resource.id
+          groupIds: [
+            'sites'
+          ]
+        }
+      }
+    ]
+  }
+}
+
+resource privateDnsZones 'Microsoft.Network/privateDnsZones@2018-09-01' = {
+  name: privateDNSZoneName
+  location: 'global'
+}
+
+resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2018-09-01' = {
+  name: '${privateDNSZoneName}/${uniqueString(vnet.id)}'
+  location: 'global'
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
+    }
+  }
+  dependsOn: [
+    privateDnsZones
+    privateEndpoint
+  ]
+}
+
+resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-03-01' = {
+  name: '${privateEndpoint_funcappAPIMCSBackendMicroServiceA_name}/default'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: '${sites_funcappAPIMCSBackendMicroServiceA_siteHostname}-azurewebsites-net'
+        properties: {
+          privateDnsZoneId: privateDnsZones.id
+        }
+      }
+    ]
+  }
+  dependsOn: [
+    privateDnsZoneLink
+  ]
 }
