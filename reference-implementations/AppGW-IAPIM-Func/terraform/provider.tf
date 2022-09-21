@@ -1,8 +1,9 @@
 terraform {
 
   backend "azurerm" {
-    storage_account_name = "apimlztfbackend "
-    container_name       = "terraform-state"
+    resource_group_name = "tfstate"
+    storage_account_name = "tfstate1259034575"
+    container_name       = "tfstate"
     key                  = "terraform.tfstate"
   }
 
@@ -14,7 +15,7 @@ terraform {
   }
 }
 
-# Configure the Microosft Azure provider 
+# Configure the Microosft Azure provider
 provider "azurerm" {
   features {}
 

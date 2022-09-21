@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "shared_rg" {
 }
 
 #-------------------------------
-# Creation of log analytics workspace instance 
+# Creation of log analytics workspace instance
 #-------------------------------
 
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
@@ -19,7 +19,7 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 }
 
 #-------------------------------
-# Creation of an application inisight instance 
+# Creation of an application inisight instance
 #-------------------------------
 
 resource "azurerm_application_insights" "shared_apim_insight" {
@@ -58,6 +58,13 @@ resource "azurerm_key_vault" "key_vault" {
 
     storage_permissions = [
       "Get",
+    ]
+    certificate_permissions = [
+      "import",
+      "get",
+      "list",
+      "update",
+      "create"
     ]
   }
 }
