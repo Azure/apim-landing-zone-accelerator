@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  location: 'westus2'
+  location: 'eastus'
   resource_prefix: "backend-apim"
   environment: "dev"
   suffix: "001"
@@ -27,10 +27,10 @@ jobs:
           if [ $(az group exists --name $rg_name) = false ]; then
             az group create \
               --name $rg_name \
-              --location ${{ env.location }} 
+              --location ${{ env.location }}
           fi
           echo ::set-output name=rg_name::$rg_name
-      
+
       - name: Create Storage Account
         run: |
           # Format name to 24 char limit, lowercase, and remove dashes

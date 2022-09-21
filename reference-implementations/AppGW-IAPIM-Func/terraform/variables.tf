@@ -1,3 +1,24 @@
+variable "subscription_id" {
+  type = string
+  description = "subscription to deploy solution"
+}
+
+variable "tenant_id" {
+  type = string
+  description = "tenant id to deploy solution"
+  }
+
+variable "client_id" {
+  type = string
+  description = "Client ID of Service Principal"
+}
+
+variable "client_secret" {
+  type = string
+  description = "Client Secret of Service Principal"
+  sensitive = true
+}
+
 variable "workload_name" {
   type        = string
   description = "A short name for the workload being deployed"
@@ -73,15 +94,15 @@ variable "certificate_secret_name" {
 variable "app_gateway_certificate_type" {
   type        = string
   description = "The certificate type used for the app gateway. Either custom or selfsigned"
-  default     = "custom"
-
+  default     = "selfsigned"
+# To do change this to key vault or imported not self documenting
   validation {
     condition     = contains(["custom", "selfsigned"], var.app_gateway_certificate_type)
     error_message = "Valid values for var: app_gateway_certificate_type are (custom, selfsigned)."
   }
 }
 
-# Backend resource variables 
+# Backend resource variables
 variable "os_type" {
   type        = string
   description = "A string indicating the Operating System type for this function app"
@@ -90,22 +111,28 @@ variable "os_type" {
 
 variable "vm_username" {
   type        = string
-  description = "Agnet VM username"
+  description = "Agent VM username"
 }
 
 variable "vm_password" {
   description = "Agent VM Password"
   type        = string
+  sensitive = true
 }
 
 variable "cicd_agent_type" {
   type        = string
   description = "The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify 'none' if no agent needed')"
+  validation {
+    condition     = contains(["azuredevops", "github", "none"], var.cicd_agent_type)
+    error_message = "Valid values for var: deployment_environment are (azuredevops, github, none)."
+  }
 }
 
 variable "personal_access_token" {
   type        = string
   description = "Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent"
+  sensitive = true
 }
 
 variable "account_name" {
@@ -116,4 +143,5 @@ variable "account_name" {
 variable "pool_name" {
   type        = string
   description = "The name Azure DevOps or GitHub pool for this build agent to join. Use 'Default' if you don't have a separate pool"
+  default     = "default"
 }
