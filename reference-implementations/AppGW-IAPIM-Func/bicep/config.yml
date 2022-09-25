@@ -1,5 +1,5 @@
 AZURE_LOCATION: 'southcentralus'
-RESOURCE_NAME_PREFIX: 'apim-contoso'
+RESOURCE_NAME_PREFIX: 'apimdemo'
 ENVIRONMENT_TAG: 'dev'
 DEPLOYMENT_NAME: 'ase-demo-deployment'
 VM_USERNAME: 'arbaneradmin'
