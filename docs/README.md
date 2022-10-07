@@ -162,7 +162,7 @@ Alternatively, you can also trigger the workflow by going to **Actions** tab and
 
 ## Deploy the backend
 
-- Create a pipeline using the [deploy-function.yml](/src/pipelines/deploy-fucntion.yml) file
+- Create a pipeline using the [deploy-function.yml](/src/pipelines/deploy-function.yml) file
 - Add [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#access-variables-through-the-environment) to the pipeline 
   - armServiceConnection - the service connection scoped to the backend resource group
   - functionAppName - name of the function app in the backend resource group
@@ -175,7 +175,7 @@ _note: pool name is Default if using the construction set scripts_
 
 ### Generator pipeline
 
-- Create a pipeline using the apim-generator.yml file. This generates the ARM templates from open api specification
+- Create a pipeline using the [apim-generator.yml](/src/pipelines/apim-generator.yml) file. This generates the ARM templates from open api specification
 - Add variables for
   - poolName
 - Run the pipeline
@@ -184,7 +184,7 @@ _note:pool name is Default if using the construction set scripts_
 
 ### Collector pipeline
 
-- Create a pipeline using the apim-collector.yml file. This collects the artifacts from the generator and deploys.
+- Create a pipeline using the [apim-collector.yml](/src/pipelines/apim-collector.yml) file. This collects the artifacts from the generator and deploys.
 - Add variables fro
   - poolName
   - apimResourceGroup
