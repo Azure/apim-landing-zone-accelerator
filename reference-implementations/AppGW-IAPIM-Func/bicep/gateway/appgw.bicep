@@ -170,7 +170,8 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
           pickHostNameFromBackendAddress: false
           requestTimeout: 20
           probe: {
-            id: '${resourceId('Microsoft.Network/applicationGateways', appGatewayName)}/probes/APIM'
+            #id: '${resourceId('Microsoft.Network/applicationGateways', appGatewayName)}/probes/APIM'
+            id: 'subscriptionResourceId('Microsoft.Network/applicationGateways', appGatewayName/probes/APIM')
           }
         }
       }
