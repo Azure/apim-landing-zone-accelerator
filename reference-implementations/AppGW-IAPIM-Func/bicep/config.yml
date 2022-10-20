@@ -1,5 +1,5 @@
 AZURE_LOCATION: 'westus2'
-RESOURCE_NAME_PREFIX: 'apimdemo'
+RESOURCE_NAME_PREFIX: 'spukdmo'
 ENVIRONMENT_TAG: 'dev'
 DEPLOYMENT_NAME: 'ase-demo-deploymentsp'
 VM_USERNAME: 'agent'
