@@ -13,6 +13,6 @@ variables:
 - name: artifactName            # Name of the pipeline artifact to be created and deployed
   value: 'apim-eslz-bicep-files'
 - name: workloadName            # Label for naming the workload in the portal as part of deployment
-  value: 'Api-Management-ESLZ'
+  value: 'APIMESLZ'
 - name: eslzEnvironmentType     # Specifier for target environment type. Options ['dev', 'uat', 'prod', 'dr']
   value: 'dev'
