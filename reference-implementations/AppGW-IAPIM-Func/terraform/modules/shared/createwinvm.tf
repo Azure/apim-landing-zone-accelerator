@@ -3,7 +3,7 @@
 #-------------------------------
 
 resource "azurerm_network_interface" "vm_nic" {
-  name                = "vm-nic-${var.resource_suffix}"
+  name                = "jumpbox-${var.environment}-nic"
   location            = azurerm_resource_group.shared_rg.location
   resource_group_name = azurerm_resource_group.shared_rg.name
 
@@ -15,7 +15,7 @@ resource "azurerm_network_interface" "vm_nic" {
 }
 
 resource "azurerm_windows_virtual_machine" "agent_vm" {
-  name                = "${var.cicd_agent_type}-${var.environment}"
+  name                = "jumpbox-${var.environment}"
   resource_group_name = azurerm_resource_group.shared_rg.name
   location            = azurerm_resource_group.shared_rg.location
   size                = "Standard_F2" 
