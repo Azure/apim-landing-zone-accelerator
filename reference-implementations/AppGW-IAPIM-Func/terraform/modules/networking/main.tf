@@ -87,7 +87,7 @@ resource "azurerm_virtual_network" "apim_cs_vnet" {
 
 //Bastion NSG
 resource "azurerm_network_security_group" "bastion_nsg" {
-  name                = local.bastion_subnet_name
+  name                = local.bastion_snnsg
   location            = azurerm_resource_group.networking_resourece_group.location
   resource_group_name = azurerm_resource_group.networking_resourece_group.name
 
@@ -137,18 +137,6 @@ resource "azurerm_network_security_group" "bastion_nsg" {
     source_port_range          = "*"
     source_address_prefix      = "VirtualNetwork"
     destination_address_prefix = "VirtualNetwork"
-  }
-
-  security_rule {
-    name                       = "DenyAllInbound"
-    priority                   = 4096
-    protocol                   = "*"
-    destination_port_range     = "*"
-    access                     = "Deny"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
   }
 
   security_rule {
@@ -202,59 +190,23 @@ resource "azurerm_network_security_group" "bastion_nsg" {
 
 //JumpBox NSG
 resource "azurerm_network_security_group" "jumpbox_nsg" {
-  name                = local.jumpbox_subnet_name
+  name                = local.jumpbox_snnsg
   location            = azurerm_resource_group.networking_resourece_group.location
   resource_group_name = azurerm_resource_group.networking_resourece_group.name
-
-  security_rule {
-    name                       = "AllowRdpInbound"
-    priority                   = 1000
-    protocol                   = "Tcp"
-    destination_port_range     = "3389"
-    access                     = "Allow"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 }
 
 //DevOps NSG
 resource "azurerm_network_security_group" "devops_nsg" {
-  name                = local.devops_subnet_name
+  name                = local.devops_snnsg
   location            = azurerm_resource_group.networking_resourece_group.location
   resource_group_name = azurerm_resource_group.networking_resourece_group.name
-
-  security_rule {
-    name                       = "AllowRdpInbound"
-    priority                   = 1000
-    protocol                   = "Tcp"
-    destination_port_range     = "3389"
-    access                     = "Allow"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 }
 
 //App Gateway NSG
 resource "azurerm_network_security_group" "appgateway_nsg" {
-  name                = local.appgateway_subnet_name
+  name                = local.appgateway_snnsg
   location            = azurerm_resource_group.networking_resourece_group.location
   resource_group_name = azurerm_resource_group.networking_resourece_group.name
-
-  security_rule {
-    name                       = "AllowRdpInbound"
-    priority                   = 1000
-    protocol                   = "Tcp"
-    destination_port_range     = "3389"
-    access                     = "Allow"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 
   security_rule {
     name                       = "AllowHealthProbesInbound"
@@ -303,18 +255,6 @@ resource "azurerm_network_security_group" "appgateway_nsg" {
     source_address_prefix      = "AzureLoadBalancer"
     destination_address_prefix = "*"
   }
-
-  security_rule {
-    name                       = "DenyAll"
-    priority                   = 130
-    protocol                   = "*"
-    destination_port_range     = "*"
-    access                     = "Deny"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 }
 
 //Private Endpoint SNNSG NSG
@@ -322,18 +262,6 @@ resource "azurerm_network_security_group" "private_endpoint_snnsg_nsg" {
   name                = local.private_endpoint_snnsg
   location            = azurerm_resource_group.networking_resourece_group.location
   resource_group_name = azurerm_resource_group.networking_resourece_group.name
-
-  security_rule {
-    name                       = "AllowRdpInbound"
-    priority                   = 1000
-    protocol                   = "Tcp"
-    destination_port_range     = "3389"
-    access                     = "Allow"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 }
 
 //Backend SNNSG NSG
@@ -341,18 +269,6 @@ resource "azurerm_network_security_group" "backend_snnsg_nsg" {
   name                = local.backend_snnsg
   location            = azurerm_resource_group.networking_resourece_group.location
   resource_group_name = azurerm_resource_group.networking_resourece_group.name
-
-  security_rule {
-    name                       = "AllowRdpInbound"
-    priority                   = 1000
-    protocol                   = "Tcp"
-    destination_port_range     = "3389"
-    access                     = "Allow"
-    direction                  = "Inbound"
-    source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 }
 
 //APIM SNNSG NSG
@@ -374,15 +290,51 @@ resource "azurerm_network_security_group" "apim_snnsg_nsg" {
   }
 
   security_rule {
-    name                       = "AllowRdpInbound"
-    priority                   = 1000
+    name                       = "apim-azure-infra-lb"
+    priority                   = 2010
     protocol                   = "Tcp"
-    destination_port_range     = "3389"
+    destination_port_range     = "6390"
     access                     = "Allow"
     direction                  = "Inbound"
     source_port_range          = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  security_rule {
+    name                       = "apim-azure-storage"
+    priority                   = 2000
+    protocol                   = "Tcp"
+    destination_port_range     = "443"
+    access                     = "Allow"
+    direction                  = "Outbound"
+    source_port_range          = "*"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "Storage"
+  }
+
+  security_rule {
+    name                       = "apim-azure-sql"
+    priority                   = 2010
+    protocol                   = "Tcp"
+    destination_port_range     = "1443"
+    access                     = "Allow"
+    direction                  = "Outbound"
+    source_port_range          = "*"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "SQL"
+  }
+
+  security_rule {
+    name                       = "apim-azure-kv"
+    priority                   = 2020
+    protocol                   = "Tcp"
+    destination_port_range     = "443"
+    access                     = "Allow"
+    direction                  = "Outbound"
+    source_port_range          = "*"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "AzureKeyVault"
   }
 }
 
