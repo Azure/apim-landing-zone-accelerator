@@ -37,10 +37,10 @@ resource "azurerm_private_dns_zone" "scm" {
 # A records for the DNS zones
 #-------------------------------
 resource "azurerm_private_dns_a_record" "gateway_record" {
-  name                = "gateway"
+  name                = var.apim_name
   zone_name           = azurerm_private_dns_zone.gateway.name
   resource_group_name = azurerm_resource_group.shared_rg.name
-  ttl                 = 300
+  ttl                 = 36000
   records             = var.private_ip_address
 }
 
