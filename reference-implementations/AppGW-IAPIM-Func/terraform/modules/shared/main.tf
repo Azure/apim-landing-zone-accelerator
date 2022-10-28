@@ -43,28 +43,31 @@ resource "azurerm_key_vault" "key_vault" {
   resource_group_name         = azurerm_resource_group.shared_rg.name
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   sku_name                    = var.key_vault_sku
+}
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+# created as a seperate resource, as managed identity uses the azurerm_key_vault_access_policy as well. See note at https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy
 
-    key_permissions = [
-      "Get",
-    ]
+resource "azurerm_key_vault_access_policy" "deployment_spn_access_policy" {
+  key_vault_id = azurerm_key_vault.key_vault.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = data.azurerm_client_config.current.object_id
 
-    secret_permissions = [
-      "Get",
-    ]
+  key_permissions = [
+    "Get",
+  ]
 
-    storage_permissions = [
-      "Get",
-    ]
-    certificate_permissions = [
-      "import",
-      "get",
-      "list",
-      "update",
-      "create"
-    ]
-  }
+  secret_permissions = [
+    "Get",
+  ]
+
+  storage_permissions = [
+    "Get",
+  ]
+  certificate_permissions = [
+    "import",
+    "get",
+    "list",
+    "update",
+    "create"
+  ]
 }
