@@ -12,7 +12,7 @@ on:
     - main
     paths:
     - 'reference-implementations/AppGW-IAPIM-Func/**'
-    - '!reference-implementations/AppGW-IAPIM-Func/terraform-es-apim.yml'
+    - '!reference-implementations/AppGW-IAPIM-Func/terraform*'
 
 permissions:
   id-token: write
