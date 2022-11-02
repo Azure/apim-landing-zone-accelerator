@@ -51,10 +51,13 @@ jobs:
       - name: Write deployment information to log
         run: |
           echo "Deploying to ${{ fromJson(env.config).AZURE_LOCATION }} with name prefix ${{ fromJson(env.config).RESOURCE_NAME_PREFIX }} and environment tag ${{ fromJson(env.config).ENVIRONMENT_TAG }}"
-        # Log into Azure
+        
+        # Log into Azure via OIDC
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
 
       - name: Run Preflight Validation
         working-directory: ./reference-implementations/AppGW-IAPIM-Func/bicep
