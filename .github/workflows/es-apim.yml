@@ -12,7 +12,10 @@ on:
     - main
     paths:
     - 'reference-implementations/AppGW-IAPIM-Func/**'
- 
+
+permissions:
+  id-token: write
+
 jobs:
   validate_bicep:
     name: "Validate Bicep files"
