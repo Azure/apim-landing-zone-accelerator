@@ -6,7 +6,6 @@ on:
   push:
     branches:
     - workflow-new
-    - jin/oidc-refactor
 
   pull_request:
     branches:
