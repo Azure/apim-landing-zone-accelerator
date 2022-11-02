@@ -107,7 +107,7 @@ There is a workflow file **es-apim.yml** created under [.github/workflows](/.git
 a) Generate the following secrets in your GitHub repository settings
 
 - `AZURE_CREDENTIALS` - Service principal credentials used to access Azure resources
-- `AZURE_SUBSCRIPTION` - Azure target subscription id
+- `AZURE_SUBSCRIPTION_ID` - Azure target subscription id
 - `PAT` -  Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent
 - `VM_PW` - The password to be used as the Administrator for all VMs created by this deployment
 - `FQDN` - Fully qualified domain name that will be used for the application gateway
