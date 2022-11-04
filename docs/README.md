@@ -97,19 +97,62 @@ f.) Copy the values for clientId, subscriptionId, and tenantId to use later in y
 
 ### 4. Add Federated Credentials
 
-Run the following command to create a new federated identity credential for your Azure Active Directory application.
 
-- Replace APPLICATION-OBJECT-ID with the objectId (generated while creating app) for your Azure Active Directory application.
-- Set a value for CREDENTIAL-NAME to reference later.
-- Set the subject. The value of this is defined by GitHub depending on your workflow:
-  - Jobs in your GitHub Actions environment: repo:< Organization/Repository >:environment:< Name >
-  - For Jobs not tied to an environment, include the ref path for branch/tag based on the ref path used for triggering the workflow: repo:< Organization/Repository >:ref:< ref path>. For example, repo:n-username/ node_express:ref:refs/heads/my-branch or repo:n-username/ node_express:ref:refs/tags/my-tag.
-  - For workflows triggered by a pull request event: repo:< Organization/Repository >:pull_request.
+You can add federated credentials in the Azure portal or with the Microsoft Graph REST API.
 
-```Powershell
-az rest --method POST --uri 'https://graph.microsoft.com/beta/applications/<APPLICATION-OBJECT-ID>/federatedIdentityCredentials' --body '{"name":"<CREDENTIAL-NAME>","issuer":"https://token.actions.githubusercontent.com","subject":"repo:organization/repository:environment:Production","description":"Testing","audiences":["api://AzureADTokenExchange"]}'
+# [Azure portal](#tab/azure-portal)
+
+1. Go to **App registrations** in the <a href="https://portal.azure.com/" target="_blank">Azure portal</a> and open the app you want to configure.
+1. Within the app, go to **Certificates and secrets**.  
+    :::image type="content" source="media/federated-certificates-secrets.png" alt-text="Select Certificates & secrets.":::
+1. In the **Federated credentials** tab, select **Add credential**.
+    :::image type="content" source="media/add-federated-credential.png" alt-text="Add the federated credential":::
+1. Select the credential scenario **GitHub Actions deploying Azure resources**. Generate your credential by entering your credential details.
+    
+|Field  |Description  |Example  |
+|---------|---------|---------|
+|Organization     |    Your GitHub organization name or GitHub username.     |     `contoso`    |
+|Repository     |     Your GitHub Repository name.    |    `contoso-app`     |
+|Entity type     |     The filter used to scope the OIDC requests from GitHub workflows. This field is used to generate the `subject` claim.   |     `Environment`, `Branch`, `Pull request`, `Tag`    |
+|GitHub name     |     The name of the environment, branch, or tag.    |     `main`    |
+|Name     |     Identifier for the federated credential.    |    `contoso-deploy`     |
+
+For a more detailed overview, see [Configure an app to trust a GitHub repo](/azure/active-directory/develop/workload-identity-federation-create-trust-github).
+# [Azure CLI](#tab/azure-cli)
+
+Run the following command to [create a new federated identity credential](/graph/api/application-post-federatedidentitycredentials?view=graph-rest-beta&preserve-view=true) for your Azure Active Directory application.
+
+* Replace `APPLICATION-OBJECT-ID` with the **objectId (generated while creating app)** for your Azure Active Directory application.
+* Set a value for `CREDENTIAL-NAME` to reference later.
+* Set the `subject`. The value of this is defined by GitHub depending on your workflow:
+  * Jobs in your GitHub Actions environment: `repo:< Organization/Repository >:environment:< Name >`
+  * For Jobs not tied to an environment, include the ref path for branch/tag based on the ref path used for triggering the workflow: `repo:< Organization/Repository >:ref:< ref path>`.  For example, `repo:n-username/ node_express:ref:refs/heads/my-branch` or `repo:n-username/ node_express:ref:refs/tags/my-tag`.
+  * For workflows triggered by a pull request event: `repo:< Organization/Repository >:pull_request`.
+
+```azurecli
+az rest --method POST --uri 'https://graph.microsoft.com/beta/applications/<APPLICATION-OBJECT-ID>/federatedIdentityCredentials' --body '{"name":"<CREDENTIAL-NAME>","issuer":"https://token.actions.githubusercontent.com","subject":"repo:organization/repository:environment:Production","description":"Testing","audiences":["api://AzureADTokenExchange"]}' 
 ```
-For a more detailed overview, see [Configure an app to trust a GitHub repo](https://learn.microsoft.com/en-us/azure/active-directory/develop/workload-identity-federation-create-trust-github).
+
+For a more detailed overview, see [Configure an app to trust a GitHub repo](/azure/active-directory/develop/workload-identity-federation-create-trust-github).
+
+### [Azure PowerShell](#tab/azure-powershell) 
+
+Run the following command to [create a new federated identity credential](/graph/api/application-post-federatedidentitycredentials?view=graph-rest-beta&preserve-view=true) for your Azure Active Directory application.
+
+* Replace `APPLICATION-OBJECT-ID` with the **Id (generated while creating app)** for your Azure Active Directory application.
+* Set a value for `CREDENTIAL-NAME` to reference later.
+* Set the `subject`. The value of this is defined by GitHub depending on your workflow:
+  * Jobs in your GitHub Actions environment: `repo:< Organization/Repository >:environment:< Name >`
+  * For Jobs not tied to an environment, include the ref path for branch/tag based on the ref path used for triggering the workflow: `repo:< Organization/Repository >:ref:< ref path>`.  For example, `repo:n-username/ node_express:ref:refs/heads/my-branch` or `repo:n-username/ node_express:ref:refs/tags/my-tag`.
+  * For workflows triggered by a pull request event: `repo:< Organization/Repository >:pull_request`.
+
+```azurepowershell
+Invoke-AzRestMethod -Method POST -Uri 'https://graph.microsoft.com/beta/applications/<APPLICATION-OBJECT-ID>/federatedIdentityCredentials' -Payload  '{"name":"<CREDENTIAL-NAME>","issuer":"https://token.actions.githubusercontent.com","subject":"repo:organization/repository:environment:Production","description":"Testing","audiences":["api://AzureADTokenExchange"]}'
+```
+
+For a more detailed overview, see [Configure an app to trust a GitHub repo](/azure/active-directory/develop/workload-identity-federation-create-trust-github).
+
+---
 
 ### 5. Create GitHub Secrets
 
