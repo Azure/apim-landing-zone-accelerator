@@ -134,7 +134,7 @@ c.) Generate the following secrets in your GitHub repository settings
 d.) Save each secret by selecting Add secret.
 
 
-### 5. Run the workflow
+### 6. Run the workflow
 
 There is a workflow file **es-apim.yml** created under [.github/workflows](/.github/workflows/es-apim.yml).
 
@@ -157,7 +157,7 @@ Alternatively, you can also trigger the workflow by going to **Actions** tab and
 
 ![manual trigger](/docs/images/manual_trigger.png)
 
-### 6. Deployed Resources
+### 7. Deployed Resources
 
 #### There will be four resource groups created as follows
 
@@ -179,7 +179,7 @@ Alternatively, you can also trigger the workflow by going to **Actions** tab and
 
 ![networking module](/docs/images/networking.png)
 
-### 7. Deploy the Function and APIs
+### 8. Deploy the Function and APIs
 
 - [Import](https://docs.microsoft.com/en-us/azure/devops/repos/git/import-git-repository?view=azure-devops) this repo to an Azure DevOps Repo
 - Create two [ARM service connections](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops) each scoped to the apim resource group and the fucntion app resource group
