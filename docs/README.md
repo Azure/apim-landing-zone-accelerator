@@ -95,8 +95,8 @@ az role assignment create --role contributor --subscription $subscriptionId --as
 
 f.) Copy the values for clientId, subscriptionId, and tenantId to use later in your GitHub Actions workflow.
 
-### 4. Add Federated Credentials
 
+### 4. Add Federated Credentials
 
 You can add federated credentials in the Azure portal or with the Microsoft Graph REST API.
 
@@ -104,9 +104,7 @@ You can add federated credentials in the Azure portal or with the Microsoft Grap
 
 1. Go to **App registrations** in the <a href="https://portal.azure.com/" target="_blank">Azure portal</a> and open the app you want to configure.
 1. Within the app, go to **Certificates and secrets**.  
-    :::image type="content" source="media/federated-certificates-secrets.png" alt-text="Select Certificates & secrets.":::
 1. In the **Federated credentials** tab, select **Add credential**.
-    :::image type="content" source="media/add-federated-credential.png" alt-text="Add the federated credential":::
 1. Select the credential scenario **GitHub Actions deploying Azure resources**. Generate your credential by entering your credential details.
     
 |Field  |Description  |Example  |
