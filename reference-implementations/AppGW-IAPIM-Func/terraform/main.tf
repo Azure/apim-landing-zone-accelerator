@@ -74,9 +74,9 @@ module "application_gateway" {
   subnet_id                    = module.networking.appgateway_subnet_id
 }
 
-# #-------------------------------
-# # Calling the Backend module
-# #-------------------------------
+#-------------------------------
+# calling the Backend module
+#-------------------------------
 module "backend" {
   source            = "./modules/backend"
   resource_suffix   = module.resource_suffix.name
