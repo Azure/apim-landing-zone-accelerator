@@ -53,7 +53,7 @@ resource "azurerm_virtual_machine_extension" "deploy_agent" {
   settings = <<SETTINGS
     {
       "fileUris" : ["https://raw.githubusercontent.com/Azure/apim-landing-zone-accelerator/main/reference-implementations/AppGW-IAPIM-Func/bicep/shared/agentsetup.ps1"],
-      "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File agentsetup.ps1 -PAT \"${var.personal_access_token}\" -URL \"${var.account_name}\" -POOl \"${var.pool_name}\" -AGENT \"${azurerm_windows_virtual_machine.agent_vm.name}\" -AGENTTYPE \"${var.cicd_agent_type}\""
+      "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File agentsetup.ps1 -PAT \"${var.personal_access_token}\" -URL \"${var.account_name}\" -POOL \"${var.pool_name}\" -AGENT \"${azurerm_windows_virtual_machine.agent_vm.name}\" -AGENTTYPE \"${var.cicd_agent_type}\""
     }
 SETTINGS
 }
