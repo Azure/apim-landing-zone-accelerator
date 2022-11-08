@@ -100,7 +100,7 @@ f.) Copy the values for clientId, subscriptionId, and tenantId to use later in y
 
 You can add federated credentials in the Azure portal or with the Microsoft Graph REST API.
 
-# [Azure portal](#tab/azure-portal)
+### [Azure portal](#tab/azure-portal)
 
 1. Go to **App registrations** in the <a href="https://portal.azure.com/" target="_blank">Azure portal</a> and open the app you want to configure.
 1. Within the app, go to **Certificates and secrets**.  
@@ -116,7 +116,7 @@ You can add federated credentials in the Azure portal or with the Microsoft Grap
 |Name     |     Identifier for the federated credential.    |    `contoso-deploy`     |
 
 For a more detailed overview, see [Configure an app to trust a GitHub repo](/azure/active-directory/develop/workload-identity-federation-create-trust-github).
-# [Azure CLI](#tab/azure-cli)
+### [Azure CLI](#tab/azure-cli)
 
 Run the following command to [create a new federated identity credential](/graph/api/application-post-federatedidentitycredentials?view=graph-rest-beta&preserve-view=true) for your Azure Active Directory application.
 
