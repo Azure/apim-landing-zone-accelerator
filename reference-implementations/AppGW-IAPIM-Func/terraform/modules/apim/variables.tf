@@ -22,7 +22,7 @@ variable "publisher_name" {
 }
 
 variable "publisher_email" {
-  description = "The email of the publisher/company"
+  description = "The email of the publisher/company; shows as administrator email in APIM"
   type        = string
   default     = "apim@contoso.com"
 }
