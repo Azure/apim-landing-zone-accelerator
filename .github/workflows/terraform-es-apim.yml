@@ -91,7 +91,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.plan_name }}
-          path: ${{ env.RUNNER_TEMP }}/${{ env.plan_name }}
+          path: '${{ env.RUNNER_TEMP }}/${{ env.plan_name }}'
           retention-days: 5
 
       # - uses: actions/github-script@v6
