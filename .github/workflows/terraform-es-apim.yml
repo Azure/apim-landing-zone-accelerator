@@ -72,8 +72,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -no-color -lock=false -out appgw-iapim-func.tfplan
-          terraform show appgw-iapim-func.${{github.run_number}}.tfplan
+          terraform plan -lock=false -out appgw-iapim-func.tfplan
         continue-on-error: false
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
