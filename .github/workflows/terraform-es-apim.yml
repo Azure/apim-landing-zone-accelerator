@@ -23,6 +23,7 @@ permissions:
 env:
   modulePath: 'reference-implementations/AppGW-IAPIM-Func/terraform'
   terraform_version: 1.3.4 # must be greater than or equal to 1.2 for OIDC
+  plan_name: 'appgw-iapim-func.${{github.run_number}}.tfplan'
 
 jobs:
   init_validate_plan:
@@ -72,7 +73,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -lock=false -out appgw-iapim-func.tfplan
+          terraform plan -lock=false -out $plan_name
         continue-on-error: false
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
