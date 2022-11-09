@@ -58,7 +58,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config='access_key=${{secrets.storage_key}}'
+        run: terraform init
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
