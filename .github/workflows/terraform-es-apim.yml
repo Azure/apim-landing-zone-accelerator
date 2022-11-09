@@ -73,7 +73,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -lock=false -out $plan_name
+          terraform plan -lock=false -out $GITHUB_WORKSPACE/$plan_name
         continue-on-error: false
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
@@ -90,8 +90,8 @@ jobs:
       - name: Upload TFPlan
         uses: actions/upload-artifact@v3
         with:
-          name: appgw-iapim-func.${{github.run_number}}.tfplan
-          path: appgw-iapim-func.${{github.run_number}}.tfplan
+          name: $plan_name
+          path: $GITHUB_WORKSPACE/$plan_name
           retention-days: 5
 
       # - uses: actions/github-script@v6
@@ -144,7 +144,7 @@ jobs:
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         with:
-          name: appgw-iapim-func.${{github.run_number}}.tfplan
+          name: $plan_name
 
       # Log into Azure via OIDC
       - uses: azure/login@v1
@@ -161,7 +161,7 @@ jobs:
       - name: Terraform apply 
         id: apply
         run: |
-          terraform apply appgw-iapim-func.${{github.run_number}}.tfplan -auto-approve -lock=false 
+          terraform apply $plan_name -auto-approve -lock=false 
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
