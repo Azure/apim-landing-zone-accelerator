@@ -144,7 +144,7 @@ jobs:
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         with:
-          name: $plan_name
+          name: ${{ env.plan_name }}
 
       # Log into Azure via OIDC
       - uses: azure/login@v1
