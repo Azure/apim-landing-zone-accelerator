@@ -72,15 +72,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -no-color \
-            -var "account_name=github.com/$GITHUB_ACTOR" \
-            -var "cicd_agent_type=github" \
-            -var "personal_access_token=${{secrets.PAT}}" \
-            -var "vm_password=${{secrets.VM_PW}}" \ 
-            -var "vm_username=${{secrets.VM_USER}}" \
-            -lock=false \
-            -out appgw-iapim-func.tfplan
-            
+          terraform plan -no-color -lock=false -out appgw-iapim-func.tfplan
           terraform show appgw-iapim-func.${{github.run_number}}.tfplan
         continue-on-error: false
         env:
@@ -88,6 +80,12 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_USE_OIDC: true
+          TF_VAR_vm_password: ${{ secrets.VM_PW }}
+          TF_VAR_vm_username: ${{ secrets.VM_USER }}
+          TF_VAR_personal_access_token: ${{ secrets.PAT }}
+          TF_VAR_cicd_agent_type: github
+          TF_VAR_account_name: github.com/$GITHUB_ACTOR
+
 
       - name: Upload TFPlan
         uses: actions/upload-artifact@v3
@@ -163,17 +161,14 @@ jobs:
       - name: Terraform apply 
         id: apply
         run: |
-          terraform apply appgw-iapim-func.${{github.run_number}}.tfplan \
-            -auto-approve \
-            -var "account_name=github.com/$GITHUB_ACTOR" \
-            -var "cicd_agent_type=github" \
-            -var "personal_access_token=${{secrets.PAT}}" \
-            -var "vm_password=${{secrets.VM_PW}}" \ 
-            -var "vm_username=${{secrets.VM_USER}}" \
-            -lock=false 
-            
+          terraform apply appgw-iapim-func.${{github.run_number}}.tfplan -auto-approve -lock=false 
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_USE_OIDC: true
+          TF_VAR_vm_password: ${{ secrets.VM_PW }}
+          TF_VAR_vm_username: ${{ secrets.VM_USER }}
+          TF_VAR_personal_access_token: ${{ secrets.PAT }}
+          TF_VAR_cicd_agent_type: github
+          TF_VAR_account_name: github.com/$GITHUB_ACTOR
