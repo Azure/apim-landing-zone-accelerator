@@ -6,44 +6,59 @@ on:
   push:
     branches:
     - pr/terraform
+    - main
     
   pull_request:
     branches:
     - main
     
     paths: 
+    - '.github/workflows/terraform-es-apim.yml'
     - '/reference-implementations/AppGW-IAPIM-Func/terraform/**'
-    
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  modulePath: 'reference-implementations/AppGW-IAPIM-Func/terraform'
+  terraform_version: 1.3.4 # must be greater than or equal to 1.2 for OIDC
+
 jobs:
-  deploy_azure:
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+  init_validate_plan:
     runs-on: ubuntu-latest
+    environment: staging
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_USE_OIDC: true
     defaults:
       run:
         shell: bash
-        working-directory: ./apim-landing-zone-accelerator/reference-implementations/AppGW-IAPIM-Func/terraform 
-  
+        working-directory: ${{ env.modulePath }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-               
-      - name: Run Az Login 
-        run: az login --service-principal -u ${{secrets.client_id}} -p ${{secrets.client_secret}} --tenant ${{secrets.tenant_id}}
+
+      # Log into Azure via OIDC
+      - uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.1.7
+          terraform_version: ${{ env.terraform_version }}
 
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
-   
+
       - name: Terraform Init
         id: init
         run: terraform init -backend-config='access_key=${{secrets.storage_key}}'
@@ -54,12 +69,23 @@ jobs:
   
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -var 'client_id=${{secrets.client_id}}' -var 'client_secret=${{secrets.client_secret}}' 
-         -var 'subscription_id=${{secrets.subscription_id}}' -var 'tenant_id=${{secrets.tenant_id}}' -var 'account_name=${{secrets.account_name}}' 
-         -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' 
-         -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
+        run: |
+          terraform plan -no-color \
+            -var 'account_name=${{secrets.account_name}}' \
+            -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' \
+            -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false \
+            -out appgw-iapim-func.tfplan
+            
+            terraform show appgw-iapim-func.${{github.run_number}}.tfplan
         continue-on-error: false
         
+      - name: Upload TFPlan
+        uses: actions/upload-artifact@v3
+        with:
+          name: appgw-iapim-func.${{github.run_number}}.tfplan
+          path: appgw-iapim-func.${{github.run_number}}.tfplan
+          retention-days: 5
+
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
@@ -96,11 +122,26 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-            
+
+  deploy:
+    # if: github.ref == 'refs/heads/main' 
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_USE_OIDC: true
+    defaults:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: appgw-iapim-func.${{github.run_number}}.tfplan
       - name: Terraform apply 
-        if: github.ref == 'refs/heads/main' 
         id: apply
-        run: terraform apply -auto-approve -var 'client_id=${{secrets.client_id}}' -var 'client_secret=${{secrets.client_secret}}' 
-         -var 'subscription_id=${{secrets.subscription_id}}' -var 'tenant_id=${{secrets.tenant_id}}' -var 'account_name=${{secrets.account_name}}' 
-         -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' 
-         -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
+        run: |
+          terraform apply appgw-iapim-func.${{github.run_number}}.tfplan \
+            -auto-approve \
+            -var 'account_name=${{secrets.account_name}}' \
+            -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' \
+            -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
