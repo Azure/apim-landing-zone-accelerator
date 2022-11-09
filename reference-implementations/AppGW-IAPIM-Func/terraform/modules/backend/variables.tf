@@ -9,8 +9,8 @@ variable "workload_name" {
 }
 
 variable "storage_account_tier" {
-  description = "Defines the Tier to use for this storage account. Valid options are Standard and Premium. For BlockBlobStorage and FileStorage accounts only Premium is valid. Changing this forces a new resource to be created."
-  default     = "standard"
+  description = "Defines the Tier to use for this storage account. Valid options are 'Standard' and 'Premium'. For BlockBlobStorage and FileStorage accounts only Premium is valid. Changing this forces a new resource to be created."
+  default     = "Standard"
 }
 
 variable "storage_replication_type" {

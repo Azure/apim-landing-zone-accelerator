@@ -12,6 +12,7 @@ deployment/bicep/localtestscript.ps1
 # .tfstate files
 *.tfstate
 *.tfstate.*
+*.tfplan
 
 # Crash log files
 crash.log

@@ -64,10 +64,10 @@ resource "azurerm_key_vault_access_policy" "deployment_spn_access_policy" {
     "Get",
   ]
   certificate_permissions = [
-    "import",
-    "get",
-    "list",
-    "update",
-    "create"
+    "Import",
+    "Get",
+    "List",
+    "Update",
+    "Create"
   ]
 }

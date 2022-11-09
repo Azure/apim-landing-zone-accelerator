@@ -20,16 +20,16 @@ resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_perm
   object_id    = azurerm_user_assigned_identity.user_assigned_identity.principal_id
 
   certificate_permissions = [
-    "import",
-    "get",
-    "list",
-    "update",
-    "create"
+    "Import",
+    "Get",
+    "List",
+    "Update",
+    "Create"
   ]
 
   secret_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 }
 
