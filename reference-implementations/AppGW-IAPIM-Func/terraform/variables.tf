@@ -102,6 +102,7 @@ variable "vm_password" {
 variable "cicd_agent_type" {
   type        = string
   description = "The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify 'none' if no agent needed')"
+  default     = "none"
   validation {
     condition     = contains(["azuredevops", "github", "none"], var.cicd_agent_type)
     error_message = "Valid values for var: deployment_environment are (azuredevops, github, none)."
@@ -117,6 +118,7 @@ variable "personal_access_token" {
 variable "account_name" {
   type        = string
   description = "The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none"
+  default     = "none"
 }
 
 variable "pool_name" {
