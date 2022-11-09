@@ -73,12 +73,16 @@ jobs:
         id: plan
         run: |
           terraform plan -no-color \
-            -var 'account_name=${{secrets.account_name}}' \
-            -var 'cicd_agent_type=github' -var 'personal_access_token=${{secrets.personal_access_token}}' \
-            -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false \
+            -var "account_name=github.com/$GITHUB_ACTOR" \
+            -var "cicd_agent_type=github" \
+            -var "personal_access_token=${{secrets.personal_access_token}}" \
+            -var "pool_name=${{secrets.pool_name}}" \
+            -var "vm_password=${{secrets.vm_password}}" \ 
+            -var "vm_username=${{secrets.vm_username}}" \
+            -lock=false \
             -out appgw-iapim-func.tfplan
             
-            terraform show appgw-iapim-func.${{github.run_number}}.tfplan
+          terraform show appgw-iapim-func.${{github.run_number}}.tfplan
         continue-on-error: false
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
@@ -162,9 +166,14 @@ jobs:
         run: |
           terraform apply appgw-iapim-func.${{github.run_number}}.tfplan \
             -auto-approve \
-            -var 'account_name=${{secrets.account_name}}' \
-            -var 'cicd_agent_type=github' -var 'personal_access_token=${{secrets.personal_access_token}}' \
-            -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
+            -var "account_name=github.com/$GITHUB_ACTOR" \
+            -var "cicd_agent_type=github" \
+            -var "personal_access_token=${{secrets.personal_access_token}}" \
+            -var "pool_name=${{secrets.pool_name}}" \
+            -var "vm_password=${{secrets.vm_password}}" \ 
+            -var "vm_username=${{secrets.vm_username}}" \
+            -lock=false 
+            
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
