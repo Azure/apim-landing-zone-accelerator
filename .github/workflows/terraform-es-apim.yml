@@ -161,7 +161,7 @@ jobs:
       - name: Terraform apply 
         id: apply
         run: |
-          terraform apply $plan_name -auto-approve -lock=false 
+          terraform apply -auto-approve -lock=false $plan_name 
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
