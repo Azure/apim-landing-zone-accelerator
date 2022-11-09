@@ -60,7 +60,7 @@ jobs:
         id: init
         run: terraform init
         env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_USE_OIDC: true
@@ -81,7 +81,7 @@ jobs:
             terraform show appgw-iapim-func.${{github.run_number}}.tfplan
         continue-on-error: false
         env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_USE_OIDC: true
@@ -154,7 +154,7 @@ jobs:
             -var 'cicd_agent_type=${{secrets.cicd_agent_type}}' -var 'personal_access_token=${{secrets.personal_access_token}}' \
             -var 'pool_name=${{secrets.pool_name}}' -var 'vm_password=${{secrets.vm_password}}' -var 'vm_username=${{secrets.vm_username}}' -lock=false
         env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_USE_OIDC: true
