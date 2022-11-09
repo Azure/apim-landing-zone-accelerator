@@ -58,12 +58,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_USE_OIDC: true
+        run: terraform init -backend-config='access_key=${{secrets.storage_key}}'
 
       - name: Terraform Validate
         id: validate
@@ -81,10 +76,9 @@ jobs:
             terraform show appgw-iapim-func.${{github.run_number}}.tfplan
         continue-on-error: false
         env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          ARM_USE_OIDC: true
+          client-id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Upload TFPlan
         uses: actions/upload-artifact@v3
