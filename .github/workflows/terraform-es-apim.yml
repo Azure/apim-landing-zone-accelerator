@@ -41,6 +41,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: feature/terraform # TODO: remove this line after testing
 
       # Log into Azure via OIDC
       - uses: azure/login@v1
@@ -124,7 +126,8 @@ jobs:
             })
 
   deploy:
-    # if: github.ref == 'refs/heads/main' 
+    # if: github.ref == 'refs/heads/main' # TODO: uncomment after testing
+    needs: init_validate_plan
     runs-on: ubuntu-latest
     environment: production
     env:
