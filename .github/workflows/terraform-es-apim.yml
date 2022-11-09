@@ -142,16 +142,16 @@ jobs:
         working-directory: ${{ env.modulePath }}
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: feature/terraform # TODO: remove this line after testing
+
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.plan_name }}
           path: ${{ env.modulePath }}
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: feature/terraform # TODO: remove this line after testing
 
       # Log into Azure via OIDC
       - uses: azure/login@v1
