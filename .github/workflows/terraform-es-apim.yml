@@ -146,6 +146,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.plan_name }}
+          path: ${{ env.modulePath }}
 
       - name: Checkout
         uses: actions/checkout@v3
