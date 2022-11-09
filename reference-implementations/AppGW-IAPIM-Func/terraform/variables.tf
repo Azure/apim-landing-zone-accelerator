@@ -1,24 +1,3 @@
-variable "subscription_id" {
-  type = string
-  description = "subscription to deploy solution"
-}
-
-variable "tenant_id" {
-  type = string
-  description = "tenant id to deploy solution"
-  }
-
-variable "client_id" {
-  type = string
-  description = "Client ID of Service Principal"
-}
-
-variable "client_secret" {
-  type = string
-  description = "Client Secret of Service Principal"
-  sensitive = true
-}
-
 variable "workload_name" {
   type        = string
   description = "A short name for the workload being deployed"
