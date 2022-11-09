@@ -5,7 +5,6 @@ on:
   
   push:
     branches:
-    - pr/terraform
     - main
     
   pull_request:
@@ -38,7 +37,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: feature/terraform # TODO: remove this line after testing
+          ref: feature/terraform # TODO: remove this line after feature/terraform is merged to main
 
       # Log into Azure via OIDC
       - uses: azure/login@v1
@@ -94,6 +93,9 @@ jobs:
           path: '${{ runner.temp}}/${{ env.plan_name }}'
           retention-days: 5
 
+      # GitHub script currently giving issues around some 'unknown identifier'. 
+      # Commenting out for now. 
+      # --------
       # - uses: actions/github-script@v6
       #   if: github.event_name == 'pull_request'
       #   env:
@@ -132,7 +134,7 @@ jobs:
       #       })
 
   deploy:
-    # if: github.ref == 'refs/heads/main' # TODO: uncomment after testing
+    # if: github.ref == 'refs/heads/main'
     needs: init_validate_plan
     runs-on: ubuntu-latest
     environment: production
@@ -145,8 +147,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: feature/terraform # TODO: remove this line after testing
-
+          ref: feature/terraform # TODO: remove this line after feature/terraform is merged to main
+          
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         with:
@@ -164,7 +166,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.terraform_version }}
-          
+
       - name: Terraform Init
         id: init
         run: terraform init
