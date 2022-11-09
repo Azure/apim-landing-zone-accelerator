@@ -90,8 +90,8 @@ jobs:
       - name: Upload TFPlan
         uses: actions/upload-artifact@v3
         with:
-          name: $plan_name
-          path: $GITHUB_WORKSPACE/$plan_name
+          name: ${{ env.plan_name }}
+          path: ${{ env.GITHUB_WORKSPACE }}/${{ env.plan_name }}
           retention-days: 5
 
       # - uses: actions/github-script@v6
