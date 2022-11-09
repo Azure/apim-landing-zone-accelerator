@@ -13,7 +13,7 @@ on:
     paths:
     - '.github/workflows/es-apim.yml'
     - 'reference-implementations/AppGW-IAPIM-Func/**'
-    - '!reference-implementations/AppGW-IAPIM-Func/terraform*'
+    - '!reference-implementations/AppGW-IAPIM-Func/terraform/**'
 
 permissions:
   id-token: write
