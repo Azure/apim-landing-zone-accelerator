@@ -75,10 +75,9 @@ jobs:
           terraform plan -no-color \
             -var "account_name=github.com/$GITHUB_ACTOR" \
             -var "cicd_agent_type=github" \
-            -var "personal_access_token=${{secrets.personal_access_token}}" \
-            -var "pool_name=${{secrets.pool_name}}" \
-            -var "vm_password=${{secrets.vm_password}}" \ 
-            -var "vm_username=${{secrets.vm_username}}" \
+            -var "personal_access_token=${{secrets.PAT}}" \
+            -var "vm_password=${{secrets.VM_PW}}" \ 
+            -var "vm_username=${{secrets.VM_USER}}" \
             -lock=false \
             -out appgw-iapim-func.tfplan
             
@@ -168,10 +167,9 @@ jobs:
             -auto-approve \
             -var "account_name=github.com/$GITHUB_ACTOR" \
             -var "cicd_agent_type=github" \
-            -var "personal_access_token=${{secrets.personal_access_token}}" \
-            -var "pool_name=${{secrets.pool_name}}" \
-            -var "vm_password=${{secrets.vm_password}}" \ 
-            -var "vm_username=${{secrets.vm_username}}" \
+            -var "personal_access_token=${{secrets.PAT}}" \
+            -var "vm_password=${{secrets.VM_PW}}" \ 
+            -var "vm_username=${{secrets.VM_USER}}" \
             -lock=false 
             
         env:
