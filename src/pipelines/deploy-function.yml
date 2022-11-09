@@ -1,0 +1,71 @@
+trigger: none
+
+parameters:
+- name: functionAppName
+  displayName: Azure Function App name
+  type: string
+  default: 'myFuncApp'
+- name: armServiceConnection
+  displayName: Azure RM service connection
+  type: string
+  default: 'none'
+- name: buildConfiguration
+  displayName: Build configuration
+  type: string
+  default: 'Debug'
+  values:
+  - Debug
+  - Release
+
+variables:
+  projectPath: 'src/functions.csproj'
+  poolName: 'Azure Pipelines'
+
+pool: $(poolName)
+
+stages:
+- stage: Build
+  jobs:  
+  - job: Build
+    displayName: Build and publish solution
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          # List sources          
+          echo 'Sources'
+          ls
+    - task: UseDotNet@2      
+      inputs:
+        packageType: 'sdk'
+        version: '3.x'
+      displayName: 'Use .NET Core SDK 3.x'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '$(projectPath)'
+      displayName: 'Restore NuGet packages'
+ 
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '$(projectPath)'
+      displayName: 'Build solution'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(projectPath)'
+        arguments: '--configuration $(${{ parameters.buildConfiguration }}) --output $(Build.ArtifactStagingDirectory)/${{ parameters.buildConfiguration }}'
+      displayName: 'Publish solution'
+      
+    - task: AzureFunctionApp@1
+      inputs:
+        azureSubscription: ${{ parameters.armServiceConnection }}
+        appType: 'functionAppLinux'
+        appName: ${{ parameters.functionAppName }} 
+        package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+      displayName: Deploy Azure Function
