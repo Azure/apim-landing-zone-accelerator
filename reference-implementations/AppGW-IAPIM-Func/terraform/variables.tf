@@ -74,7 +74,7 @@ variable "app_gateway_certificate_type" {
   type        = string
   description = "The certificate type used for the app gateway. Either custom or selfsigned"
   default     = "selfsigned"
-# To do change this to key vault or imported not self documenting
+  # To do change this to key vault or imported not self documenting
   validation {
     condition     = contains(["custom", "selfsigned"], var.app_gateway_certificate_type)
     error_message = "Valid values for var: app_gateway_certificate_type are (custom, selfsigned)."
@@ -96,7 +96,7 @@ variable "vm_username" {
 variable "vm_password" {
   description = "Agent VM Password"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "cicd_agent_type" {
@@ -111,7 +111,7 @@ variable "cicd_agent_type" {
 variable "personal_access_token" {
   type        = string
   description = "Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "account_name" {

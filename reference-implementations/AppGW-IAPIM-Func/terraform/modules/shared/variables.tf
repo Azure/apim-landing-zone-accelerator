@@ -2,18 +2,18 @@
 # Common variables
 #-------------------------------
 variable "resource_suffix" {
-  type        = string
+  type = string
 }
-  
+
 variable "location" {
-    description = "The location of the apim instance"
-    type        = string
+  description = "The location of the apim instance"
+  type        = string
 }
 
 variable "environment" {
   description = "The environment for which the deployment is being executed"
 }
-variable "key_vault_sku"{
+variable "key_vault_sku" {
   type        = string
   description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
   default     = "standard"
@@ -49,31 +49,31 @@ variable "cicd_agent_subnet_id" {
 
 variable "vm_username" {
   description = "Agent VM username"
-  type = string
+  type        = string
 }
 
 variable "vm_password" {
   description = "Agent VM Password"
-  type = string
+  type        = string
 }
 
 variable "cicd_agent_type" {
-  type = string
+  type        = string
   description = "The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify 'none' if no agent needed"
 }
 
 variable "personal_access_token" {
-  type = string
+  type        = string
   description = "Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent"
 }
 
 variable "account_name" {
-  type = string
+  type        = string
   description = "'The Azure DevOps or GitHub account name to be used when configuring the CI/CD agent, in the format https://dev.azure.com/ORGNAME OR github.com/ORGUSERNAME OR none'"
 }
 
 variable "pool_name" {
-  type = string
+  type        = string
   description = "The name Azure DevOps or GitHub pool for this build agent to join. Use 'Default' if you don't have a separate pool"
 }
 

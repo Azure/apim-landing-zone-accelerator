@@ -65,10 +65,10 @@ This document is automatically generated based upon the configuration found in t
 
 This project leverages the [`service-suffix`](./modules/service-suffix/) module to standardize and construct the `resource_suffix` to enforce naming standards across deployments.
 
-`resource_suffix` is constructed as the following:
+`resource_suffix` is constructed based on terraform input variables as follows:
 
 ```bash
-resource_suffix = ${workloadName}-${environment}-${location}-001
+resource_suffix = ${workloadName}-${environment}-${location}-${resource_suffix}
 ```
 
 Examples:
