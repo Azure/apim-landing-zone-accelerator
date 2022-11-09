@@ -133,10 +133,15 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_USE_OIDC: true
     defaults:
+      run:
+        shell: bash
+
+    steps:
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         with:
           name: appgw-iapim-func.${{github.run_number}}.tfplan
+        
       - name: Terraform apply 
         id: apply
         run: |
