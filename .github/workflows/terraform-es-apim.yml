@@ -73,7 +73,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -lock=false -out $GITHUB_WORKSPACE/$plan_name
+          terraform plan -lock=false -out /$RUNNER_TEMP/$plan_name
         continue-on-error: false
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
@@ -91,7 +91,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.plan_name }}
-          path: ${{ env.GITHUB_WORKSPACE }}/${{ env.plan_name }}
+          path: ${{ env.RUNNER_TEMP }}/${{ env.plan_name }}
           retention-days: 5
 
       # - uses: actions/github-script@v6
