@@ -59,7 +59,7 @@ resource "azurerm_function_app" "function_app" {
   os_type                    = var.os_type
   storage_account_name       = azurerm_storage_account.backend_storage_account.name
   storage_account_access_key = azurerm_storage_account.backend_storage_account.primary_access_key
-  version                    = "~3"
+  version                    = "~4"
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "",
     "FUNCTIONS_WORKER_RUNTIME" = "dotnet",
@@ -95,7 +95,7 @@ resource "azurerm_function_app" "function_app_container" {
   os_type                    = var.os_type
   storage_account_name       = azurerm_storage_account.backend_storage_account.name
   storage_account_access_key = azurerm_storage_account.backend_storage_account.primary_access_key
-  version                    = "~3"
+  version                    = "~4"
 
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "",
