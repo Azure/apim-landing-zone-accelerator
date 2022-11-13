@@ -32,34 +32,28 @@ resource "azurerm_storage_account" "backend_storage_account" {
 # ASP for the function apps 
 #-----------------------------
 
-resource "azurerm_app_service_plan" "function_app_asp" {
+resource "azurerm_service_plan" "function_app_service_plan" {
   name                = "asp-${var.resource_suffix}"
   location            = azurerm_resource_group.backend_rg.location
   resource_group_name = azurerm_resource_group.backend_rg.name
 
-  sku {
-    tier = var.asp_tier
-    size = var.asp_size
-  }
-
-  kind     = "Linux"
-  reserved = true
+  sku_name = var.sp_sku
+  os_type  = "Linux"
 }
 
 #-------------------------------
 # Azure function app (Linux, .NET Core 3.1)
 #-------------------------------
 
-resource "azurerm_function_app" "function_app" {
-  name                       = "func-code-${var.resource_suffix}"
-  resource_group_name        = azurerm_resource_group.backend_rg.name
-  location                   = azurerm_resource_group.backend_rg.location
-  app_service_plan_id        = azurerm_app_service_plan.function_app_asp.id
-  https_only                 = true
-  os_type                    = var.os_type
-  storage_account_name       = azurerm_storage_account.backend_storage_account.name
-  storage_account_access_key = azurerm_storage_account.backend_storage_account.primary_access_key
-  version                    = "~4"
+resource "azurerm_linux_function_app" "function_app" {
+  name                        = "func-code-${var.resource_suffix}"
+  resource_group_name         = azurerm_resource_group.backend_rg.name
+  location                    = azurerm_resource_group.backend_rg.location
+  service_plan_id             = azurerm_service_plan.function_app_service_plan.id
+  https_only                  = true
+  storage_account_name        = azurerm_storage_account.backend_storage_account.name
+  storage_account_access_key  = azurerm_storage_account.backend_storage_account.primary_access_key
+  functions_extension_version = "~4"
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "",
     "FUNCTIONS_WORKER_RUNTIME" = "dotnet",
@@ -67,8 +61,11 @@ resource "azurerm_function_app" "function_app" {
 
 
   site_config {
-    linux_fx_version          = "dotnetcore|3.1" # az webapp list-runtimes --linux
-    use_32_bit_worker_process = false
+    use_32_bit_worker = false
+
+    application_stack {
+      dotnet_version = "3.1"
+    }
 
     ip_restriction {
       virtual_network_subnet_id = var.backend_subnet_id
@@ -86,31 +83,37 @@ resource "azurerm_function_app" "function_app" {
 # Azure function app (Container)
 #-------------------------------
 
-resource "azurerm_function_app" "function_app_container" {
-  name                       = "func-cont-${var.resource_suffix}"
-  resource_group_name        = azurerm_resource_group.backend_rg.name
-  location                   = azurerm_resource_group.backend_rg.location
-  app_service_plan_id        = azurerm_app_service_plan.function_app_asp.id
-  https_only                 = true
-  os_type                    = var.os_type
-  storage_account_name       = azurerm_storage_account.backend_storage_account.name
-  storage_account_access_key = azurerm_storage_account.backend_storage_account.primary_access_key
-  version                    = "~4"
+resource "azurerm_linux_function_app" "function_app_container" {
+  name                        = "func-cont-${var.resource_suffix}"
+  resource_group_name         = azurerm_resource_group.backend_rg.name
+  location                    = azurerm_resource_group.backend_rg.location
+  service_plan_id             = azurerm_service_plan.function_app_service_plan.id
+  https_only                  = true
+  storage_account_name        = azurerm_storage_account.backend_storage_account.name
+  storage_account_access_key  = azurerm_storage_account.backend_storage_account.primary_access_key
+  functions_extension_version = "~4"
 
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "",
     "FUNCTIONS_WORKER_RUNTIME" = "dotnet",
   }
 
-
   site_config {
-    linux_fx_version          = "DOCKER|mcr.microsoft.com/azure-functions/dotnet"
-    use_32_bit_worker_process = false
+    use_32_bit_worker = false
+
+    application_stack {
+      docker {
+        registry_url = "mcr.microsoft.com"
+        image_name   = "azure-functions/dotnet"
+        image_tag    = "latest"
+      }
+    }
 
     ip_restriction {
       virtual_network_subnet_id = var.backend_subnet_id
     }
   }
+
   lifecycle {
     ignore_changes = [
       app_settings["WEBSITE_RUN_FROM_PACKAGE"],
