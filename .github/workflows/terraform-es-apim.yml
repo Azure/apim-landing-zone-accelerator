@@ -22,6 +22,7 @@ on:
   pull_request:
     branches:
     - main
+    - feature/terraform
     
     paths: 
     - '.github/workflows/terraform-es-apim.yml'
