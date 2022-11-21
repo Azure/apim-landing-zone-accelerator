@@ -157,7 +157,7 @@ jobs:
 
   deploy:
     # if: github.ref == 'refs/heads/main'
-    if: github.event_name == 'pull_request
+    if: github.event_name == 'pull_request'
     needs: init_validate_plan
     runs-on: ubuntu-latest
     environment: production
