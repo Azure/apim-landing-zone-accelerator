@@ -82,12 +82,6 @@ variable "app_gateway_certificate_type" {
 }
 
 # Backend resource variables
-variable "os_type" {
-  type        = string
-  description = "A string indicating the Operating System type for this function app"
-  default     = "linux"
-}
-
 variable "vm_username" {
   type        = string
   description = "Agent VM username"
