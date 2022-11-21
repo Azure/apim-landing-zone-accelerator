@@ -18,22 +18,13 @@ variable "storage_replication_type" {
   description = "Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS. Changing this forces a new resource to be created."
 }
 
-variable "os_type" {
-  description = "A string indicating the Operating System type for this function app"
-}
-
 variable "resource_suffix" {
   description = ""
   type        = string
 }
 
-variable "asp_tier" {
-  default = "premium"
-  type    = string
-}
-
-variable "asp_size" {
-  default = "p1v2"
+variable "sp_sku" {
+  default = "P1v2"
   type    = string
 }
 
