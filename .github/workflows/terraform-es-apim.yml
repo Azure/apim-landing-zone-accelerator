@@ -88,6 +88,7 @@ jobs:
           TF_VAR_personal_access_token: ${{ secrets.PAT }}
           TF_VAR_cicd_agent_type: github
           TF_VAR_account_name: github.com/$GITHUB_ACTOR
+          TF_VAR_workload_name: lza
 
       - name: Upload TFPlan
         uses: actions/upload-artifact@v3
@@ -193,3 +194,4 @@ jobs:
           TF_VAR_personal_access_token: ${{ secrets.PAT }}
           TF_VAR_cicd_agent_type: github
           TF_VAR_account_name: github.com/$GITHUB_ACTOR
+          TF_VAR_workload_name: lza
