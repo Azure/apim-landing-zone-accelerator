@@ -18,11 +18,6 @@ name: 'Terraform ES-APIM Deploy'
 
 on:
   workflow_dispatch: 
-  
-  push:
-    branches:
-    - main
-    - merge/terraform-cicd
     
   pull_request:
     branches:
