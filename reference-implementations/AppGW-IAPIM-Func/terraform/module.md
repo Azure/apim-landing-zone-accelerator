@@ -40,7 +40,6 @@ No resources.
 | <a name="input_cicd_agent_type"></a> [cicd\_agent\_type](#input\_cicd\_agent\_type) | The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify 'none' if no agent needed') | `string` | n/a | yes |
 | <a name="input_deployment_environment"></a> [deployment\_environment](#input\_deployment\_environment) | The environment for which the deployment is being executed | `string` | `"dev"` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location in which the deployment is happening | `string` | `"East US"` | no |
-| <a name="input_os_type"></a> [os\_type](#input\_os\_type) | A string indicating the Operating System type for this function app | `string` | `"linux"` | no |
 | <a name="input_personal_access_token"></a> [personal\_access\_token](#input\_personal\_access\_token) | Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent | `string` | n/a | yes |
 | <a name="input_pool_name"></a> [pool\_name](#input\_pool\_name) | The name Azure DevOps or GitHub pool for this build agent to join. Use 'Default' if you don't have a separate pool | `string` | n/a | yes |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | n/a | `string` | `"001"` | no |

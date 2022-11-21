@@ -210,6 +210,7 @@ resource "azurerm_application_gateway" "network" {
     http_listener_name         = "https"
     backend_address_pool_name  = "apim"
     backend_http_settings_name = "https"
+    priority                   = 100
   }
 
   probe {

@@ -81,7 +81,6 @@ module "backend" {
   source            = "./modules/backend"
   resource_suffix   = module.resource_suffix.name
   workload_name     = var.workload_name
-  os_type           = var.os_type
   location          = local.resource_location
   backend_subnet_id = module.networking.backend_subnet_id
 }
