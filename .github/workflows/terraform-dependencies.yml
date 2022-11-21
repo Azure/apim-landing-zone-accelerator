@@ -13,22 +13,10 @@ permissions:
   contents: read
   
 jobs:
-  staging-service-principal:
-    name: "Retrieve staging service principal ID to grant read access over storage account"
-    runs-on: ubuntu-latest
-    environment: staging
-    outputs:
-      staging-client-id: ${{ steps.get-staging-client}}
-    steps:
-    - id: get-staging-client
-      run: echo "STAGING_CLIENT_ID=${{ secrets.AZURE_OIDC_CLIENT_ID }}" >> $GITHUB_OUTPUT
-
   provision-infrastructure-dependencies:
     name: "Create storage account and container for Terraform state"
     runs-on: ubuntu-latest
     environment: production
-    needs:
-    - staging-service-principal
     steps:
       # Log into Azure via OIDC
       - uses: azure/login@v1
