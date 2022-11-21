@@ -114,21 +114,16 @@ $storageAccount = New-AzStorageAccount -ResourceGroupName $RESOURCE_GROUP_NAME -
 New-AzStorageContainer -Name $CONTAINER_NAME -Context $storageAccount.context -Permission blob
 ```
 
-Alternatively, the [Terraform Dependencies](../../../.github/workflows/terraform-dependencies.yml) actions workflow can provision the Terraform remote state storage account and container. Customize the deployment by updating the `environment variables` on lines 6-11:
-
-```yaml
-env:
-  location: 'westus2'
-  resource_prefix: "backend-appsrvc"
-  environment: "dev"
-  suffix: "001"
-  container_name: "tfstate"
-```
+Alternatively, the [Terraform Dependencies](../../../.github/workflows/terraform-dependencies.yml) actions workflow can provision the Terraform remote state storage account and container. Customize the deployment through setting the following GITHUB_SECRETS for your own repository's action workflows:
+- `AZURE_TF_STATE_RESOURCE_GROUP_NAME` - Name of the Resource Group to create to store the Terraform remote state backend resources within.
+- `AZURE_TF_STATE_STORAGE_ACCOUNT_NAME` - Name of the Storage Account for the Terraform remote state.
+- `AZURE_TF_STATE_STORAGE_CONTAINER_NAME` - Name of the Storage Account Container to store the Terraform state files.
 
 For additional reading around remote state:
 
 - [MS Doc: Store Terraform state in Azure Storage](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
 - [TF Doc: AzureRM Provider Configuration Documentation](https://www.terraform.io/language/settings/backends/azurerm)
+- [GitHub Doc: GitHub Actions Secrets](https://docs.github.com/en/github-ae@latest/rest/actions/secrets)
 
 ### Deploy the API Management Landing Zone
 

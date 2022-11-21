@@ -1,3 +1,18 @@
+# Terraform-Dependencies.yml
+# --------------------------------------------
+# Provisions Azure Terraform Remote State Backend Resources:
+#  - Resource Group
+#  - Storage Account
+#  - Storage Container
+#
+# Resource naming and OIDC configured via following GitHub Secrets:
+#  - AZURE_TF_STATE_RESOURCE_GROUP_NAME
+#  - AZURE_TF_STATE_STORAGE_ACCOUNT_NAME
+#  - AZURE_TF_STATE_STORAGE_CONTAINER_NAME
+#  - AZURE_SUBSCRIPTION_ID
+#  - AZURE_TENANT_ID
+#  - AZURE_OIDC_CLIENT_ID
+
 name: 'Terraform Dependencies'
 
 on:

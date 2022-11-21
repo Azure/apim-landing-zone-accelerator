@@ -1,3 +1,19 @@
+# --------------------------------------------
+# Terraform-ES-APIM.yml
+# --------------------------------------------
+# Deploys the Terraform reference implementation code
+# Leverages two environments to handle OIDC-based RBAC:
+#   staging: READ ONLY access to provide plan outputs
+#   production: CONTRIBUTOR access to apply the configuration
+#
+# Leverages the following GITHUB SECRETS to configure the remote state backend:
+#  - AZURE_TF_STATE_RESOURCE_GROUP_NAME
+#  - AZURE_TF_STATE_STORAGE_ACCOUNT_NAME
+#  - AZURE_TF_STATE_STORAGE_CONTAINER_NAME
+#  - AZURE_SUBSCRIPTION_ID
+#  - AZURE_TENANT_ID
+#  - AZURE_OIDC_CLIENT_ID
+
 name: 'Terraform ES-APIM Deploy'
 
 on:
@@ -90,7 +106,8 @@ jobs:
           TF_VAR_cicd_agent_type: github
           TF_VAR_account_name: github.com/$GITHUB_ACTOR
           TF_VAR_workload_name: ${{ env.workload_name }}
-          
+          TF_VAR_deployment_environment: prod
+
       - name: Upload TFPlan
         uses: actions/upload-artifact@v3
         with:
@@ -140,6 +157,7 @@ jobs:
 
   deploy:
     # if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request
     needs: init_validate_plan
     runs-on: ubuntu-latest
     environment: production
@@ -199,3 +217,4 @@ jobs:
           TF_VAR_cicd_agent_type: github
           TF_VAR_account_name: github.com/$GITHUB_ACTOR
           TF_VAR_workload_name: ${{ env.workload_name }}
+          TF_VAR_deployment_environment: prod
