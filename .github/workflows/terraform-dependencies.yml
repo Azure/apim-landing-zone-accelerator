@@ -2,9 +2,7 @@ name: 'Terraform Dependencies'
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-    - devops/terraform
+  
 env:
   location: 'westus2'
 
