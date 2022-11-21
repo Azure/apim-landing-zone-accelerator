@@ -90,7 +90,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -lock=false -out /$RUNNER_TEMP/$plan_name
+          terraform plan -lock=false -no-color -out /$RUNNER_TEMP/$plan_name
         continue-on-error: false
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
@@ -143,7 +143,7 @@ jobs:
 
             </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.modulePath }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
