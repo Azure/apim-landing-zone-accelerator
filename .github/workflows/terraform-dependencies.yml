@@ -8,6 +8,10 @@ on:
 env:
   location: 'westus2'
 
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   provision-infrastructure-dependencies:
     name: "Create storage account and container for Terraform state"
