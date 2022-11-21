@@ -31,6 +31,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 env:
   modulePath: 'reference-implementations/AppGW-IAPIM-Func/terraform'
