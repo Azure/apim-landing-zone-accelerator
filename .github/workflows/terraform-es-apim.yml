@@ -167,11 +167,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
           
-      # - name: Download a single artifact
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: ${{ env.plan_name }}
-      #     path: ${{ env.modulePath }}
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.plan_name }}
+          path: ${{ env.modulePath }}
 
       # Log into Azure via OIDC
       - uses: azure/login@v1
