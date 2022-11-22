@@ -91,6 +91,6 @@ variable "apim_vnet_id" {
 
 variable "additional_client_ids" {
   description = "List of additional clients to add to the Key Vault access policy."
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = []
 }
