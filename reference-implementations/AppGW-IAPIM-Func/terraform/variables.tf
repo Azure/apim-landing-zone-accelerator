@@ -121,8 +121,8 @@ variable "pool_name" {
   default     = "default"
 }
 
-variable "additional_client_ids" {
-  description = "List of additional clients to add to the Shared Key Vault access policy."
-  type    = list(string)
-  default = []
+variable "cicd_spn_client_id" {
+  description = "Deployment service principal client ID for CICD agent to grant access to shared key vault."
+  type    = string
+  default = null
 }

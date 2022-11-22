@@ -215,4 +215,4 @@ jobs:
           TF_VAR_account_name: github.com/$GITHUB_ACTOR
           TF_VAR_workload_name: ${{ env.workload_name }}
           TF_VAR_deployment_environment: prod
-          TF_VAR_additional_client_ids: [ ${{ secrets.AZURE_OIDC_CLIENT_ID }} ]
+          TF_VAR_cicd_spn_client_id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
