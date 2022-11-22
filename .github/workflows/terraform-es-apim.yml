@@ -167,11 +167,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
           
-      - name: Download a single artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ env.plan_name }}
-          path: ${{ env.modulePath }}
+      # - name: Download a single artifact
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: ${{ env.plan_name }}
+      #     path: ${{ env.modulePath }}
 
       # Log into Azure via OIDC
       - uses: azure/login@v1
@@ -215,3 +215,4 @@ jobs:
           TF_VAR_account_name: github.com/$GITHUB_ACTOR
           TF_VAR_workload_name: ${{ env.workload_name }}
           TF_VAR_deployment_environment: prod
+          TF_VAR_additional_client_ids: [ ${{ secrets.AZURE_OIDC_CLIENT_ID }} ]

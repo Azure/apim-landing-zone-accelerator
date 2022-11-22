@@ -120,3 +120,9 @@ variable "pool_name" {
   description = "The name Azure DevOps or GitHub pool for this build agent to join. Use 'Default' if you don't have a separate pool"
   default     = "default"
 }
+
+variable "additional_client_ids" {
+  description = "List of additional clients to add to the Shared Key Vault access policy."
+  type    = list(string)
+  default = []
+}
