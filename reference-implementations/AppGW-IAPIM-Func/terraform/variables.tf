@@ -123,6 +123,6 @@ variable "pool_name" {
 
 variable "cicd_spn_client_id" {
   description = "Deployment service principal client ID for CICD agent to grant access to shared key vault."
-  type    = string
-  default = null
+  type        = string
+  default     = null
 }
