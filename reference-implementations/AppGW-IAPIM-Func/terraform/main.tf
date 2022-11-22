@@ -33,7 +33,7 @@ module "shared" {
   vm_username           = var.vm_username
   vm_password           = var.vm_password
 
-  additional_client_ids = var.cicd_spn_client_id ? [var.cicd_spn_client_id] : []
+  additional_client_ids = var.cicd_spn_client_id != null ? [var.cicd_spn_client_id] : []
 }
 
 #-------------------------------
