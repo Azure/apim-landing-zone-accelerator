@@ -120,3 +120,9 @@ variable "pool_name" {
   description = "The name Azure DevOps or GitHub pool for this build agent to join. Use 'Default' if you don't have a separate pool"
   default     = "default"
 }
+
+variable "cicd_spn_client_id" {
+  description = "Deployment service principal client ID for CICD agent to grant access to shared key vault."
+  type        = string
+  default     = null
+}

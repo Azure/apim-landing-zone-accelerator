@@ -1,0 +1,218 @@
+# --------------------------------------------
+# Terraform-ES-APIM.yml
+# --------------------------------------------
+# Deploys the Terraform reference implementation code
+# Leverages two environments to handle OIDC-based RBAC:
+#   staging: READ ONLY access to provide plan outputs
+#   production: CONTRIBUTOR access to apply the configuration
+#
+# Leverages the following GITHUB SECRETS to configure the remote state backend:
+#  - AZURE_TF_STATE_RESOURCE_GROUP_NAME
+#  - AZURE_TF_STATE_STORAGE_ACCOUNT_NAME
+#  - AZURE_TF_STATE_STORAGE_CONTAINER_NAME
+#  - AZURE_SUBSCRIPTION_ID
+#  - AZURE_TENANT_ID
+#  - AZURE_OIDC_CLIENT_ID
+
+name: 'Terraform ES-APIM Deploy'
+
+on:
+  workflow_dispatch: 
+    
+  pull_request:
+    branches:
+    - main
+    - feature/terraform
+    
+    paths: 
+    - '.github/workflows/terraform-es-apim.yml'
+    - '/reference-implementations/AppGW-IAPIM-Func/terraform/**'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+env:
+  modulePath: 'reference-implementations/AppGW-IAPIM-Func/terraform'
+  workload_name: lza
+  terraform_version: 1.3.4 # must be greater than or equal to 1.2 for OIDC
+  plan_name: 'appgw-iapim-func.${{github.run_number}}.tfplan'
+  
+jobs:
+  init_validate_plan:
+    runs-on: ubuntu-latest
+    environment: staging
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.modulePath }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Log into Azure via OIDC
+      - uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.terraform_version }}
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.AZURE_TF_STATE_RESOURCE_GROUP_NAME }}"   \
+            -backend-config="storage_account_name=${{ secrets.AZURE_TF_STATE_STORAGE_ACCOUNT_NAME }}" \
+            -backend-config="container_name=${{ secrets.AZURE_TF_STATE_STORAGE_CONTAINER_NAME }}"     \
+            -backend-config="key=${{ secrets.AZURE_TF_STATE_STORAGE_CONTAINER_KEY }}"
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_USE_OIDC: true
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+  
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -lock=false -no-color -out /$RUNNER_TEMP/$plan_name
+        continue-on-error: false
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_USE_OIDC: true
+          TF_VAR_vm_password: ${{ secrets.VM_PW }}
+          TF_VAR_vm_username: ${{ secrets.VM_USER }}
+          TF_VAR_personal_access_token: ${{ secrets.PAT }}
+          TF_VAR_cicd_agent_type: github
+          TF_VAR_account_name: github.com/$GITHUB_ACTOR
+          TF_VAR_workload_name: ${{ env.workload_name }}
+          TF_VAR_deployment_environment: prod
+
+      - name: Upload TFPlan
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.plan_name }}
+          path: '${{ runner.temp}}/${{ env.plan_name }}'
+          retention-days: 5
+
+      # GitHub script currently giving issues around some 'unknown identifier'. 
+      # Commenting out for now. 
+      # --------
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          # github-token: ${{ secrets.PAT}}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ steps.validate.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.modulePath }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+  deploy:
+    # if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request'
+    needs: init_validate_plan
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.modulePath }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+          
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.plan_name }}
+          path: ${{ env.modulePath }}
+
+      # Log into Azure via OIDC
+      - uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.terraform_version }}
+
+      - name: Terraform Init
+        id: init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.AZURE_TF_STATE_RESOURCE_GROUP_NAME }}"   \
+            -backend-config="storage_account_name=${{ secrets.AZURE_TF_STATE_STORAGE_ACCOUNT_NAME }}" \
+            -backend-config="container_name=${{ secrets.AZURE_TF_STATE_STORAGE_CONTAINER_NAME }}"     \
+            -backend-config="key=${{ secrets.AZURE_TF_STATE_STORAGE_CONTAINER_KEY }}"
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_USE_OIDC: true
+
+      - name: Terraform apply 
+        id: apply
+        run: |
+          terraform apply -auto-approve -lock=false $plan_name 
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_USE_OIDC: true
+          TF_VAR_vm_password: ${{ secrets.VM_PW }}
+          TF_VAR_vm_username: ${{ secrets.VM_USER }}
+          TF_VAR_personal_access_token: ${{ secrets.PAT }}
+          TF_VAR_cicd_agent_type: github
+          TF_VAR_account_name: github.com/$GITHUB_ACTOR
+          TF_VAR_workload_name: ${{ env.workload_name }}
+          TF_VAR_deployment_environment: prod
+          TF_VAR_cicd_spn_client_id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
