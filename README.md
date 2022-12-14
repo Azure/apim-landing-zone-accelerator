@@ -33,7 +33,7 @@ Deployment Details:
 |--------------|--------------|--------------|
 | [Bicep](/reference-implementations/AppGW-IAPIM-Func/bicep) |[es-apim.yml](/.github/workflows/es-apim.yml)| [README](/docs/README.md)
 | [ARM](/reference-implementations/AppGW-IAPIM-Func/azure-resource-manager/apim-arm.js) | Not provided* |
-| Terraform (Coming soon)||
+| [Terraform](reference-implementations/AppGW-IAPIM-Func/terraform) | [terraform-es-apim.yml](.github/workflows/terraform-es-apim.yml) | [README](reference-implementations/AppGW-IAPIM-Func/terraform/README.md) |
 ---
 
 ## Other Considerations

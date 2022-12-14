@@ -1,0 +1,62 @@
+# Terraform-Dependencies.yml
+# --------------------------------------------
+# Provisions Azure Terraform Remote State Backend Resources:
+#  - Resource Group
+#  - Storage Account
+#  - Storage Container
+#
+# Resource naming and OIDC configured via following GitHub Secrets:
+#  - AZURE_TF_STATE_RESOURCE_GROUP_NAME
+#  - AZURE_TF_STATE_STORAGE_ACCOUNT_NAME
+#  - AZURE_TF_STATE_STORAGE_CONTAINER_NAME
+#  - AZURE_SUBSCRIPTION_ID
+#  - AZURE_TENANT_ID
+#  - AZURE_OIDC_CLIENT_ID
+
+name: 'Terraform Dependencies'
+
+on:
+  workflow_dispatch:
+  
+env:
+  location: 'westus2'
+
+permissions:
+  id-token: write
+  contents: read
+  
+jobs:
+  provision-infrastructure-dependencies:
+    name: "Create storage account and container for Terraform state"
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      # Log into Azure via OIDC
+      - uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_OIDC_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Create Resource Group & Storage Account
+        id: rg
+        run: |
+          if [ $(az group exists --name ${{ secrets.AZURE_TF_STATE_RESOURCE_GROUP_NAME }}) = false ]; then
+            az group create \
+              --name ${{ secrets.AZURE_TF_STATE_RESOURCE_GROUP_NAME }} \
+              --location ${{ env.location }} 
+          fi
+
+          if [ $(az storage account check-name --name ${{ secrets.AZURE_TF_STATE_STORAGE_ACCOUNT_NAME }} --query nameAvailable) ]; then
+            az storage account create \
+              --name ${{ secrets.AZURE_TF_STATE_STORAGE_ACCOUNT_NAME }} \
+              --resource-group ${{ secrets.AZURE_TF_STATE_RESOURCE_GROUP_NAME }} \
+              --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} \
+              --location ${{ env.location }} \
+              --sku Standard_LRS
+
+            az storage container create \
+              --name ${{ secrets.AZURE_TF_STATE_STORAGE_CONTAINER_NAME }} \
+              --account-name ${{ secrets.AZURE_TF_STATE_STORAGE_ACCOUNT_NAME }}
+          fi
+

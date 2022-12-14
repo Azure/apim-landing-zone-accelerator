@@ -167,6 +167,9 @@ c.) Generate the following secrets in your GitHub repository settings
 - `AZURE_OIDC_CLIENT_ID` - Service principal Application (client) id
 - `AZURE_TENANT_ID` - Your Azure AD Directory (tenant) id
 - `AZURE_SUBSCRIPTION_ID` - Azure target subscription id
+- `AZURE_TF_STATE_RESOURCE_GROUP_NAME` - Name of the Resource Group where the Terraform remote state storage account resides
+- `AZURE_TF_STATE_STORAGE_ACCOUNT_NAME` - Name of the Storage Account that contains the Terraform remote state container
+- `AZURE_TF_STATE_STORAGE_CONTAINER_NAME` - Name of the Storage Account Container to initialize the Terraform remote state
 - `PAT` -  Azure DevOps or GitHub personal access token (PAT) used to setup the CI/CD agent
 - `VM_PW` - The password to be used as the Administrator for all VMs created by this deployment
 - `FQDN` - Fully qualified domain name that will be used for the application gateway
