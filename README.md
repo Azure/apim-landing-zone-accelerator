@@ -46,6 +46,24 @@ Deployment Details:
 2. Please leverage issues if you have any feedback or request on how we can improve on this repository
 
 ---
+
+## Got a feedback
+
+Please leverage issues if you have any feedback or request on how we can improve on this repository.
+
+---
+## Data Collection
+
+The software may collect information about you and your use of the software and send it to Microsoft. Microsoft may use this information to provide services and improve our products and services. You may turn off the telemetry as described in the repository. There are also some features in the software that may enable you and Microsoft to collect data from users of your applications. If you use these features, you must comply with applicable law, including providing appropriate notices to users of your applications together with a copy of Microsoft's privacy statement. Our privacy statement is located at https://go.microsoft.com/fwlink/?LinkId=521839. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices.
+
+### Telemetry Configuration
+
+Telemetry collection is on by default.
+
+To opt-out, set the variable enableTelemetry to `false` in Bicep/ARM file and disable_terraform_partner_id to `false` on Terraform files.
+
+---
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
@@ -67,3 +85,4 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
