@@ -9,7 +9,7 @@ The `Enterprise-scale-APIM` - architecture solution template is intended to prov
 
 ## Tooling
 
-- [Az CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) latest version
+- [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) latest version
 OR
 - Azure [cloud shell](https://shell.azure.com/)
 
@@ -29,15 +29,15 @@ You can automate workflows using Azure [Login Action](https://github.com/Azure/l
 
 The Azure login action supports two different ways of authenticating with Azure :
 
-- Service principal with [secrets](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-a-service-principal-secret)
+- Service principal with [secrets](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-a-service-principal-secret)
 
-- OpenID Connect (OIDC) with a Azure service principal using a [Federated Identity Credential](https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-openid-connect)
+- OpenID Connect (OIDC) with a Azure service principal using a [Federated Identity Credential](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Cwindows#use-the-azure-login-action-with-openid-connect)
 
 **Note** The default configuration for the APIM accelerator workflow is to use OpenID Connect.
 
 ### 3. Create a Service Principal using Az CLI commands by signing-in interactively OR using Cloud Shell
 
-a.) Interactive sign-in using [Az CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+a.) Interactive sign-in using [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
 
 ```Powershell
 az login
@@ -225,14 +225,14 @@ Alternatively, you can also trigger the workflow by going to **Actions** tab and
 
 ### 8. Deploy the Function and APIs
 
-- [Import](https://docs.microsoft.com/en-us/azure/devops/repos/git/import-git-repository?view=azure-devops) this repo to an Azure DevOps Repo
-- Create two [ARM service connections](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops) each scoped to the apim resource group and the fucntion app resource group
+- [Import](https://learn.microsoft.com/en-us/azure/devops/repos/git/import-git-repository?view=azure-devops) this repo to an Azure DevOps Repo
+- Create two [ARM service connections](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops) each scoped to the apim resource group and the function app resource group
 - Make sure that the *Default* agent pool has _Grant access to all pipelines_ selected
 
 ## Deploy the backend
 
 - Create a pipeline using the [deploy-function.yml](/src/pipelines/deploy-function.yml) file
-- Add [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#access-variables-through-the-environment) to the pipeline 
+- Add [variables](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#access-variables-through-the-environment) to the pipeline 
   - armServiceConnection - the service connection scoped to the backend resource group
   - functionAppName - name of the function app in the backend resource group
   - poolName
