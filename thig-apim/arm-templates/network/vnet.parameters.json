@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "tag1Key": {
+            "value": "BusinessUnit"
+        },
+        "tag1Value": {
+            "value": "Personal Lines"
+        },
+        "tag2Key": {
+            "value": "CostCenter"
+        },
+        "tag2Value": {
+            "value": "356151"
+        },
+        "tag3Key": {
+            "value": "Department"
+        },
+        "tag3Value": {
+            "value": "HTG"
+        },
+        "tag4Key": {
+            "value": "Environment"
+        },
+        "tag4Value": {
+            "value": "Sandbox"
+        },
+        "tag5Key": {
+            "value": "BusinessOwner"
+        },
+        "tag5Value": {
+            "value": "Kalyan Ponnada"
+        },
+        "tag6Key": {
+            "value": "Operation Owner"
+        },
+        "tag6Value": {
+            "value": "Kalyan Ponnada"
+        },
+        "virtualNetworkName": {
+            "value": "vnet-thig-apim-prd-eu2-001"
+        },
+        "apimSubnetName": {
+            "value": "snet-thig-apim-apim-prd-eu2-001"
+        },
+        "appGatewaySubnetName": {
+            "value": "snet-thig-apim-agw-prd-eu2-001"
+        },
+        "windowsJumpServerSubnetName": {
+            "value": "snet-thig-apim-jsvm-prd-eu2-001"
+        },
+        "azureDevOpsAgentSubnetName": {
+            "value": "snet-thig-apim-adoa-prd-eu2-001"
+        }
+    }
+}

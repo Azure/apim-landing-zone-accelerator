@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworkName": {
+            "type": "string"
+        },
+        "apimSubnetName": {
+            "type": "string"
+        },
+        "appGatewaySubnetName": {
+            "type": "string"
+        },
+        "windowsJumpServerSubnetName": {
+            "type": "string"
+        },
+        "azureDevOpsAgentSubnetName": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('virtualNetworkName')]",
+            "type": "Microsoft.Network/VirtualNetworks",
+            "apiVersion": "2021-01-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "CostCenter": "54321",
+                "BusinessUnit": "Sample Business"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.2.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('apimSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "10.2.7.0/24"
+                        }
+                    },
+                    {
+                        "name": "[parameters('appGatewaySubnetName')]",
+                        "properties": {
+                            "addressPrefix": "10.2.4.0/24"
+                        }
+                    },
+                    {
+                        "name": "[parameters('windowsJumpServerSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "10.2.3.0/24"
+                        }
+                    },
+                    {
+                        "name": "[parameters('azureDevOpsAgentSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "10.2.2.0/24"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
