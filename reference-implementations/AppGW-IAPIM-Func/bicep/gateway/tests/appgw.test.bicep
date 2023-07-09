@@ -13,8 +13,14 @@ var apimFqdn =                      'api-internal.constoso.com'
 
 var keyVaultName =                  'kv-${workload}-${environment}-002'
 var keyVaultRG =                    'ES-AppGateway_RG'
+var appGwManagedIdentityId =        '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/ES-AppGateway_RG/providers/Microsoft.ManagedIdentity/userAssignedIdentities/appgw-${resourceSuffix}-identity'
 
-var certPassword =                  '123456'
+var existingKvName = ''
+var existingKvRG = ''
+var existingKvSecretName = ''
+var newOrExistingKv = 'new'
+
+//var certPassword =                  '123456'
 
 module appgwModule '../appgw.bicep' = {
   name: 'appgwDeploy'
@@ -27,6 +33,11 @@ module appgwModule '../appgw.bicep' = {
     primaryBackendEndFQDN:          apimFqdn
     keyVaultName:                   keyVaultName
     keyVaultResourceGroupName:      keyVaultRG
-    certPassword:                   certPassword
+    appGatewayCertType:            'pfx'
+    appGwManagedIdentityId: appGwManagedIdentityId
+    newOrExistingKeyVault:          newOrExistingKv
+    existingKeyVaultName:          existingKvName
+    existingKeyVaultResourceGroup: existingKvRG
+    existingKeyVaultSecretName: existingKvSecretName
   }
 }

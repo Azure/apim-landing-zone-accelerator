@@ -1,59 +1,69 @@
-param keyVaultName            string
+param newOrExistingKv string 
+param existingKvName string 
+param existingSecretName string 
+param existingKvResourceGroup string
+param newKeyVaultName  string 
 param managedIdentity         object      
 param location                string
 param appGatewayFQDN          string
 @secure()
-param certPassword            string  
+param certPassword            string
 param appGatewayCertType      string
+param scope                   string = ((newOrExistingKv == 'new') ? resourceGroup().name : existingKvResourceGroup)
 
-var secretName = replace(appGatewayFQDN,'.', '-')
+var kvName = ((newOrExistingKv == 'new') ?newKeyVaultName : existingKvName)
+var secretName = ((newOrExistingKv == 'new')? replace(appGatewayFQDN,'.', '-') : existingSecretName)
 var subjectName='CN=${appGatewayFQDN}'
 
-var certData = appGatewayCertType == 'selfsigned' ? 'null' : loadFileAsBase64('../certs/appgw.pfx')
-var certPwd = appGatewayCertType == 'selfsigned' ? 'null' : certPassword
 
-resource accessPolicyGrant 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01' = {
-  name: '${keyVaultName}/add'
-  properties: {
-    accessPolicies: [
-      {
-        objectId: managedIdentity.properties.principalId
-        tenantId: managedIdentity.properties.tenantId
-        permissions: {
-          secrets: [ 
-            'get' 
-            'list'
-          ]
-          certificates: [
-            'import'
-            'get'
-            'list'
-            'update'
-            'create'
-          ]
-        }                  
-      }
-    ]
+module grantAccessPolicy '../../keyvault/accessPolicy.bicep'= {
+  name: 'grantAccessPolicy'
+  scope: resourceGroup(scope)
+  params:{
+    kvName: kvName
+    managedIdentity: managedIdentity
   }
 }
+// resource accessPolicyGrant 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01' = {
+//   name: '${kvName}/add'
+//   properties: {
+//     accessPolicies: [
+//       {
+//         objectId: managedIdentity.properties.principalId
+//         tenantId: managedIdentity.properties.tenantId
+//         permissions: {
+//           secrets: [ 
+//             'get' 
+//             'list'
+//           ]
+//           certificates: [
+//             'import'
+//             'get'
+//             'list'
+//             'update'
+//             'create'
+//           ]
+//         }                  
+//       }
+//     ]
+//   }
+// }
 
-resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
+resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2020-10-01' = if (newOrExistingKv == 'new') {
   name: '${secretName}-certificate'
   dependsOn: [
-    accessPolicyGrant
+    grantAccessPolicy
   ]
   location: location 
   kind: 'AzurePowerShell'
   properties: {
     azPowerShellVersion: '6.6'
-    arguments: ' -vaultName ${keyVaultName} -certificateName ${secretName} -subjectName ${subjectName} -certPwd ${certPwd} -certDataString ${certData} -certType ${appGatewayCertType}'
+    arguments: ' -vaultName ${newKeyVaultName} -certificateName ${secretName} -subjectName ${subjectName} -certType ${appGatewayCertType}'
     scriptContent: '''
       param(
       [string] [Parameter(Mandatory=$true)] $vaultName,
       [string] [Parameter(Mandatory=$true)] $certificateName,
       [string] [Parameter(Mandatory=$true)] $subjectName,
-      [string] [Parameter(Mandatory=$true)] $certPwd,
-      [string] [Parameter(Mandatory=$true)] $certDataString,
       [string] [Parameter(Mandatory=$true)] $certType
       )
 
@@ -86,10 +96,6 @@ resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2020-10-01
           }
         } while ($operation.Status -ne 'completed')		
       }
-      else {
-        $ss = Convertto-SecureString -String $certPwd -AsPlainText -Force; 
-        Import-AzKeyVaultCertificate -Name $certificateName -VaultName $vaultName -CertificateString $certDataString -Password $ss
-      }
       '''
     retentionInterval: 'P1D'
   }
@@ -101,15 +107,32 @@ resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2020-10-01
   }
 }
 
-module appGatewaySecretsUri 'certificateSecret.bicep' = {
+module appGatewaySecretsUriFromNewKv 'certificateSecret.bicep' = if(newOrExistingKv == 'new'){
   name: '${secretName}-certificate'
+  scope: resourceGroup(scope)
   dependsOn: [
     appGatewayCertificate
   ]
   params: {
-    keyVaultName: keyVaultName
+    resourceGroupName: scope
+    keyVaultName: kvName
     secretName: secretName
   }
 }
 
-output secretUri string = appGatewaySecretsUri.outputs.secretUri
+module appGatewaySecretsUriFromExistingKv 'certificateSecret.bicep' = if(newOrExistingKv == 'existing'){
+  name: '${secretName}-certificate'
+  scope: resourceGroup(scope)
+  dependsOn: [
+    appGatewayCertificate
+  ]
+  params: {
+    resourceGroupName: scope
+    keyVaultName: kvName
+    secretName: secretName
+  }
+}
+
+output secretUriFromNewKv string = appGatewaySecretsUriFromNewKv.outputs.secretUri
+output secretUriFromExistingKv string = appGatewaySecretsUriFromExistingKv.outputs.secretUri
+

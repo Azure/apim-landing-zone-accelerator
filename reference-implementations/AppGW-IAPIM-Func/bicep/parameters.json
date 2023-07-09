@@ -28,6 +28,18 @@
         },
         "appGatewayCertType" :{
             "value": "selfsigned or custom"
+        },
+        "newOrExistingCert":{ 
+            "value": "new or existing"
+        },
+        "existingKeyVaultName":{ 
+            "value": "KEYVAULT NAME"
+        },
+        "existingKeyVaultResourceGroup":{ 
+            "value": "KEYVAULT RESOURCE GROUP"
+        },
+        "existingSecretName":{
+            "value": "CERT NAME"
         }
     }
 }

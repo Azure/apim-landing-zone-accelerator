@@ -28,9 +28,9 @@ param capacity int = 1
 @description('Location for Azure resources.')
 param location string = resourceGroup().location
 
-param appInsightsName string
-param appInsightsId string
-param appInsightsInstrumentationKey string
+// param appInsightsName string
+// param appInsightsId string
+// param appInsightsInstrumentationKey string
 
 /*
  * Resources
@@ -53,27 +53,27 @@ resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
   }
 }
 
-resource apimName_appInsightsLogger_resource 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
-  parent: apimName_resource
-  name: appInsightsName
-  properties: {
-    loggerType: 'applicationInsights'
-    resourceId: appInsightsId
-    credentials: {
-      instrumentationKey: appInsightsInstrumentationKey
-    }
-  }
-}
+// resource apimName_appInsightsLogger_resource 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
+//   parent: apimName_resource
+//   name: appInsightsName
+//   properties: {
+//     loggerType: 'applicationInsights'
+//     resourceId: appInsightsId
+//     credentials: {
+//       instrumentationKey: appInsightsInstrumentationKey
+//     }
+//   }
+// }
 
-resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnostics@2019-01-01' = {
-  parent: apimName_resource
-  name: 'applicationinsights'
-  properties: {
-    loggerId: apimName_appInsightsLogger_resource.id
-    alwaysLog: 'allErrors'
-    sampling: {
-      percentage: 100
-      samplingType: 'fixed'
-    }
-  }
-}
+// resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnostics@2019-01-01' = {
+//   parent: apimName_resource
+//   name: 'applicationinsights'
+//   properties: {
+//     loggerId: apimName_appInsightsLogger_resource.id
+//     alwaysLog: 'allErrors'
+//     sampling: {
+//       percentage: 100
+//       samplingType: 'fixed'
+//     }
+//   }
+// }
