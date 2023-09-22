@@ -1,16 +1,16 @@
 # Steps to deploy the function and APIs
 
-- [Import](https://docs.microsoft.com/en-us/azure/devops/repos/git/import-git-repository?view=azure-devops) this repo to an Azure DevOps Repo
-- Create two [ARM service connections](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops) each scoped to the apim resource group and the fucntion app resource group
+- [Import](https://learn.microsoft.com/en-us/azure/devops/repos/git/import-git-repository?view=azure-devops) this repo to an Azure DevOps Repo
+- Create two [ARM service connections](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops) each scoped to the APIM resource group and the function app resource group
 - Make sure that the *Default* agent pool has _Grant access to all pipelines_ selected
-- Create an [Artifacts Feed](https://docs.microsoft.com/en-us/azure/devops/artifacts/get-started-nuget?view=azure-devops&tabs=windows#create-a-feed). For ex, name as todo-apis
+- Create an [Artifacts Feed](https://learn.microsoft.com/en-us/azure/devops/artifacts/get-started-nuget?view=azure-devops&tabs=windows#create-a-feed). For ex, name as todo-apis
 
 ## Deploy the backend
 
 - Create a pipeline using the deploy-function.yml file
-- Add [variables](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#access-variables-through-the-environment) to the pipeline
+- Add [variables](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#access-variables-through-the-environment) to the pipeline
   - armServiceConnection - the service connection scoped to the backend resource group
-  - functionAppName - name of the funciton app in the backend resource group
+  - functionAppName - name of the function app in the backend resource group
   - poolName
 - Run the pipeline
 

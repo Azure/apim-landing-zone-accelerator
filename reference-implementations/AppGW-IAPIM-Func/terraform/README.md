@@ -19,7 +19,7 @@
 ## Pre-requisites
 
 1. [Terraform](#configure-terraform)
-1. [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+1. [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 1. Azure Subscription
 
 ## Overview
@@ -87,10 +87,10 @@ AppInsightsName = appi-${resource_suffix} [e.g. appi-apidemo-dev-eastus-001]
 
 If you haven't already done so, configure Terraform using one of the following options:
 
-- [Configure Terraform in Azure Cloud Shell with Bash](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash)
-- [Configure Terraform in Azure Cloud Shell with PowerShell](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-powershell)
-- [Configure Terraform in Windows with Bash](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-windows-bash)
-- [Configure Terraform in Windows with PowerShell](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-windows-powershell)
+- [Configure Terraform in Azure Cloud Shell with Bash](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash)
+- [Configure Terraform in Azure Cloud Shell with PowerShell](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-powershell)
+- [Configure Terraform in Windows with Bash](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-windows-bash)
+- [Configure Terraform in Windows with PowerShell](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-windows-powershell)
 
 #### Configure Remote Storage Account
 
@@ -121,9 +121,9 @@ Alternatively, the [Terraform Dependencies](../../../.github/workflows/terraform
 
 For additional reading around remote state:
 
-- [MS Doc: Store Terraform state in Azure Storage](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
+- [MS Doc: Store Terraform state in Azure Storage](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
 - [TF Doc: AzureRM Provider Configuration Documentation](https://www.terraform.io/language/settings/backends/azurerm)
-- [GitHub Doc: GitHub Actions Secrets](https://docs.github.com/en/github-ae@latest/rest/actions/secrets)
+- [GitHub Doc: GitHub Actions Secrets](https://learn.github.com/en/github-ae@latest/rest/actions/secrets)
 
 ### Deploy the API Management Landing Zone
 
@@ -148,7 +148,7 @@ To configure your Terraform deployment to use the newly provisioned storage acco
 As you configured the backend remote state with your live Azure infrastructure resource values, you must also provide them for your deployment.
 
 1. Review the available variables with their descriptions and default values in the [variables.tf](./variables.tf) file.
-2. Provide any custom values to the defined variables by creating a `terraform.tfvars` file in this direcotry (`reference-implementations/AppGW-IAPIM-Func/terraform/terraform.tfvars`)
+2. Provide any custom values to the defined variables by creating a `terraform.tfvars` file in this directory (`reference-implementations/AppGW-IAPIM-Func/terraform/terraform.tfvars`)
     - [TF Docs: Variable Definitions (.tfvars) Files](https://www.terraform.io/language/values/variables#variable-definitions-tfvars-files)
 
 #### Deploy

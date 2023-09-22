@@ -9,7 +9,7 @@ Bicep is a domain-specific language (DSL) that uses declarative syntax to deploy
 
 You can use Bicep instead of JSON to develop your Azure Resource Manager templates (ARM templates). The JSON syntax to create an ARM template can be verbose and require complicated expressions. Bicep syntax reduces that complexity and improves the development experience. Bicep is a transparent abstraction over ARM template JSON and doesn't lose any of the JSON template capabilities. During deployment, the Bicep CLI converts a Bicep file into ARM template JSON.
 
-For more information please see [this](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
+For more information please see [this](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
 
 ## How to convert Bicep To ARM using Automation
 Initially we had prepared automated way, so for the GitHub Actions you can use this snippet
@@ -82,9 +82,9 @@ There are several ways to **Validate** an ARM Template;
 
 **Syntax**: For syntax check ```bicep build``` completes that validation.
 
-**Behavior**: Bicep completes most of behavior checks, while [arm-ttk](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/test-toolkit) has some additional capabilities that will eventually be incorporated into Bicep or other tools. 
+**Behavior**: Bicep completes most of behavior checks, while [arm-ttk](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/test-toolkit) has some additional capabilities that will eventually be incorporated into Bicep or other tools. 
 
-**Result**: This can be covered using [Azure Policy](https://docs.microsoft.com/en-us/azure/governance/policy/overview). 
+**Result**: This can be covered using [Azure Policy](https://learn.microsoft.com/en-us/azure/governance/policy/overview). 
 
 **Intent**: We can run what-if scenarios on the ARM Template. This, however, requires human interaction and thus cannot be automated. 
 
