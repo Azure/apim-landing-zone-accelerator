@@ -39,29 +39,33 @@ param personalAccessToken string
 @description('The FQDN for the Application Gateway. Example - api.contoso.com.')
 param appGatewayFqdn string
 
-@description('The password for the TLS certificate for the Application Gateway.  The pfx file needs to be copied to deployment/bicep/gateway/certs/appgw.pfx')
-@secure()
-param certificatePassword string
-
 @description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and copy the pfx file to deployment/bicep/gateway/certs/appgw.pfx if custom certificates are to be used')
+@allowed([
+  'selfsigned'
+  'custom'
+])
 param appGatewayCertType string
+
+param existingKvName string 
+param existingKvResourceGroup string 
+param existingSecretName string 
 
 param location string = deployment().location
 
 // Variables
-var resourceSuffix = '${workloadName}-${environment}-${location}-001'
+var resourceSuffix = '${workloadName}-${environment}-${location}-002'
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
-
 
 var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
+var newOrExisting = ((appGatewayCertType == 'selfsigned')? 'new' : 'existing')
+
 // Resource Names
 var apimName = 'apim-${resourceSuffix}'
 var appGatewayName = 'appgw-${resourceSuffix}'
-
 
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: networkingResourceGroupName
@@ -82,6 +86,12 @@ resource apimRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: apimResourceGroupName
   location: location
 }
+
+resource existingKvRG 'Microsoft.Resources/resourceGroups@2021-04-01' existing = if(newOrExisting == 'existing') {
+  name: existingKvResourceGroup
+}
+
+// Modules
 
 module networking './networking/networking.bicep' = {
   name: 'networkingresources'
@@ -128,8 +138,12 @@ module shared './shared/shared.bicep' = {
     resourceSuffix: resourceSuffix
     vmPassword: vmPassword
     vmUsername: vmUsername
+    appGatewayName: appGatewayName
+    newOrExisting: newOrExisting
   }
 }
+
+var newKvName = shared.outputs.keyVaultName
 
 module apimModule 'apim/apim.bicep'  = {
   name: 'apimDeploy'
@@ -138,9 +152,9 @@ module apimModule 'apim/apim.bicep'  = {
     apimName: apimName
     apimSubnetId: networking.outputs.apimSubnetid
     location: location
-    appInsightsName: shared.outputs.appInsightsName
-    appInsightsId: shared.outputs.appInsightsId
-    appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
+    // appInsightsName: shared.outputs.appInsightsName
+    // appInsightsId: shared.outputs.appInsightsId
+    // appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
   }
 }
 
@@ -159,12 +173,46 @@ module dnsZoneModule 'shared/dnszone.bicep'  = {
   }
 }
 
+
+
+module appgwIdentity 'gateway/Identity/Identity.bicep' = {
+  scope: resourceGroup(apimRG.name)
+  name: 'appGatewayIdentity'
+  params: {
+    appGatewayName: appGatewayName
+    location:     location
+  }
+}
+var appgwIdentityId = appgwIdentity.outputs.appGatewayIdentityId
+
+
+module keyvaultExisting 'keyvault/keyvault.bicep' = if (newOrExisting == 'existing') {
+  name: existingKvName
+  scope: existingKvRG
+  dependsOn:[
+    appgwIdentity
+  ]
+  params: {
+    existingSecretName: existingSecretName
+    existingKvResourceGroup: existingKvRG.name
+    existingKvName: existingKvName
+    appGwManagedIdentity: appgwIdentity
+    appGatewayFQDN: appGatewayFqdn
+    location: location
+    newOrExisting: newOrExisting
+    newKvName: newKvName
+  }
+}
+
+
+
 module appgwModule 'gateway/appgw.bicep' = {
   name: 'appgwDeploy'
   scope: resourceGroup(apimRG.name)
   dependsOn: [
     apimModule
     dnsZoneModule
+    appgwIdentity
   ]
   params: {
     appGatewayName:                 appGatewayName
@@ -175,6 +223,11 @@ module appgwModule 'gateway/appgw.bicep' = {
     keyVaultName:                   shared.outputs.keyVaultName
     keyVaultResourceGroupName:      sharedRG.name
     appGatewayCertType:             appGatewayCertType
-    certPassword:                   certificatePassword
+    appGwManagedIdentityId:           appgwIdentityId
+    newOrExistingKeyVault:                  newOrExisting
+    existingKeyVaultName:          existingKvName
+    existingKeyVaultResourceGroup: existingKvResourceGroup
+    existingKeyVaultSecretName:   existingSecretName
   }
 }
+

@@ -7,7 +7,7 @@ param location string
 param resourceSuffix string
 
 // Variables
-var appInsightsName = 'appi-${resourceSuffix}'
+//var appInsightsName = 'appi-${resourceSuffix}'
 var logAnalyticsWorkspaceName = 'log-${resourceSuffix}'
 
 // Resources
@@ -26,17 +26,17 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06
 }
 
 
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: appInsightsName
-  location: location
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    WorkspaceResourceId: logAnalyticsWorkspace.id
-  }
-}
+// resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+//   name: appInsightsName
+//   location: location
+//   kind: 'web'
+//   properties: {
+//     Application_Type: 'web'
+//     WorkspaceResourceId: logAnalyticsWorkspace.id
+//   }
+// }
 
-output appInsightsConnectionString string = appInsights.properties.ConnectionString
-output appInsightsName string = appInsights.name
-output appInsightsId string = appInsights.id
-output appInsightsInstrumentationKey string = appInsights.properties.InstrumentationKey
+// output appInsightsConnectionString string = appInsights.properties.ConnectionString
+// output appInsightsName string = appInsights.name
+// output appInsightsId string = appInsights.id
+// output appInsightsInstrumentationKey string = appInsights.properties.InstrumentationKey

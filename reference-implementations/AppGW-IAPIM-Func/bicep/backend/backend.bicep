@@ -34,7 +34,7 @@ var owner = 'APIM Const Set'
 // Azure Storage Sizing
 //
 // - name: must be globally unique
-var storageAccounts_saapimcsbackend_name  = toLower(take(replace('stbknd${workloadName}${environment}${location}', '-',''), 24))
+var storageAccounts_saapimcsbackend_name  = toLower(take(replace('stbkndg${workloadName}${environment}${location}', '-',''), 24))
 // - location
 var storageAccounts_location = location
 // - SKU name
@@ -75,12 +75,12 @@ var serverfarms_appsvcplanAPIMCSBackend_skuFamily  = 'Pv2' // dev - 'B'
 var serverfarms_appsvcplanAPIMCSBackend_skuCapacity  = 1
 
 
-var sites_funcappAPIMCSBackendMicroServiceA_name = 'func-code-be-${workloadName}-${environment}-${location}'
+var sites_funcappAPIMCSBackendMicroServiceA_name = 'func-code-be-ga1-${workloadName}-${environment}-${location}'
 var sites_funcappAPIMCSBackendMicroServiceA_location  = location
-var sites_funcappAPIMCSBackendMicroServiceA_siteHostname   = 'func-code-be-${workloadName}-${environment}-${location}.azurewebsites.net'
-var sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname   = 'func-code-be-${workloadName}-${environment}-${location}.scm.azurewebsites.net'
-var sites_funcappAPIMCSBackendMicroServiceA_siteName   = 'funccodebe${workloadName}${environment}${location}'
-var privateEndpoint_funcappAPIMCSBackendMicroServiceA_name   = 'pep-func-code-be-${workloadName}-${environment}-${location}'
+var sites_funcappAPIMCSBackendMicroServiceA_siteHostname   = 'func-code-be-ga1-${workloadName}-${environment}-${location}.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname   = 'func-code-be-ga1-${workloadName}-${environment}-${location}.scm.azurewebsites.net'
+var sites_funcappAPIMCSBackendMicroServiceA_siteName   = 'funccodebega1${workloadName}${environment}${location}'
+var privateEndpoint_funcappAPIMCSBackendMicroServiceA_name   = 'pep-func-code-be-ga1-${workloadName}-${environment}-${location}'
 
 
 //

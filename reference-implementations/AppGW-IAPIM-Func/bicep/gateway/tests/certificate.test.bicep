@@ -4,7 +4,7 @@ var location =                      'southcentralus'
 var appgwFqdn =                     'api.contoso.com'
 var apimRG =                        'ES-AppGateway_RG'
 var keyVaultName =                  'kv-${workload}-${environment}-002'
-var certPassword =                  '123456'
+// var certPassword =                  '123456'
 
 var appGatewayIdentityId            = 'identity-bjdcsacloud'
 
@@ -19,9 +19,13 @@ module certificate '../modules/certificate.bicep' = {
   params: {
     appGatewayFQDN:                 appgwFqdn
     location:                       location
-    keyVaultName:                   keyVaultName
-    certPassword:                   certPassword
     managedIdentity:                appGatewayIdentity
+    appGatewayCertType:            'selfsigned'
+    existingKvName:                'existingKvName'
+    existingKvResourceGroup:              'existingKvRgName'
+    existingSecretName:          'existingKvSecretName'
+    newKeyVaultName:             'newKvName'
+    newOrExistingKv: 'new'
   }
 }
 

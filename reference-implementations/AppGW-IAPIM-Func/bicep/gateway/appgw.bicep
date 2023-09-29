@@ -25,29 +25,61 @@ param probeUrl                      string = '/status-0123456789abcdef'
 param keyVaultName                  string
 param keyVaultResourceGroupName     string
 
-@secure()
-param certPassword                  string  
+param existingKeyVaultResourceGroup string
+param existingKeyVaultName          string
+param existingKeyVaultSecretName    string
+
+param appGwManagedIdentityId        string
+
+param newOrExistingKeyVault         string 
+
+// @secure()
+// param certPassword                  string  
 
 var appGatewayPrimaryPip            = 'pip-${appGatewayName}'
 var appGatewayIdentityId            = 'identity-${appGatewayName}'
 
-resource appGatewayIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-  name:     appGatewayIdentityId
-  location: location
+// resource appGatewayIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+//   name:     appGatewayIdentityId
+//   location: location
+// }
+
+module appgwIdentity 'Identity/Identity.bicep' = {
+  name: appGatewayIdentityId
+  params: {
+    appGatewayName: appGatewayName
+    location:     location
+  }
 }
+
+var appGwManagedIdentity = appgwIdentity.outputs.appGatewayIdentity
 
 module certificate './modules/certificate.bicep' = {
   name: 'certificate'
   scope: resourceGroup(keyVaultResourceGroupName)
   params: {
-    managedIdentity:    appGatewayIdentity
-    keyVaultName:       keyVaultName
+    managedIdentity:    appGwManagedIdentity
     location:           location
     appGatewayFQDN:     appGatewayFQDN
     appGatewayCertType: appGatewayCertType
-    certPassword:       certPassword
+    existingKvName: existingKeyVaultName
+    existingKvResourceGroup: existingKeyVaultResourceGroup
+    existingSecretName: existingKeyVaultSecretName
+    newOrExistingKv: newOrExistingKeyVault
+    newKeyVaultName: keyVaultName
   }
 }
+
+// module existingCertificate 'modules/existingCertificate.bicep' = if (newOrExistingKeyVault == 'existing'){
+//   name: 'existingCertificate'
+//   scope: resourceGroup(existingKeyVaultResourceGroup)
+//   params: {
+//     existingSecretName: existingKeyVaultSecretName
+//     existingKvName:   existingKeyVaultName
+//     existingKvResourceGroup:     existingKeyVaultResourceGroup  
+//     appGwManagedIdentity : appGwManagedIdentity
+//   }
+// }
 
 resource appGatewayPublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-09-01' = {
   name: appGatewayPrimaryPip
@@ -61,16 +93,16 @@ resource appGatewayPublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-09-
   }
 }
 
-resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-01' = {
+resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-01' = { 
   name: appGatewayName
   location: location
   dependsOn: [
-    certificate
+    certificate, appgwIdentity//, existingCertificate
   ]
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
-      '${appGatewayIdentity.id}': {}
+      '${appGwManagedIdentityId}': {}
     }
   }
   properties: {
@@ -92,7 +124,7 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
       {
         name: appGatewayFQDN
         properties: {
-          keyVaultSecretId:  certificate.outputs.secretUri
+          keyVaultSecretId:  ((newOrExistingKeyVault == 'new') ? certificate.outputs.secretUriFromNewKv : certificate.outputs.secretUriFromExistingKv)
         }
       }
     ]
@@ -265,3 +297,8 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
     }
   }
 }
+
+
+
+//outputs
+output appGtManagedIdentity object = appgwIdentity

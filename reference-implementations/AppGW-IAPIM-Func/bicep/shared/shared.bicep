@@ -45,19 +45,32 @@ param resourceSuffix string
   'dr'
 ])
 param environment string
+param newOrExisting string 
+param appGatewayName string 
+
 
 // Variables - ensure key vault name does not end with '-'
-var tempKeyVaultName = take('kv-${resourceSuffix}', 24) // Must be between 3-24 alphanumeric characters 
+var tempKeyVaultName = take('kv5-${resourceSuffix}', 24) // Must be between 3-24 alphanumeric characters 
 var keyVaultName = endsWith(tempKeyVaultName, '-') ? substring(tempKeyVaultName, 0, length(tempKeyVaultName) - 1) : tempKeyVaultName
+
+module appgwIdentity '../gateway/Identity/Identity.bicep' = {
+  name: 'appGatewayIdentity'
+  params: {
+    appGatewayName: appGatewayName
+    location:     location
+  }
+}
+
 
 // Resources
 module appInsights './azmon.bicep' = {
   name: 'azmon'
   scope: resourceGroup(resourceGroupName)
-  params: {
-    location: location
+  params:{
     resourceSuffix: resourceSuffix
+    location: location
   }
+  
 }
 
 module vm_devopswinvm './createvmwindows.bicep' = if (toLower(CICDAgentType)!='none') {
@@ -89,7 +102,7 @@ module vm_jumpboxwinvm './createvmwindows.bicep' = {
   }
 }
 
-resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
+resource key_vault_new 'Microsoft.KeyVault/vaults@2019-09-01' = if (newOrExisting == 'new') {
   name: keyVaultName
   location: location
   properties: {
@@ -122,11 +135,14 @@ resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
   }
 }
 
+
 // Outputs
-output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
+//output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
 output CICDAgentVmName string = vm_devopswinvm.name
 output jumpBoxvmName string = vm_jumpboxwinvm.name
-output appInsightsName string=appInsights.outputs.appInsightsName
-output appInsightsId string=appInsights.outputs.appInsightsId
-output appInsightsInstrumentationKey string=appInsights.outputs.appInsightsInstrumentationKey
-output keyVaultName string = key_vault.name
+// output appInsightsName string=appInsights.outputs.appInsightsName
+// output appInsightsId string=appInsights.outputs.appInsightsId
+// output appInsightsInstrumentationKey string=appInsights.outputs.appInsightsInstrumentationKey
+output keyVaultName string = key_vault_new.name
+//output existingKeyVaultName string = key_vault_existing.name
+
