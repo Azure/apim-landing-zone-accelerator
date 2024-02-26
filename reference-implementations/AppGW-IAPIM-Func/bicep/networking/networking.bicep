@@ -43,6 +43,7 @@ param privateEndpointAddressPrefix string = '10.2.5.0/24'
 param backEndAddressPrefix string = '10.2.6.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
 param location string
+param apimName string
 
 /*
 @description('A short name for the PL that will be created between Funcs')
@@ -469,8 +470,15 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
 resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
   name: publicIPAddressName
   location: location
+  sku: {
+    name: 'Standard'
+  }
   properties: {
-    publicIPAllocationMethod: 'Dynamic'
+    publicIPAllocationMethod: 'Static'
+    dnsSettings: {
+      fqdn: '${apimName}.azure-api.net'
+      domainNameLabel: apimName
+    }
   }
 }
 
