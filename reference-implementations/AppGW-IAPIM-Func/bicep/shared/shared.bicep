@@ -1,4 +1,4 @@
-targetScope='resourceGroup'
+targetScope = 'resourceGroup'
 // Parameters
 @description('Azure location to which the resources are to be deployed')
 param location string
@@ -15,6 +15,9 @@ param vmUsername string
 @description('The password for the Administrator user for all VMs created by this deployment')
 @secure()
 param vmPassword string
+
+@description('Valid SKU indicator for the VM')
+param vmSize string = 'Standard_D4_v3'
 
 @description('The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')
 @allowed([
@@ -60,7 +63,7 @@ module appInsights './azmon.bicep' = {
   }
 }
 
-module vm_devopswinvm './createvmwindows.bicep' = if (toLower(CICDAgentType)!='none') {
+module vm_devopswinvm './createvmwindows.bicep' = if (toLower(CICDAgentType) != 'none') {
   name: 'devopsvm'
   scope: resourceGroup(resourceGroupName)
   params: {
@@ -73,6 +76,7 @@ module vm_devopswinvm './createvmwindows.bicep' = if (toLower(CICDAgentType)!='n
     personalAccessToken: personalAccessToken
     CICDAgentType: CICDAgentType
     deployAgent: true
+    vmSize: vmSize
   }
 }
 
@@ -86,6 +90,7 @@ module vm_jumpboxwinvm './createvmwindows.bicep' = {
     password: vmPassword
     CICDAgentType: CICDAgentType
     vmName: 'jumpbox-${environment}'
+    vmSize: vmSize
   }
 }
 
@@ -97,7 +102,7 @@ resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
     sku: {
       family: 'A'
       name: 'standard'
-    }    
+    }
     accessPolicies: [
       // {
       //   tenantId: 'string'
@@ -126,7 +131,7 @@ resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
 output appInsightsConnectionString string = appInsights.outputs.appInsightsConnectionString
 output CICDAgentVmName string = vm_devopswinvm.name
 output jumpBoxvmName string = vm_jumpboxwinvm.name
-output appInsightsName string=appInsights.outputs.appInsightsName
-output appInsightsId string=appInsights.outputs.appInsightsId
-output appInsightsInstrumentationKey string=appInsights.outputs.appInsightsInstrumentationKey
+output appInsightsName string = appInsights.outputs.appInsightsName
+output appInsightsId string = appInsights.outputs.appInsightsId
+output appInsightsInstrumentationKey string = appInsights.outputs.appInsightsInstrumentationKey
 output keyVaultName string = key_vault.name

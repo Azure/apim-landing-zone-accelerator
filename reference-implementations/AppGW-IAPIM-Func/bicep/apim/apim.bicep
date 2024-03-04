@@ -1,11 +1,11 @@
-targetScope='resourceGroup'
+targetScope = 'resourceGroup'
 
 /*
  * Input parameters
 */
 
 @description('The name of the API Management resource to be created.')
-param apimName            string
+param apimName string
 
 @description('The subnet resource id to use for APIM.')
 @minLength(1)
@@ -32,48 +32,48 @@ param appInsightsName string
 param appInsightsId string
 param appInsightsInstrumentationKey string
 
+param publicIpAddressId string
 /*
  * Resources
 */
 
-resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
+resource apimName_resource 'Microsoft.ApiManagement/service@2022-08-01' = {
   name: apimName
   location: location
-  sku:{
+  sku: {
     capacity: capacity
     name: skuName
   }
-  properties:{
+  properties: {
     virtualNetworkType: 'Internal'
     publisherEmail: publisherEmail
     publisherName: publisherName
+    publicIpAddressId: publicIpAddressId
     virtualNetworkConfiguration: {
       subnetResourceId: apimSubnetId
     }
   }
-}
 
-resource apimName_appInsightsLogger_resource 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
-  parent: apimName_resource
-  name: appInsightsName
-  properties: {
-    loggerType: 'applicationInsights'
-    resourceId: appInsightsId
-    credentials: {
-      instrumentationKey: appInsightsInstrumentationKey
+  resource apimName_appInsightsLogger_resource 'loggers' = {
+    name: appInsightsName
+    properties: {
+      loggerType: 'applicationInsights'
+      resourceId: appInsightsId
+      credentials: {
+        instrumentationKey: appInsightsInstrumentationKey
+      }
     }
   }
-}
 
-resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnostics@2019-01-01' = {
-  parent: apimName_resource
-  name: 'applicationinsights'
-  properties: {
-    loggerId: apimName_appInsightsLogger_resource.id
-    alwaysLog: 'allErrors'
-    sampling: {
-      percentage: 100
-      samplingType: 'fixed'
+  resource apimName_applicationinsights 'diagnostics' = {
+    name: 'applicationinsights'
+    properties: {
+      loggerId: apimName_appInsightsLogger_resource.id
+      alwaysLog: 'allErrors'
+      sampling: {
+        percentage: 100
+        samplingType: 'fixed'
+      }
     }
   }
 }

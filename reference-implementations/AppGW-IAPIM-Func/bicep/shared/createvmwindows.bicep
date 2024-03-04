@@ -100,24 +100,23 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-04-01' = {
       ]
     }
   }
-}
 
-// deploy CI/CD agent, if required
-resource vm_CustomScript 'Microsoft.Compute/virtualMachines/extensions@2021-04-01' = if (deployAgent) {
-  parent: vm
-  name: 'CustomScript'
-  location: location
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    settings: {
-      fileUris: [
-        artifactsLocation
-      ]   
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command ./agentsetup.ps1 -url ${accountName} -pat ${personalAccessToken} -agent ${AgentName} -pool ${poolName} -agenttype ${CICDAgentType} '
+  // deploy CI/CD agent, if required
+  resource vm_CustomScript 'extensions' = if (deployAgent) {
+    name: 'CustomScript'
+    location: location
+    properties: {
+      publisher: 'Microsoft.Compute'
+      type: 'CustomScriptExtension'
+      typeHandlerVersion: '1.10'
+      settings: {
+        fileUris: [
+          artifactsLocation
+        ]   
+      }
+      protectedSettings: {
+        commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command ./agentsetup.ps1 -url ${accountName} -pat ${personalAccessToken} -agent ${AgentName} -pool ${poolName} -agenttype ${CICDAgentType} '
+      }
     }
   }
 }
