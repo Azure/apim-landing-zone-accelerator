@@ -38,7 +38,7 @@ param appInsightsInstrumentationKey string
  * Resources
 */
 
-resource apimName_resource 'Microsoft.ApiManagement/service@2023-05-01-preview' = {
+resource apimName_resource 'Microsoft.ApiManagement/service@2022-08-01' = {
   name: apimName
   location: location
   sku:{
