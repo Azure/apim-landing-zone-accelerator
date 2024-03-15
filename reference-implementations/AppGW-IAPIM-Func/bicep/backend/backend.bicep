@@ -22,11 +22,12 @@ param vnetName string
 param vnetRG string
 
 param location string
+param resourceSuffix string
 
 //
 // Variables
 //
-var owner = 'APIM Const Set'
+var owner = 'APIM LZ'
 
 //
 // Azure Storage
@@ -50,16 +51,16 @@ var functionContentShareName = 'func-contents'
 //
 // - min TLS version
 var storageAccounts_minTLSVersion = 'TLS1_2'
-var privateEndpoint_storageaccount_queue_Name = 'pep-sa-queue-${workloadName}-${environment}-${location}'
-var privateEndpoint_storageaccount_blob_Name = 'pep-sa-blob-${workloadName}-${environment}-${location}'
-var privateEndpoint_storageaccount_file_Name = 'pep-sa-file-${workloadName}-${environment}-${location}'
-var privateEndpoint_storageaccount_table_Name = 'pep-sa-table-${workloadName}-${environment}-${location}'
+var privateEndpoint_storageaccount_queue_Name = 'pep-sa-queue-${resourceSuffix}'
+var privateEndpoint_storageaccount_blob_Name = 'pep-sa-blob-${resourceSuffix}'
+var privateEndpoint_storageaccount_file_Name = 'pep-sa-file-${resourceSuffix}'
+var privateEndpoint_storageaccount_table_Name = 'pep-sa-table-${resourceSuffix}'
 
 //
 // Azure Application Service Plan
 //
 // - name
-var serverfarms_appsvcplanAPIMCSBackend_name = 'plan-be-${workloadName}-${environment}-${location}'
+var serverfarms_appsvcplanAPIMCSBackend_name = 'plan-be-${resourceSuffix}'
 // - location
 var serverfarms_appsvcplanAPIMCSBackend_location = location
 // Azure Application Service Plan sizing
