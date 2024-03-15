@@ -42,6 +42,7 @@ param privateEndpointAddressPrefix string = '10.2.5.0/24'
 param backEndAddressPrefix string = '10.2.6.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
 param location string
+param apimName string
 
 /*
 @description('A short name for the PL that will be created between Funcs')

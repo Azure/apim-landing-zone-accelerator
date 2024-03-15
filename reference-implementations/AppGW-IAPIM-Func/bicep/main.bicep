@@ -97,6 +97,7 @@ module networking './networking/networking.bicep' = {
     workloadName: workloadName
     deploymentEnvironment: environment
     location: location
+    apimName: apimName
   }
 }
 
