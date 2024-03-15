@@ -19,7 +19,6 @@
 // 
 // # Script end
 
-
 // Parameters
 @description('A short name for the workload being deployed')
 param workloadName string
@@ -55,7 +54,6 @@ param functionId string = '123131'
 // Variables
 var owner = 'APIM Const Set'
 
-
 var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${deploymentEnvironment}-${location}'
 
 var bastionSubnetName = 'AzureBastionSubnet' // Azure Bastion subnet must have AzureBastionSubnet name, not 'snet-bast-${workloadName}-${deploymentEnvironment}-${location}'
@@ -65,7 +63,7 @@ var appGatewaySubnetName = 'snet-apgw-${workloadName}-${deploymentEnvironment}-$
 var privateEndpointSubnetName = 'snet-prep-${workloadName}-${deploymentEnvironment}-${location}-001'
 var backEndSubnetName = 'snet-bcke-${workloadName}-${deploymentEnvironment}-${location}-001'
 var apimSubnetName = 'snet-apim-${workloadName}-${deploymentEnvironment}-${location}-001'
-var bastionName = 'bastion-${workloadName}-${deploymentEnvironment}-${location}'	
+var bastionName = 'bastion-${workloadName}-${deploymentEnvironment}-${location}'
 var bastionIPConfigName = 'bastionipcfg-${workloadName}-${deploymentEnvironment}-${location}'
 
 var bastionSNNSG = 'nsg-bast-${workloadName}-${deploymentEnvironment}-${location}'
@@ -122,7 +120,6 @@ resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
             id: jumpBoxNSG.id
           }
         }
-        
       }
       {
         name: appGatewaySubnetName
@@ -182,119 +179,119 @@ resource bastionNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   location: location
   properties: {
     securityRules: [
-        {
-          name: 'AllowHttpsInbound'
-          properties: {
-            priority: 120
-            protocol: 'Tcp'
-            destinationPortRange: '443'
-            access: 'Allow'
-            direction: 'Inbound'
-            sourcePortRange: '*'
-            sourceAddressPrefix: 'Internet'
-            destinationAddressPrefix: '*'
-          }              
+      {
+        name: 'AllowHttpsInbound'
+        properties: {
+          priority: 120
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'Internet'
+          destinationAddressPrefix: '*'
         }
-        {
-          name: 'AllowGatewayManagerInbound'
-          properties: {
-            priority: 130
-            protocol: 'Tcp'
-            destinationPortRange: '443'
-            access: 'Allow'
-            direction: 'Inbound'
-            sourcePortRange: '*'
-            sourceAddressPrefix: 'GatewayManager'
-            destinationAddressPrefix: '*'
-          }              
+      }
+      {
+        name: 'AllowGatewayManagerInbound'
+        properties: {
+          priority: 130
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'GatewayManager'
+          destinationAddressPrefix: '*'
         }
-        {
-            name: 'AllowAzureLoadBalancerInbound'
-            properties: {
-              priority: 140
-              protocol: 'Tcp'
-              destinationPortRange: '443'
-              access: 'Allow'
-              direction: 'Inbound'
-              sourcePortRange: '*'
-              sourceAddressPrefix: 'AzureLoadBalancer'
-              destinationAddressPrefix: '*'
-            }         
-          }     
-          {
-              name: 'AllowBastionHostCommunicationInbound'
-              properties: {
-                priority: 150
-                protocol: '*'
-                destinationPortRanges:[
-                  '8080'
-                  '5701'                
-                ] 
-                access: 'Allow'
-                direction: 'Inbound'
-                sourcePortRange: '*'
-                sourceAddressPrefix: 'VirtualNetwork'
-                destinationAddressPrefix: 'VirtualNetwork'
-              }              
-          }                    
-          {
-            name: 'AllowSshRdpOutbound'
-            properties: {
-              priority: 100
-              protocol: '*'
-              destinationPortRanges:[
-                '22'
-                '3389'
-              ]
-              access: 'Allow'
-              direction: 'Outbound'
-              sourcePortRange: '*'
-              sourceAddressPrefix: '*'
-              destinationAddressPrefix: 'VirtualNetwork'
-            }              
-          }       
-          {
-            name: 'AllowAzureCloudOutbound'
-            properties: {
-              priority: 110
-              protocol: 'Tcp'
-              destinationPortRange:'443'              
-              access: 'Allow'
-              direction: 'Outbound'
-              sourcePortRange: '*'
-              sourceAddressPrefix: '*'
-              destinationAddressPrefix: 'AzureCloud'
-            }              
-          }                                                         
-          {
-            name: 'AllowBastionCommunication'
-            properties: {
-              priority: 120
-              protocol: '*'
-              destinationPortRanges: [  
-                '8080'
-                '5701'
-              ]
-              access: 'Allow'
-              direction: 'Outbound'
-              sourcePortRange: '*'
-              sourceAddressPrefix: 'VirtualNetwork'
-              destinationAddressPrefix: 'VirtualNetwork'
-            }              
-          }                     
-          {
-            name: 'AllowGetSessionInformation'
-            properties: {
-              priority: 130
-              protocol: '*'
-              destinationPortRange: '80'
-              access: 'Allow'
-              direction: 'Outbound'
-              sourcePortRange: '*'
-              sourceAddressPrefix: '*'
-              destinationAddressPrefix: 'Internet'
-            }              
-          }                                                                   
+      }
+      {
+        name: 'AllowAzureLoadBalancerInbound'
+        properties: {
+          priority: 140
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'AzureLoadBalancer'
+          destinationAddressPrefix: '*'
+        }
+      }
+      {
+        name: 'AllowBastionHostCommunicationInbound'
+        properties: {
+          priority: 150
+          protocol: '*'
+          destinationPortRanges: [
+            '8080'
+            '5701'
+          ]
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
+      {
+        name: 'AllowSshRdpOutbound'
+        properties: {
+          priority: 100
+          protocol: '*'
+          destinationPortRanges: [
+            '22'
+            '3389'
+          ]
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
+      {
+        name: 'AllowAzureCloudOutbound'
+        properties: {
+          priority: 110
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: 'AzureCloud'
+        }
+      }
+      {
+        name: 'AllowBastionCommunication'
+        properties: {
+          priority: 120
+          protocol: '*'
+          destinationPortRanges: [
+            '8080'
+            '5701'
+          ]
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
+      {
+        name: 'AllowGetSessionInformation'
+        properties: {
+          priority: 130
+          protocol: '*'
+          destinationPortRange: '80'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: 'Internet'
+        }
+      }
     ]
   }
 }
@@ -303,16 +300,14 @@ resource devOpsNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   name: devOpsSNNSG
   location: location
   properties: {
-    securityRules: [
-    ]
+    securityRules: []
   }
 }
 resource jumpBoxNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   name: jumpBoxSNNSG
   location: location
   properties: {
-    securityRules: [
-    ]
+    securityRules: []
   }
 }
 resource appGatewayNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
@@ -379,8 +374,7 @@ resource privateEndpointNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01'
   name: privateEndpointSNNSG
   location: location
   properties: {
-    securityRules: [
-    ]
+    securityRules: []
   }
 }
 
@@ -388,8 +382,7 @@ resource backEndNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
   name: backEndSNNSG
   location: location
   properties: {
-    securityRules: [
-    ]
+    securityRules: []
   }
 }
 resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
@@ -472,12 +465,12 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
   location: location
   sku: {
     name: 'Standard'
+    tier: 'Regional'
   }
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      fqdn: '${apimName}.azure-api.net'
-      domainNameLabel: apimName
+      domainNameLabel: '${publicIPAddressName}dns'
     }
   }
 }
@@ -493,13 +486,13 @@ resource pipBastion 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
   properties: {
     publicIPAllocationMethod: 'Static'
     publicIPAddressVersion: 'IPv4'
-  }  
+  }
 }
 
 resource bastion 'Microsoft.Network/bastionHosts@2020-07-01' = {
   name: bastionName
-  location: location 
-  tags:  {
+  location: location
+  tags: {
     Owner: owner
   }
   properties: {
@@ -509,37 +502,35 @@ resource bastion 'Microsoft.Network/bastionHosts@2020-07-01' = {
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
-            id: pipBastion.id             
+            id: pipBastion.id
           }
           subnet: {
-            id: '${vnetApimCs.id}/subnets/${bastionSubnetName}' 
+            id: '${vnetApimCs.id}/subnets/${bastionSubnetName}'
           }
         }
       }
     ]
   }
-} 
-
-
+}
 
 // Output section
 output apimCSVNetName string = apimCSVNetName
 output apimCSVNetId string = vnetApimCs.id
 
-output bastionSubnetName string = bastionSubnetName  
-output devOpsSubnetName string = devOpsSubnetName  
-output jumpBoxSubnetName string = jumpBoxSubnetName  
-output appGatewaySubnetName string = appGatewaySubnetName  
-output privateEndpointSubnetName string = privateEndpointSubnetName  
-output backEndSubnetName string = backEndSubnetName  
+output bastionSubnetName string = bastionSubnetName
+output devOpsSubnetName string = devOpsSubnetName
+output jumpBoxSubnetName string = jumpBoxSubnetName
+output appGatewaySubnetName string = appGatewaySubnetName
+output privateEndpointSubnetName string = privateEndpointSubnetName
+output backEndSubnetName string = backEndSubnetName
 output apimSubnetName string = apimSubnetName
 
-output bastionSubnetid string = '${vnetApimCs.id}/subnets/${bastionSubnetName}'  
-output CICDAgentSubnetId string = '${vnetApimCs.id}/subnets/${devOpsSubnetName}'  
-output jumpBoxSubnetid string = '${vnetApimCs.id}/subnets/${jumpBoxSubnetName}'  
-output appGatewaySubnetid string = '${vnetApimCs.id}/subnets/${appGatewaySubnetName}'  
-output privateEndpointSubnetid string = '${vnetApimCs.id}/subnets/${privateEndpointSubnetName}'  
-output backEndSubnetid string = '${vnetApimCs.id}/subnets/${backEndSubnetName}'  
-output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'  
+output bastionSubnetid string = '${vnetApimCs.id}/subnets/${bastionSubnetName}'
+output CICDAgentSubnetId string = '${vnetApimCs.id}/subnets/${devOpsSubnetName}'
+output jumpBoxSubnetid string = '${vnetApimCs.id}/subnets/${jumpBoxSubnetName}'
+output appGatewaySubnetid string = '${vnetApimCs.id}/subnets/${appGatewaySubnetName}'
+output privateEndpointSubnetid string = '${vnetApimCs.id}/subnets/${privateEndpointSubnetName}'
+output backEndSubnetid string = '${vnetApimCs.id}/subnets/${backEndSubnetName}'
+output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'
 
 output publicIp string = pip.id

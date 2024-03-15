@@ -1,4 +1,4 @@
-targetScope='subscription'
+targetScope = 'subscription'
 
 // Parameters
 @description('A short name for the workload being deployed alphanumberic only')
@@ -20,6 +20,9 @@ param vmUsername string
 @description('The password for the Administrator user for all VMs created by this deployment')
 @secure()
 param vmPassword string
+
+@description('Valid SKU indicator for the VMs')
+param vmSize string = 'Standard_D4_v3'
 
 @description('The CI/CD platform to be used, and for which an agent will be configured for the ASE deployment. Specify \'none\' if no agent needed')
 @allowed([
@@ -48,11 +51,12 @@ param appGatewayCertType string
 
 param location string = deployment().location
 
+param resourceGroupTags object = {}
+
 // Variables
-var resourceSuffix = '${workloadName}-${environment}-${location}-001'
+var resourceSuffix = '${workloadName}-${environment}-${location}-${uniqueString(subscription().id)}'
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
-
 
 var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
 
@@ -62,25 +66,28 @@ var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 var apimName = 'apim-${resourceSuffix}'
 var appGatewayName = 'appgw-${resourceSuffix}'
 
-
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: networkingResourceGroupName
   location: location
+  tags: resourceGroupTags
 }
 
 resource backendRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: backendResourceGroupName
   location: location
+  tags: resourceGroupTags
 }
 
 resource sharedRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: sharedResourceGroupName
   location: location
+  tags: resourceGroupTags
 }
 
 resource apimRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: apimResourceGroupName
   location: location
+  tags: resourceGroupTags
 }
 
 module networking './networking/networking.bicep' = {
@@ -100,7 +107,7 @@ module backend './backend/backend.bicep' = {
   params: {
     workloadName: workloadName
     environment: environment
-    location: location    
+    location: location
     vnetName: networking.outputs.apimCSVNetName
     vnetRG: networkingRG.name
     backendSubnetId: networking.outputs.backEndSubnetid
@@ -108,7 +115,7 @@ module backend './backend/backend.bicep' = {
   }
 }
 
-var jumpboxSubnetId= networking.outputs.jumpBoxSubnetid
+var jumpboxSubnetId = networking.outputs.jumpBoxSubnetid
 var CICDAgentSubnetId = networking.outputs.CICDAgentSubnetId
 
 module shared './shared/shared.bicep' = {
@@ -129,10 +136,11 @@ module shared './shared/shared.bicep' = {
     resourceSuffix: resourceSuffix
     vmPassword: vmPassword
     vmUsername: vmUsername
+    vmSize: vmSize
   }
 }
 
-module apimModule 'apim/apim.bicep'  = {
+module apimModule 'apim/apim.bicep' = {
   name: 'apimDeploy'
   scope: resourceGroup(apimRG.name)
   params: {
@@ -142,12 +150,12 @@ module apimModule 'apim/apim.bicep'  = {
     appInsightsName: shared.outputs.appInsightsName
     appInsightsId: shared.outputs.appInsightsId
     appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
-    apimPublicIpId: networking.outputs.publicIp
+    publicIpAddressId: networking.outputs.publicIp
   }
 }
 
 //Creation of private DNS zones
-module dnsZoneModule 'shared/dnszone.bicep'  = {
+module dnsZoneModule 'shared/dnszone.bicep' = {
   name: 'apimDnsZoneDeploy'
   scope: resourceGroup(sharedRG.name)
   dependsOn: [
@@ -169,14 +177,14 @@ module appgwModule 'gateway/appgw.bicep' = {
     dnsZoneModule
   ]
   params: {
-    appGatewayName:                 appGatewayName
-    appGatewayFQDN:                 appGatewayFqdn
-    location:                       location
-    appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
-    primaryBackendEndFQDN:          '${apimName}.azure-api.net'
-    keyVaultName:                   shared.outputs.keyVaultName
-    keyVaultResourceGroupName:      sharedRG.name
-    appGatewayCertType:             appGatewayCertType
-    certPassword:                   certificatePassword
+    appGatewayName: appGatewayName
+    appGatewayFQDN: appGatewayFqdn
+    location: location
+    appGatewaySubnetId: networking.outputs.appGatewaySubnetid
+    primaryBackendEndFQDN: '${apimName}.azure-api.net'
+    keyVaultName: shared.outputs.keyVaultName
+    keyVaultResourceGroupName: sharedRG.name
+    appGatewayCertType: appGatewayCertType
+    certPassword: certificatePassword
   }
 }
