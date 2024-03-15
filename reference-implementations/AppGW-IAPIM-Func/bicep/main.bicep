@@ -2,8 +2,8 @@ targetScope = 'subscription'
 
 // Parameters
 @description('A short name for the workload being deployed alphanumberic only')
-@maxLength(8)
-param workloadName string
+@maxLength(6)
+param workloadName string = 'apimlz'
 
 @description('The environment for which the deployment is being executed')
 @allowed([
@@ -53,18 +53,20 @@ param location string = deployment().location
 
 param resourceGroupTags object = {}
 
+param instanceNumber string = '01'
+
 // Variables
-var resourceSuffix = '${workloadName}-${environment}-${location}-${uniqueString(subscription().id)}'
+var resourceSuffix = '${workloadName}-${environment}-${location}-${instanceNumber}'
+
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
-
 var backendResourceGroupName = 'rg-backend-${resourceSuffix}'
-
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
 
-// Resource Names
 var apimName = 'apim-${resourceSuffix}'
 var appGatewayName = 'appgw-${resourceSuffix}'
+
+// Resource Group Deployments
 
 resource networkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: networkingResourceGroupName
@@ -90,6 +92,7 @@ resource apimRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: resourceGroupTags
 }
 
+// Module Deployments
 module networking './networking/networking.bicep' = {
   name: 'networkingresources'
   scope: resourceGroup(networkingRG.name)
@@ -97,7 +100,6 @@ module networking './networking/networking.bicep' = {
     workloadName: workloadName
     deploymentEnvironment: environment
     location: location
-    apimName: apimName
   }
 }
 
@@ -112,6 +114,7 @@ module backend './backend/backend.bicep' = {
     vnetRG: networkingRG.name
     backendSubnetId: networking.outputs.backEndSubnetid
     privateEndpointSubnetid: networking.outputs.privateEndpointSubnetid
+    resourceSuffix: resourceSuffix
   }
 }
 

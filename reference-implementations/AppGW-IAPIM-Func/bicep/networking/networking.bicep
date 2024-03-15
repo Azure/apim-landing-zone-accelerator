@@ -42,7 +42,7 @@ param privateEndpointAddressPrefix string = '10.2.5.0/24'
 param backEndAddressPrefix string = '10.2.6.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
 param location string
-param apimName string
+param instanceNumber string = '01'
 
 /*
 @description('A short name for the PL that will be created between Funcs')
@@ -52,30 +52,33 @@ param functionId string = '123131'
 */
 
 // Variables
-var owner = 'APIM Const Set'
+var owner = 'APIM LZ'
 
-var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${deploymentEnvironment}-${location}'
+var resourceSuffix = '${workloadName}-${deploymentEnvironment}-${location}-${instanceNumber}'
+
+var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${deploymentEnvironment}-${location}-${instanceNumber}'
+var bastionName = 'bastion-${resourceSuffix}'
+var publicIPAddressName = 'pip-apimcs-${resourceSuffix}' // 'publicIp'
+var publicIPAddressNameBastion = 'pip-bastion-${resourceSuffix}' // 'publicIpBastion
+var bastionIPConfigName = 'bastionipcfg-${resourceSuffix}'
 
 var bastionSubnetName = 'AzureBastionSubnet' // Azure Bastion subnet must have AzureBastionSubnet name, not 'snet-bast-${workloadName}-${deploymentEnvironment}-${location}'
 var devOpsSubnetName = 'snet-devops-${workloadName}-${deploymentEnvironment}-${location}'
-var jumpBoxSubnetName = 'snet-jbox-${workloadName}-${deploymentEnvironment}-${location}-001'
-var appGatewaySubnetName = 'snet-apgw-${workloadName}-${deploymentEnvironment}-${location}-001'
-var privateEndpointSubnetName = 'snet-prep-${workloadName}-${deploymentEnvironment}-${location}-001'
-var backEndSubnetName = 'snet-bcke-${workloadName}-${deploymentEnvironment}-${location}-001'
-var apimSubnetName = 'snet-apim-${workloadName}-${deploymentEnvironment}-${location}-001'
-var bastionName = 'bastion-${workloadName}-${deploymentEnvironment}-${location}'
-var bastionIPConfigName = 'bastionipcfg-${workloadName}-${deploymentEnvironment}-${location}'
+var jumpBoxSubnetName = 'snet-jbox-${workloadName}-${deploymentEnvironment}-${location}'
+var appGatewaySubnetName = 'snet-apgw-${workloadName}-${deploymentEnvironment}-${location}'
+var privateEndpointSubnetName = 'snet-prep-${workloadName}-${deploymentEnvironment}-${location}'
+var backEndSubnetName = 'snet-bcke-${workloadName}-${deploymentEnvironment}-${location}'
+var apimSubnetName = 'snet-apim-${workloadName}-${deploymentEnvironment}-${location}'
 
-var bastionSNNSG = 'nsg-bast-${workloadName}-${deploymentEnvironment}-${location}'
-var devOpsSNNSG = 'nsg-devops-${workloadName}-${deploymentEnvironment}-${location}'
-var jumpBoxSNNSG = 'nsg-jbox-${workloadName}-${deploymentEnvironment}-${location}'
-var appGatewaySNNSG = 'nsg-apgw-${workloadName}-${deploymentEnvironment}-${location}'
-var privateEndpointSNNSG = 'nsg-prep-${workloadName}-${deploymentEnvironment}-${location}'
-var backEndSNNSG = 'nsg-bcke-${workloadName}-${deploymentEnvironment}-${location}'
-var apimSNNSG = 'nsg-apim-${workloadName}-${deploymentEnvironment}-${location}'
+var bastionSNNSG = 'nsg-bast-${resourceSuffix}'
+var devOpsSNNSG = 'nsg-devops-${resourceSuffix}'
+var jumpBoxSNNSG = 'nsg-jbox-${resourceSuffix}'
+var appGatewaySNNSG = 'nsg-apgw-${resourceSuffix}'
+var privateEndpointSNNSG = 'nsg-prep-${resourceSuffix}'
+var backEndSNNSG = 'nsg-bcke-${resourceSuffix}'
+var apimSNNSG = 'nsg-apim-${resourceSuffix}'
 
-var publicIPAddressName = 'pip-apimcs-${workloadName}-${deploymentEnvironment}-${location}' // 'publicIp'
-var publicIPAddressNameBastion = 'pip-bastion-${workloadName}-${deploymentEnvironment}-${location}'
+var publicIPAddressDNSLabel = 'doesnotmatter${uniqueString(subscription().id)}0' // Label is required but name does not matter
 
 // Resources - VNet - SubNets
 resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
@@ -470,7 +473,7 @@ resource pip 'Microsoft.Network/publicIPAddresses@2020-07-01' = {
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      domainNameLabel: '${publicIPAddressName}dns'
+      domainNameLabel: publicIPAddressDNSLabel
     }
   }
 }

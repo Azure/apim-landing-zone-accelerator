@@ -15,7 +15,7 @@
             "value": "ENTERPAT"
         },
         "workloadName" :{ 
-            "value": "demoWL"
+            "value": "apimlz"
         },
         "CICDAgentType": {
             "value": "azuredevops OR github OR none"
@@ -28,6 +28,9 @@
         },
         "appGatewayCertType" :{
             "value": "selfsigned or custom"
+        },
+        "instanceNumber" :{
+            "value": "instance number E.G 01"
         }
     }
 }
