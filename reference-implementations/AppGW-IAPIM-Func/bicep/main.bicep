@@ -90,6 +90,7 @@ module networking './networking/networking.bicep' = {
     workloadName: workloadName
     deploymentEnvironment: environment
     location: location
+    apimName: apimName
   }
 }
 
@@ -141,6 +142,7 @@ module apimModule 'apim/apim.bicep'  = {
     appInsightsName: shared.outputs.appInsightsName
     appInsightsId: shared.outputs.appInsightsId
     appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
+    apimPublicIpId: networking.outputs.publicIp
   }
 }
 

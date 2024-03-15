@@ -5,11 +5,13 @@ targetScope='resourceGroup'
 */
 
 @description('The name of the API Management resource to be created.')
-param apimName            string
+param apimName string
 
 @description('The subnet resource id to use for APIM.')
 @minLength(1)
 param apimSubnetId string
+
+param apimPublicIpId string
 
 @description('The email address of the publisher of the APIM resource.')
 @minLength(1)
@@ -36,7 +38,7 @@ param appInsightsInstrumentationKey string
  * Resources
 */
 
-resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
+resource apimName_resource 'Microsoft.ApiManagement/service@2022-08-01' = {
   name: apimName
   location: location
   sku:{
@@ -47,6 +49,7 @@ resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
     virtualNetworkType: 'Internal'
     publisherEmail: publisherEmail
     publisherName: publisherName
+    publicIpAddressId: apimPublicIpId
     virtualNetworkConfiguration: {
       subnetResourceId: apimSubnetId
     }
