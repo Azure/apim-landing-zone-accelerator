@@ -47,3 +47,8 @@ variable "instrumentation_key" {
   type        = string
   description = "App insights instrumentation key"
 }
+
+variable "public_ip_address_id" {
+  type        = string
+  description = "APIM Management Public IP"
+}
