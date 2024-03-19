@@ -1,3 +1,9 @@
+resource "random_string" "random_dnslabel" {
+  length  = 5
+  special = false
+  upper   = false
+}
+
 locals {
   resource_suffix                = "${var.workload_name}-${var.deployment_environment}-${var.location}"
   resource_suffix_id             = "001"
@@ -22,6 +28,7 @@ locals {
   apim_snnsg                     = "nsg-apim-${local.resource_suffix}"
   public_ip_address_name         = "pip-apimcs-${local.resource_suffix}"
   public_ip_address_name_bastion = "pip-bastion-${local.resource_suffix}"
+  publicIPAddressDNSLabel        = "doesnotmatter${random_string.random_dnslabel.result}" // Label is required but name does not matter
 }
 
 resource "azurerm_resource_group" "networking_resourece_group" {
@@ -343,8 +350,13 @@ resource "azurerm_public_ip" "public_ip" {
   name                = local.public_ip_address_name
   resource_group_name = azurerm_resource_group.networking_resourece_group.name
   location            = azurerm_resource_group.networking_resourece_group.location
-  allocation_method   = "Dynamic"
+  sku                 = "Standard"
+  sku_tier            = "Regional"
+  allocation_method   = "Static"
+  domain_name_label   = local.publicIPAddressDNSLabel
+  ip_version          = "IPv4"
 }
+  
 
 //Bastion public IP
 resource "azurerm_public_ip" "bastion_public_ip" {

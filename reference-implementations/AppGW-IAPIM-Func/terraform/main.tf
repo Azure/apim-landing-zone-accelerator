@@ -50,12 +50,13 @@ module "networking" {
 # calling the APIM module
 #-------------------------------
 module "apim" {
-  source              = "./modules/apim"
-  resource_suffix     = module.resource_suffix.name
-  location            = local.resource_location
-  workspace_id        = module.shared.workspace_id
-  instrumentation_key = module.shared.instrumentation_key
-  apim_subnet_id      = module.networking.apim_subnet_id
+  source               = "./modules/apim"
+  resource_suffix      = module.resource_suffix.name
+  location             = local.resource_location
+  workspace_id         = module.shared.workspace_id
+  instrumentation_key  = module.shared.instrumentation_key
+  apim_subnet_id       = module.networking.apim_subnet_id
+  public_ip_address_id = module.networking.public_ip
 }
 
 #-------------------------------

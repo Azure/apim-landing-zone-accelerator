@@ -16,6 +16,7 @@ resource "azurerm_api_management" "apim_internal" {
   publisher_name       = var.publisher_name
   publisher_email      = var.publisher_email
   virtual_network_type = "Internal"
+  public_ip_address_id = var.public_ip_address_id
 
   sku_name = var.sku_name
 

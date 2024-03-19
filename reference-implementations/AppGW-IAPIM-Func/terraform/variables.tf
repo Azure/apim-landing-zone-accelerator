@@ -25,13 +25,6 @@ variable "location" {
   type        = string
   description = "The location in which the deployment is happening"
   default     = "East US"
-  validation {
-    condition = anytrue([
-      var.location == "East US",
-      var.location == "West US"
-    ])
-    error_message = "Please enter a valid Azure Region."
-  }
 }
 
 variable "resource_suffix" {
