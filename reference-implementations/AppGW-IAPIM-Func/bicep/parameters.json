@@ -30,7 +30,7 @@
             "value": "selfsigned or custom"
         },
         "instanceNumber" :{
-            "value": "instance number E.G 01"
+            "value": "instance number E.G 1"
         }
     }
 }
