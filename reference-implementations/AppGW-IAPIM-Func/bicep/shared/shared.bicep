@@ -89,7 +89,7 @@ module vm_jumpboxwinvm './createvmwindows.bicep' = {
     username: vmUsername
     password: vmPassword
     CICDAgentType: CICDAgentType
-    vmName: 'jumpbox-${resourceSuffix}'
+    vmName: 'jbox-${environment}'
     vmSize: vmSize
   }
 }
