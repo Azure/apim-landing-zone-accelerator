@@ -1,0 +1,298 @@
+//
+//   ***@microsoft.com, 2021
+//
+// Deploy as
+//
+// # Script start
+//
+// $RESOURCE_GROUP = "rgAPIMCSBackend"
+// $LOCATION = "westeurope"
+// $BICEP_FILE="networking.bicep"
+//
+// # delete a deployment
+//
+// az deployment group  delete --name testnetworkingdeployment -g $RESOURCE_GROUP 
+// 
+// # deploy the bicep file directly
+//
+// az deployment group create --name testnetworkingdeployment --template-file $BICEP_FILE --parameters parameters.json -g $RESOURCE_GROUP -o json
+// 
+// # Script end
+
+
+// Parameters
+@description('A short name for the workload being deployed')
+param workloadName string
+
+@description('The environment for which the deployment is being executed')
+@allowed([
+  'dev'
+  'uat'
+  'prod'
+  'dr'
+])
+param deploymentEnvironment string
+
+param apimCSVNetNameAddressPrefix string = '10.2.0.0/16'
+
+param appGatewayAddressPrefix string = '10.2.4.0/24'
+param apimAddressPrefix string = '10.2.7.0/24'
+param location string
+
+// Variables
+var owner = 'APIM Const Set'
+
+var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${deploymentEnvironment}-${location}'
+
+var appGatewaySubnetName = 'snet-apgw-${workloadName}-${deploymentEnvironment}-${location}-001'
+var apimSubnetName = 'snet-apim-${workloadName}-${deploymentEnvironment}-${location}-001'
+
+var appGatewaySNNSG = 'nsg-apgw-${workloadName}-${deploymentEnvironment}-${location}'
+var apimSNNSG = 'nsg-apim-${workloadName}-${deploymentEnvironment}-${location}'
+
+var publicAppGwIPAddressName = 'pip-appgw-${workloadName}-${deploymentEnvironment}-${location}' // 'publicIp'
+var publicApimIPAddressName = 'pip-apim-${workloadName}-${deploymentEnvironment}-${location}'
+
+// Resources - VNet - SubNets
+resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
+  name: apimCSVNetName
+  location: location
+  tags: {
+    Owner: owner
+  }
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        apimCSVNetNameAddressPrefix
+      ]
+    }
+    enableVmProtection: false
+    enableDdosProtection: false
+    subnets: [
+      {
+        name: appGatewaySubnetName
+        properties: {
+          addressPrefix: appGatewayAddressPrefix
+          networkSecurityGroup: {
+            id: appGatewayNSG.id
+          }
+        }
+      }
+      {
+        name: apimSubnetName
+        properties: {
+          addressPrefix: apimAddressPrefix
+          networkSecurityGroup: {
+            id: apimNSG.id
+          }
+        }
+      }
+    ]
+  }
+}
+
+// Network Security Groups (NSG)
+
+resource appGatewayNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
+  name: appGatewaySNNSG
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'AllowHealthProbes'
+        properties: {
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '65200-65535'
+          sourceAddressPrefix: 'GatewayManager'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'AllowClientTrafficToSubnet'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRanges: ['80', '443']
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: appGatewayAddressPrefix
+          access: 'Allow'
+          priority: 110
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'AllowClientTrafficToFrontendIP'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRanges: ['80', '443']
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '${pipAppGw.properties.ipAddress}/32'
+          access: 'Allow'
+          priority: 111
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'AllowAzureLoadBalancer'
+        properties: {
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '*'
+          sourceAddressPrefix: 'AzureLoadBalancer'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 120
+          direction: 'Inbound'
+        }
+      }
+    ]
+  }
+}
+
+resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
+  name: apimSNNSG
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'AllowApimManagement'
+        properties: {
+          priority: 2000
+          sourceAddressPrefix: 'ApiManagement'
+          protocol: 'Tcp'
+          destinationPortRange: '3443'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
+      {
+        name: 'AllowAzureLoadBalancer'
+        properties: {
+          priority: 2010
+          sourceAddressPrefix: 'AzureLoadBalancer'
+          protocol: 'Tcp'
+          destinationPortRange: '6390'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }
+      {
+        name: 'AllowAzureTrafficManager'
+        properties: {
+          priority: 2020
+          sourceAddressPrefix: 'AzureTrafficManager'
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'VirtualNetwork'
+        }
+      }      
+      {
+        name: 'AllowStorage'
+        properties: {
+          priority: 2000
+          sourceAddressPrefix: 'VirtualNetwork'
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'Storage'
+        }
+      }
+      {
+        name: 'AllowSql'
+        properties: {
+          priority: 2010
+          sourceAddressPrefix: 'VirtualNetwork'
+          protocol: 'Tcp'
+          destinationPortRange: '1433'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'SQL'
+        }
+      }
+      {
+        name: 'AllowKeyVault'
+        properties: {
+          priority: 2020
+          sourceAddressPrefix: 'VirtualNetwork'
+          protocol: 'Tcp'
+          destinationPortRange: '443'
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'AzureKeyVault'
+        }
+      }
+      {
+        name: 'AllowMonitor'
+        properties: {
+          priority: 2030
+          sourceAddressPrefix: 'VirtualNetwork'
+          protocol: 'Tcp'
+          destinationPortRanges: ['1886', '443']
+          access: 'Allow'
+          direction: 'Outbound'
+          sourcePortRange: '*'
+          destinationAddressPrefix: 'AzureMonitor'
+        }
+      }     
+    ]
+  }
+}
+
+// Public IP 
+resource pipAppGw 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
+  name: publicAppGwIPAddressName
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Regional'
+  }  
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
+
+// Mind the PIP for APIM being Standard SKU, Static IP
+resource pipApim 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
+  name: publicApimIPAddressName
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Regional'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+    publicIPAddressVersion: 'IPv4'
+    dnsSettings: {
+      domainNameLabel: 'apim-${workloadName}-${deploymentEnvironment}-${location}'
+    }
+  } 
+}
+
+// Output section
+output apimCSVNetName string = apimCSVNetName
+output apimCSVNetId string = vnetApimCs.id
+
+output appGatewaySubnetName string = appGatewaySubnetName  
+output apimSubnetName string = apimSubnetName
+
+output appGatewaySubnetid string = '${vnetApimCs.id}/subnets/${appGatewaySubnetName}'  
+output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'  
+
+output publicIpAppGw string = pipAppGw.id
+output publicIpApim string = pipApim.id
