@@ -83,6 +83,8 @@ module apimModule 'apim/apim.bicep'  = {
     appInsightsName: shared.outputs.appInsightsName
     appInsightsId: shared.outputs.appInsightsId
     appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
+    keyVaultName: shared.outputs.keyVaultName
+    keyVaultResourceGroupName: sharedRG.name
   }
 }
 
@@ -103,7 +105,7 @@ module dnsZoneModule 'shared/dnszone.bicep'  = {
 
 module appgwModule 'gateway/appgw.bicep' = {
   name: 'appgwDeploy'
-  scope: resourceGroup(apimRG.name)
+  scope: resourceGroup(networkingRG.name)
   dependsOn: [
     apimModule
     dnsZoneModule

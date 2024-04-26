@@ -29,6 +29,7 @@ param certKey                  string
 
 var appGatewayPrimaryPip            = 'pip-${appGatewayName}'
 var appGatewayIdentityId            = 'identity-${appGatewayName}'
+var appGatewayFirewallPolicy        = 'waf-${appGatewayName}'
 
 resource appGatewayIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name:     appGatewayIdentityId
@@ -59,6 +60,30 @@ resource appGatewayPublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-09-
     publicIPAllocationMethod: 'Static'
   }
 }
+
+resource appgw_waf_Pol 'Microsoft.Network/ApplicationGatewayWebApplicationFirewallPolicies@2021-08-01' = {
+  name: appGatewayFirewallPolicy
+  location: location
+  properties: {
+    policySettings: {
+      requestBodyCheck: true
+      maxRequestBodySizeInKb: 128
+      fileUploadLimitInMb: 100
+      state: 'Enabled'
+      mode: 'detection'
+    }
+    managedRules: {
+      managedRuleSets: [
+        {
+          ruleSetType: 'OWASP'
+          ruleSetVersion: '3.2'
+        }
+      ]
+    }
+  }
+}
+
+
 
 resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-01' = {
   name: appGatewayName
@@ -123,12 +148,6 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
     ]
     frontendPorts: [
       {
-        name: 'port_80'
-        properties: {
-          port: 80
-        }
-      }
-      {
         name: 'port_443'
         properties: {
           port: 443
@@ -149,17 +168,6 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
     ]
     backendHttpSettingsCollection: [
       {
-        name: 'default'
-        properties: {
-          port: 80
-          protocol: 'Http'
-          cookieBasedAffinity: 'Disabled'
-          pickHostNameFromBackendAddress: false
-          affinityCookieName: 'ApplicationGatewayAffinity'
-          requestTimeout: 20
-        }
-      }
-      {
         name: 'https'
         properties: {
           port: 443
@@ -175,20 +183,6 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
       }
     ]
     httpListeners: [
-      {
-        name: 'default'
-        properties: {
-          frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', appGatewayName, 'appGwPublicFrontendIp')
-          }
-          frontendPort: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', appGatewayName, 'port_80')
-          }
-          protocol: 'Http'
-          hostnames: []
-          requireServerNameIndication: false
-        }
-      }
       {
         name: 'https'
         properties: {
@@ -247,15 +241,8 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
     ]
     rewriteRuleSets: []
     redirectConfigurations: []
-    webApplicationFirewallConfiguration: {
-      enabled: true
-      firewallMode: 'Detection'
-      ruleSetType: 'OWASP'
-      ruleSetVersion: '3.0'
-      disabledRuleGroups: []
-      requestBodyCheck: true
-      maxRequestBodySizeInKb: 128
-      fileUploadLimitInMb: 100
+    firewallPolicy: {
+      id: appgw_waf_Pol.id
     }
     enableHttp2: true
     autoscaleConfiguration: {
