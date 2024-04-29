@@ -32,6 +32,9 @@ param appInsightsName string
 param appInsightsId string
 param appInsightsInstrumentationKey string
 
+param keyVaultName                  string
+param keyVaultResourceGroupName     string
+
 /*
  * Resources
 */
@@ -42,6 +45,9 @@ resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
   sku:{
     capacity: capacity
     name: skuName
+  }
+  identity: {
+    type: 'SystemAssigned'
   }
   properties:{
     virtualNetworkType: 'Internal'
@@ -75,5 +81,14 @@ resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnosti
       percentage: 100
       samplingType: 'fixed'
     }
+  }
+}
+
+module kvaccess './modules/kvaccess.bicep' = {
+  name: 'kvaccess'
+  scope: resourceGroup(keyVaultResourceGroupName)
+  params: {
+    managedIdentity:    apimName_resource.identity
+    keyVaultName:       keyVaultName
   }
 }
