@@ -43,6 +43,17 @@ else
   CERT_TYPE="${CERT_TYPE%$'\r'}"    
 fi
 
+if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
+  chars="abcdefghijklmnopqrstuvwxyz"
+  random_string=""
+  for i in {1..3}; do
+      random_char="${chars:RANDOM%${#chars}:1}"
+      random_string+="$random_char"
+  done
+  echo "RANDOM_IDENTIFIER='$random_string'" >> "$script_dir/../.env"
+else
+  random_string="${RANDOM_IDENTIFIER}"
+fi
 
 
 cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
@@ -56,6 +67,9 @@ cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
     "environment" :{ 
         "value": "${ENVIRONMENT_TAG}"
     },
+    "identifier" :{ 
+        "value": "${random_string}"
+    },
     "appGatewayFqdn" :{ 
         "value": "${APPGATEWAY_FQDN}"
     },
@@ -66,9 +80,8 @@ cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
 }
 EOF
 
-deployment_name="deployment-${RESOURCE_NAME_PREFIX}"
+deployment_name="apim-baseline-${RESOURCE_NAME_PREFIX}"
 
-echo "$deployment_name"
 cd "$script_dir/../apim-baseline/bicep/"
 echo "=="
 echo "== Starting bicep deployment ${deployment_name}"
@@ -79,5 +92,14 @@ output=$(az deployment sub create \
   --parameters parameters.json \
   --location "$AZURE_LOCATION" \
   --output json)
+
+echo "== Completed bicep deployment ${deployment_name}"
+
 echo "$output" | jq "[.properties.outputs | to_entries | .[] | {key:.key, value: .value.value}] | from_entries" > "$script_dir/../apim-baseline/bicep/output.json"
+
+appGatewayPublicIpAddress=$(cat "$script_dir/../apim-baseline/bicep/output.json" | jq -r '.appGatewayPublicIpAddress')
+apimStarterSubscriptionKey=$(cat "$script_dir/../apim-baseline/bicep/output.json" | jq -r '.apimStarterSubscriptionKey')
+
+testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${apimStarterSubscriptionKey}' https://${appGatewayPublicIpAddress}/echo/resource?param1=sample"
+echo "Test the deployment by running the following command: ${testUri}"
 echo -e "\n"

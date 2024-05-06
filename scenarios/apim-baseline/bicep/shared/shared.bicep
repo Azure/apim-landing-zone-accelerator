@@ -1,5 +1,18 @@
 targetScope='resourceGroup'
 // Parameters
+@description('A short name for the workload being deployed')
+param workloadName string
+
+@description('The environment for which the deployment is being executed')
+@allowed([
+  'dev'
+  'uat'
+  'prod'
+  'dr'
+])
+param environment string
+param identifier string
+
 @description('Azure location to which the resources are to be deployed')
 param location string
 
@@ -10,8 +23,8 @@ param resourceGroupName string
 param resourceSuffix string
 
 // Variables - ensure key vault name does not end with '-'
-var tempKeyVaultName = take('kv-${resourceSuffix}', 20) // Must be between 3-24 alphanumeric characters 
-var uniqueKeyVaultName = take('${tempKeyVaultName}-${uniqueString(resourceGroupName)}', 24)
+var tempKeyVaultName = take('kv-${workloadName}-${environment}-${location}', 20) // Must be between 3-24 alphanumeric characters 
+var uniqueKeyVaultName = take('${tempKeyVaultName}-${identifier}', 24)
 var keyVaultName = endsWith(uniqueKeyVaultName, '-') ? substring(uniqueKeyVaultName, 0, length(uniqueKeyVaultName) - 1) : uniqueKeyVaultName
 
 // Resources

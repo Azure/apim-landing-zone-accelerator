@@ -9,6 +9,9 @@ deployment/bicep/localtestscript.ps1
 # Local .terraform directories
 **/.terraform/*
 
+output.json
+parameters.json
+
 # .tfstate files
 *.tfstate
 *.tfstate.*

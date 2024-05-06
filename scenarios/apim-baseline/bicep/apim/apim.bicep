@@ -35,6 +35,7 @@ param appInsightsInstrumentationKey string
 param keyVaultName                  string
 param keyVaultResourceGroupName     string
 
+var echoSubscriptionKey = guid('echoPrimaryKey')
 /*
  * Resources
 */
@@ -56,6 +57,16 @@ resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
     virtualNetworkConfiguration: {
       subnetResourceId: apimSubnetId
     }
+  }
+}
+
+resource echoSubscription 'Microsoft.ApiManagement/service/subscriptions@2020-12-01' = {
+  parent: apimName_resource
+  name: 'Echo'
+  properties: {
+    displayName: 'Echo'
+    scope: '/products/starter'
+    primaryKey: echoSubscriptionKey
   }
 }
 
@@ -92,3 +103,5 @@ module kvaccess './modules/kvaccess.bicep' = {
     keyVaultName:       keyVaultName
   }
 }
+
+output apimStarterSubscriptionKey string = echoSubscriptionKey

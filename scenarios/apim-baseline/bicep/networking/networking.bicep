@@ -1,57 +1,24 @@
-//
-//   ***@microsoft.com, 2021
-//
-// Deploy as
-//
-// # Script start
-//
-// $RESOURCE_GROUP = "rgAPIMCSBackend"
-// $LOCATION = "westeurope"
-// $BICEP_FILE="networking.bicep"
-//
-// # delete a deployment
-//
-// az deployment group  delete --name testnetworkingdeployment -g $RESOURCE_GROUP 
-// 
-// # deploy the bicep file directly
-//
-// az deployment group create --name testnetworkingdeployment --template-file $BICEP_FILE --parameters parameters.json -g $RESOURCE_GROUP -o json
-// 
-// # Script end
-
-
-// Parameters
-@description('A short name for the workload being deployed')
-param workloadName string
-
-@description('The environment for which the deployment is being executed')
-@allowed([
-  'dev'
-  'uat'
-  'prod'
-  'dr'
-])
-param deploymentEnvironment string
-
 param apimCSVNetNameAddressPrefix string = '10.2.0.0/16'
 
 param appGatewayAddressPrefix string = '10.2.4.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
 param location string
 
+@description('Standardized suffix text to be added to resource names')
+param resourceSuffix string
+
 // Variables
 var owner = 'APIM Const Set'
 
-var apimCSVNetName = 'vnet-apim-cs-${workloadName}-${deploymentEnvironment}-${location}'
+var apimCSVNetName = 'vnet-apim-cs-${resourceSuffix}'
 
-var appGatewaySubnetName = 'snet-apgw-${workloadName}-${deploymentEnvironment}-${location}-001'
-var apimSubnetName = 'snet-apim-${workloadName}-${deploymentEnvironment}-${location}-001'
+var appGatewaySubnetName = 'snet-apgw-${resourceSuffix}'
+var apimSubnetName = 'snet-apim-${resourceSuffix}'
 
-var appGatewaySNNSG = 'nsg-apgw-${workloadName}-${deploymentEnvironment}-${location}'
-var apimSNNSG = 'nsg-apim-${workloadName}-${deploymentEnvironment}-${location}'
+var appGatewaySNNSG = 'nsg-apgw-${resourceSuffix}'
+var apimSNNSG = 'nsg-apim-${resourceSuffix}'
 
-var publicAppGwIPAddressName = 'pip-appgw-${workloadName}-${deploymentEnvironment}-${location}' // 'publicIp'
-var publicApimIPAddressName = 'pip-apim-${workloadName}-${deploymentEnvironment}-${location}'
+var appGatewayPublicIpName = 'pip-appgw-${resourceSuffix}'
 
 // Resources - VNet - SubNets
 resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
@@ -256,32 +223,16 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
 
 // Public IP 
 resource pipAppGw 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
-  name: publicAppGwIPAddressName
+  name: appGatewayPublicIpName
   location: location
   sku: {
     name: 'Standard'
-    tier: 'Regional'
-  }  
-  properties: {
-    publicIPAllocationMethod: 'Static'
   }
-}
-
-// Mind the PIP for APIM being Standard SKU, Static IP
-resource pipApim 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
-  name: publicApimIPAddressName
-  location: location
-  sku: {
-    name: 'Standard'
-    tier: 'Regional'
-  }
+  zones: ['1', '2', '3']
   properties: {
-    publicIPAllocationMethod: 'Static'
     publicIPAddressVersion: 'IPv4'
-    dnsSettings: {
-      domainNameLabel: 'apim-${workloadName}-${deploymentEnvironment}-${location}'
-    }
-  } 
+    publicIPAllocationMethod: 'Static'
+  }
 }
 
 // Output section
@@ -295,4 +246,4 @@ output appGatewaySubnetid string = '${vnetApimCs.id}/subnets/${appGatewaySubnetN
 output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'  
 
 output publicIpAppGw string = pipAppGw.id
-output publicIpApim string = pipApim.id
+output appGatewayPublicIpName string = appGatewayPublicIpName

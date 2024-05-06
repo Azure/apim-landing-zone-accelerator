@@ -8,6 +8,9 @@
     "environment" :{ 
         "value": "dev"
     },
+    "identifier" :{ 
+        "value": "cfx"
+    },
     "appGatewayFqdn" :{ 
         "value": "apim.example.com"
     },

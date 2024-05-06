@@ -14,6 +14,8 @@ param workloadName string
 ])
 param environment string
 
+param identifier string
+
 @description('The FQDN for the Application Gateway. Example - api.contoso.com.')
 param appGatewayFqdn string
 
@@ -26,7 +28,7 @@ param appGatewayCertType string
 param location string = deployment().location
 
 // Variables
-var resourceSuffix = '${workloadName}-${environment}-${location}-001'
+var resourceSuffix = '${workloadName}-${environment}-${location}-${identifier}'
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
 var sharedResourceGroupName = 'rg-shared-${resourceSuffix}'
 var apimResourceGroupName = 'rg-apim-${resourceSuffix}'
@@ -54,9 +56,8 @@ module networking './networking/networking.bicep' = {
   name: 'networkingresources'
   scope: resourceGroup(networkingRG.name)
   params: {
-    workloadName: workloadName
-    deploymentEnvironment: environment
     location: location
+    resourceSuffix: resourceSuffix
   }
 }
 
@@ -67,6 +68,9 @@ module shared './shared/shared.bicep' = {
   name: 'sharedresources'
   scope: resourceGroup(sharedRG.name)
   params: {
+    workloadName: workloadName
+    environment: environment
+    identifier: identifier
     location: location
     resourceGroupName: sharedRG.name
     resourceSuffix: resourceSuffix
@@ -120,12 +124,18 @@ module appgwModule 'gateway/appgw.bicep' = {
     keyVaultResourceGroupName:      sharedRG.name
     appGatewayCertType:             appGatewayCertType
     certKey:                        certKey
+    appGatewayPublicIpName:         networking.outputs.appGatewayPublicIpName
   }
 }
 
+output resourceSuffix string = resourceSuffix
 output networkingResourceGroupName string = networkingResourceGroupName
 output sharedResourceGroupName string = sharedResourceGroupName
 output apimResourceGroupName string = apimResourceGroupName
 output apimName string = apimName
 output vnetId string = networking.outputs.apimCSVNetId
+output vnetName string = networking.outputs.apimCSVNetName
 output keyVaultName string = shared.outputs.keyVaultName
+output appGatewayName string = appGatewayName
+output appGatewayPublicIpAddress string = appgwModule.outputs.appGatewayPublicIpAddress
+output apimStarterSubscriptionKey string = apimModule.outputs.apimStarterSubscriptionKey
