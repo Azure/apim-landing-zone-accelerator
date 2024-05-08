@@ -1,0 +1,16 @@
+<policies>
+    <inbound>
+        <base />
+        <set-backend-service backend-id="payg-backend-1" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <include-fragment fragment-id="usage-tracking" />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

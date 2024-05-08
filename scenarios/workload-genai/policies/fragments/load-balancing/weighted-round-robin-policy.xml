@@ -1,0 +1,18 @@
+<policies>
+    <inbound>
+        <base />
+        <include-fragment fragment-id="weighted-round-robin" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+         <set-header name="x-apim-backend" exists-action="override">
+            <value>@((string)context.Variables["selected-backend-id"])</value>
+        </set-header>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

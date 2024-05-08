@@ -1,0 +1,23 @@
+<fragment>
+    <choose>
+        <!--Chargeback model using eventhub logging 
+				Conditional Logging to EventHub:
+				Logs specific information to an EventHub if the response status code is 200.
+				Captures various request and response details like service name, gateway ID, request ID, operation name, subscription ID, product ID, business unit name, invoked OpenAI instance, and total tokens used.-->
+        <when condition="@(context.Response.StatusCode == 200)">
+            <log-to-eventhub logger-id="eventhub-logger">@{
+                    return new JObject(
+                        new JProperty("Type", "Message"),
+                        new JProperty("EventTime", DateTime.UtcNow.ToString()),
+                        new JProperty("ServiceName", context.Deployment.ServiceName),
+                        new JProperty("GatewayId", context.Deployment.Gateway.Id),
+                        new JProperty("RequestId", context.RequestId),
+                        new JProperty("RequestIp", context.Request.IpAddress),
+                        new JProperty("OperationName", context.Operation.Name),
+                        new JProperty("SubscriptionId", context.Subscription.Id),
+                        new JProperty("TotalTokens",  context.Response.Body.As&lt;JObject&gt;(preserveContent: true).SelectToken("usage.total_tokens").ToString())
+                    ).ToString();
+                }</log-to-eventhub>
+        </when>
+    </choose>
+</fragment>

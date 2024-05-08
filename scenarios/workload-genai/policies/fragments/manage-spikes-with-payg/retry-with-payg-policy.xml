@@ -1,0 +1,17 @@
+<policies>
+    <inbound>
+        <base />
+    </inbound>
+    <backend>
+        <include-fragment fragment-id="retry-with-payg" />
+    </backend>
+    <outbound>
+        <base />
+         <set-header name="x-apim-backend" exists-action="override">
+            <value>@((string)context.Variables["selected-backend-id"])</value>
+        </set-header>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
