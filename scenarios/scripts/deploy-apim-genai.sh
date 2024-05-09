@@ -8,46 +8,30 @@ if [[ -f "$script_dir/../.env" ]]; then
 	source "$script_dir/../.env"
 fi
 
-cd "$script_dir/../infra/apim-genai"
+cd "$script_dir/../workload-genai/bicep"
 
-if [[ "${USE_SIMULATOR}" != "true" ]]; then
-  if [[ ${#PTU_DEPLOYMENT_1_BASE_URL} -eq 0 ]]; then
-    echo 'ERROR: Missing environment variable PTU_DEPLOYMENT_1_BASE_URL' 1>&2
-    exit 6
-  else
-    PTU_DEPLOYMENT_1_BASE_URL="${PTU_DEPLOYMENT_1_BASE_URL%$'\r'}"
-  fi
-
-  if [[ ${#PAYG_DEPLOYMENT_1_BASE_URL} -eq 0 ]]; then
-    echo 'ERROR: Missing environment variable PAYG_DEPLOYMENT_1_BASE_URL' 1>&2
-    exit 6
-  else
-    PAYG_DEPLOYMENT_1_BASE_URL="${PAYG_DEPLOYMENT_1_BASE_URL%$'\r'}"  
-  fi
-
-  if [[ ${#PAYG_DEPLOYMENT_2_BASE_URL} -eq 0 ]]; then
-    echo 'ERROR: Missing environment variable PAYG_DEPLOYMENT_2_BASE_URL' 1>&2
-    exit 6
-  else
-    PAYG_DEPLOYMENT_2_BASE_URL="${PAYG_DEPLOYMENT_2_BASE_URL%$'\r'}"  
-  fi
+if [[ ${#PTU_DEPLOYMENT_1_BASE_URL} -eq 0 ]]; then
+  echo 'ERROR: Missing environment variable PTU_DEPLOYMENT_1_BASE_URL' 1>&2
+  exit 6
+else
+  PTU_DEPLOYMENT_1_BASE_URL="${PTU_DEPLOYMENT_1_BASE_URL%$'\r'}"
 fi
 
-#
-# This script uses a number of files to store generated keys and outputs from the deployment:
-# - generated-keys.json: stores generated keys (e.g. API Key for the API simulator)
-# - output-simulator-base.json: stores the output from the base simulator deployment (e.g. container registry details)
-# - output-simulators.json: stores the output from the simulator instances deployment (e.g. simulator endpoints)
-# - output.json: stores the output from the main deployment (e.g. APIM endpoints)
-#
-
-output_generated_keys="$script_dir/../infra/apim-genai/generated-keys.json"
-output_base="$script_dir/../apim-baseline/output.json"
-
-# Ensure output-keys.json exists and add empty JSON object if not
-if [[ ! -f "$output_generated_keys" ]]; then
-  echo "{}" > "$output_generated_keys"
+if [[ ${#PAYG_DEPLOYMENT_1_BASE_URL} -eq 0 ]]; then
+  echo 'ERROR: Missing environment variable PAYG_DEPLOYMENT_1_BASE_URL' 1>&2
+  exit 6
+else
+  PAYG_DEPLOYMENT_1_BASE_URL="${PAYG_DEPLOYMENT_1_BASE_URL%$'\r'}"  
 fi
+
+if [[ ${#PAYG_DEPLOYMENT_2_BASE_URL} -eq 0 ]]; then
+  echo 'ERROR: Missing environment variable PAYG_DEPLOYMENT_2_BASE_URL' 1>&2
+  exit 6
+else
+  PAYG_DEPLOYMENT_2_BASE_URL="${PAYG_DEPLOYMENT_2_BASE_URL%$'\r'}"  
+fi
+
+output_base="$script_dir/../apim-baseline/bicep/output.json"
 
 RESOURCE_GROUP_NAME=$(jq -r '.apimResourceGroupName // ""' < "$output_base")
 API_MANAGEMENT_SERVICE_NAME=$(jq -r '.apimName // ""' < "$output_base")
@@ -69,7 +53,7 @@ fi
 #
 # Deploy APIM policies etc
 #
-cat << EOF > "$script_dir/../infra/apim-genai/azuredeploy.parameters.json"
+cat << EOF > "$script_dir/../workload-genai/bicep/azuredeploy.parameters.json"
 {
   "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
@@ -87,19 +71,19 @@ cat << EOF > "$script_dir/../infra/apim-genai/azuredeploy.parameters.json"
         "value": "${PTU_DEPLOYMENT_1_BASE_URL}"
     },
     "ptuDeploymentOneApiKey": {
-        "value": "${SIMULATOR_API_KEY}"
+      "value": "${PTU_DEPLOYMENT_1_API_KEY}"
     },
     "payAsYouGoDeploymentOneBaseUrl": {
         "value": "${PAYG_DEPLOYMENT_1_BASE_URL}"
     },
     "payAsYouGoDeploymentOneApiKey": {
-        "value": "${SIMULATOR_API_KEY}"
+        "value": "${PAYG_DEPLOYMENT_1_API_KEY}"
     },
     "payAsYouGoDeploymentTwoBaseUrl": {
         "value": "${PAYG_DEPLOYMENT_2_BASE_URL}"
     },
     "payAsYouGoDeploymentTwoApiKey": {
-        "value": "${SIMULATOR_API_KEY}"
+        "value": "${PAYG_DEPLOYMENT_2_API_KEY}"
     }
   }
 }
@@ -120,6 +104,6 @@ output=$(az deployment group create \
   
 echo "== Completed bicep deployment ${deployment_name}"
 
-echo "$output" | jq "[.properties.outputs | to_entries | .[] | {key:.key, value: .value.value}] | from_entries" > "$script_dir/../infra/apim-genai/output.json"
+echo "$output" | jq "[.properties.outputs | to_entries | .[] | {key:.key, value: .value.value}] | from_entries" > "$script_dir/../workload-genai/bicep/output.json"
 
 echo -e "\n"

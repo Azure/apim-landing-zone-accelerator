@@ -163,6 +163,22 @@ resource usageTrackingPolicyFragment 'Microsoft.ApiManagement/service/policyFrag
   dependsOn: [eventHubLogger]
 }
 
+resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2023-05-01-preview' = {
+  parent: azureOpenAIApi
+  name: 'policy'
+  properties: {
+    value: loadTextContent('../../policies/genai-policy.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [
+    simpleRoundRobinPolicyFragment
+    weightedRoundRobinPolicyFragment
+    adaptiveRateLimitingPolicyFragment
+    retryWithPayAsYouGoPolicyFragment
+    usageTrackingPolicyFragment]
+}
+
+
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2021-11-01' existing = {
   name: eventHubNamespaceName
 }
@@ -184,7 +200,7 @@ resource assignEventHubsDataSenderToApiManagement 'Microsoft.Authorization/roleA
 }
 
 resource eventHubLogger 'Microsoft.ApiManagement/service/loggers@2022-04-01-preview' = {
-  name: 'eventhub-logger'
+  name: 'eventhub-logger-2d53'
   parent: apiManagementService
   properties: {
     loggerType: 'azureEventHub'
