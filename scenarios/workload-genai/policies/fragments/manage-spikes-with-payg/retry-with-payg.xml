@@ -1,0 +1,36 @@
+<!-- Policy fragment to use Pay As You Go (PAYG) endpoints when the PTU endpoints are busy.
+
+    should be used inside the <backend> section of the policy
+
+    Expected named values
+    - ptu-endpoint-1, payg-endpoint-1, payg-endpoint-2: The backend endpoints to be load balanced. -->
+<fragment>
+    <!-- Exponential retry policy: If the HTTP status code of the response is 300 or greater, the request is retried. 
+     Maximum retries: 3. Initial retry interval: 1 second. Maximum retry interval: 10 seconds. 
+     Retry interval increase per retry: 2 seconds -->
+    <retry condition="@(context.Response.StatusCode == 429)"
+           count="3"
+           interval="1"
+           max-interval="10"
+           delta="2">
+        <!-- The retry policy executes its child policies once and then retries their execution until the retry 
+        condition becomes false or retry count is exhausted. -->
+        <choose>
+            <when condition="@(context.Response.StatusCode == 429)">
+                <!-- If the PTU returns 429, the control enters this block -->
+                <!-- It is also possible to have a pool of backends and load balance them -->
+                <set-variable name="selected-backend-id" value="payg-backend-1" />
+                <set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+            </when>
+            <otherwise>
+                <!-- This is the default path of the request -->
+                <!-- The backend will point to the `ptu endpoint` or it is possible to load balance multiple 
+                PTU endpoints as well -->
+                <set-variable name="selected-backend-id" value="ptu-backend-1" />
+                <set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+            </otherwise>
+        </choose>
+
+        <forward-request timeout="120" fail-on-error-status-code="true" buffer-response="false" />
+    </retry>
+</fragment>

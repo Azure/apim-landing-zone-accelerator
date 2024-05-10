@@ -3,16 +3,16 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "workloadName" :{ 
-        "value": "apimdemo"
+        "value": "accpv"
     },
     "environment" :{ 
         "value": "dev"
     },
     "identifier" :{ 
-        "value": "cfx"
+        "value": "jek"
     },
     "appGatewayFqdn" :{ 
-        "value": "apim.example.com"
+        "value": "accpv.example.com"
     },
     "appGatewayCertType" :{
         "value": "selfsigned"
