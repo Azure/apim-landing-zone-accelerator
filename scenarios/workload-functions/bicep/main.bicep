@@ -5,6 +5,11 @@ param networkingResourceGroupName string
 param apimResourceGroupName string
 param apimName string
 param vnetName string
+param privateEndpointSubnetid string
+param deploymentIdentityName string
+param deploymentSubnetId     string
+param deploymentStorageName    string
+param sharedResourceGroupName string
 
 param location string = deployment().location
 
@@ -23,6 +28,7 @@ module backend './backend/backend.bicep' = {
     resourceSuffix: resourceSuffix   
     vnetName: vnetName
     networkingResourceGroupName: networkingResourceGroupName
+    privateEndpointSubnetid: privateEndpointSubnetid
   }
 }
 
@@ -32,9 +38,11 @@ module deploy './deploy/deploy.bicep' = {
   params: {
     location: location
     resourceSuffix: resourceSuffix
-    vnetName: vnetName
-    networkingResourceGroupName: networkingResourceGroupName
     funcAppName: backend.outputs.funcAppName
+    deploymentIdentityName: deploymentIdentityName
+    deploymentSubnetId: deploymentSubnetId
+    deploymentStorageName: deploymentStorageName
+    deploymentIdentityResourceGroupName: sharedResourceGroupName
   }
   dependsOn: [
     backend

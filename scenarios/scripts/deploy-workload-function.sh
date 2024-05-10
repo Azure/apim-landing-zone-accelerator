@@ -59,7 +59,22 @@ cat << EOF > "$script_dir/../workload-functions/bicep/parameters.json"
     },
     "vnetName" :{
         "value": "${vnetName}"
-    }
+    },
+    "deploymentIdentityName" :{
+        "value": "${deploymentIdentityName}"
+    },
+    "deploymentSubnetId" :{
+        "value": "${deploymentSubnetId}"
+    },
+    "deploymentStorageName" :{
+        "value": "${deploymentStorageName}"
+    },
+    "privateEndpointSubnetid" :{
+        "value": "${privateEndpointSubnetid}"
+    },
+    "sharedResourceGroupName" :{
+        "value": "${sharedResourceGroupName}"
+    },
   }
 }
 EOF

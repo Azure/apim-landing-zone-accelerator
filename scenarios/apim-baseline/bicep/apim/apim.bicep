@@ -35,10 +35,20 @@ param appInsightsInstrumentationKey string
 param keyVaultName                  string
 param keyVaultResourceGroupName     string
 
+param vnetName string
+param networkingResourceGroupName string
+param apimRG string
 var echoSubscriptionKey = guid('echoPrimaryKey')
 /*
  * Resources
 */
+
+var apimIdentityName = 'identity-${apimName}'
+
+resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: apimIdentityName
+  location: location
+}
 
 resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
   name: apimName
@@ -48,7 +58,10 @@ resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
     name: skuName
   }
   identity: {
-    type: 'SystemAssigned'
+    type:'UserAssigned'
+    userAssignedIdentities: {
+      '${apimIdentity.id}': {}
+    }
   }
   properties:{
     virtualNetworkType: 'Internal'
@@ -99,9 +112,25 @@ module kvaccess './modules/kvaccess.bicep' = {
   name: 'kvaccess'
   scope: resourceGroup(keyVaultResourceGroupName)
   params: {
-    managedIdentity:    apimName_resource.identity
+    managedIdentity:    apimIdentity
     keyVaultName:       keyVaultName
   }
 }
 
+//Creation of private DNS zones
+module dnsZoneModule './modules/dnsrecords.bicep'  = {
+  name: 'apimDnsRecordsDeploy'
+  scope: resourceGroup(networkingResourceGroupName)
+  dependsOn: [
+    apimName_resource
+  ]
+  params: {
+    vnetName: vnetName
+    apimName: apimName
+    apimRG: apimRG
+    networkingResourceGroupName: networkingResourceGroupName  
+  }
+}
+
 output apimStarterSubscriptionKey string = echoSubscriptionKey
+output apimIdentityName string = apimIdentityName

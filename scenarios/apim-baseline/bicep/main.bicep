@@ -74,6 +74,10 @@ module shared './shared/shared.bicep' = {
     location: location
     resourceGroupName: sharedRG.name
     resourceSuffix: resourceSuffix
+    vnetName: networking.outputs.apimCSVNetName
+    privateEndpointSubnetid: networking.outputs.privateEndpointSubnetid
+    networkingResourceGroupName: networkingRG.name
+    deploymentSubnetId: networking.outputs.deploymentSubnetId
   }
 }
 
@@ -89,21 +93,9 @@ module apimModule 'apim/apim.bicep'  = {
     appInsightsInstrumentationKey: shared.outputs.appInsightsInstrumentationKey
     keyVaultName: shared.outputs.keyVaultName
     keyVaultResourceGroupName: sharedRG.name
-  }
-}
-
-//Creation of private DNS zones
-module dnsZoneModule 'shared/dnszone.bicep'  = {
-  name: 'apimDnsZoneDeploy'
-  scope: resourceGroup(sharedRG.name)
-  dependsOn: [
-    apimModule
-  ]
-  params: {
-    vnetName: networking.outputs.apimCSVNetName
-    vnetRG: networkingRG.name
-    apimName: apimName
+    networkingResourceGroupName: networkingRG.name
     apimRG: apimRG.name
+    vnetName: networking.outputs.apimCSVNetName
   }
 }
 
@@ -112,7 +104,6 @@ module appgwModule 'gateway/appgw.bicep' = {
   scope: resourceGroup(networkingRG.name)
   dependsOn: [
     apimModule
-    dnsZoneModule
   ]
   params: {
     appGatewayName:                 appGatewayName
@@ -125,6 +116,9 @@ module appgwModule 'gateway/appgw.bicep' = {
     appGatewayCertType:             appGatewayCertType
     certKey:                        certKey
     appGatewayPublicIpName:         networking.outputs.appGatewayPublicIpName
+    deploymentIdentityName:         shared.outputs.deploymentIdentityName
+    deploymentSubnetId:             networking.outputs.deploymentSubnetId
+    deploymentStorageName:          shared.outputs.deploymentStorageName
   }
 }
 
@@ -133,8 +127,13 @@ output networkingResourceGroupName string = networkingResourceGroupName
 output sharedResourceGroupName string = sharedResourceGroupName
 output apimResourceGroupName string = apimResourceGroupName
 output apimName string = apimName
+output apimIdentityName string = apimModule.outputs.apimIdentityName
 output vnetId string = networking.outputs.apimCSVNetId
 output vnetName string = networking.outputs.apimCSVNetName
+output privateEndpointSubnetid string = networking.outputs.privateEndpointSubnetid
+output deploymentIdentityName string = shared.outputs.deploymentIdentityName
+output deploymentSubnetId string = networking.outputs.deploymentSubnetId
+output deploymentStorageName string =shared.outputs.deploymentStorageName
 output keyVaultName string = shared.outputs.keyVaultName
 output appGatewayName string = appGatewayName
 output appGatewayPublicIpAddress string = appgwModule.outputs.appGatewayPublicIpAddress
