@@ -1,5 +1,5 @@
 <fragment>
-	<set-variable name="all-backends" value="@{
+    <set-variable name="all-backends" value="@{
             JArray backends = new JArray();
             backends.Add(new JObject()
             {
@@ -15,7 +15,7 @@
 
             return backends;
     }" />
-	<set-variable name="selected-backend-id" value="@{
+    <set-variable name="selected-backend-id" value="@{
             var backends = (JArray)context.Variables["all-backends"];
             var totalWeight = backends.Sum(e => (int)e["weight"]);
             var randomNumber = new Random().Next(totalWeight);
@@ -30,5 +30,9 @@
             }
             return backends[0]["id"].ToString();
     }" />
-	<set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+    <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" client-id="{{apim-identity}}" ignore-error="false" />
+    <set-header name="Authorization" exists-action="override">
+        <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+    </set-header>
+    <set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
 </fragment>

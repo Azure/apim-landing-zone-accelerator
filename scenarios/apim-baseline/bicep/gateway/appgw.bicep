@@ -274,6 +274,28 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
               }
             }
             {
+              name: 'openai-api'
+              properties: {
+                paths: [
+                  '/openai/*'
+                ]
+                backendAddressPool: {
+                  id: resourceId(
+                    'Microsoft.Network/applicationGateways/backendAddressPools',
+                    appGatewayName,
+                    'apim'
+                  )
+                }
+                backendHttpSettings: {
+                  id: resourceId(
+                    'Microsoft.Network/applicationGateways/backendHttpSettingsCollection',
+                    appGatewayName,
+                    'apim-demo-apis-https'
+                  )
+                }
+              }
+            }            
+            {
               name: 'default'
               properties: {
                 paths: [

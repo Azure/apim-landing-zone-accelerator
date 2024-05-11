@@ -119,7 +119,6 @@ module queueStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_queue_Name
-    privateDnsZoneName: 'queueDnsZone'
     domain: 'privatelink.queue.${environment().suffixes.storage}'
     groupId: 'queue'
     serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
@@ -134,7 +133,6 @@ module blobStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/p
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_blob_Name
-    privateDnsZoneName: 'blobDnsZone'
     groupId: 'blob'
     domain: 'privatelink.blob.${environment().suffixes.storage}'
     serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
@@ -149,7 +147,6 @@ module tableStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_table_Name
-    privateDnsZoneName: 'tableDnsZone'
     groupId: 'table'
     domain: 'privatelink.table.${environment().suffixes.storage}'
     serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
@@ -164,7 +161,6 @@ module fileStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/p
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_file_Name
-    privateDnsZoneName: 'fileDnsZone'
     groupId: 'file'
     domain: 'privatelink.file.${environment().suffixes.storage}'
     serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
