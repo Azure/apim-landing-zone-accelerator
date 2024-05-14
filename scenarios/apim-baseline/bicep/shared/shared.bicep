@@ -43,7 +43,7 @@ module appInsights './modules/azmon.bicep' = {
   }
 }
 
-resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
+resource key_vault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: keyVaultName
   location: location
   properties: {
@@ -52,6 +52,13 @@ resource key_vault 'Microsoft.KeyVault/vaults@2019-09-01' = {
       family: 'A'
       name: 'standard'
     }    
+    publicNetworkAccess: 'Disabled'
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Deny'
+      ipRules: []
+      virtualNetworkRules: []
+    }
     accessPolicies: [
     ]
   }
@@ -63,7 +70,6 @@ module keyvaultPrivateEndpoint './modules/privateendpoint.bicep' = {
   params: {
     location: location
     privateEndpointName: privateEndpoint_keyvault_Name
-    privateDnsZoneName: 'kvDnsZone'
     groupId: 'vault'
     serviceResourceId: key_vault.id
     vnetName: vnetName

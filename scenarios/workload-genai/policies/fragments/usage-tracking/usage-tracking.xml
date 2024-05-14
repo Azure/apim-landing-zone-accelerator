@@ -5,7 +5,7 @@
 				Logs specific information to an EventHub if the response status code is 200.
 				Captures various request and response details like service name, gateway ID, request ID, operation name, subscription ID, product ID, business unit name, invoked OpenAI instance, and total tokens used.-->
         <when condition="@(context.Response.StatusCode == 200)">
-            <log-to-eventhub logger-id="eventhub-logger-2d53">@{
+            <log-to-eventhub logger-id="eventhub-logger">@{
                     return new JObject(
                         new JProperty("Type", "Message"),
                         new JProperty("EventTime", DateTime.UtcNow.ToString()),

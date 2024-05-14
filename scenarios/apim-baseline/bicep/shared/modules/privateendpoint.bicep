@@ -5,7 +5,7 @@ param vnetName string
 param networkingResourceGroupName string
 param subnetId string
 param serviceResourceId string
-param privateDnsZoneName string
+param createDnsZone bool = true
 param domain string
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-03-01' = {
@@ -29,8 +29,8 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-03-01' = {
   }
 }
 
-module dnsZone './dnszone.bicep' = {
-  name: privateDnsZoneName
+module dnsZoneNew './dnszone.bicep' = if (createDnsZone == true) {
+  name: take('${replace(domain, '.', '-')}-deploy', 64)
   params: {
     vnetName: vnetName
     networkingResourceGroupName: networkingResourceGroupName
@@ -41,15 +41,22 @@ module dnsZone './dnszone.bicep' = {
   ]
 }
 
+resource dnsZone 'Microsoft.Network/privateDnsZones@2018-09-01' existing = if (createDnsZone == false) {
+  name: domain 
+}
+
+var dnsZoneName = (createDnsZone == true) ? dnsZoneNew.outputs.dnsZoneName : dnsZone.name
+var dnsZoneId = (createDnsZone == true) ? dnsZoneNew.outputs.dnsZoneId : dnsZone.id
+
 resource dnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-03-01' = {
   name: 'default'
   parent: privateEndpoint
   properties: {
     privateDnsZoneConfigs: [
       {      
-        name: dnsZone.outputs.dnsZoneName
+        name: dnsZoneName
         properties: {
-          privateDnsZoneId: dnsZone.outputs.dnsZoneId          
+          privateDnsZoneId: dnsZoneId          
         }
       }
     ]
@@ -57,6 +64,4 @@ resource dnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2
 }
 
 output privateEndpointId string = privateEndpoint.id
-output dnsZoneId string = dnsZone.outputs.dnsZoneId
 output dnsZoneGroupId string = dnsZoneGroup.id
-output vnetLinksId string = dnsZone.outputs.vnetLinksLink
