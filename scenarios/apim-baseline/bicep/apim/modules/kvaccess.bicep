@@ -6,8 +6,8 @@ resource accessPolicyGrant 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01'
   properties: {
     accessPolicies: [
       {
-        objectId: managedIdentity.principalId
-        tenantId: managedIdentity.tenantId
+        objectId: managedIdentity.properties.principalId
+        tenantId: managedIdentity.properties.tenantId
         permissions: {
           secrets: [ 
             'get' 

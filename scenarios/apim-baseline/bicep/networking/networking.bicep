@@ -2,6 +2,9 @@ param apimCSVNetNameAddressPrefix string = '10.2.0.0/16'
 
 param appGatewayAddressPrefix string = '10.2.4.0/24'
 param apimAddressPrefix string = '10.2.7.0/24'
+param privateEndpointAddressPrefix string = '10.2.5.0/24'
+param deploymentAddressPrefix string = '10.2.8.0/24'
+
 param location string
 
 @description('Standardized suffix text to be added to resource names')
@@ -17,6 +20,11 @@ var apimSubnetName = 'snet-apim-${resourceSuffix}'
 
 var appGatewaySNNSG = 'nsg-apgw-${resourceSuffix}'
 var apimSNNSG = 'nsg-apim-${resourceSuffix}'
+
+var privateEndpointSubnetName = 'snet-prep-${resourceSuffix}'
+var privateEndpointSNNSG = 'nsg-prep-${resourceSuffix}'
+
+var deploymentSubnetName = 'snet-deploy-${resourceSuffix}'
 
 var appGatewayPublicIpName = 'pip-appgw-${resourceSuffix}'
 
@@ -52,6 +60,35 @@ resource vnetApimCs 'Microsoft.Network/virtualNetworks@2021-02-01' = {
           networkSecurityGroup: {
             id: apimNSG.id
           }
+        }
+      }
+      {
+        name: privateEndpointSubnetName
+        properties: {
+          addressPrefix: privateEndpointAddressPrefix
+          networkSecurityGroup: {
+            id: privateEndpointNSG.id
+          }
+          privateEndpointNetworkPolicies: 'Disabled'
+        }
+      }
+      {
+        name: deploymentSubnetName
+        properties: {
+          addressPrefix: deploymentAddressPrefix
+          serviceEndpoints: [
+            {
+              service: 'Microsoft.Storage'
+            }
+          ]
+          delegations: [
+            {
+              name: 'Microsoft.ContainerInstance.containerGroups'
+              properties: {
+                serviceName: 'Microsoft.ContainerInstance/containerGroups'
+              }
+            }
+          ]
         }
       }
     ]
@@ -164,7 +201,7 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           sourcePortRange: '*'
           destinationAddressPrefix: 'VirtualNetwork'
         }
-      }      
+      }
       {
         name: 'AllowStorage'
         properties: {
@@ -216,8 +253,16 @@ resource apimNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
           sourcePortRange: '*'
           destinationAddressPrefix: 'AzureMonitor'
         }
-      }     
+      }
     ]
+  }
+}
+
+resource privateEndpointNSG 'Microsoft.Network/networkSecurityGroups@2020-06-01' = {
+  name: privateEndpointSNNSG
+  location: location
+  properties: {
+    securityRules: []
   }
 }
 
@@ -239,11 +284,16 @@ resource pipAppGw 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
 output apimCSVNetName string = apimCSVNetName
 output apimCSVNetId string = vnetApimCs.id
 
-output appGatewaySubnetName string = appGatewaySubnetName  
+output appGatewaySubnetName string = appGatewaySubnetName
 output apimSubnetName string = apimSubnetName
+output privateEndpointSubnetName string = privateEndpointSubnetName
 
-output appGatewaySubnetid string = '${vnetApimCs.id}/subnets/${appGatewaySubnetName}'  
-output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'  
+output appGatewaySubnetid string = '${vnetApimCs.id}/subnets/${appGatewaySubnetName}'
+output apimSubnetid string = '${vnetApimCs.id}/subnets/${apimSubnetName}'
+output privateEndpointSubnetid string = '${vnetApimCs.id}/subnets/${privateEndpointSubnetName}'
+
+output deploymentSubnetId string = '${vnetApimCs.id}/subnets/${deploymentSubnetName}'
+output deploymentSubnetName string = deploymentSubnetName
 
 output publicIpAppGw string = pipAppGw.id
 output appGatewayPublicIpName string = appGatewayPublicIpName

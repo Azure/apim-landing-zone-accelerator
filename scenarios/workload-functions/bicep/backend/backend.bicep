@@ -3,6 +3,8 @@ param resourceSuffix string
 param vnetName string
 param networkingResourceGroupName string
 
+param privateEndpointSubnetid string
+
 param location string
 
 @description('The language worker runtime to load in the function app.')
@@ -58,6 +60,7 @@ var sites_funcappAPIMCSBackendMicroServiceA_repositoryHostname   = 'func-code-be
 var sites_funcappAPIMCSBackendMicroServiceA_siteName   = 'funccodebe${resourceSuffix}'
 var privateEndpoint_funcappAPIMCSBackendMicroServiceA_name   = 'pep-func-code-be-${resourceSuffix}'
 
+
 module networking './modules/networking.bicep' = {
   name: 'networkingresources'
   scope: resourceGroup(networkingResourceGroupName)
@@ -69,7 +72,6 @@ module networking './modules/networking.bicep' = {
 }
 
 var backendSubnetId = networking.outputs.backEndSubnetid
-var privateEndpointSubnetid = networking.outputs.privateEndpointSubnetid
 
 //
 // Definitions
@@ -112,60 +114,56 @@ resource storageAccounts_saapimcsbackend_name_resource 'Microsoft.Storage/storag
 }
 
 
-module queueStoragePrivateEndpoint './modules/privateendpoint.bicep' = {
+module queueStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/privateendpoint.bicep' = {
   name: privateEndpoint_storageaccount_queue_Name
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_queue_Name
-    privateDnsZoneName: 'queueDnsZone'
-    storageAcountName: storageAccounts_saapimcsbackend_name
+    domain: 'privatelink.queue.${environment().suffixes.storage}'
     groupId: 'queue'
-    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
     vnetName: vnetName
     networkingResourceGroupName: networkingResourceGroupName
     subnetId: privateEndpointSubnetid
   }
 }
 
-module blobStoragePrivateEndpoint './modules/privateendpoint.bicep' = {
+module blobStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/privateendpoint.bicep' = {
   name: privateEndpoint_storageaccount_blob_Name
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_blob_Name
-    privateDnsZoneName: 'blobDnsZone'
-    storageAcountName: storageAccounts_saapimcsbackend_name
     groupId: 'blob'
-    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    domain: 'privatelink.blob.${environment().suffixes.storage}'
+    serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
     vnetName: vnetName
     networkingResourceGroupName: networkingResourceGroupName
     subnetId: privateEndpointSubnetid
   }
 }
 
-module tableStoragePrivateEndpoint './modules/privateendpoint.bicep' = {
+module tableStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/privateendpoint.bicep' = {
   name: privateEndpoint_storageaccount_table_Name
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_table_Name
-    privateDnsZoneName: 'tableDnsZone'
-    storageAcountName: storageAccounts_saapimcsbackend_name
     groupId: 'table'
-    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    domain: 'privatelink.table.${environment().suffixes.storage}'
+    serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
     vnetName: vnetName
     networkingResourceGroupName: networkingResourceGroupName
     subnetId: privateEndpointSubnetid
   }
 }
 
-module fileStoragePrivateEndpoint './modules/privateendpoint.bicep' = {
+module fileStoragePrivateEndpoint '../../../apim-baseline/bicep/shared/modules/privateendpoint.bicep' = {
   name: privateEndpoint_storageaccount_file_Name
   params: {
     location: location
     privateEndpointName: privateEndpoint_storageaccount_file_Name
-    privateDnsZoneName: 'fileDnsZone'
-    storageAcountName: storageAccounts_saapimcsbackend_name
     groupId: 'file'
-    storageAccountId: storageAccounts_saapimcsbackend_name_resource.id
+    domain: 'privatelink.file.${environment().suffixes.storage}'
+    serviceResourceId: storageAccounts_saapimcsbackend_name_resource.id
     vnetName: vnetName
     networkingResourceGroupName: networkingResourceGroupName
     subnetId: privateEndpointSubnetid
@@ -232,8 +230,7 @@ resource sites_funcappAPIMCSBackendMicroServiceA_name_resource 'Microsoft.Web/si
       }
     ]
     siteConfig: {
-      functionsRuntimeScaleMonitoringEnabled: true
-      linuxFxVersion: (isReserved ? linuxFxVersion : json('null'))
+      linuxFxVersion: (isReserved ? linuxFxVersion : null)
       appSettings: [
         {
           name: 'AzureWebJobsStorage'

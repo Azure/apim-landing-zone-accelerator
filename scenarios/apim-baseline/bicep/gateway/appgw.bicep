@@ -26,6 +26,10 @@ param appGatewayPublicIpName string
 param keyVaultName string
 param keyVaultResourceGroupName string
 
+param deploymentIdentityName string
+param deploymentSubnetId     string
+param deploymentStorageName    string
+
 param certKey string
 
 var appGatewayIdentityId = 'identity-${appGatewayName}'
@@ -41,6 +45,9 @@ module certificate './modules/certificate.bicep' = {
   scope: resourceGroup(keyVaultResourceGroupName)
   params: {
     managedIdentity: appGatewayIdentity
+    deploymentIdentityName: deploymentIdentityName
+    deploymentSubnetId: deploymentSubnetId
+    deploymentStorageName: deploymentStorageName
     keyVaultName: keyVaultName
     location: location
     appGatewayFQDN: appGatewayFQDN
@@ -266,6 +273,28 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
                 }
               }
             }
+            {
+              name: 'openai-api'
+              properties: {
+                paths: [
+                  '/openai/*'
+                ]
+                backendAddressPool: {
+                  id: resourceId(
+                    'Microsoft.Network/applicationGateways/backendAddressPools',
+                    appGatewayName,
+                    'apim'
+                  )
+                }
+                backendHttpSettings: {
+                  id: resourceId(
+                    'Microsoft.Network/applicationGateways/backendHttpSettingsCollection',
+                    appGatewayName,
+                    'apim-demo-apis-https'
+                  )
+                }
+              }
+            }            
             {
               name: 'default'
               properties: {

@@ -4,6 +4,9 @@ param location                string
 param appGatewayFQDN          string
 param certKey            string  
 param appGatewayCertType      string
+param deploymentIdentityName string
+param deploymentSubnetId     string
+param deploymentStorageName    string
 
 var secretName = replace(appGatewayFQDN,'.', '-')
 var subjectName='CN=${appGatewayFQDN}'
@@ -11,7 +14,11 @@ var subjectName='CN=${appGatewayFQDN}'
 var certData = appGatewayCertType == 'selfsigned' ? 'null' : loadFileAsBase64('../certs/appgw.pfx')
 var certPwd = appGatewayCertType == 'selfsigned' ? 'null' : certKey
 
-resource accessPolicyGrant 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01' = {
+resource deploymentIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
+  name: deploymentIdentityName
+}
+
+resource accessPolicyGrantForCertificate 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01' = {
   name: '${keyVaultName}/add'
   properties: {
     accessPolicies: [
@@ -32,19 +39,52 @@ resource accessPolicyGrant 'Microsoft.KeyVault/vaults/accessPolicies@2019-09-01'
           ]
         }                  
       }
+      {
+        objectId: deploymentIdentity.properties.principalId
+        tenantId: deploymentIdentity.properties.tenantId
+        permissions: {
+          secrets: [ 
+            'get' 
+            'list'
+          ]
+          certificates: [
+            'import'
+            'get'
+            'list'
+            'update'
+            'create'
+          ]
+        }                  
+      }
     ]
   }
 }
 
-resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
+resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
   name: '${secretName}-certificate'
   dependsOn: [
-    accessPolicyGrant
+    accessPolicyGrantForCertificate
   ]
   location: location 
+  identity: {
+    type: 'userAssigned'
+    userAssignedIdentities: {
+      '${deploymentIdentity.id}': {}
+    }
+  }
   kind: 'AzurePowerShell'
   properties: {
     azPowerShellVersion: '6.6'
+    storageAccountSettings: {
+      storageAccountName: deploymentStorageName
+    }
+    containerSettings: {
+      subnetIds: [
+        {
+          id: deploymentSubnetId
+        }
+      ]
+    }     
     arguments: ' -vaultName ${keyVaultName} -certificateName ${secretName} -subjectName ${subjectName} -certPwd ${certPwd} -certDataString ${certData} -certType ${appGatewayCertType}'
     scriptContent: '''
       param(
@@ -91,12 +131,6 @@ resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2020-10-01
       }
       '''
     retentionInterval: 'P1D'
-  }
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '/subscriptions/${managedIdentity.subscriptionId}/resourceGroups/${managedIdentity.resourceGroupName}/providers/${managedIdentity.resourceId}': {}
-    }
   }
 }
 
