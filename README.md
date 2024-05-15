@@ -4,7 +4,7 @@ Azure API Management Landing ZOne Accelerator provides packaged guidance with re
 
 ## Enterprise-Scale Architecture
 
-![image](/docs/images/apim-secure-baseline)
+![image](/docs/images/apim-secure-baseline.jpg)
 
 ## :mag: Design areas
 

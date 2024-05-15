@@ -7,7 +7,8 @@
     - [Deploy GenAI Workload](#deploy-genai-workload)
   - [Architecture Diagram](#architecture-diagram)
   - [GenAI Gateway capabilities](#genai-gateway-capabilities)
-
+    - [Upcoming capabilities](#upcoming-capabilities)
+  - [AI Hub Gateway capabilities](#ai-hub-gateway-capabilities)
 
 ## Introduction
 
@@ -44,9 +45,15 @@ This repo currently contains the policies showing how to implement these GenAI G
 | [Adaptive rate limiting](./capabilities/rate-limiting/README.md) | Dynamically adjust rate-limits applied to different workloads|
 | [Tracking token usage](./capabilities/usage-tracking//README.md) | Record the token consumption for usage tracking and attribution|
 
-@prasann - please add pre-requisites with respect to azure open ai instances provisioning and general pre-reqs as well. can we also mention that this repo will be updated with the latest features after Build.
+### Upcoming capabilities
+
+*Note: These capabilites will be launched post MSFT build*
+
+- Elegant way of rate limiting by tokens for both streaming and non-streaming Azure OpenAI endpoints.
+- Usage and token tracking within Application insights for both streaming and non-streaming Azure OpenAI endpoints.
 
 ## AI Hub Gateway capabilities
+
 Looking for comprehensive reference implementation to provision your AI Hub Gateway? Check out AI Hub Gateway scenario.
 
 :arrow_forward: [AI Hub Gateway](https://github.com/Azure-Samples/ai-hub-gateway-solution-accelerator)
