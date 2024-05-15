@@ -2,7 +2,7 @@
 
 Azure API Management Landing ZOne Accelerator provides packaged guidance with reference architecture and reference implementation along with design guidance recommendations and considerations on critical design areas for provisioning APIM with a secure baseline. They are aligned with industry proven practices, such as those presented in [Azure landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/) guidance in the Cloud Adoption Framework.
 
-## Enterprise-Scale Architecture
+## Reference Architecture
 
 ![image](/docs/images/apim-secure-baseline.jpg)
 
@@ -18,13 +18,13 @@ The enterprise architecture is broken down into six different design areas, wher
 | Governance|[Design Considerations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-considerations)|[Design Recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-recommendations)|
 | Platform Automation and DevOps|[Design Considerations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-considerations)|[Design Recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-recommendations)|
 
-## :rocket: Enterprise-Scale Reference Implementation
+## :rocket: Reference Implementation
 
 This repo contains the Azure landing zone accelerator's reference implementations, all with supporting *Infrastructure as Code* artifacts. The scenarios covered are:
 
-:arrow_forward: [Scenario 1: Azure API Management - Secure Baseline](scenarios/apim-baseline/README.md)
-:arrow_forward: [Scenario 2: Azure API Management - Function Backend](scenarios/workload-functions/README.md)
-:arrow_forward: [Scenario 3: Azure API Management - Gen AI Backend](scenarios/workload-genai/README.md)
+- :arrow_forward: [Scenario 1: Azure API Management - Secure Baseline](scenarios/apim-baseline/README.md)
+- :arrow_forward: [Scenario 2: Azure API Management - Function Backend](scenarios/workload-functions/README.md)
+- :arrow_forward: [Scenario 3: Azure API Management - Gen AI Backend](scenarios/workload-genai/README.md)
 
 *More reference implementation scenarios will be added as they become available.*
 
