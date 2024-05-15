@@ -1,8 +1,12 @@
-# Enterprise-Scale-APIM
+# Azure API Management Landing Zone Accelerator
 
-This is a repository ([aka.ms/EnterpriseScale-APIM](https://aka.ms/EnterpriseScale-APIM)) that contains both enterprise architecture (proven recommendations and considerations) and reference implementation (deployable artifacts for a common implementations).
+Azure API Management Landing ZOne Accelerator provides packaged guidance with reference architecture and reference implementation along with design guidance recommendations and considerations on critical design areas for provisioning APIM with a secure baseline. They are aligned with industry proven practices, such as those presented in [Azure landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/) guidance in the Cloud Adoption Framework.
 
 ## Enterprise-Scale Architecture
+
+![image](/docs/images/apim-secure-baseline)
+
+## :mag: Design areas
 
 The enterprise architecture is broken down into six different design areas, where you can find the links to each at:
 | Design Area|Considerations|Recommendations|
@@ -14,26 +18,20 @@ The enterprise architecture is broken down into six different design areas, wher
 | Governance|[Design Considerations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-considerations)|[Design Recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-recommendations)|
 | Platform Automation and DevOps|[Design Considerations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-considerations)|[Design Recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-recommendations)|
 
-## Enterprise-Scale Reference Implementation
+## :rocket: Enterprise-Scale Reference Implementation
 
-In this repo you will also find reference implementations with supporting Infrastructure as Code templates. More reference implementations will be added as they become available.
+This repo contains the Azure landing zone accelerator's reference implementations, all with supporting *Infrastructure as Code* artifacts. The scenarios covered are:
 
----
+:arrow_forward: [Scenario 1: Azure API Management - Secure Baseline](scenarios/apim-baseline/README.md)
+:arrow_forward: [Scenario 2: Azure API Management - Function Backend](scenarios/workload-functions/README.md)
+:arrow_forward: [Scenario 3: Azure API Management - Gen AI Backend](scenarios/workload-genai/README.md)
 
-### Reference Implementation 1: App Gateway with internal APIM instance with Azure Functions as backend
+*More reference implementation scenarios will be added as they become available.*
 
-Architectural Diagram:
-![image](/docs/images/arch.png)
 
-Resources Deployed:
-![image](/docs/images/deployed-items.png)
 
 Deployment Details:
-| Deployment Methodology| GitHub Action YAML| User Guide|
-|--------------|--------------|--------------|
-| [Bicep](/reference-implementations/AppGW-IAPIM-Func/bicep) |[es-apim.yml](/.github/workflows/es-apim.yml)| [README](/docs/README.md)
-| [ARM](/reference-implementations/AppGW-IAPIM-Func/azure-resource-manager/apim-arm.js) | Not provided* |
-| [Terraform](reference-implementations/AppGW-IAPIM-Func/terraform) | [terraform-es-apim.yml](.github/workflows/terraform-es-apim.yml) | [README](reference-implementations/AppGW-IAPIM-Func/terraform/README.md) |
+@seenu433 - add layered deployment approach here
 ---
 
 ## Other Considerations
@@ -42,9 +40,6 @@ Deployment Details:
 
     ```azcli
     az deployment sub create --location eastus --name am --template-file main.bicep --parameters workloadName=am environment=dev
-
-2. Please leverage issues if you have any feedback or request on how we can improve on this repository
-
 ---
 
 ## Got a feedback
