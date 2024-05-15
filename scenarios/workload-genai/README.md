@@ -8,6 +8,7 @@
   - [Architecture Diagram](#architecture-diagram)
   - [GenAI Gateway capabilities](#genai-gateway-capabilities)
     - [Upcoming capabilities](#upcoming-capabilities)
+    - [Test/Demo setup](#testdemo-setup)
   - [AI Hub Gateway capabilities](#ai-hub-gateway-capabilities)
 
 ## Introduction
@@ -51,6 +52,12 @@ This repo currently contains the policies showing how to implement these GenAI G
 
 - Elegant way of rate limiting by tokens for both streaming and non-streaming Azure OpenAI endpoints.
 - Usage and token tracking within Application insights for both streaming and non-streaming Azure OpenAI endpoints.
+
+### Test/Demo setup
+
+If you are looking for a quick way to test or demo these capabilities with a minimalistic non production like APIM setup against a Azure OpenAI simulator, check out this repository.
+
+:arrow_forward: [APIM GenAI Gateway Toolkit](https://github.com/Azure-Samples/apim-genai-gateway-toolkit)
 
 ## AI Hub Gateway capabilities
 
