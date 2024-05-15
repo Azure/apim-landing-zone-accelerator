@@ -21,7 +21,7 @@ This accelerator contains APIM policies showing how to implement different [GenA
 
 ### Pre-requisites
 
-[Follow this instructions](./../readme.md) and setup APIM baseline.
+[Follow this instructions](./../scenarios/apim-baseline/readme.md) and setup APIM baseline.
 
 ### Deploy GenAI Workload
 
@@ -31,7 +31,7 @@ This accelerator contains APIM policies showing how to implement different [GenA
 
 ## Architecture Diagram
 
-> TODO: Show an architectural diagram containing EventHub, Private OpenAI endpoints, APIM.
+![Architectural diagram showing an Azure API Management deployment in a virtual network with AOAI as backend.](../../docs/images/apim-workload-ai.jpg)
 
 ## GenAI Gateway capabilities
 
@@ -43,3 +43,5 @@ This repo currently contains the policies showing how to implement these GenAI G
 | [Managing spikes with PAYG](./capabilities/manage-spikes-with-payg/README.md) | Manage spikes in traffic by routing traffic to PAYG endpoints when a PTU is out of capacity. |
 | [Adaptive rate limiting](./capabilities/rate-limiting/README.md) | Dynamically adjust rate-limits applied to different workloads|
 | [Tracking token usage](./capabilities/usage-tracking//README.md) | Record the token consumption for usage tracking and attribution|
+
+@prasann - please add pre-requisites with respect to azure open ai instances provisioning and general pre-reqs as well. can we also mention that this repo will be updated with the latest features after Build.
