@@ -45,3 +45,8 @@ This repo currently contains the policies showing how to implement these GenAI G
 | [Tracking token usage](./capabilities/usage-tracking//README.md) | Record the token consumption for usage tracking and attribution|
 
 @prasann - please add pre-requisites with respect to azure open ai instances provisioning and general pre-reqs as well. can we also mention that this repo will be updated with the latest features after Build.
+
+## AI Hub Gateway capabilities
+Looking for comprehensive reference implementation to provision your AI Hub Gateway? Check out AI Hub Gateway scenario.
+
+:arrow_forward: [AI Hub Gateway](https://github.com/Azure-Samples/ai-hub-gateway-solution-accelerator)
