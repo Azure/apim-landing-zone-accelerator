@@ -37,11 +37,14 @@ This accelerator contains APIM policies showing how to implement different [GenA
 
 ## GenAI Gateway capabilities
 
+![GenAI capabilities](../../docs/images/genai-capabilities.jpg)
+
+
 This repo currently contains the policies showing how to implement these GenAI Gateway capabilities:
 
 | Capability                                                                      | Description                                                             |
 | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| [Load balancing (round-robin)](./capabilities/load-balancing-round-robin/Readme.md) | Load balance traffic across PAYG endpoints using round-robin algorithm. |
+| [Load balancing (round-robin)](./capabilities/load-balancing-round-robin/Readme.md) | Load balance traffic across PAYG endpoints using simple and weighted round-robin algorithm. |
 | [Managing spikes with PAYG](./capabilities/manage-spikes-with-payg/README.md) | Manage spikes in traffic by routing traffic to PAYG endpoints when a PTU is out of capacity. |
 | [Adaptive rate limiting](./capabilities/rate-limiting/README.md) | Dynamically adjust rate-limits applied to different workloads|
 | [Tracking token usage](./capabilities/usage-tracking//README.md) | Record the token consumption for usage tracking and attribution|
