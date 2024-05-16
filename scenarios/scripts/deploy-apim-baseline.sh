@@ -44,6 +44,14 @@ else
   CERT_TYPE="${CERT_TYPE%$'\r'}"    
 fi
 
+if [[ "$CERT_TYPE" == "selfsigned" ]]; then
+  cert_data=''
+  cert_Pwd=''
+else
+  cert_data=$(base64 -w 0 "$script_dir/../certs/appgw.pfx")
+  cert_pwd=$(CERT_PWD)
+fi
+
 if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
   chars="abcdefghijklmnopqrstuvwxyz"
   random_string=""
@@ -56,7 +64,7 @@ else
   random_string="${RANDOM_IDENTIFIER}"
 fi
 
-
+if [[ "$CERT_TYPE" == "selfsigned" ]]; then
 cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
 {
   "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
@@ -76,10 +84,18 @@ cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
     },
     "appGatewayCertType" :{
         "value": "${CERT_TYPE}"
-    }    
+    },
+    "certData" :{
+        "value": "${cert_data}"
+    },
+    "certKey" :{
+        "value": "${cert_pwd}"
+    }        
   }
 }
 EOF
+fi
+
 
 deployment_name="apim-baseline-${RESOURCE_NAME_PREFIX}"
 

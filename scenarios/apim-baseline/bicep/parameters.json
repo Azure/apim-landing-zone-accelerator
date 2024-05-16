@@ -9,13 +9,19 @@
         "value": "dev"
     },
     "identifier" :{ 
-        "value": "vak"
+        "value": "ixq"
     },
     "appGatewayFqdn" :{ 
         "value": "apim.example.com"
     },
     "appGatewayCertType" :{
         "value": "selfsigned"
-    }    
+    },
+    "certData" :{
+        "value": ""
+    },
+    "certKey" :{
+        "value": ""
+    }        
   }
 }
