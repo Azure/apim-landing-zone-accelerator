@@ -20,7 +20,7 @@ param identifier string
 param appGatewayFqdn string
 
 @description('The password for the TLS certificate for the Application Gateway.  The pfx file needs to be copied to deployment/bicep/gateway/certs/appgw.pfx')
-param certKey string = 'apimlz'
+param appGatewayCertKey string = 'apimlz'
 
 @description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and copy the pfx file to deployment/bicep/gateway/certs/appgw.pfx if custom certificates are to be used')
 param appGatewayCertType string
@@ -114,7 +114,7 @@ module appgwModule 'gateway/appgw.bicep' = {
     keyVaultName:                   shared.outputs.keyVaultName
     keyVaultResourceGroupName:      sharedRG.name
     appGatewayCertType:             appGatewayCertType
-    certKey:                        certKey
+    certKey:                        appGatewayCertKey
     appGatewayPublicIpName:         networking.outputs.appGatewayPublicIpName
     deploymentIdentityName:         shared.outputs.deploymentIdentityName
     deploymentSubnetId:             networking.outputs.deploymentSubnetId

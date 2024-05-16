@@ -9,7 +9,7 @@
         "value": "dev"
     },
     "identifier" :{ 
-        "value": "vak"
+        "value": "pik"
     },
     "appGatewayFqdn" :{ 
         "value": "apim.example.com"
