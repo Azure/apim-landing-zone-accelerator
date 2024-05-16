@@ -56,6 +56,10 @@ else
   random_string="${RANDOM_IDENTIFIER}"
 fi
 
+if [[ $CERT_TYPE == "selfsigned" ]]; then
+    mkdir -p "$script_dir/../apim-baseline/bicep/gateway/certs"
+    touch "$script_dir/../apim-baseline/bicep/gateway/certs/appgw.pfx"
+fi
 
 cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
 {
