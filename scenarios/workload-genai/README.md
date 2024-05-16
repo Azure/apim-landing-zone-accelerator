@@ -21,22 +21,20 @@ This accelerator contains APIM policies showing how to implement different [GenA
 
 ## Getting Started
 
-### Pre-requisites
+### Deploy the reference implementation
 
-[Follow this instructions](./../scenarios/apim-baseline/readme.md) and setup APIM baseline.
+This reference implementation is provided with the following infrastructure as code options. Select the deployment guide you are interested in. They both deploy the same implementation.
+
+:arrow_forward: [Bicep-based deployment guide](./bicep/README.md)
+:arrow_forward: Terraform-based deployment guide (Work in progress)
 
 ## Architecture Diagram
 
 ![Architectural diagram showing an Azure API Management deployment in a virtual network with AOAI as backend.](../../docs/images/apim-workload-ai.jpg)
 
-- Azure Open AI Services
-- Azure Private Endpoint
-- Azure Event Hub
-
 ## GenAI Gateway capabilities
 
 ![GenAI capabilities](../../docs/images/genai-capabilities.jpg)
-
 
 This repo currently contains the policies showing how to implement these GenAI Gateway capabilities:
 
@@ -66,9 +64,4 @@ Looking for comprehensive reference implementation to provision your AI Hub Gate
 
 :arrow_forward: [AI Hub Gateway](https://github.com/Azure-Samples/ai-hub-gateway-solution-accelerator)
 
-## Deploy the reference implementation
 
-This reference implementation is provided with the following infrastructure as code options. Select the deployment guide you are interested in. They both deploy the same implementation.
-
-:arrow_forward: [Bicep-based deployment guide](./bicep/README.md)
-:arrow_forward: Terraform-based deployment guide (Work in progress)
