@@ -28,20 +28,6 @@ This repo contains the Azure landing zone accelerator's reference implementation
 
 *More reference implementation scenarios will be added as they become available.*
 
-
-
-Deployment Details:
-@seenu433 - add layered deployment approach here
----
-
-## Other Considerations
-
-1. This is a way you can execute bicep deployment:
-
-    ```azcli
-    az deployment sub create --location eastus --name am --template-file main.bicep --parameters workloadName=am environment=dev
----
-
 ## Got a feedback
 
 Please leverage issues if you have any feedback or request on how we can improve on this repository.
@@ -80,4 +66,3 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
-
