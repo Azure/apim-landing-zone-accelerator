@@ -64,7 +64,6 @@ else
   random_string="${RANDOM_IDENTIFIER}"
 fi
 
-if [[ "$CERT_TYPE" == "selfsigned" ]]; then
 cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
 {
   "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
@@ -94,8 +93,6 @@ cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
   }
 }
 EOF
-fi
-
 
 deployment_name="apim-baseline-${RESOURCE_NAME_PREFIX}"
 

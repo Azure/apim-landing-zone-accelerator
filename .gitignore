@@ -335,3 +335,5 @@ override.tf.json
 *_override.tf.json
 
 **/azuredeploy.parameters.json
+scenarios/.env
+scenarios/apim-baseline/bicep/parameters.json
