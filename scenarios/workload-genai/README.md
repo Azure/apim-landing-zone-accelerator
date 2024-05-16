@@ -3,8 +3,7 @@
 - [GenAI Gateway using APIM](#genai-gateway-using-apim)
   - [Introduction](#introduction)
   - [Getting Started](#getting-started)
-    - [Pre-requisites](#pre-requisites)
-    - [Deploy GenAI Workload](#deploy-genai-workload)
+    - [Deploy the reference implementation](#deploy-the-reference-implementation)
   - [Architecture Diagram](#architecture-diagram)
   - [GenAI Gateway capabilities](#genai-gateway-capabilities)
     - [Upcoming capabilities](#upcoming-capabilities)
@@ -17,7 +16,7 @@ A "GenAI Gateway" serves as an intelligent interface/middleware that dynamically
 
 To read more about considerations when implementing a GenAI Gateway, see [this article](https://learn.microsoft.com/ai/playbook/technology-guidance/generative-ai/dev-starters/genai-gateway/).
 
-This accelerator contains APIM policies showing how to implement different [GenAI Gateway capabilities](#gateway-capabilities) in APIM, along with code to enable you to deploy the policies and see them in action.
+This accelerator contains APIM policies showing how to implement different [GenAI Gateway capabilities](#genai-gateway-capabilities) in APIM, along with code to enable you to deploy the policies and see them in action.
 
 ## Getting Started
 
@@ -63,5 +62,3 @@ If you are looking for a quick way to test or demo these capabilities with a min
 Looking for comprehensive reference implementation to provision your AI Hub Gateway? Check out AI Hub Gateway scenario.
 
 :arrow_forward: [AI Hub Gateway](https://github.com/Azure-Samples/ai-hub-gateway-solution-accelerator)
-
-
