@@ -124,3 +124,4 @@ apimStarterSubscriptionKey=$(cat "$script_dir/../apim-baseline/bicep/output.json
 testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${apimStarterSubscriptionKey}' https://${appGatewayPublicIpAddress}/echo/resource?param1=sample"
 echo "Test the deployment by running the following command: ${testUri}"
 echo -e "\n"
+
