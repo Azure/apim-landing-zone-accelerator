@@ -44,6 +44,10 @@ else
   CERT_TYPE="${CERT_TYPE%$'\r'}"    
 fi
 
+if [[ ${#ENABLE_TELEMETRY} -eq 0 ]]; then
+  telemetry=true
+fi
+
 if [[ "$CERT_TYPE" == "selfsigned" ]]; then
   cert_data=''
   cert_Pwd=''
@@ -89,7 +93,10 @@ cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
     },
     "certKey" :{
         "value": "${cert_pwd}"
-    }        
+    },
+    "enableTelemetry" :{
+        "value": ${telemetry}
+    }            
   }
 }
 EOF

@@ -12,6 +12,10 @@ param vnetName string
 param privateEndpointSubnetid string
 param networkingResourceGroupName string
 
+@description('Enable sending usage and telemetry feedback to Microsoft.')
+param enableTelemetry bool = true
+var telemetryId = 'ab1e5729-7452-41b2-9fbb-945cc51d9cd0-${location}-apimsb-genai'
+
 var workloadResourceGroupName = 'rg-openai-${resourceSuffix}'
 
 var eventHubNamespaceName = 'eh-ns-${resourceSuffix}'
@@ -115,6 +119,21 @@ module apiManagement 'apim-policies/apiManagement.bicep' = {
     eventHubNamespaceName: eventHub.outputs.eventHubNamespaceName
     eventHubName: eventHub.outputs.eventHubName
     apimIdentityName: apimIdentityName
+  }
+}
+
+@description('Microsoft telemetry deployment.')
+#disable-next-line no-deployments-resources
+resource telemetrydeployment 'Microsoft.Resources/deployments@2021-04-01' = if (enableTelemetry) {
+  location: location
+  name: telemetryId
+  properties: {
+    mode: 'Incremental'
+    template: {
+      '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#'
+      contentVersion: '1.0.0.0'
+      resources: {}
+    }
   }
 }
 
