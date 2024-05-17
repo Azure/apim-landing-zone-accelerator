@@ -6,7 +6,7 @@ By the end of this deployment guide, you would have deployed private Azure OpenA
 
 ## Architecture
 
-![Architectural diagram showing an Azure API Management deployment in a virtual network with AOAI as backend.](../../docs/images/apim-workload-ai.jpg)
+![Architectural diagram showing an Azure API Management deployment in a virtual network with AOAI as backend.](../../docs/images/apim-workload-ai.jpeg)
 
 ### Core components
 
