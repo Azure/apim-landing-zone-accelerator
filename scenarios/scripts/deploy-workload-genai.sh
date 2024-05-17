@@ -8,6 +8,10 @@ if [[ -f "$script_dir/../.env" ]]; then
 	source "$script_dir/../.env"
 fi
 
+if [[ ${#ENABLE_TELEMETRY} -eq 0 ]]; then
+  telemetry=true
+fi
+
 if [[ -f "$script_dir/../apim-baseline/bicep/output.json" ]]; then
 	echo "Loading baseline configuration"
     
@@ -18,9 +22,7 @@ else
     echo "ERROR: Missing baseline configuration. Run deploy-apim-baseline.sh" 1>&2
     exit 6
 fi
-#
-# Deploy APIM policies etc
-#
+
 cat << EOF > "$script_dir/../workload-genai/bicep/parameters.json"
 {
   "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
@@ -46,7 +48,10 @@ cat << EOF > "$script_dir/../workload-genai/bicep/parameters.json"
     },
     "networkingResourceGroupName" :{
         "value": "${networkingResourceGroupName}"
-    }               
+    },
+    "enableTelemetry" :{
+        "value": ${telemetry}
+    }              
   }
 }
 EOF

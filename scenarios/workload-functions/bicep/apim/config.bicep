@@ -68,6 +68,7 @@ resource basicProduct 'Microsoft.ApiManagement/service/products@2020-12-01' = {
     subscriptionsLimit: 1
     terms: 'These are the terms of use ...'
   }
+  dependsOn: [helloApi]
 }
 
 resource basicProductPolicies 'Microsoft.ApiManagement/service/products/policies@2020-12-01' = {
@@ -82,6 +83,7 @@ resource basicProductPolicies 'Microsoft.ApiManagement/service/products/policies
 resource linkHelloApiToBasicProduct 'Microsoft.ApiManagement/service/products/apis@2020-12-01' = {
   name: 'hello'
   parent: basicProduct
+  dependsOn: [helloApi]
 }
 
 resource starterProduct 'Microsoft.ApiManagement/service/products@2020-12-01' existing = {

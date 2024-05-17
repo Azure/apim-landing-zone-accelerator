@@ -40,6 +40,10 @@ else
   ENVIRONMENT_TAG="${ENVIRONMENT_TAG%$'\r'}"  
 fi
 
+if [[ ${#ENABLE_TELEMETRY} -eq 0 ]]; then
+  telemetry=true
+fi
+
 cat << EOF > "$script_dir/../workload-functions/bicep/parameters.json"
 {
   "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
@@ -75,6 +79,9 @@ cat << EOF > "$script_dir/../workload-functions/bicep/parameters.json"
     "sharedResourceGroupName" :{
         "value": "${sharedResourceGroupName}"
     },
+    "enableTelemetry" :{
+        "value": ${telemetry}
+    }
   }
 }
 EOF
