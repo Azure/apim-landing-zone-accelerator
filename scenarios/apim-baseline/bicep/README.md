@@ -12,9 +12,14 @@ This is the starting point for the instructions on deploying this reference impl
   - `Microsoft.Network`
   - `Microsoft.KeyVault`
 - The user or service principal initiating the deployment process must have the [owner role](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) at the subscription level to have the ability to create resource groups and to delegate access to others (Azure Managed Identities created from the IaC deployment).
+- Access to Bash command line to run the deployment script.
 - Latest [Azure CLI installed](https://learn.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) (must be at least 2.40), or you can perform this from Azure Cloud Shell by clicking below.
 
   [![Launch Azure Cloud Shell](https://learn.microsoft.com/azure/includes/media/cloud-shell-try-it/launchcloudshell.png)](https://shell.azure.com)
+- JQ command line JSON processor installed 
+   ```bash
+   sudo apt-get install jq
+   ```
 
 ## Steps
 
@@ -43,7 +48,8 @@ This is the starting point for the instructions on deploying this reference impl
    | `RESOURCE_NAME_PREFIX` | A suffix for naming. | **apimdemo** | **appname** |
    | `ENVIRONMENT_TAG` | A tag that will be included in the naming. | **dev** | **stage** |
    | `APPGATEWAY_FQDN` | The Azure location to deploy to. | **apim.example.com** | **my.org.com** |
-   | `CERT_TYPE` | selfsigned will create a self-signed certificate for the APPGATEWAY_FQDN. custom will use an existing certificate in pfx format that needs to be available in the [certs](./gateway/certs) folder | **selfsigned** | **custom** |
+   | `CERT_TYPE` | selfsigned will create a self-signed certificate for the APPGATEWAY_FQDN. custom will use an existing certificate in pfx format that needs to be available in the [certs](../../certs) folder and named appgw.pfx | **selfsigned** | **custom** |
+   | `CERT_PWD` | The password for the pfx certificate. Only required if CERT_TYPE is custom. | **N/A** | **password123** |
    | `RANDOM_IDENTIFIER` | Optional 3 character random string to ensure deployments are unique. Automatically assigned if not provided | **abc** | **pqr** |
 
 1. Deploy the reference implementation.
@@ -54,4 +60,4 @@ This is the starting point for the instructions on deploying this reference impl
     ./deploy-apim-baseline.sh
     ```
 
-Test the echo api using hte generated command from the output
+Test the echo api using the generated command from the output

@@ -31,6 +31,7 @@ param deploymentSubnetId     string
 param deploymentStorageName    string
 
 param certKey string
+param certData string
 
 var appGatewayIdentityId = 'identity-${appGatewayName}'
 var appGatewayFirewallPolicy = 'waf-${appGatewayName}'
@@ -53,6 +54,7 @@ module certificate './modules/certificate.bicep' = {
     appGatewayFQDN: appGatewayFQDN
     appGatewayCertType: appGatewayCertType
     certKey: certKey
+    certData: certData
   }
 }
 

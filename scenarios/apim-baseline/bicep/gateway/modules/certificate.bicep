@@ -2,17 +2,18 @@ param keyVaultName            string
 param managedIdentity         object      
 param location                string
 param appGatewayFQDN          string
-param certKey            string  
+param certKey                 string
+param certData                string
 param appGatewayCertType      string
-param deploymentIdentityName string
-param deploymentSubnetId     string
-param deploymentStorageName    string
+param deploymentIdentityName  string
+param deploymentSubnetId      string
+param deploymentStorageName   string
 
 var secretName = replace(appGatewayFQDN,'.', '-')
 var subjectName='CN=${appGatewayFQDN}'
 
-var certData = appGatewayCertType == 'selfsigned' ? 'null' : loadFileAsBase64('../certs/appgw.pfx')
 var certPwd = appGatewayCertType == 'selfsigned' ? 'null' : certKey
+var certDataString = appGatewayCertType == 'selfsigned' ? 'null' : certData
 
 resource deploymentIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
   name: deploymentIdentityName
@@ -85,7 +86,7 @@ resource appGatewayCertificate 'Microsoft.Resources/deploymentScripts@2023-08-01
         }
       ]
     }     
-    arguments: ' -vaultName ${keyVaultName} -certificateName ${secretName} -subjectName ${subjectName} -certPwd ${certPwd} -certDataString ${certData} -certType ${appGatewayCertType}'
+    arguments: ' -vaultName ${keyVaultName} -certificateName ${secretName} -subjectName ${subjectName} -certPwd ${certPwd} -certDataString ${certDataString} -certType ${appGatewayCertType}'
     scriptContent: '''
       param(
       [string] [Parameter(Mandatory=$true)] $vaultName,

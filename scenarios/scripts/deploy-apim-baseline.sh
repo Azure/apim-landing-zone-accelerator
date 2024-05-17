@@ -44,6 +44,14 @@ else
   CERT_TYPE="${CERT_TYPE%$'\r'}"    
 fi
 
+if [[ "$CERT_TYPE" == "selfsigned" ]]; then
+  cert_data=''
+  cert_Pwd=''
+else
+  cert_data=$(base64 -w 0 "$script_dir/../certs/appgw.pfx")
+  cert_pwd=$(CERT_PWD)
+fi
+
 if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
   chars="abcdefghijklmnopqrstuvwxyz"
   random_string=""
@@ -54,11 +62,6 @@ if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
   echo "RANDOM_IDENTIFIER='$random_string'" >> "$script_dir/../.env"
 else
   random_string="${RANDOM_IDENTIFIER}"
-fi
-
-if [[ $CERT_TYPE == "selfsigned" ]]; then
-    mkdir -p "$script_dir/../apim-baseline/bicep/gateway/certs"
-    touch "$script_dir/../apim-baseline/bicep/gateway/certs/appgw.pfx"
 fi
 
 cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
@@ -80,7 +83,13 @@ cat << EOF > "$script_dir/../apim-baseline/bicep/parameters.json"
     },
     "appGatewayCertType" :{
         "value": "${CERT_TYPE}"
-    }    
+    },
+    "certData" :{
+        "value": "${cert_data}"
+    },
+    "certKey" :{
+        "value": "${cert_pwd}"
+    }        
   }
 }
 EOF
