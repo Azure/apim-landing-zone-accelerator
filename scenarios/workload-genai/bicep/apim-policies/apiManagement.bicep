@@ -1,0 +1,189 @@
+@description('The name of the API Management service instance')
+param apiManagementServiceName string
+
+@description('The base url of the first Azure Open AI Service PTU deployment (e.g. https://{your-resource-name}.openai.azure.com/openai/deployments/{deployment-id}/)')
+param ptuDeploymentOneBaseUrl string
+
+@description('The base url of the first Azure Open AI Service Pay-As-You-Go deployment (e.g. https://{your-resource-name}.openai.azure.com/openai/deployments/{deployment-id}/)')
+param payAsYouGoDeploymentOneBaseUrl string
+
+@description('The base url of the second Azure Open AI Service Pay-As-You-Go deployment (e.g. https://{your-resource-name}.openai.azure.com/openai/deployments/{deployment-id}/)')
+param payAsYouGoDeploymentTwoBaseUrl string
+
+@description('The name of the Event Hub Namespace to log to')
+param eventHubNamespaceName string
+
+@description('The name of the Event Hub to log utilization data to')
+param eventHubName string
+param apimIdentityName string
+
+var apimIdentityNameValue = 'apim-identity'
+
+resource apiManagementService 'Microsoft.ApiManagement/service@2023-05-01-preview' existing = {
+  name: apiManagementServiceName
+}
+
+resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
+  name: apimIdentityName
+}
+
+resource azureOpenAIApi 'Microsoft.ApiManagement/service/apis@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'azure-openai-api'
+  properties: {
+    path: '/openai'
+    displayName: 'AzureOpenAI'
+    protocols: ['https']
+    value: loadTextContent('./api-specs/openapi-spec.json')
+    format: 'openapi+json'
+  }
+}
+
+resource azureOpenAIProduct 'Microsoft.ApiManagement/service/products@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'aoai-product'
+  properties: {
+    displayName: 'aoai-product'
+    subscriptionRequired: true
+    state: 'published'
+    approvalRequired: false
+  }
+}
+
+var azureOpenAIAPINames = [
+  azureOpenAIApi.name
+]
+
+resource azureOpenAIProductAPIAssociation 'Microsoft.ApiManagement/service/products/apis@2023-05-01-preview' = [
+  for apiName in azureOpenAIAPINames: {
+    name: '${apiManagementServiceName}/${azureOpenAIProduct.name}/${apiName}'
+  }
+]
+
+resource ptuBackendOne 'Microsoft.ApiManagement/service/backends@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'ptu-backend-1'
+  properties:{
+    protocol: 'http'
+    url: ptuDeploymentOneBaseUrl
+  }
+}
+
+resource payAsYouGoBackendOne 'Microsoft.ApiManagement/service/backends@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'payg-backend-1'
+  properties:{
+    protocol: 'http'
+    url: payAsYouGoDeploymentOneBaseUrl
+  }
+}
+
+resource payAsYouGoBackendTwo 'Microsoft.ApiManagement/service/backends@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'payg-backend-2'
+  properties:{
+    protocol: 'http'
+    url: payAsYouGoDeploymentTwoBaseUrl
+  }
+}
+
+resource azureOpenAIProductSubscription 'Microsoft.ApiManagement/service/subscriptions@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'aoai-product-subscription'
+  properties: {
+    displayName: 'aoai-product-subscription'
+    state: 'active'
+    scope: azureOpenAIProduct.id
+  }
+}
+
+resource simpleRoundRobinPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'simple-round-robin'
+  properties: {
+    value: loadTextContent('../../policies/fragments/load-balancing/simple-round-robin.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [payAsYouGoBackendOne, payAsYouGoBackendTwo]
+}
+
+resource weightedRoundRobinPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'weighted-round-robin'
+  properties: {
+    value: loadTextContent('../../policies/fragments/load-balancing/weighted-round-robin.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [payAsYouGoBackendOne, payAsYouGoBackendTwo]
+}
+
+resource adaptiveRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'adaptive-rate-limiting'
+  properties: {
+    value: loadTextContent('../../policies/fragments/rate-limiting/adaptive-rate-limiting.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
+}
+
+resource retryWithPayAsYouGoPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'retry-with-payg'
+  properties: {
+    value: loadTextContent('../../policies/fragments/manage-spikes-with-payg/retry-with-payg.xml')
+    format: 'rawxml'
+  }
+}
+
+resource usageTrackingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'usage-tracking'
+  properties: {
+    value: loadTextContent('../../policies/fragments/usage-tracking/usage-tracking.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [eventHubLogger]
+}
+
+resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2023-05-01-preview' = {
+  parent: azureOpenAIApi
+  name: 'policy'
+  properties: {
+    value: loadTextContent('../../policies/genai-policy.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [
+    simpleRoundRobinPolicyFragment
+    weightedRoundRobinPolicyFragment
+    adaptiveRateLimitingPolicyFragment
+    retryWithPayAsYouGoPolicyFragment
+    usageTrackingPolicyFragment]
+}
+
+resource apimOpenaiApiUamiNamedValue 'Microsoft.ApiManagement/service/namedValues@2022-08-01' = {
+  name: apimIdentityNameValue
+  parent: apiManagementService
+  properties: {
+    displayName: apimIdentityNameValue
+    secret: true
+    value: apimIdentity.properties.clientId
+  }
+}
+
+resource eventHubLogger 'Microsoft.ApiManagement/service/loggers@2022-04-01-preview' = {
+  name: 'eventhub-logger'
+  parent: apiManagementService
+  properties: {
+    loggerType: 'azureEventHub'
+    description: 'Event hub logger with system-assigned managed identity'
+    credentials: {
+      endpointAddress: '${eventHubNamespaceName}.servicebus.windows.net'
+      identityClientId: apimIdentity.properties.clientId
+      name: eventHubName
+    }
+  }
+}
+
+output apiManagementServiceName string = apiManagementService.name
+output apiManagementAzureOpenAIProductSubscriptionKey string = azureOpenAIProductSubscription.listSecrets().primaryKey

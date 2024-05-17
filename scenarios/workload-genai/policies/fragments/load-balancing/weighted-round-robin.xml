@@ -1,0 +1,38 @@
+<fragment>
+    <set-variable name="all-backends" value="@{
+            JArray backends = new JArray();
+            backends.Add(new JObject()
+            {
+                { "id", "payg-backend-1" },
+                { "weight", 2 },
+            });
+
+            backends.Add(new JObject()
+            {
+                { "id", "payg-backend-2" },
+                { "weight", 1 },
+            });
+
+            return backends;
+    }" />
+    <set-variable name="selected-backend-id" value="@{
+            var backends = (JArray)context.Variables["all-backends"];
+            var totalWeight = backends.Sum(e => (int)e["weight"]);
+            var randomNumber = new Random().Next(totalWeight);
+            var weightSum = 0;
+            foreach (var backend in backends)
+            {
+                weightSum += (int)backend["weight"];
+                if (randomNumber < weightSum)
+                {
+                    return backend["id"].ToString();
+                }
+            }
+            return backends[0]["id"].ToString();
+    }" />
+    <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" client-id="{{apim-identity}}" ignore-error="false" />
+    <set-header name="Authorization" exists-action="override">
+        <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+    </set-header>
+    <set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+</fragment>

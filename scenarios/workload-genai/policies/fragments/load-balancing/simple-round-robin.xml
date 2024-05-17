@@ -1,0 +1,32 @@
+<!-- 
+    Policy fragment to implement a round-robin load balancing algorithm.
+
+    Expected named values
+    - payg-endpoint-1,payg-endpoint-2: The backend endpoints to be load balanced.
+ -->
+<fragment>
+    <!-- Backend counter is persisted in the cache, enabling a stateful loop across various requests -->
+    <cache-lookup-value key="backend-counter" variable-name="backend-counter" default-value="@(0)" />
+    <set-variable name="backend-counter" value="@(((int)context.Variables["backend-counter"])+1)" />
+    <cache-store-value key="backend-counter" value="@((int)context.Variables["backend-counter"])" duration="1200" />
+
+    <!-- backend pool contains all the Azure OpenAI backends, that needs to be load balanced. -->
+    <set-variable name="backend-pool" value="@{
+            JArray backends = new JArray();
+            backends.Add("payg-backend-1");
+            backends.Add("payg-backend-2");
+            return backends;
+        }" />
+
+    <!-- select the backend URL from the pool for this request -->
+    <set-variable name="total-backend-count" value="@(((JArray)context.Variables["backend-pool"]).Count)" />
+    <set-variable name="chosen-index" value="@((int)context.Variables["backend-counter"]%(int)context.Variables["total-backend-count"])" />
+    <set-variable name="selected-backend-id" value="@(((JArray)context.Variables["backend-pool"])[(int)context.Variables["chosen-index"]].ToString())" />
+
+    <!-- set the backend service URL to the selected backend URL -->
+    <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" client-id="{{apim-identity}}" ignore-error="false" />
+    <set-header name="Authorization" exists-action="override">
+        <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+    </set-header>
+    <set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+</fragment>
