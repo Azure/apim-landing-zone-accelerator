@@ -1,6 +1,6 @@
 # Azure API Management Landing Zone Accelerator
 
-Azure API Management Landing ZOne Accelerator provides packaged guidance with reference architecture and reference implementation along with design guidance recommendations and considerations on critical design areas for provisioning APIM with a secure baseline. They are aligned with industry proven practices, such as those presented in [Azure landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/) guidance in the Cloud Adoption Framework.
+Azure API Management Landing Zone Accelerator provides packaged guidance with reference architecture and reference implementation along with design guidance recommendations and considerations on critical design areas for provisioning APIM with a secure baseline. They are aligned with industry proven practices, such as those presented in [Azure landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/) guidance in the Cloud Adoption Framework.
 
 ## Reference Architecture
 
@@ -18,13 +18,21 @@ The enterprise architecture is broken down into six different design areas, wher
 | Governance|[Design Considerations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-considerations)|[Design Recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/governance#design-recommendations)|
 | Platform Automation and DevOps|[Design Considerations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-considerations)|[Design Recommendations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/platform-automation-and-devops#design-recommendations)|
 
-## :rocket: Reference Implementation
+## :rocket: Deployment scenarios
 
 This repo contains the Azure landing zone accelerator's reference implementations, all with supporting *Infrastructure as Code* artifacts. The scenarios covered are:
 
-- :arrow_forward: [Scenario 1: Azure API Management - Secure Baseline](scenarios/apim-baseline/README.md)
-- :arrow_forward: [Scenario 2: Azure API Management - Function Backend](scenarios/workload-functions/README.md)
-- :arrow_forward: [Scenario 3: Azure API Management - Gen AI Backend](scenarios/workload-genai/README.md)
+### :arrow_forward: [Scenario 1: Azure API Management - Secure Baseline](scenarios/apim-baseline/README.md)
+
+Deploys APIM with a secure baseline configuration with no backends and a sample API. 
+
+### :arrow_forward: [Scenario 2: Azure API Management - Function Backend](scenarios/workload-functions/README.md)
+
+On top of the secure baseline, deploys a private Azure function as a backend and provision APIs in APIM to access the function.
+
+### :arrow_forward: [Scenario 3: Azure API Management - Gen AI Backend](scenarios/workload-genai/README.md)
+
+On top of the secure baseline, deploys private Azure OpenAI endpoints (3 endpoints) as backend and provision API that can handle [multiple use cases.](./scenarios/workload-genai/README.md#scenarios-handled-by-this-accelerator)
 
 *More reference implementation scenarios will be added as they become available.*
 
