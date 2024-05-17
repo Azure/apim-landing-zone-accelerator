@@ -1,16 +1,32 @@
-# GenAI Gateway using APIM
+# Scenario 3: Azure API Management - Generative AI resources as backend
 
-- [GenAI Gateway using APIM](#genai-gateway-using-apim)
-  - [Introduction](#introduction)
-  - [Getting Started](#getting-started)
-    - [Deploy the reference implementation](#deploy-the-reference-implementation)
-  - [Architecture Diagram](#architecture-diagram)
-  - [GenAI Gateway capabilities](#genai-gateway-capabilities)
-    - [Upcoming capabilities](#upcoming-capabilities)
-    - [Test/Demo setup](#testdemo-setup)
-  - [AI Hub Gateway capabilities](#ai-hub-gateway-capabilities)
+This reference implementation demonstrates how to provision and interact with Generative AI resources through API Management. The implementation is on top of the [APIM baseline](./../apim-baseline/README.md) and additionally includes private deployments of Azure OpenAI endpoints, and the policies for the [following capabilities](#genai-gateway-capabilities) that are specifically tailored for GenAI use cases.
 
-## Introduction
+By the end of this deployment guide, you would have deployed private Azure OpenAI endpoints and an opinionated set of policies in APIM to manage traffic to these endpoints. You can then test the policies by sending requests to the APIM gateway, and can modify either to include the policy fragments [listed here](#scenarios-handled-by-this-accelerator) or to include your own custom policies.
+
+## Architecture
+
+![Architectural diagram showing an Azure API Management deployment in a virtual network with AOAI as backend.](../../docs/images/apim-workload-ai.jpg)
+
+### Core components
+
+- Azure OpenAI endpoints
+- Azure Event Hub
+- Azure Private Endpoint
+- Azure Private DNS Zones
+
+### GenAI Gateway capabilities
+
+![GenAI capabilities](../../docs/images/genai-capabilities.jpg)
+
+## Deploy the reference implementation
+
+This reference implementation is provided with the following infrastructure as code options. Select the deployment guide you are interested in. They both deploy the same implementation.
+
+:arrow_forward: [Bicep-based deployment guide](./bicep/README.md)
+:arrow_forward: Terraform-based deployment guide (Work in progress)
+
+## GenAI Gateway
 
 A "GenAI Gateway" serves as an intelligent interface/middleware that dynamically balances incoming traffic across backend resources to achieve optimizing resource utilization. In addition to load balancing, GenAI Gateway can be equipped with extra capabilities to address the challenges around billing, monitoring etc.
 
@@ -18,22 +34,7 @@ To read more about considerations when implementing a GenAI Gateway, see [this a
 
 This accelerator contains APIM policies showing how to implement different [GenAI Gateway capabilities](#genai-gateway-capabilities) in APIM, along with code to enable you to deploy the policies and see them in action.
 
-## Getting Started
-
-### Deploy the reference implementation
-
-This reference implementation is provided with the following infrastructure as code options. Select the deployment guide you are interested in. They both deploy the same implementation.
-
-:arrow_forward: [Bicep-based deployment guide](./bicep/README.md)
-:arrow_forward: Terraform-based deployment guide (Work in progress)
-
-## Architecture Diagram
-
-![Architectural diagram showing an Azure API Management deployment in a virtual network with AOAI as backend.](../../docs/images/apim-workload-ai.jpg)
-
-## GenAI Gateway capabilities
-
-![GenAI capabilities](../../docs/images/genai-capabilities.jpg)
+### Scenarios handled by this accelerator
 
 This repo currently contains the policies showing how to implement these GenAI Gateway capabilities:
 
