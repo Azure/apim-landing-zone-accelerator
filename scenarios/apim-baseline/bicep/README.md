@@ -16,7 +16,8 @@ This is the starting point for the instructions on deploying this reference impl
 - Latest [Azure CLI installed](https://learn.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) (must be at least 2.40), or you can perform this from Azure Cloud Shell by clicking below.
 
   [![Launch Azure Cloud Shell](https://learn.microsoft.com/azure/includes/media/cloud-shell-try-it/launchcloudshell.png)](https://shell.azure.com)
-- JQ command line JSON processor installed 
+- JQ command line JSON processor installed
+
    ```bash
    sudo apt-get install jq
    ```
@@ -61,3 +62,11 @@ This is the starting point for the instructions on deploying this reference impl
     ```
 
 Test the echo api using the generated command from the output
+
+## Troubleshooting
+
+If you see the message `-bash: ./deploy-apim-baseline.sh: /bin/bash^M: bad interpreter: No such file or directory` when running the script, you can fix this by running the following command:
+
+   ```bash
+    sed -i -e 's/\r$//' deploy-apim-baseline.sh
+   ```

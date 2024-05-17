@@ -13,13 +13,13 @@ param location string = resourceGroup().location
 @description('The subnet resource id to use for Application Gateway.')
 param appGatewaySubnetId string
 
-@description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and copy the pfx file to deployment/bicep/gateway/certs/appgw.pfx if custom certificates are to be used')
+@description('Set to selfsigned if self signed certificates should be used for the Application Gateway. Set to custom and pass the CertData and CertKey if custom certificates should be used.')
 param appGatewayCertType string
 
 @description('The backend URL of the APIM.')
 param primaryBackendEndFQDN string
 
-@description('The Url for the Application Gateway Health Probe.')
+@description('The Url for the APIM Health Probe.')
 param probeUrl string = '/status-0123456789abcdef'
 
 param appGatewayPublicIpName string
