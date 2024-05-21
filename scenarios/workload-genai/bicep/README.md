@@ -4,7 +4,7 @@ This is the Bicep-based deployment guide for [Scenario 3: Azure API Management -
 
 ## Prerequisites
 
-This scenario requires the completion of the [Azure API Management - Secure Baseline](../apim-baseline/README.md) scenario.
+This scenario requires the completion of the [Azure API Management - Secure Baseline](../../apim-baseline/README.md) scenario.
 
 ## Steps
 
