@@ -127,6 +127,17 @@ resource adaptiveRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/pol
   dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
 }
 
+resource adaptiveRateLimitingWorkAroundPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'adaptive-rate-limiting-workaround'
+  properties: {
+    value: loadTextContent('../../policies/fragments/rate-limiting/adaptive-rate-limiting-workaround.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
+}
+
+
 resource retryWithPayAsYouGoPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
   name: 'retry-with-payg'

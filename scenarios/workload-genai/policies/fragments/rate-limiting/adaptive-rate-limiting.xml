@@ -1,49 +1,39 @@
 <fragment>
-    <!-- Rate limit configuration for global tokens. 
-         Allows 500 tokens per 60 seconds. 
-         The count is incremented if the response status code is between 200 and 400 by any request -->
-    <rate-limit-by-key calls="500"
-        renewal-period="60"
-        counter-key="GlobalTokensLimit"
-        increment-condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 400)"
-        increment-count="@(context.Response.Body.As<JObject>(true).SelectToken("usage.total_tokens").ToObject<int>())"
-        remaining-calls-variable-name="globalRemainingTokens"
-        remaining-calls-header-name="x-apim-global-remaining-tokens"/>
-    <!-- Choose block to decide the rate limit based on the presence of "x-higher-limit" in the request headers. -->
+    <azure-openai-token-limit counter-key="GlobalTokensLimit"
+        tokens-per-minute="500"
+        estimate-prompt-tokens="true"
+        remaining-tokens-header-name="x-apim-global-remaining-tokens"
+        remaining-tokens-variable-name="globalRemainingTokens"
+        tokens-consumed-header-name="x-apim-global-consumed-tokens"/>
+
     <choose>
-        <!-- If "x-higher-limit" is present in the request headers, 
-             the rate limit is set to 300 tokens per 60 seconds plus 10% of the remaining global tokens. -->
         <when condition="@(context.Request.Headers.ContainsKey("x-higher-limit"))">
-            <rate-limit-by-key calls="@{
+            <set-variable name="higherLimit" value="@{
                 var defaultHigherLimit = 300;
                 if (context.Variables["globalRemainingTokens"] is int globalRemainingTokens && globalRemainingTokens > 0)
                 {
                     defaultHigherLimit += (int)(globalRemainingTokens * 0.1); 
                 }
-                return defaultHigherLimit;
-                }"
-                renewal-period="60"
-                counter-key="highRateLimitSvc"
-                increment-condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 400)"
-                increment-count="@(context.Response.Body.As<JObject>(true).SelectToken("usage.total_tokens").ToObject<int>())"
-                remaining-calls-header-name="x-apim-high-rate-remaining-tokens" />
+                return (int)defaultHigherLimit;
+                }" />
+            <azure-openai-token-limit counter-key="highRateLimitSvc"
+                tokens-per-minute="@((int)context.Variables["higherLimit"])"
+                estimate-prompt-tokens="true"
+                remaining-tokens-header-name="x-apim-high-rate-remaining-tokens"/>
         </when>
-        <!-- If "x-higher-limit" is not present in the request headers, 
-             the rate limit is set to 100 tokens per 60 seconds plus 10% of the remaining global tokens. -->
         <otherwise>
-            <rate-limit-by-key calls="@{
+            <set-variable name="lowerRateLimit" value="@{
                 var defaultLowerRateLimit = 100;
                 if (context.Variables["globalRemainingTokens"] is int globalRemainingTokens && globalRemainingTokens > 0)
                 {
                     defaultLowerRateLimit += (int)(globalRemainingTokens * 0.1); 
                 }
                 return defaultLowerRateLimit;
-                }"
-                renewal-period="60"
-                counter-key="lowRateLimitSvc"
-                increment-condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 400)"
-                increment-count="@(context.Response.Body.As<JObject>(true).SelectToken("usage.total_tokens").ToObject<int>())"
-                remaining-calls-header-name="x-apim-low-rate-remaining-tokens" />
+                }" />
+            <azure-openai-token-limit counter-key="lowRateLimitSvc"
+                tokens-per-minute="@((int)context.Variables["lowerRateLimit"])"
+                estimate-prompt-tokens="true"
+                remaining-tokens-header-name="x-apim-low-rate-remaining-tokens"/>
         </otherwise>
     </choose>
 </fragment>
