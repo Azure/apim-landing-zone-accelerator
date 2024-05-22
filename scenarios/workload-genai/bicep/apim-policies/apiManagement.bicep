@@ -157,6 +157,16 @@ resource usageTrackingPolicyFragment 'Microsoft.ApiManagement/service/policyFrag
   dependsOn: [eventHubLogger]
 }
 
+resource usageTrackingWithAppInsightsPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'usage-tracking-with-appinsights'
+  properties: {
+    value: loadTextContent('../../policies/fragments/usage-tracking/usage-tracking-with-appinsights.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [eventHubLogger]
+}
+
 resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2023-05-01-preview' = {
   parent: azureOpenAIApi
   name: 'policy'
@@ -169,7 +179,7 @@ resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@202
     weightedRoundRobinPolicyFragment
     adaptiveRateLimitingPolicyFragment
     retryWithPayAsYouGoPolicyFragment
-    usageTrackingPolicyFragment]
+    usageTrackingWithAppInsightsPolicyFragment]
 }
 
 resource apimOpenaiApiUamiNamedValue 'Microsoft.ApiManagement/service/namedValues@2022-08-01' = {

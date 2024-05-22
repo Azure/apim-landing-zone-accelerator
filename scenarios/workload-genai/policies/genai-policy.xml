@@ -12,6 +12,9 @@
         <!-- performs weighted round robin between payg-backend-1, payg-backend-2 
              weights are defined in the fragment itself -->
         <include-fragment fragment-id="weighted-round-robin" />
+
+        <!-- tracks token consumption using the event hub -->
+        <include-fragment fragment-id="usage-tracking-with-appinsights" />
     </inbound>
     <backend>
         <!-- either base or the fragment needs to be present.  -->
@@ -22,8 +25,7 @@
     </backend>
     <outbound>
         <base />
-        <!-- tracks token consumption using the event hub -->
-        <include-fragment fragment-id="usage-tracking" />
+        
          <set-header name="x-apim-backend" exists-action="override">
             <value>@((string)context.Variables["selected-backend-id"])</value>
         </set-header>
