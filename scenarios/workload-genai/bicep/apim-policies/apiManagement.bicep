@@ -147,11 +147,11 @@ resource retryWithPayAsYouGoPolicyFragment 'Microsoft.ApiManagement/service/poli
   }
 }
 
-resource usageTrackingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+resource usageTrackingEHPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
-  name: 'usage-tracking'
+  name: 'usage-tracking-with-eventhub'
   properties: {
-    value: loadTextContent('../../policies/fragments/usage-tracking/usage-tracking.xml')
+    value: loadTextContent('../../policies/fragments/usage-tracking/usage-tracking-with-eventhub.xml')
     format: 'rawxml'
   }
   dependsOn: [eventHubLogger]

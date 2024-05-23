@@ -49,7 +49,7 @@
 
         <!-- tracks token consumption using the event hub, this can be used as a workaround if the 
         new policy isn't available in the region yet. -->
-        <!-- <include-fragment fragment-id="usage-tracking" /> -->
+        <!-- <include-fragment fragment-id="usage-tracking-with-eventhub" /> -->
     </outbound>
     <on-error>
         <base />
