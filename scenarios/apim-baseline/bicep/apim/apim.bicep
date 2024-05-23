@@ -83,7 +83,7 @@ resource echoSubscription 'Microsoft.ApiManagement/service/subscriptions@2020-12
   }
 }
 
-resource apimName_appInsightsLogger_resource 'Microsoft.ApiManagement/service/loggers@2019-01-01' = {
+resource apimName_appInsightsLogger_resource 'Microsoft.ApiManagement/service/loggers@2021-08-01' = {
   parent: apimName_resource
   name: appInsightsName
   properties: {
@@ -95,7 +95,7 @@ resource apimName_appInsightsLogger_resource 'Microsoft.ApiManagement/service/lo
   }
 }
 
-resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnostics@2019-01-01' = {
+resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnostics@2021-08-01' = {
   parent: apimName_resource
   name: 'applicationinsights'
   properties: {
@@ -105,6 +105,7 @@ resource apimName_applicationinsights 'Microsoft.ApiManagement/service/diagnosti
       percentage: 100
       samplingType: 'fixed'
     }
+    metrics: true
   }
 }
 
