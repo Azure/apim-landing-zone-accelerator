@@ -28,6 +28,10 @@ param appGatewayCertType string
 
 param location string = deployment().location
 
+@description('Enable sending usage and telemetry feedback to Microsoft.')
+param enableTelemetry bool = true
+var telemetryId = 'ab1e5729-7452-41b2-9fbb-945cc51d9cd0-${location}-apimsb-main'
+
 // Variables
 var resourceSuffix = '${workloadName}-${environment}-${location}-${identifier}'
 var networkingResourceGroupName = 'rg-networking-${resourceSuffix}'
@@ -121,6 +125,21 @@ module appgwModule 'gateway/appgw.bicep' = {
     deploymentIdentityName:         shared.outputs.deploymentIdentityName
     deploymentSubnetId:             networking.outputs.deploymentSubnetId
     deploymentStorageName:          shared.outputs.deploymentStorageName
+  }
+}
+
+@description('Microsoft telemetry deployment.')
+#disable-next-line no-deployments-resources
+resource telemetrydeployment 'Microsoft.Resources/deployments@2021-04-01' = if (enableTelemetry) {
+  location: location
+  name: telemetryId
+  properties: {
+    mode: 'Incremental'
+    template: {
+      '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#'
+      contentVersion: '1.0.0.0'
+      resources: {}
+    }
   }
 }
 
