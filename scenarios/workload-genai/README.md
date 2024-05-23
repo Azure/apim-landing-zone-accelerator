@@ -6,7 +6,6 @@
     - [Deploy the reference implementation](#deploy-the-reference-implementation)
   - [Architecture Diagram](#architecture-diagram)
   - [GenAI Gateway capabilities](#genai-gateway-capabilities)
-    - [Upcoming capabilities](#upcoming-capabilities)
     - [Test/Demo setup](#testdemo-setup)
   - [AI Hub Gateway capabilities](#ai-hub-gateway-capabilities)
 
@@ -43,13 +42,6 @@ This repo currently contains the policies showing how to implement these GenAI G
 | [Managing spikes with PAYG](./capabilities/manage-spikes-with-payg/README.md) | Manage spikes in traffic by routing traffic to PAYG endpoints when a PTU is out of capacity. |
 | [Adaptive rate limiting](./capabilities/rate-limiting/README.md) | Dynamically adjust rate-limits applied to different workloads|
 | [Tracking token usage](./capabilities/usage-tracking//README.md) | Record the token consumption for usage tracking and attribution|
-
-### Upcoming capabilities
-
-*Note: These capabilites will be launched post MSFT build*
-
-- Elegant way of rate limiting by tokens for both streaming and non-streaming Azure OpenAI endpoints.
-- Usage and token tracking within Application insights for both streaming and non-streaming Azure OpenAI endpoints.
 
 ### Test/Demo setup
 
