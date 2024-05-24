@@ -5,7 +5,7 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # TODO: limiting the number of regions to deploy for now. since the new GenAI policies aren't available everywhere.
 
-allowed_locations=("francecentral")
+allowed_locations=("australiacentral australiaeast australiasoutheast brazilsouth eastasia francecentral germanywestcentral koreacentral northeurope southeastasia southcentralus uksouth ukwest westeurope westus2 westus3")
 
 if [[ ! " ${allowed_locations[@]} " =~ " ${AZURE_LOCATION} " ]]; then
   echo "ERROR: Invalid AZURE_LOCATION. Allowed locations are: ${allowed_locations[*]}" 1>&2
