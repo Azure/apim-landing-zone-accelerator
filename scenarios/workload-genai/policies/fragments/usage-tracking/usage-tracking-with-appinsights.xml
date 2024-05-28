@@ -1,0 +1,8 @@
+<fragment>
+    <azure-openai-emit-token-metric namespace="aoai.token.usage">
+        <dimension name="SubscriptionId" value="@(context.Subscription.Id)"/>
+        <dimension name="ClientIP" value="@(context.Request.IpAddress)" />
+        <dimension name="RequestId" value="@(context.Request.IpAddress)" />
+        <dimension name="OperationName" value="@(context.Operation.Name)" />
+    </azure-openai-emit-token-metric>
+</fragment>

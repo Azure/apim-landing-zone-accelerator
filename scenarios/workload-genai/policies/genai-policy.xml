@@ -3,6 +3,8 @@
         <base />
         <!-- applies tokens constraint defined as per the fragment, doesn't set the backend-->
         <include-fragment fragment-id="adaptive-rate-limiting" />
+        <!-- this can be used for new ratelimiting isn't available in the region -->
+        <!-- <include-fragment fragment-id="adaptive-rate-limiting-workaround" /> -->
 
         <!-- START: set backend service -->
 
@@ -12,6 +14,9 @@
         <!-- performs weighted round robin between payg-backend-1, payg-backend-2 
              weights are defined in the fragment itself -->
         <include-fragment fragment-id="weighted-round-robin" />
+
+        <!-- tracks token consumption as custom metrics in App insights -->
+        <include-fragment fragment-id="usage-tracking-with-appinsights" />
     </inbound>
     <backend>
         <!-- either base or the fragment needs to be present.  -->
@@ -22,8 +27,7 @@
     </backend>
     <outbound>
         <base />
-        <!-- tracks token consumption using the event hub -->
-        <include-fragment fragment-id="usage-tracking" />
+        
          <set-header name="x-apim-backend" exists-action="override">
             <value>@((string)context.Variables["selected-backend-id"])</value>
         </set-header>
@@ -42,6 +46,10 @@
                 }</set-body>
             </when>
         </choose>
+
+        <!-- tracks token consumption using the event hub, this can be used as a workaround if the 
+        new policy isn't available in the region yet. -->
+        <!-- <include-fragment fragment-id="usage-tracking-with-eventhub" /> -->
     </outbound>
     <on-error>
         <base />

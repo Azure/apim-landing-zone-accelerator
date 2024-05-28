@@ -127,6 +127,17 @@ resource adaptiveRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/pol
   dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
 }
 
+resource adaptiveRateLimitingWorkAroundPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'adaptive-rate-limiting-workaround'
+  properties: {
+    value: loadTextContent('../../policies/fragments/rate-limiting/adaptive-rate-limiting-workaround.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
+}
+
+
 resource retryWithPayAsYouGoPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
   name: 'retry-with-payg'
@@ -136,11 +147,21 @@ resource retryWithPayAsYouGoPolicyFragment 'Microsoft.ApiManagement/service/poli
   }
 }
 
-resource usageTrackingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+resource usageTrackingEHPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
-  name: 'usage-tracking'
+  name: 'usage-tracking-with-eventhub'
   properties: {
-    value: loadTextContent('../../policies/fragments/usage-tracking/usage-tracking.xml')
+    value: loadTextContent('../../policies/fragments/usage-tracking/usage-tracking-with-eventhub.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [eventHubLogger]
+}
+
+resource usageTrackingWithAppInsightsPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'usage-tracking-with-appinsights'
+  properties: {
+    value: loadTextContent('../../policies/fragments/usage-tracking/usage-tracking-with-appinsights.xml')
     format: 'rawxml'
   }
   dependsOn: [eventHubLogger]
@@ -158,7 +179,7 @@ resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@202
     weightedRoundRobinPolicyFragment
     adaptiveRateLimitingPolicyFragment
     retryWithPayAsYouGoPolicyFragment
-    usageTrackingPolicyFragment]
+    usageTrackingWithAppInsightsPolicyFragment]
 }
 
 resource apimOpenaiApiUamiNamedValue 'Microsoft.ApiManagement/service/namedValues@2022-08-01' = {

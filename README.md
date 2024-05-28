@@ -36,6 +36,14 @@ On top of the secure baseline, deploys private Azure OpenAI endpoints (3 endpoin
 
 *More reference implementation scenarios will be added as they become available.*
 
+### Supported Regions
+
+Some of the new Azure OpenAI policies are not available in al the regions yet. If you see the deployment failures, try chosing a different region. The following regions are more likely to work.
+
+```shell
+australiacentral, australiaeast, australiasoutheast, brazilsouth, eastasia, francecentral, germanywestcentral, koreacentral, northeurope, southeastasia, southcentralus, uksouth, ukwest, westeurope, westus2, westus3
+```
+
 ## Got a feedback
 
 Please leverage issues if you have any feedback or request on how we can improve on this repository.

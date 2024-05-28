@@ -11,6 +11,7 @@
 	<retry condition="@(context.Response.StatusCode == 429)" count="3" interval="1" max-interval="10" delta="2">
 		<!-- The retry policy executes its child policies once and then retries their execution until the retry 
         condition becomes false or retry count is exhausted. -->
+		<set-variable name="body" value="@(context.Request.Body.As<string>(preserveContent: true))" />
 		<choose>
 			<when condition="@(context.Response.StatusCode == 429)">
 				<!-- If the PTU returns 429, the control enters this block -->
@@ -32,6 +33,7 @@
 				<set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
 			</otherwise>
 		</choose>
+		<set-body>@((string)context.Variables["body"])</set-body>
 		<forward-request timeout="120" fail-on-error-status-code="true" buffer-response="false" />
 	</retry>
 </fragment>
