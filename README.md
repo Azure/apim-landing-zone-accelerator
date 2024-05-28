@@ -38,23 +38,11 @@ On top of the secure baseline, deploys private Azure OpenAI endpoints (3 endpoin
 
 ### Supported Regions
 
-Some of the new Azure OpenAI policies are only available in the following regions, hence the APIM is limited to these regions:
+Some of the new Azure OpenAI policies are not available in al the regions yet. If you see the deployment failures, try chosing a different region. The following regions are more likely to work.
 
-- South Central US
-- West US
-- France Central
-- Germany West Central
-- North Europe
-- West Europe
-- UK South
-- UK West
-- Brazil South
-- Australia Central
-- Australia East
-- Australia Southeast
-- East Asia
-- Southeast Asia
-- Korea Central
+```shell
+australiacentral, australiaeast, australiasoutheast, brazilsouth, eastasia, francecentral, germanywestcentral, koreacentral, northeurope, southeastasia, southcentralus, uksouth, ukwest, westeurope, westus2, westus3
+```
 
 ## Got a feedback
 
