@@ -337,3 +337,6 @@ override.tf.json
 **/azuredeploy.parameters.json
 scenarios/.env
 scenarios/apim-baseline/bicep/parameters.json
+
+# Rest client test files
+*.http
