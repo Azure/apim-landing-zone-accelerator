@@ -1,0 +1,3 @@
+# Set bash scripts to use LF line endings regardless of the platform
+# used to clone the code
+*.sh text eol=lf
