@@ -42,6 +42,10 @@ This is the starting point for the instructions on deploying this reference impl
    Copy the `sample.env` into a new file called `.env` in the same directory.
 
    ```bash
+   cp ../sample.env ../.env
+   ```
+
+   ```bash
    The [**.env**](../../.env) parameter file is where you can customize your deployment. The defaults are a suitable starting point, but feel free to adjust any to fit your requirements.
 
    **Deployment parameters**
@@ -65,11 +69,3 @@ This is the starting point for the instructions on deploying this reference impl
     ```
 
 Test the echo api using the generated command from the output
-
-## Troubleshooting
-
-If you see the message `-bash: ./deploy-apim-baseline.sh: /bin/bash^M: bad interpreter: No such file or directory` when running the script, you can fix this by running the following command:
-
-   ```bash
-    sed -i -e 's/\r$//' deploy-apim-baseline.sh
-   ```
