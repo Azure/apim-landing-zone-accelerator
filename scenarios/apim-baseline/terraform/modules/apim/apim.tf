@@ -109,6 +109,7 @@ resource "azurerm_api_management_subscription" "echo" {
   display_name        = "Echo API"
   primary_key         = random_uuid.starter_key.result
   allow_tracing       = false
+  state               = "active"
 }
 
 #-------------------------------
