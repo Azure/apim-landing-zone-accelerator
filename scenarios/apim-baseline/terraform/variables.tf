@@ -58,6 +58,30 @@ variable "deploymentAddressPrefix" {
   default     = "10.2.8.0/24"
 }
 
+variable "keyVaultSku" {
+  type        = string
+  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
+  default     = "standard"
+}
+
+variable "additionalClientIds" {
+  description = "List of additional clients to add to the Key Vault access policy."
+  type        = list(string)
+  default     = []
+}
+
+variable "certificatePassword" {
+  description = "Password for the certificate"
+  type        = string
+  default     = ""
+}
+
+variable "certificatePath" {
+  description = "Path to the certificate"
+  type        = string
+  default     = "../../certs/appgw.pfx"
+}
+
 
 
 

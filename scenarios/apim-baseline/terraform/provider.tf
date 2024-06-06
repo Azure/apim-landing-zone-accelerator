@@ -31,7 +31,11 @@ terraform {
 
 # Configure the Microsft Azure provider
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
   use_oidc = true
 
   # subscription_id = var.subscription_id

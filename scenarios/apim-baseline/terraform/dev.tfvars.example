@@ -1,0 +1,6 @@
+# Rename this file to dev.tfvars and update the values prior to use
+location           = "uksouth"
+workloadName       = "apimlza"
+environment        = "dev"
+appGatewayFqdn     = "apim.example.com"
+appGatewayCertType = "selfsigned"

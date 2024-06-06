@@ -185,7 +185,7 @@ resource "azurerm_subnet" "deploy_subnet" {
 
     service_delegation {
       name    = "Microsoft.ContainerInstance/containerGroups"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
 }
@@ -202,14 +202,3 @@ resource "azurerm_subnet_network_security_group_association" "apim_subnet" {
   network_security_group_id = azurerm_network_security_group.apim_snnsg_nsg.id
 }
 
-//Public IP
-resource "azurerm_public_ip" "public_ip" {
-  name                = local.appgateway_public_ipname
-  resource_group_name = var.resourceGroupName
-  location            = var.location
-  sku                 = "Standard"
-  sku_tier            = "Regional"
-  allocation_method   = "Static"
-  ip_version          = "IPv4"
-  zones               = ["1", "2", "3"]
-}

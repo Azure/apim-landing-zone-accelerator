@@ -1,0 +1,164 @@
+locals {
+  apimName          = "apim-${var.resourceSuffix}"
+  apimPipPrimaryPip = "pip-apim-${var.resourceSuffix}"
+}
+
+#-------------------------------
+# Creation of an internal APIM instance 
+#-------------------------------
+resource "azurerm_api_management" "apim_internal" {
+  name                 = local.apimName
+  location             = var.location
+  resource_group_name  = var.resourceGroupName
+  publisher_name       = var.publisherName
+  publisher_email      = var.publisherEmail
+  virtual_network_type = "Internal"
+
+  sku_name = var.skuName
+
+  virtual_network_configuration {
+    subnet_id = var.apimSubnetId
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
+
+#-------------------------------
+# Creation of the apim logger entity
+#-------------------------------
+resource "azurerm_api_management_logger" "apim_logger" {
+  name                = "apim-logger"
+  api_management_name = azurerm_api_management.apim_internal.name
+  resource_group_name = var.resourceGroupName
+  resource_id         = var.workspaceId
+
+  application_insights {
+    instrumentation_key = var.instrumentationKey
+  }
+}
+
+#-------------------------------
+# API management service diagnostic
+#-------------------------------
+resource "azurerm_api_management_diagnostic" "apim_diagnostic" {
+  identifier               = "applicationinsights"
+  resource_group_name      = var.resourceGroupName
+  api_management_name      = azurerm_api_management.apim_internal.name
+  api_management_logger_id = azurerm_api_management_logger.apim_logger.id
+
+  sampling_percentage = 100.0
+  always_log_errors   = true
+  verbosity           = "verbose" #possible value are verbose, error, information
+
+
+  frontend_request {
+    body_bytes = 32
+    headers_to_log = [
+      "content-type",
+      "accept",
+      "origin",
+    ]
+  }
+
+  frontend_response {
+    body_bytes = 32
+    headers_to_log = [
+      "content-type",
+      "content-length",
+      "origin",
+    ]
+  }
+
+  backend_request {
+    body_bytes = 32
+    headers_to_log = [
+      "content-type",
+      "accept",
+      "origin",
+    ]
+  }
+
+  backend_response {
+    body_bytes = 32
+    headers_to_log = [
+      "content-type",
+      "content-length",
+      "origin",
+    ]
+  }
+}
+
+resource "azurerm_api_management_product" "starter" {
+  display_name        = "Starter"
+  product_id          = "starter"
+  api_management_name = azurerm_api_management.apim_internal.name
+  resource_group_name = azurerm_api_management.apim_internal.resource_group_name
+  published           = true
+}
+
+resource "random_uuid" "starter_key" {
+}
+
+resource "azurerm_api_management_subscription" "echo" {
+  api_management_name = azurerm_api_management.apim_internal.name
+  resource_group_name = azurerm_api_management.apim_internal.resource_group_name
+  product_id          = azurerm_api_management_product.starter.id
+  display_name        = "Echo API"
+  primary_key         = random_uuid.starter_key.result
+  allow_tracing       = false
+}
+
+#-------------------------------
+# Importing the Echo API into API Management
+#-------------------------------
+resource "azurerm_api_management_api" "echo_api" {
+  name                = "echo-api"
+  api_management_name = azurerm_api_management.apim_internal.name
+  resource_group_name = azurerm_api_management.apim_internal.resource_group_name
+  revision            = "1"
+  display_name        = "Echo API"
+  path                = "echo"
+  protocols           = ["https"]
+  service_url         = "http://echoapi.cloudapp.net/api"
+
+
+}
+
+resource "azurerm_api_management_api_operation" "echo_api_operation" {
+  api_name            = azurerm_api_management_api.echo_api.name
+  api_management_name = azurerm_api_management.apim_internal.name
+  resource_group_name = azurerm_api_management.apim_internal.resource_group_name
+  display_name        = "Retrieve resource"
+  method              = "GET"
+  url_template        = "/resource"
+
+  request {
+    query_parameter {
+      type          = "string"
+      name          = "param1"
+      default_value = "sample"
+      required      = true
+    }
+    query_parameter {
+      type     = "number"
+      name     = "param2"
+      required = false
+    }
+  }
+
+  response {
+    status_code = 200
+    description = "A demonstration of a GET call on a sample resource. It is handled by an \"echo\" backend which returns a response equal to the request (the supplied headers and body are being returned as received)."
+  }
+  operation_id = "retrieve-resource"
+}
+
+resource "azurerm_api_management_product_api" "echo" {
+  api_name            = azurerm_api_management_api.echo_api.name
+  product_id          = azurerm_api_management_product.starter.product_id
+  api_management_name = azurerm_api_management.apim_internal.name
+  resource_group_name = azurerm_api_management.apim_internal.resource_group_name
+}
