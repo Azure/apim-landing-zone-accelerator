@@ -15,18 +15,18 @@ module dnsZone '../../shared/modules/dnszone.bicep' = {
   params: {
     vnetName: vnetName
     networkingResourceGroupName: networkingResourceGroupName
-    domain: 'azure-api.net'
+    domain: '${apimName}.azure-api.net'
   }
 }
 
 resource apimDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
-  name: 'azure-api.net'
+  name: '${apimName}.azure-api.net'
 }
 
 
 resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
   parent: apimDnsZone
-  name: apimName
+  name: '@'
   dependsOn: [
     apim
     dnsZone
@@ -43,7 +43,7 @@ resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
 
 resource developerRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
   parent: apimDnsZone
-  name: '${apimName}.developer'
+  name: 'developer'
   dependsOn: [
     apim
     dnsZone
