@@ -2,20 +2,14 @@
 
 ## Capability
 
-There are 2 different flavours of load balancing implemented: simple round robin and weighted round robin.
+API Management supports the following load balancing options for backend pools:
 
-## How the policy works
+- *Round-robin:* By default, requests are distributed evenly across the backends in the pool.
+- *Weighted*: Weights are assigned to the backends in the pool, and requests are distributed across the backends based on the relative weight assigned to each backend. Use this option for scenarios such as conducting a blue-green deployment.
+- *Priority-based:* Backends are organized in priority groups, and requests are sent to the backends in order of the priority groups. Within a priority group, requests are distributed either evenly across the backends, or (if assigned) according to the relative weight assigned to each backend.
 
-### Simple Round Robin
+## Examples
 
-- All the pool of endpoints are defined as an array.
-- Each time a request is received the counter is incremented and persisted
-- The counter value is used to select the endpoint from the array (using `random_value % backend_count`).
-- The selected endpoint is then used to route the request.
+### Managing spikes with PAYG
 
-### Weighted Round Robin
-
-- All the pool of endpoints are defined as an `JArray` along with the weights for each endpoint.
-- A random number is generated from 0 to the sum of all the weights.
-- The endpoint is selected based on the random number generated, which is then used to route the request.
-- There is no persistence of the counter in this case.
+The priority based load balancing policy can be used to manage spikes in traffic by routing traffic to PAYG endpoints when a PTU is out of capacity.
