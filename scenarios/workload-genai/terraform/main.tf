@@ -194,7 +194,7 @@ module "eventHub" {
   eventHubName            = var.eventHubName
   eventHubNamespaceName   = local.eventHubNamespaceName
   location                = var.location
-  apimIdentityName        = basename(data.azurerm_api_management.apim.identity[0].principal_id)
+  apimIdentityName        = data.azurerm_api_management.apim.identity[0].principal_id
   apimResourceGroupName   = data.azurerm_resource_group.apim.name
   openaiResourceGroupName = azurerm_resource_group.rg.name
 }
