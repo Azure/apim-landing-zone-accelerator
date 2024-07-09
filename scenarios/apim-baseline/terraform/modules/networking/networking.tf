@@ -63,6 +63,9 @@ resource "azurerm_network_security_group" "appgateway_nsg" {
     source_address_prefix      = "AzureLoadBalancer"
     destination_address_prefix = "*"
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_network_security_group" "apim_snnsg_nsg" {
@@ -129,12 +132,19 @@ resource "azurerm_network_security_group" "apim_snnsg_nsg" {
     source_address_prefix      = "VirtualNetwork"
     destination_address_prefix = "AzureKeyVault"
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_network_security_group" "private_endpoint_snnsg_nsg" {
   name                = local.private_endpoint_snnsg
   location            = var.location
   resource_group_name = var.resourceGroupName
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_virtual_network" "apim_cs_vnet" {
@@ -146,6 +156,10 @@ resource "azurerm_virtual_network" "apim_cs_vnet" {
   tags = {
     Owner = local.owner
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_subnet" "appgateway_subnet" {
@@ -153,11 +167,19 @@ resource "azurerm_subnet" "appgateway_subnet" {
   resource_group_name  = var.resourceGroupName
   virtual_network_name = azurerm_virtual_network.apim_cs_vnet.name
   address_prefixes     = [var.appGatewayAddressPrefix]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_subnet_network_security_group_association" "appgateway_subnet" {
   subnet_id                 = azurerm_subnet.appgateway_subnet.id
   network_security_group_id = azurerm_network_security_group.appgateway_nsg.id
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_subnet" "private_endpoint_subnet" {
@@ -165,11 +187,19 @@ resource "azurerm_subnet" "private_endpoint_subnet" {
   resource_group_name  = var.resourceGroupName
   virtual_network_name = azurerm_virtual_network.apim_cs_vnet.name
   address_prefixes     = [var.privateEndpointAddressPrefix]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_subnet_network_security_group_association" "private_endpoint_subnet" {
   subnet_id                 = azurerm_subnet.private_endpoint_subnet.id
   network_security_group_id = azurerm_network_security_group.private_endpoint_snnsg_nsg.id
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_subnet" "deploy_subnet" {
@@ -188,6 +218,10 @@ resource "azurerm_subnet" "deploy_subnet" {
       actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_subnet" "apim_subnet" {
@@ -195,10 +229,18 @@ resource "azurerm_subnet" "apim_subnet" {
   resource_group_name  = var.resourceGroupName
   virtual_network_name = azurerm_virtual_network.apim_cs_vnet.name
   address_prefixes     = [var.apimAddressPrefix]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_subnet_network_security_group_association" "apim_subnet" {
   subnet_id                 = azurerm_subnet.apim_subnet.id
   network_security_group_id = azurerm_network_security_group.apim_snnsg_nsg.id
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 

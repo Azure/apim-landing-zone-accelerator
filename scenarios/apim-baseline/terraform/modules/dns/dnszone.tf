@@ -11,37 +11,61 @@ Git	                        contosointernalvnet.scm.azure-api.net */
 resource "azurerm_private_dns_zone" "gateway" {
   name                = "azure-api.net"
   resource_group_name = var.resourceGroupName
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone" "dev_portal" {
   name                = "portal.azure-api.net"
   resource_group_name = var.resourceGroupName
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone" "new_dev_portal" {
   name                = "developer.azure-api.net"
   resource_group_name = var.resourceGroupName
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone" "mgmt_portal" {
   name                = "management.azure-api.net"
   resource_group_name = var.resourceGroupName
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone" "scm" {
   name                = "scm.azure-api.net"
   resource_group_name = var.resourceGroupName
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 #-------------------------------
 # A records for the DNS zones
 #-------------------------------
 resource "azurerm_private_dns_a_record" "gateway_record" {
-  name                = var.apimName
+  name                = lower(var.apimName)
   zone_name           = azurerm_private_dns_zone.gateway.name
   resource_group_name = var.resourceGroupName
   ttl                 = 36000
   records             = [var.apimPrivateIp]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_a_record" "dev_portal_record" {
@@ -50,6 +74,10 @@ resource "azurerm_private_dns_a_record" "dev_portal_record" {
   resource_group_name = var.resourceGroupName
   ttl                 = 300
   records             = [var.apimPrivateIp]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_a_record" "new_dev_portal_record" {
@@ -58,6 +86,10 @@ resource "azurerm_private_dns_a_record" "new_dev_portal_record" {
   resource_group_name = var.resourceGroupName
   ttl                 = 300
   records             = [var.apimPrivateIp]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_a_record" "mgmt_portal_record" {
@@ -66,6 +98,10 @@ resource "azurerm_private_dns_a_record" "mgmt_portal_record" {
   resource_group_name = var.resourceGroupName
   ttl                 = 300
   records             = [var.apimPrivateIp]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_a_record" "scm_record" {
@@ -74,6 +110,10 @@ resource "azurerm_private_dns_a_record" "scm_record" {
   resource_group_name = var.resourceGroupName
   ttl                 = 300
   records             = [var.apimPrivateIp]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 #-------------------------------
@@ -84,6 +124,10 @@ resource "azurerm_private_dns_zone_virtual_network_link" "gateway_vnetlink" {
   resource_group_name   = var.resourceGroupName
   private_dns_zone_name = azurerm_private_dns_zone.gateway.name
   virtual_network_id    = var.apimVnetId
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "dev_portal_vnetlink" {
@@ -91,6 +135,10 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dev_portal_vnetlink" {
   resource_group_name   = var.resourceGroupName
   private_dns_zone_name = azurerm_private_dns_zone.dev_portal.name
   virtual_network_id    = var.apimVnetId
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "new_dev_portal_vnetlink" {
@@ -98,6 +146,10 @@ resource "azurerm_private_dns_zone_virtual_network_link" "new_dev_portal_vnetlin
   resource_group_name   = var.resourceGroupName
   private_dns_zone_name = azurerm_private_dns_zone.new_dev_portal.name
   virtual_network_id    = var.apimVnetId
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "mgmt_vnetlink" {
@@ -105,6 +157,10 @@ resource "azurerm_private_dns_zone_virtual_network_link" "mgmt_vnetlink" {
   resource_group_name   = var.resourceGroupName
   private_dns_zone_name = azurerm_private_dns_zone.mgmt_portal.name
   virtual_network_id    = var.apimVnetId
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "scm_vnetlink" {
@@ -112,4 +168,8 @@ resource "azurerm_private_dns_zone_virtual_network_link" "scm_vnetlink" {
   resource_group_name   = var.resourceGroupName
   private_dns_zone_name = azurerm_private_dns_zone.scm.name
   virtual_network_id    = var.apimVnetId
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

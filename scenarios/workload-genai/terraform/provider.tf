@@ -10,7 +10,7 @@ terraform {
     #        -backend-config="resource_group_name=rg-tfstate-auseast"     \
     #        -backend-config="storage_account_name=tfstateauseaststorage" \
     #        -backend-config="container_name=apimlza"       \
-    #        -backend-config="key=terraform-apimlza-dev-v2.tfstate"
+    #        -backend-config="key=terraform-apimlza-dev-v3.tfstate"
     # ----------------------
     resource_group_name = "rg-tfstate-auseast"
     storage_account_name = "tfstateauseaststorage"

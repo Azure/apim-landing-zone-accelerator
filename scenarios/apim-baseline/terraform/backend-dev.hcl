@@ -1,4 +1,4 @@
-resource_group_name  = "rg-tfstate-uks"
-storage_account_name = "satfstateelpy7eogzws7w"
-container_name       = "apimlza"
-key                  = "terraform-apimlza-dev-v2.tfstate"
+resource_group_name  = "rg-tfstate-auseast"
+storage_account_name = "tfstateauseaststorage"
+container_name       = "apimlza_v3"
+key                  = "terraform-apimlza-dev-v3.tfstate"

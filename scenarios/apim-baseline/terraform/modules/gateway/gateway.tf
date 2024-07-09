@@ -13,6 +13,10 @@ resource "azurerm_user_assigned_identity" "user_assigned_identity" {
   location            = var.location
 
   name = local.appGatewayIdentityId
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_permissions" {
@@ -32,6 +36,10 @@ resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_perm
     "Get",
     "List",
   ]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_key_vault_certificate" "kv_domain_certs" {
@@ -60,6 +68,10 @@ resource "azurerm_key_vault_certificate" "kv_domain_certs" {
     secret_properties {
       content_type = "application/x-pkcs12"
     }
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
@@ -104,6 +116,10 @@ resource "azurerm_key_vault_certificate" "local_domain_certs" {
       validity_in_months = 12
     }
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 //Public IP
@@ -116,6 +132,10 @@ resource "azurerm_public_ip" "public_ip" {
   allocation_method   = "Static"
   ip_version          = "IPv4"
   zones               = ["1", "2", "3"]
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_application_gateway" "network" {
@@ -248,5 +268,9 @@ resource "azurerm_application_gateway" "network" {
   autoscale_configuration {
     min_capacity = 2
     max_capacity = 3
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }

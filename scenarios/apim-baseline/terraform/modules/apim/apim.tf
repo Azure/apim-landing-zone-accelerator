@@ -23,6 +23,10 @@ resource "azurerm_api_management" "apim_internal" {
   identity {
     type = "SystemAssigned"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 
@@ -37,6 +41,10 @@ resource "azurerm_api_management_logger" "apim_logger" {
 
   application_insights {
     instrumentation_key = var.instrumentationKey
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
@@ -89,6 +97,10 @@ resource "azurerm_api_management_diagnostic" "apim_diagnostic" {
       "origin",
     ]
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_api_management_product" "starter" {
@@ -97,9 +109,16 @@ resource "azurerm_api_management_product" "starter" {
   api_management_name = azurerm_api_management.apim_internal.name
   resource_group_name = azurerm_api_management.apim_internal.resource_group_name
   published           = true
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "random_uuid" "starter_key" {
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_api_management_subscription" "echo" {
@@ -110,6 +129,10 @@ resource "azurerm_api_management_subscription" "echo" {
   primary_key         = random_uuid.starter_key.result
   allow_tracing       = false
   state               = "active"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 #-------------------------------
@@ -125,7 +148,9 @@ resource "azurerm_api_management_api" "echo_api" {
   protocols           = ["https"]
   service_url         = "http://echoapi.cloudapp.net/api"
 
-
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_api_management_api_operation" "echo_api_operation" {
@@ -155,6 +180,11 @@ resource "azurerm_api_management_api_operation" "echo_api_operation" {
     description = "A demonstration of a GET call on a sample resource. It is handled by an \"echo\" backend which returns a response equal to the request (the supplied headers and body are being returned as received)."
   }
   operation_id = "retrieve-resource"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+
 }
 
 resource "azurerm_api_management_product_api" "echo" {
@@ -162,4 +192,8 @@ resource "azurerm_api_management_product_api" "echo" {
   product_id          = azurerm_api_management_product.starter.product_id
   api_management_name = azurerm_api_management.apim_internal.name
   resource_group_name = azurerm_api_management.apim_internal.resource_group_name
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
