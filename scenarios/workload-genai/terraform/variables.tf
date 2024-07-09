@@ -7,7 +7,7 @@
 variable "location" {
   type        = string
   description = "The Azure location in which the deployment is happening"
-  default     = "eastus"
+  default     = "eastus2"
 }
 
 variable "workloadName" {
@@ -23,15 +23,15 @@ variable "environment" {
 }
 
 variable "resource_group_name" {
-   description = "Name of the resource group in which the resources will be created"
-   default     = "RG"
+  description = "Name of the resource group in which the resources will be created"
+  default     = "RG"
 }
 
 variable "tags" {
   description = "(Optional) Specifies tags for all the resources"
-  default     = {
-    createdWith = "Terraform",
-    openAi = "true",
+  default = {
+    createdWith   = "Terraform",
+    openAi        = "true",
     containerApps = "true"
   }
 }
@@ -50,7 +50,7 @@ variable "vnet_name" {
 
 variable "vnet_address_space" {
   description = "Specifies the address prefix of the virtual network"
-  default     =  ["10.0.0.0/16"]
+  default     = ["10.0.0.0/16"]
   type        = list(string)
 }
 
@@ -80,27 +80,27 @@ variable "internal_load_balancer_enabled" {
 
 variable "openai_name" {
   description = "(Required) Specifies the name of the Azure OpenAI Service"
-  type = string
-  default = "OpenAI"
+  type        = string
+  default     = "OpenAI"
 }
 
 variable "openai_sku_name" {
   description = "(Optional) Specifies the sku name for the Azure OpenAI Service"
-  type = string
-  default = "S0"
+  type        = string
+  default     = "S0"
 }
 
 variable "openai_custom_subdomain_name" {
   description = "(Optional) Specifies the custom subdomain name of the Azure OpenAI Service"
-  type = string
-  nullable = true
-  default = ""
+  type        = string
+  nullable    = true
+  default     = ""
 }
 
 variable "openai_public_network_access_enabled" {
   description = "(Optional) Specifies whether public network access is allowed for the Azure OpenAI Service"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "openai_deployments" {
@@ -108,16 +108,16 @@ variable "openai_deployments" {
   type = list(object({
     name = string
     model = object({
-      name = string
+      name    = string
       version = string
     })
-    rai_policy_name = string  
+    rai_policy_name = string
   }))
   default = [
     {
       name = "gpt-35-turbo-16k"
       model = {
-        name = "gpt-35-turbo-16k"
+        name    = "gpt-35-turbo-16k"
         version = "0613"
       }
       rai_policy_name = ""
@@ -130,21 +130,22 @@ variable "openai_deployments" {
     #   }
     #   rai_policy_name = ""
     # }
-  ] 
+  ]
 }
 
 variable "workload_managed_identity_name" {
   description = "(Required) Specifies the name of the workload user-defined managed identity"
-  type = string
-  default = "WorkloadIdentity"
+  type        = string
+  default     = "WorkloadIdentity"
 }
 
 variable "eventHubName" {
   description = "The name of the Event Hub to log utilization data to"
   type        = string
+  default     = "apim-utilization-reporting"
 }
 
-variable apimIdentityName {
-  description = "The name of the API Management Identity"
-  type        = string
-}
+# variable apimIdentityName {
+#   description = "The name of the API Management Identity"
+#   type        = string
+# }

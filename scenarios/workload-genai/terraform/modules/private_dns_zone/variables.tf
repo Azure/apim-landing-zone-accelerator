@@ -13,8 +13,13 @@ variable "tags" {
   default     = {}
 }
 
-variable "virtual_networks_to_link" {
-  description = "(Optional) Specifies the subscription id, resource group name, and name of the virtual networks to which create a virtual network link"
-  type        = map(any)
-  default     = {}
+# variable "virtual_networks_to_link" {
+#   description = "(Optional) Specifies the subscription id, resource group name, and name of the virtual networks to which create a virtual network link"
+#   type        = map(any)
+#   default     = {}
+# }
+
+variable "virtual_networks_to_link_id" {
+  description = "(Optional) Specifies the virtual networks id to which create a virtual network link"
+  type        = string
 }

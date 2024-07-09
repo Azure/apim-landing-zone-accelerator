@@ -1,7 +1,7 @@
 variable "location" {
   type        = string
   description = "The Azure location in which the deployment is happening"
-  default     = "eastus"
+  default     = "eastus2"
 }
 
 variable "workloadName" {
@@ -81,7 +81,3 @@ variable "certificatePath" {
   type        = string
   default     = "../../certs/appgw.pfx"
 }
-
-
-
-
