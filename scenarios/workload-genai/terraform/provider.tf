@@ -12,10 +12,10 @@ terraform {
     #        -backend-config="container_name=apimlza"       \
     #        -backend-config="key=terraform-apimlza-dev-v3.tfstate"
     # ----------------------
-    resource_group_name = "tfstate"
-    storage_account_name = "tfsaeastus2001"
-    container_name       = "tfstatus"
-    key                  = "scenario3.tfstate"
+    resource_group_name = "rg-tfstate-auseast"
+    storage_account_name = "tfstateauseaststorage"
+    container_name       = "apimlza"
+    key                  = "terraform-apimlza-dev-v4.tfstate" 
   }
   required_providers {
     azurerm = {

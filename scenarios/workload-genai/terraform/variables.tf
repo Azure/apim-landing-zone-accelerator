@@ -7,7 +7,7 @@
 variable "location" {
   type        = string
   description = "The Azure location in which the deployment is happening"
-  default     = "eastus2"
+  default     = "AustraliaEast"
 }
 
 variable "workloadName" {
@@ -145,7 +145,7 @@ variable "eventHubName" {
   default     = "apim-utilization-reporting"
 }
 
-# variable apimIdentityName {
-#   description = "The name of the API Management Identity"
-#   type        = string
-# }
+variable apimIdentityName {
+  description = "The name of the API Management Identity"
+  type        = string
+}

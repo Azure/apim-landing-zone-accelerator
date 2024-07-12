@@ -1,5 +1,5 @@
 locals {
-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-cpi"
+  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   # sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"
@@ -199,13 +199,20 @@ module "eventHub" {
   openaiResourceGroupName = azurerm_resource_group.rg.name
 }
 
-# module "apiManagement" {
-#   source                         = "./modules/apim_policies"
-#   api_management_service_name = var.api_management_service_name
-#   ptu_deployment_one_base_url = "${module.simulatedPTUDeployment.endpoint}openai"
-#   pay_as_you_go_deployment_one_base_url = "${module.simulatedPaygoOneDeployment.endpoint}openai"
-#   pay_as_you_go_deployment_two_base_url = "${module.simulatedPaygoTwoDeployment.endpoint}openai"
-#   event_hub_namespace_name = module.eventHub.event_hub_namespace_name
-#   event_hub_name = module.eventHub.event_hub_name
-#   apim_identity_name = var.apim_identity_name
-# }
+module "apiManagement" {
+  source                         = "./modules/apim_policies"
+  location                       = var.location
+  openaiResourceGroupName        = local.openaiResourceGroupName
+  resourceGroupName              = local.apimResourceGroupName
+  apiManagementServiceName       = local.apimName
+  ptuDeploymentOneBaseUrl        = "${module.simulatedPTUDeployment.endpoint}openai"
+  payAsYouGoDeploymentOneBaseUrl = "${module.simulatedPaygoOneDeployment.endpoint}openai"
+  payAsYouGoDeploymentTwoBaseUrl = "${module.simulatedPaygoTwoDeployment.endpoint}openai"
+  eventHubNamespaceName          = module.eventHub.eventHubNamespaceName
+  eventHubName                   = module.eventHub.eventHubName
+  apimIdentityName               = data.azurerm_api_management.apim.identity[0].principal_id
+
+  depends_on = [
+    module.eventHub
+  ]
+}

@@ -1,0 +1,2304 @@
+[0m[1mmodule.apim.random_uuid.starter_key: Refreshing state... [id=d3db33c3-27d4-fb58-b9d4-070f4dd81bc7][0m
+[0m[1mrandom_string.random_identifier: Refreshing state... [id=c6a][0m
+[0m[1mazurerm_resource_group.shared: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.networking.azurerm_subnet_network_security_group_association.private_endpoint_subnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.networking.azurerm_subnet.private_endpoint_subnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone_virtual_network_link.dev_portal_vnetlink: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/portal.azure-api.net/virtualNetworkLinks/portal-vnet-link][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone_virtual_network_link.mgmt_vnetlink: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/management.azure-api.net/virtualNetworkLinks/mgmt-vnet-link][0m
+[0m[1mmodule.networking.azurerm_virtual_network.apim_cs_vnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.gateway.azurerm_key_vault_access_policy.user_assigned_identity_keyvault_permissions: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral/objectId/22ee260d-8166-4af1-9e6d-ef90dcb2f6bf][0m
+[0m[1mmodule.dns.azurerm_private_dns_a_record.new_dev_portal_record: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/developer.azure-api.net/A/developer][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone.mgmt_portal: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/management.azure-api.net][0m
+[0m[1mmodule.gateway.azurerm_application_gateway.network: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.dns.azurerm_private_dns_a_record.scm_record: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/scm.azure-api.net/A/scm][0m
+[0m[1mmodule.gateway.azurerm_key_vault_certificate.local_domain_certs[0]: Refreshing state... [id=https://kv-apimlzav2-dev-austral.vault.azure.net/certificates/generated-cert/8433fe0c4c1540c080f84dab7d8ab62a][0m
+[0m[1mmodule.apim.azurerm_api_management.apim_internal: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.networking.azurerm_subnet.apim_subnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apim-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone.gateway: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/azure-api.net][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone.new_dev_portal: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/developer.azure-api.net][0m
+[0m[1mazurerm_resource_group.networking: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.apim.azurerm_api_management_diagnostic.apim_diagnostic: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/diagnostics/applicationinsights][0m
+[0m[1mmodule.networking.azurerm_subnet_network_security_group_association.apim_subnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apim-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.gateway.azurerm_public_ip.public_ip: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/publicIPAddresses/pip-appgw-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.shared.azurerm_application_insights.shared_apim_insight: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Insights/components/appi-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.shared.azurerm_log_analytics_workspace.log_analytics_workspace: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.OperationalInsights/workspaces/log-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.apim.azurerm_api_management_product.starter: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/products/starter][0m
+[0m[1mmodule.shared.azurerm_key_vault.key_vault: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone_virtual_network_link.new_dev_portal_vnetlink: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/developer.azure-api.net/virtualNetworkLinks/dev-portal-vnet-link][0m
+[0m[1mmodule.apim.azurerm_api_management_product_api.echo: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/products/starter/apis/echo-api][0m
+[0m[1mmodule.dns.azurerm_private_dns_a_record.dev_portal_record: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/portal.azure-api.net/A/portal][0m
+[0m[1mmodule.apim.azurerm_api_management_subscription.echo: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/subscriptions/3f3d6f9d-011b-4c57-870f-20db2c4c03d3][0m
+[0m[1mmodule.networking.azurerm_subnet.deploy_subnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-deploy-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.apim.azurerm_api_management_logger.apim_logger: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/loggers/apim-logger][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone.dev_portal: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/portal.azure-api.net][0m
+[0m[1mmodule.networking.azurerm_network_security_group.private_endpoint_snnsg_nsg: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-prep-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.gateway.azurerm_user_assigned_identity.user_assigned_identity: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity-appgw-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.shared.azurerm_key_vault_access_policy.deployment_spn_access_policy["dc2133aa-adce-459f-bc0d-32c06375d556"]: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral/objectId/dc2133aa-adce-459f-bc0d-32c06375d556][0m
+[0m[1mazurerm_resource_group.apim: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone_virtual_network_link.scm_vnetlink: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/scm.azure-api.net/virtualNetworkLinks/scm-vnet-link][0m
+[0m[1mmodule.networking.azurerm_subnet_network_security_group_association.appgateway_subnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apgw-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.dns.azurerm_private_dns_a_record.mgmt_portal_record: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/management.azure-api.net/A/management][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone_virtual_network_link.gateway_vnetlink: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/azure-api.net/virtualNetworkLinks/gateway-vnet-link][0m
+[0m[1mmodule.apim.azurerm_api_management_api.echo_api: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/apis/echo-api;rev=1][0m
+[0m[1mdata.azurerm_resource_group.networking: Reading...[0m[0m
+[0m[1mmodule.dns.azurerm_private_dns_a_record.gateway_record: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/azure-api.net/A/apim-apimlzav2-dev-australiaeast-c6a][0m
+[0m[1mmodule.networking.azurerm_network_security_group.appgateway_nsg: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apgw-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mdata.azurerm_resource_group.networking: Read complete after 0s [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.networking.azurerm_subnet.appgateway_subnet: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apgw-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.networking.azurerm_network_security_group.apim_snnsg_nsg: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apim-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.dns.azurerm_private_dns_zone.scm: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/scm.azure-api.net][0m
+[0m[1mmodule.apim.azurerm_api_management_api_operation.echo_api_operation: Refreshing state... [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/apis/echo-api/operations/retrieve-resource][0m
+[0m[1mdata.azurerm_subnet.deploy_subnet: Reading...[0m[0m
+[0m[1mdata.azurerm_subnet.private_endpoint_subnet: Reading...[0m[0m
+[0m[1mdata.azurerm_client_config.current: Reading...[0m[0m
+[0m[1mdata.azurerm_client_config.current: Read complete after 0s [id=Y2xpZW50Q29uZmlncy9jbGllbnRJZD0wNGIwNzc5NS04ZGRiLTQ2MWEtYmJlZS0wMmY5ZTFiZjdiNDY7b2JqZWN0SWQ9ZGMyMTMzYWEtYWRjZS00NTlmLWJjMGQtMzJjMDYzNzVkNTU2O3N1YnNjcmlwdGlvbklkPTkyMTcwNzc3LWI4YmUtNDQzNS1hYjIxLTVmZmNiM2RlYzkyZDt0ZW5hbnRJZD0xNmIzYzAxMy1kMzAwLTQ2OGQtYWM2NC03ZWRhMDgyMGI2ZDM=][0m
+[0m[1mmodule.eventHub.data.azurerm_role_definition.eventHubsDataSenderRoleDefinition: Reading...[0m[0m
+[0m[1mdata.azurerm_resource_group.apim: Reading...[0m[0m
+[0m[1mdata.azurerm_resource_group.apim: Read complete after 0s [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mdata.azurerm_virtual_network.apim_cs_vnet: Reading...[0m[0m
+[0m[1mdata.azurerm_subnet.deploy_subnet: Read complete after 0s [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-deploy-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mdata.azurerm_api_management.apim: Reading...[0m[0m
+[0m[1mdata.azurerm_subnet.private_endpoint_subnet: Read complete after 1s [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mdata.azurerm_virtual_network.apim_cs_vnet: Read complete after 1s [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a][0m
+[0m[1mmodule.eventHub.data.azurerm_role_definition.eventHubsDataSenderRoleDefinition: Read complete after 1s [id=/providers/Microsoft.Authorization/roleDefinitions/2b629674-e913-4c01-ae53-ef4638d8f975][0m
+[0m[1mdata.azurerm_api_management.apim: Read complete after 1s [id=/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [32m+[0m create[0m
+  [31m-[0m destroy[0m
+ [36m<=[0m read (data resources)[0m
+
+Terraform will perform the following actions:
+
+[1m  # azurerm_resource_group.apim[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_resource_group.apim is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_resource_group" "apim" {
+      [31m-[0m[0m id         = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location   = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name       = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags       = {} [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # azurerm_resource_group.networking[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_resource_group.networking is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_resource_group" "networking" {
+      [31m-[0m[0m id         = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location   = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name       = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags       = {} [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # azurerm_resource_group.rg[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_resource_group" "rg" {
+      [32m+[0m[0m id       = (known after apply)
+      [32m+[0m[0m location = "australiaeast"
+      [32m+[0m[0m name     = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+    }
+
+[1m  # azurerm_resource_group.shared[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_resource_group.shared is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_resource_group" "shared" {
+      [31m-[0m[0m id         = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location   = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name       = "rg-shared-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags       = {} [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.apiManagement.data.azurerm_api_management.apiManagementService[0m will be read during apply
+  # (depends on a resource or a module with changes pending)
+[0m [36m<=[0m[0m data "azurerm_api_management" "apiManagementService" {
+      [32m+[0m[0m additional_location       = (known after apply)
+      [32m+[0m[0m developer_portal_url      = (known after apply)
+      [32m+[0m[0m gateway_regional_url      = (known after apply)
+      [32m+[0m[0m gateway_url               = (known after apply)
+      [32m+[0m[0m hostname_configuration    = (known after apply)
+      [32m+[0m[0m id                        = (known after apply)
+      [32m+[0m[0m identity                  = (known after apply)
+      [32m+[0m[0m location                  = (known after apply)
+      [32m+[0m[0m management_api_url        = (known after apply)
+      [32m+[0m[0m name                      = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m notification_sender_email = (known after apply)
+      [32m+[0m[0m portal_url                = (known after apply)
+      [32m+[0m[0m private_ip_addresses      = (known after apply)
+      [32m+[0m[0m public_ip_address_id      = (known after apply)
+      [32m+[0m[0m public_ip_addresses       = (known after apply)
+      [32m+[0m[0m publisher_email           = (known after apply)
+      [32m+[0m[0m publisher_name            = (known after apply)
+      [32m+[0m[0m resource_group_name       = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m scm_url                   = (known after apply)
+      [32m+[0m[0m sku_name                  = (known after apply)
+      [32m+[0m[0m tenant_access             = (known after apply)
+    }
+
+[1m  # module.apiManagement.data.azurerm_eventhub_namespace.eventHubNamespace[0m will be read during apply
+  # (depends on a resource or a module with changes pending)
+[0m [36m<=[0m[0m data "azurerm_eventhub_namespace" "eventHubNamespace" {
+      [32m+[0m[0m auto_inflate_enabled                      = (known after apply)
+      [32m+[0m[0m capacity                                  = (known after apply)
+      [32m+[0m[0m dedicated_cluster_id                      = (known after apply)
+      [32m+[0m[0m default_primary_connection_string         = (sensitive value)
+      [32m+[0m[0m default_primary_connection_string_alias   = (sensitive value)
+      [32m+[0m[0m default_primary_key                       = (sensitive value)
+      [32m+[0m[0m default_secondary_connection_string       = (sensitive value)
+      [32m+[0m[0m default_secondary_connection_string_alias = (sensitive value)
+      [32m+[0m[0m default_secondary_key                     = (sensitive value)
+      [32m+[0m[0m id                                        = (known after apply)
+      [32m+[0m[0m kafka_enabled                             = (known after apply)
+      [32m+[0m[0m location                                  = (known after apply)
+      [32m+[0m[0m maximum_throughput_units                  = (known after apply)
+      [32m+[0m[0m name                                      = "eh-ns-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m resource_group_name                       = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m sku                                       = (known after apply)
+      [32m+[0m[0m tags                                      = (known after apply)
+      [32m+[0m[0m zone_redundant                            = (known after apply)
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_api.azureOpenAIApi[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_api" "azureOpenAIApi" {
+      [32m+[0m[0m api_management_name   = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m api_type              = (known after apply)
+      [32m+[0m[0m display_name          = "AzureOpenAI"
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m is_current            = (known after apply)
+      [32m+[0m[0m is_online             = (known after apply)
+      [32m+[0m[0m name                  = "azure-openai-api"
+      [32m+[0m[0m path                  = "openai"
+      [32m+[0m[0m protocols             = [
+          [32m+[0m[0m "https",
+        ]
+      [32m+[0m[0m resource_group_name   = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m revision              = "1"
+      [32m+[0m[0m service_url           = (known after apply)
+      [32m+[0m[0m soap_pass_through     = (known after apply)
+      [32m+[0m[0m subscription_required = true
+      [32m+[0m[0m version               = (known after apply)
+      [32m+[0m[0m version_set_id        = (known after apply)
+
+      [32m+[0m[0m import {
+          [32m+[0m[0m content_format = "swagger-link-json"
+          [32m+[0m[0m content_value  = "./api-specs/openapi-spec.json"
+        }
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_backend.payAsYouGoBackendOne[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_backend" "payAsYouGoBackendOne" {
+      [32m+[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m name                = "payg-backend-1"
+      [32m+[0m[0m protocol            = "http"
+      [32m+[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m url                 = (known after apply)
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_backend.payAsYouGoBackendTwo[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_backend" "payAsYouGoBackendTwo" {
+      [32m+[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m name                = "payg-backend-2"
+      [32m+[0m[0m protocol            = "http"
+      [32m+[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m url                 = (known after apply)
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_backend.ptuBackendOne[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_backend" "ptuBackendOne" {
+      [32m+[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m name                = "ptu-backend-1"
+      [32m+[0m[0m protocol            = "http"
+      [32m+[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m url                 = (known after apply)
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_logger.event_hub_logger[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_logger" "event_hub_logger" {
+      [32m+[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m buffered            = true
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m name                = "eventhub-logger"
+      [32m+[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+
+      [32m+[0m[0m eventhub {
+          [32m+[0m[0m connection_string = (sensitive value)
+          [32m+[0m[0m name              = "apim-utilization-reporting"
+        }
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_named_value" "apimOpenaiApiUamiNamedValue" {
+      [32m+[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m display_name        = "5b0279dc-91fd-4137-9668-94a14360ebe6"
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m name                = "5b0279dc-91fd-4137-9668-94a14360ebe6"
+      [32m+[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m secret              = true
+      [32m+[0m[0m value               = (sensitive value)
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy.azureOpenAIApiPolicy[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy" "azureOpenAIApiPolicy" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m xml_content       = <<-EOT
+            <policies>
+                <inbound>
+                    <base />
+                    <!-- applies tokens constraint defined as per the fragment, doesn't set the backend-->
+                    <include-fragment fragment-id="adaptive-rate-limiting" />
+                    <!-- this can be used for new ratelimiting isn't available in the region -->
+                    <!-- <include-fragment fragment-id="adaptive-rate-limiting-workaround" /> -->
+            
+                    <!-- START: set backend service -->
+            
+                    <!-- performs simple round robin between payg-backend-1, payg-backend-2 -->
+                    <!-- <include-fragment fragment-id="simple-round-robin" /> -->
+                    
+                    <!-- performs weighted round robin between payg-backend-1, payg-backend-2 
+                         weights are defined in the fragment itself -->
+                    <include-fragment fragment-id="weighted-round-robin" />
+            
+                    <!-- tracks token consumption as custom metrics in App insights -->
+                    <include-fragment fragment-id="usage-tracking-with-appinsights" />
+                </inbound>
+                <backend>
+                    <!-- either base or the fragment needs to be present.  -->
+                    <!-- <base /> -->
+                    <!-- sets backend to PTU endpoint by default and retries with PAYG when PTU return 429 -->
+                    <include-fragment fragment-id="retry-with-payg" />
+                    <!-- END: sets backend service -->
+                </backend>
+                <outbound>
+                    <base />
+                    
+                     <set-header name="x-apim-backend" exists-action="override">
+                        <value>@((string)context.Variables["selected-backend-id"])</value>
+                    </set-header>
+                    <choose>
+                        <when condition="@(context.Response.StatusCode == 200)">
+                            <!--
+            					NOTE: To retrieve context.Response.Body in inbound section, this object needs to be accessed first in the outbound section of the policy. Not doing so will return null body in Inbound section.
+            					We are using preserveContent=true when deserializing response body stream into a JSON object since we intend to access it again. See details on htTPM://docs.microsoft.com/en-us/azure/api-management/api-management-transformation-policies#SetBody 
+            				-->
+                            <!--Response Modification:
+            					Checks if the response status code is 200.
+            					Converts the response body into a JSON object to be returned as a string.-->
+                            <set-body>@{                   
+                            JObject api_response = context.Response.Body.As&lt;JObject&gt;(preserveContent: true);                
+                            return api_response.ToString();                         
+                            }</set-body>
+                        </when>
+                    </choose>
+            
+                    <!-- tracks token consumption using the event hub, this can be used as a workaround if the 
+                    new policy isn't available in the region yet. -->
+                    <!-- <include-fragment fragment-id="usage-tracking-with-eventhub" /> -->
+                </outbound>
+                <on-error>
+                    <base />
+                </on-error>
+            </policies>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy_fragment.adaptiveRateLimitingPolicyFragment[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingPolicyFragment" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m format            = "rawxml"
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m name              = "adaptive-rate-limiting"
+      [32m+[0m[0m value             = <<-EOT
+            <fragment>
+                <azure-openai-token-limit counter-key="GlobalTokensLimit"
+                    tokens-per-minute="500"
+                    estimate-prompt-tokens="true"
+                    remaining-tokens-header-name="x-apim-global-remaining-tokens"
+                    remaining-tokens-variable-name="globalRemainingTokens"
+                    tokens-consumed-header-name="x-apim-global-consumed-tokens"/>
+            
+                <choose>
+                    <when condition="@(context.Request.Headers.ContainsKey("x-higher-limit"))">
+                        <set-variable name="higherLimit" value="@{
+                            var defaultHigherLimit = 300;
+                            if (context.Variables["globalRemainingTokens"] is int globalRemainingTokens && globalRemainingTokens > 0)
+                            {
+                                defaultHigherLimit += (int)(globalRemainingTokens * 0.1); 
+                            }
+                            return (int)defaultHigherLimit;
+                            }" />
+                        <azure-openai-token-limit counter-key="highRateLimitSvc"
+                            tokens-per-minute="@((int)context.Variables["higherLimit"])"
+                            estimate-prompt-tokens="true"
+                            remaining-tokens-header-name="x-apim-high-rate-remaining-tokens"/>
+                    </when>
+                    <otherwise>
+                        <set-variable name="lowerRateLimit" value="@{
+                            var defaultLowerRateLimit = 100;
+                            if (context.Variables["globalRemainingTokens"] is int globalRemainingTokens && globalRemainingTokens > 0)
+                            {
+                                defaultLowerRateLimit += (int)(globalRemainingTokens * 0.1); 
+                            }
+                            return defaultLowerRateLimit;
+                            }" />
+                        <azure-openai-token-limit counter-key="lowRateLimitSvc"
+                            tokens-per-minute="@((int)context.Variables["lowerRateLimit"])"
+                            estimate-prompt-tokens="true"
+                            remaining-tokens-header-name="x-apim-low-rate-remaining-tokens"/>
+                    </otherwise>
+                </choose>
+            </fragment>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy_fragment.adaptiveRateLimitingWorkAroundPolicyFragment[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingWorkAroundPolicyFragment" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m format            = "rawxml"
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m name              = "adaptive-rate-limiting-workaround"
+      [32m+[0m[0m value             = <<-EOT
+            <fragment>
+                <!-- Rate limit configuration for global tokens. 
+                     Allows 500 tokens per 60 seconds. 
+                     The count is incremented if the response status code is between 200 and 400 by any request -->
+                <rate-limit-by-key calls="500"
+                    renewal-period="60"
+                    counter-key="GlobalTokensLimit"
+                    increment-condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 400)"
+                    increment-count="@(context.Response.Body.As<JObject>(true).SelectToken("usage.total_tokens").ToObject<int>())"
+                    remaining-calls-variable-name="globalRemainingTokens"
+                    remaining-calls-header-name="x-apim-global-remaining-tokens"/>
+                <!-- Choose block to decide the rate limit based on the presence of "x-higher-limit" in the request headers. -->
+                <choose>
+                    <!-- If "x-higher-limit" is present in the request headers, 
+                         the rate limit is set to 300 tokens per 60 seconds plus 10% of the remaining global tokens. -->
+                    <when condition="@(context.Request.Headers.ContainsKey("x-higher-limit"))">
+                        <rate-limit-by-key calls="@{
+                            var defaultHigherLimit = 300;
+                            if (context.Variables["globalRemainingTokens"] is int globalRemainingTokens && globalRemainingTokens > 0)
+                            {
+                                defaultHigherLimit += (int)(globalRemainingTokens * 0.1); 
+                            }
+                            return defaultHigherLimit;
+                            }"
+                            renewal-period="60"
+                            counter-key="highRateLimitSvc"
+                            increment-condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 400)"
+                            increment-count="@(context.Response.Body.As<JObject>(true).SelectToken("usage.total_tokens").ToObject<int>())"
+                            remaining-calls-header-name="x-apim-high-rate-remaining-tokens" />
+                    </when>
+                    <!-- If "x-higher-limit" is not present in the request headers, 
+                         the rate limit is set to 100 tokens per 60 seconds plus 10% of the remaining global tokens. -->
+                    <otherwise>
+                        <rate-limit-by-key calls="@{
+                            var defaultLowerRateLimit = 100;
+                            if (context.Variables["globalRemainingTokens"] is int globalRemainingTokens && globalRemainingTokens > 0)
+                            {
+                                defaultLowerRateLimit += (int)(globalRemainingTokens * 0.1); 
+                            }
+                            return defaultLowerRateLimit;
+                            }"
+                            renewal-period="60"
+                            counter-key="lowRateLimitSvc"
+                            increment-condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 400)"
+                            increment-count="@(context.Response.Body.As<JObject>(true).SelectToken("usage.total_tokens").ToObject<int>())"
+                            remaining-calls-header-name="x-apim-low-rate-remaining-tokens" />
+                    </otherwise>
+                </choose>
+            </fragment>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy_fragment.retryWithPayAsYouGoPolicyFragment[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy_fragment" "retryWithPayAsYouGoPolicyFragment" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m format            = "rawxml"
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m name              = "retry-with-payg"
+      [32m+[0m[0m value             = <<-EOT
+            <!-- Policy fragment to use Pay As You Go (PAYG) endpoints when the PTU endpoints are busy.
+            
+                should be used inside the <backend> section of the policy
+            
+                Expected named values
+                - ptu-endpoint-1, payg-endpoint-1, payg-endpoint-2: The backend endpoints to be load balanced. -->
+            <fragment>
+            	<!-- Exponential retry policy: If the HTTP status code of the response is 300 or greater, the request is retried. 
+                 Maximum retries: 3. Initial retry interval: 1 second. Maximum retry interval: 10 seconds. 
+                 Retry interval increase per retry: 2 seconds -->
+            	<retry condition="@(context.Response.StatusCode == 429)" count="3" interval="1" max-interval="10" delta="2">
+            		<!-- The retry policy executes its child policies once and then retries their execution until the retry 
+                    condition becomes false or retry count is exhausted. -->
+            		<set-variable name="body" value="@(context.Request.Body.As<string>(preserveContent: true))" />
+            		<choose>
+            			<when condition="@(context.Response.StatusCode == 429)">
+            				<!-- If the PTU returns 429, the control enters this block -->
+            				<!-- It is also possible to have a pool of backends and load balance them -->
+            				<set-variable name="selected-backend-id" value="payg-backend-1" />
+            				<set-header name="Authorization" exists-action="override">
+            					<value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+            				</set-header>
+            				<set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+            			</when>
+            			<otherwise>
+            				<!-- This is the default path of the request -->
+            				<!-- The backend will point to the `ptu endpoint` or it is possible to load balance multiple 
+                            PTU endpoints as well -->
+            				<set-variable name="selected-backend-id" value="ptu-backend-1" />
+            				<set-header name="Authorization" exists-action="override">
+            					<value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+            				</set-header>
+            				<set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+            			</otherwise>
+            		</choose>
+            		<set-body>@((string)context.Variables["body"])</set-body>
+            		<forward-request timeout="120" fail-on-error-status-code="true" buffer-response="false" />
+            	</retry>
+            </fragment>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragment" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m format            = "rawxml"
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m name              = "simple-round-robin"
+      [32m+[0m[0m value             = <<-EOT
+            <!-- 
+                Policy fragment to implement a round-robin load balancing algorithm.
+            
+                Expected named values
+                - payg-endpoint-1,payg-endpoint-2: The backend endpoints to be load balanced.
+             -->
+            <fragment>
+                <!-- Backend counter is persisted in the cache, enabling a stateful loop across various requests -->
+                <cache-lookup-value key="backend-counter" variable-name="backend-counter" default-value="@(0)" />
+                <set-variable name="backend-counter" value="@(((int)context.Variables["backend-counter"])+1)" />
+                <cache-store-value key="backend-counter" value="@((int)context.Variables["backend-counter"])" duration="1200" />
+            
+                <!-- backend pool contains all the Azure OpenAI backends, that needs to be load balanced. -->
+                <set-variable name="backend-pool" value="@{
+                        JArray backends = new JArray();
+                        backends.Add("payg-backend-1");
+                        backends.Add("payg-backend-2");
+                        return backends;
+                    }" />
+            
+                <!-- select the backend URL from the pool for this request -->
+                <set-variable name="total-backend-count" value="@(((JArray)context.Variables["backend-pool"]).Count)" />
+                <set-variable name="chosen-index" value="@((int)context.Variables["backend-counter"]%(int)context.Variables["total-backend-count"])" />
+                <set-variable name="selected-backend-id" value="@(((JArray)context.Variables["backend-pool"])[(int)context.Variables["chosen-index"]].ToString())" />
+            
+                <!-- set the backend service URL to the selected backend URL -->
+                <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" client-id="{{apim-identity}}" ignore-error="false" />
+                <set-header name="Authorization" exists-action="override">
+                    <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+                </set-header>
+                <set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+            </fragment>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy_fragment.usageTrackingEHPolicyFragment[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy_fragment" "usageTrackingEHPolicyFragment" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m format            = "rawxml"
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m name              = "usage-tracking-with-eventhub"
+      [32m+[0m[0m value             = <<-EOT
+            <fragment>
+                <choose>
+                    <!--Chargeback model using eventhub logging 
+            				Conditional Logging to EventHub:
+            				Logs specific information to an EventHub if the response status code is 200.
+            				Captures various request and response details like service name, gateway ID, request ID, operation name, subscription ID, product ID, business unit name, invoked OpenAI instance, and total tokens used.-->
+                    <when condition="@(context.Response.StatusCode == 200)">
+                        <log-to-eventhub logger-id="eventhub-logger">@{
+                                return new JObject(
+                                    new JProperty("Type", "Message"),
+                                    new JProperty("EventTime", DateTime.UtcNow.ToString()),
+                                    new JProperty("ServiceName", context.Deployment.ServiceName),
+                                    new JProperty("GatewayId", context.Deployment.Gateway.Id),
+                                    new JProperty("RequestId", context.RequestId),
+                                    new JProperty("RequestIp", context.Request.IpAddress),
+                                    new JProperty("OperationName", context.Operation.Name),
+                                    new JProperty("SubscriptionId", context.Subscription.Id),
+                                    new JProperty("TotalTokens",  context.Response.Body.As&lt;JObject&gt;(preserveContent: true).SelectToken("usage.total_tokens").ToString())
+                                ).ToString();
+                            }</log-to-eventhub>
+                    </when>
+                </choose>
+            </fragment>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy_fragment.usageTrackingWithAppInsightsPolicyFragment[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy_fragment" "usageTrackingWithAppInsightsPolicyFragment" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m format            = "rawxml"
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m name              = "usage-tracking-with-appinsights"
+      [32m+[0m[0m value             = <<-EOT
+            <fragment>
+                <azure-openai-emit-token-metric namespace="aoai.token.usage">
+                    <dimension name="SubscriptionId" value="@(context.Subscription.Id)"/>
+                    <dimension name="ClientIP" value="@(context.Request.IpAddress)" />
+                    <dimension name="RequestId" value="@(context.Request.IpAddress)" />
+                    <dimension name="OperationName" value="@(context.Operation.Name)" />
+                </azure-openai-emit-token-metric>
+            </fragment>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_policy_fragment.weightedRoundRobinPolicyFragment[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
+      [32m+[0m[0m api_management_id = (known after apply)
+      [32m+[0m[0m format            = "rawxml"
+      [32m+[0m[0m id                = (known after apply)
+      [32m+[0m[0m name              = "weighted-round-robin"
+      [32m+[0m[0m value             = <<-EOT
+            <fragment>
+                <set-variable name="all-backends" value="@{
+                        JArray backends = new JArray();
+                        backends.Add(new JObject()
+                        {
+                            { "id", "payg-backend-1" },
+                            { "weight", 2 },
+                        });
+            
+                        backends.Add(new JObject()
+                        {
+                            { "id", "payg-backend-2" },
+                            { "weight", 1 },
+                        });
+            
+                        return backends;
+                }" />
+                <set-variable name="selected-backend-id" value="@{
+                        var backends = (JArray)context.Variables["all-backends"];
+                        var totalWeight = backends.Sum(e => (int)e["weight"]);
+                        var randomNumber = new Random().Next(totalWeight);
+                        var weightSum = 0;
+                        foreach (var backend in backends)
+                        {
+                            weightSum += (int)backend["weight"];
+                            if (randomNumber < weightSum)
+                            {
+                                return backend["id"].ToString();
+                            }
+                        }
+                        return backends[0]["id"].ToString();
+                }" />
+                <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" client-id="{{apim-identity}}" ignore-error="false" />
+                <set-header name="Authorization" exists-action="override">
+                    <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+                </set-header>
+                <set-backend-service backend-id="@((string)context.Variables["selected-backend-id"])" />
+            </fragment>
+        EOT
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_product.azureOpenAIProduct[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_product" "azureOpenAIProduct" {
+      [32m+[0m[0m api_management_name   = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m display_name          = "aoai-product"
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m product_id            = "aoai-product"
+      [32m+[0m[0m published             = true
+      [32m+[0m[0m resource_group_name   = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m subscription_required = true
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_product_api.azureOpenAIProductAPI[0][0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
+      [32m+[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m api_name            = "apim-apimlzav2-dev-AustraliaEast-c6a/aoai-product/azure-openai-api"
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m product_id          = (known after apply)
+      [32m+[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+    }
+
+[1m  # module.apiManagement.azurerm_api_management_subscription.azureOpenAIProductSubscription[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_api_management_subscription" "azureOpenAIProductSubscription" {
+      [32m+[0m[0m allow_tracing       = true
+      [32m+[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m display_name        = "aoai-product-subscription"
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m primary_key         = (sensitive value)
+      [32m+[0m[0m product_id          = (known after apply)
+      [32m+[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m secondary_key       = (sensitive value)
+      [32m+[0m[0m state               = "active"
+      [32m+[0m[0m subscription_id     = "aoai-product-subscription"
+    }
+
+[1m  # module.apim.azurerm_api_management.apim_internal[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management.apim_internal is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management" "apim_internal" {
+      [31m-[0m[0m client_certificate_enabled    = false [90m-> null[0m[0m
+      [31m-[0m[0m developer_portal_url          = "https://apim-apimlzav2-dev-australiaeast-c6a.developer.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m gateway_disabled              = false [90m-> null[0m[0m
+      [31m-[0m[0m gateway_regional_url          = "https://apim-apimlzav2-dev-australiaeast-c6a-australiaeast-01.regional.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m gateway_url                   = "https://apim-apimlzav2-dev-australiaeast-c6a.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m id                            = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location                      = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m management_api_url            = "https://apim-apimlzav2-dev-australiaeast-c6a.management.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m name                          = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m notification_sender_email     = "apimgmt-noreply@mail.windowsazure.com" [90m-> null[0m[0m
+      [31m-[0m[0m policy                        = [
+          [31m-[0m[0m {
+              [31m-[0m[0m xml_content = <<-EOT
+                    <!--
+                        IMPORTANT:
+                        - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.
+                        - Only the <forward-request> policy element can appear within the <backend> section element.
+                        - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.
+                        - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.
+                        - To add a policy position the cursor at the desired insertion point and click on the round button associated with the policy.
+                        - To remove a policy, delete the corresponding policy statement from the policy document.
+                        - Policies are applied in the order of their appearance, from the top down.
+                    -->
+                    <policies>
+                    	<inbound />
+                    	<backend>
+                    		<forward-request />
+                    	</backend>
+                    	<outbound />
+                    </policies>
+                EOT
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m portal_url                    = "https://apim-apimlzav2-dev-australiaeast-c6a.portal.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m private_ip_addresses          = [
+          [31m-[0m[0m "10.2.7.4",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m public_ip_addresses           = [
+          [31m-[0m[0m "4.147.91.165",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m public_network_access_enabled = true [90m-> null[0m[0m
+      [31m-[0m[0m publisher_email               = "apim@contoso.com" [90m-> null[0m[0m
+      [31m-[0m[0m publisher_name                = "Contoso" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name           = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m scm_url                       = "https://apim-apimlzav2-dev-australiaeast-c6a.scm.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m sku_name                      = "Developer_1" [90m-> null[0m[0m
+      [31m-[0m[0m tags                          = {} [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_type          = "Internal" [90m-> null[0m[0m
+      [31m-[0m[0m zones                         = [] [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m delegation {
+          [31m-[0m[0m subscriptions_enabled     = false [90m-> null[0m[0m
+          [31m-[0m[0m user_registration_enabled = false [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+
+      [31m-[0m[0m hostname_configuration {
+          [31m-[0m[0m proxy {
+              [31m-[0m[0m certificate_source              = "BuiltIn" [90m-> null[0m[0m
+              [31m-[0m[0m default_ssl_binding             = true [90m-> null[0m[0m
+              [31m-[0m[0m host_name                       = "apim-apimlzav2-dev-australiaeast-c6a.azure-api.net" [90m-> null[0m[0m
+              [31m-[0m[0m negotiate_client_certificate    = false [90m-> null[0m[0m
+                [90m# (8 unchanged attributes hidden)[0m[0m
+            }
+        }
+
+      [31m-[0m[0m identity {
+          [31m-[0m[0m identity_ids = [] [90m-> null[0m[0m
+          [31m-[0m[0m principal_id = "5b0279dc-91fd-4137-9668-94a14360ebe6" [90m-> null[0m[0m
+          [31m-[0m[0m tenant_id    = "16b3c013-d300-468d-ac64-7eda0820b6d3" [90m-> null[0m[0m
+          [31m-[0m[0m type         = "SystemAssigned" [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m protocols {
+          [31m-[0m[0m enable_http2 = false [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m security {
+          [31m-[0m[0m enable_backend_ssl30                                = false [90m-> null[0m[0m
+          [31m-[0m[0m enable_backend_tls10                                = false [90m-> null[0m[0m
+          [31m-[0m[0m enable_backend_tls11                                = false [90m-> null[0m[0m
+          [31m-[0m[0m enable_frontend_ssl30                               = false [90m-> null[0m[0m
+          [31m-[0m[0m enable_frontend_tls10                               = false [90m-> null[0m[0m
+          [31m-[0m[0m enable_frontend_tls11                               = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_ecdhe_ecdsa_with_aes128_cbc_sha_ciphers_enabled = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_ecdhe_ecdsa_with_aes256_cbc_sha_ciphers_enabled = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_ecdhe_rsa_with_aes128_cbc_sha_ciphers_enabled   = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_ecdhe_rsa_with_aes256_cbc_sha_ciphers_enabled   = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_rsa_with_aes128_cbc_sha256_ciphers_enabled      = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_rsa_with_aes128_cbc_sha_ciphers_enabled         = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_rsa_with_aes128_gcm_sha256_ciphers_enabled      = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_rsa_with_aes256_cbc_sha256_ciphers_enabled      = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_rsa_with_aes256_cbc_sha_ciphers_enabled         = false [90m-> null[0m[0m
+          [31m-[0m[0m tls_rsa_with_aes256_gcm_sha384_ciphers_enabled      = false [90m-> null[0m[0m
+          [31m-[0m[0m triple_des_ciphers_enabled                          = false [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m sign_in {
+          [31m-[0m[0m enabled = false [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m sign_up {
+          [31m-[0m[0m enabled = false [90m-> null[0m[0m
+
+          [31m-[0m[0m terms_of_service {
+              [31m-[0m[0m consent_required = false [90m-> null[0m[0m
+              [31m-[0m[0m enabled          = false [90m-> null[0m[0m
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            }
+        }
+
+      [31m-[0m[0m tenant_access {
+          [31m-[0m[0m enabled       = false [90m-> null[0m[0m
+          [31m-[0m[0m primary_key   = (sensitive value) [90m-> null[0m[0m
+          [31m-[0m[0m secondary_key = (sensitive value) [90m-> null[0m[0m
+          [31m-[0m[0m tenant_id     = "/tenant/access" [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m virtual_network_configuration {
+          [31m-[0m[0m subnet_id = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.apim.azurerm_api_management_api.echo_api[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management_api.echo_api is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management_api" "echo_api" {
+      [31m-[0m[0m api_management_name   = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m api_type              = "http" [90m-> null[0m[0m
+      [31m-[0m[0m display_name          = "Echo API" [90m-> null[0m[0m
+      [31m-[0m[0m id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/apis/echo-api;rev=1" [90m-> null[0m[0m
+      [31m-[0m[0m is_current            = true [90m-> null[0m[0m
+      [31m-[0m[0m is_online             = false [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "echo-api" [90m-> null[0m[0m
+      [31m-[0m[0m path                  = "echo" [90m-> null[0m[0m
+      [31m-[0m[0m protocols             = [
+          [31m-[0m[0m "https",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name   = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m revision              = "1" [90m-> null[0m[0m
+      [31m-[0m[0m service_url           = "http://echoapi.cloudapp.net/api" [90m-> null[0m[0m
+      [31m-[0m[0m soap_pass_through     = false [90m-> null[0m[0m
+      [31m-[0m[0m subscription_required = true [90m-> null[0m[0m
+        [90m# (6 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m subscription_key_parameter_names {
+          [31m-[0m[0m header = "Ocp-Apim-Subscription-Key" [90m-> null[0m[0m
+          [31m-[0m[0m query  = "subscription-key" [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.apim.azurerm_api_management_api_operation.echo_api_operation[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management_api_operation.echo_api_operation is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management_api_operation" "echo_api_operation" {
+      [31m-[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m api_name            = "echo-api" [90m-> null[0m[0m
+      [31m-[0m[0m display_name        = "Retrieve resource" [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/apis/echo-api/operations/retrieve-resource" [90m-> null[0m[0m
+      [31m-[0m[0m method              = "GET" [90m-> null[0m[0m
+      [31m-[0m[0m operation_id        = "retrieve-resource" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m url_template        = "/resource" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+
+      [31m-[0m[0m request {
+            [90m# (1 unchanged attribute hidden)[0m[0m
+
+          [31m-[0m[0m query_parameter {
+              [31m-[0m[0m default_value = "sample" [90m-> null[0m[0m
+              [31m-[0m[0m name          = "param1" [90m-> null[0m[0m
+              [31m-[0m[0m required      = true [90m-> null[0m[0m
+              [31m-[0m[0m type          = "string" [90m-> null[0m[0m
+              [31m-[0m[0m values        = [] [90m-> null[0m[0m
+                [90m# (3 unchanged attributes hidden)[0m[0m
+            }
+          [31m-[0m[0m query_parameter {
+              [31m-[0m[0m name          = "param2" [90m-> null[0m[0m
+              [31m-[0m[0m required      = false [90m-> null[0m[0m
+              [31m-[0m[0m type          = "number" [90m-> null[0m[0m
+              [31m-[0m[0m values        = [] [90m-> null[0m[0m
+                [90m# (4 unchanged attributes hidden)[0m[0m
+            }
+        }
+
+      [31m-[0m[0m response {
+          [31m-[0m[0m description = "A demonstration of a GET call on a sample resource. It is handled by an \"echo\" backend which returns a response equal to the request (the supplied headers and body are being returned as received)." [90m-> null[0m[0m
+          [31m-[0m[0m status_code = 200 [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.apim.azurerm_api_management_diagnostic.apim_diagnostic[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management_diagnostic.apim_diagnostic is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management_diagnostic" "apim_diagnostic" {
+      [31m-[0m[0m always_log_errors         = true [90m-> null[0m[0m
+      [31m-[0m[0m api_management_logger_id  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/loggers/apim-logger" [90m-> null[0m[0m
+      [31m-[0m[0m api_management_name       = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m http_correlation_protocol = "Legacy" [90m-> null[0m[0m
+      [31m-[0m[0m id                        = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/diagnostics/applicationinsights" [90m-> null[0m[0m
+      [31m-[0m[0m identifier                = "applicationinsights" [90m-> null[0m[0m
+      [31m-[0m[0m log_client_ip             = true [90m-> null[0m[0m
+      [31m-[0m[0m operation_name_format     = "Name" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name       = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m sampling_percentage       = 100 [90m-> null[0m[0m
+      [31m-[0m[0m verbosity                 = "verbose" [90m-> null[0m[0m
+
+      [31m-[0m[0m backend_request {
+          [31m-[0m[0m body_bytes     = 32 [90m-> null[0m[0m
+          [31m-[0m[0m headers_to_log = [
+              [31m-[0m[0m "accept",
+              [31m-[0m[0m "content-type",
+              [31m-[0m[0m "origin",
+            ] [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m backend_response {
+          [31m-[0m[0m body_bytes     = 32 [90m-> null[0m[0m
+          [31m-[0m[0m headers_to_log = [
+              [31m-[0m[0m "content-length",
+              [31m-[0m[0m "content-type",
+              [31m-[0m[0m "origin",
+            ] [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m frontend_request {
+          [31m-[0m[0m body_bytes     = 32 [90m-> null[0m[0m
+          [31m-[0m[0m headers_to_log = [
+              [31m-[0m[0m "accept",
+              [31m-[0m[0m "content-type",
+              [31m-[0m[0m "origin",
+            ] [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m frontend_response {
+          [31m-[0m[0m body_bytes     = 32 [90m-> null[0m[0m
+          [31m-[0m[0m headers_to_log = [
+              [31m-[0m[0m "content-length",
+              [31m-[0m[0m "content-type",
+              [31m-[0m[0m "origin",
+            ] [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.apim.azurerm_api_management_logger.apim_logger[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management_logger.apim_logger is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management_logger" "apim_logger" {
+      [31m-[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m buffered            = true [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/loggers/apim-logger" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "apim-logger" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_id         = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.OperationalInsights/workspaces/log-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+
+      [31m-[0m[0m application_insights {
+          [31m-[0m[0m instrumentation_key = (sensitive value) [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.apim.azurerm_api_management_product.starter[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management_product.starter is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management_product" "starter" {
+      [31m-[0m[0m api_management_name   = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m approval_required     = false [90m-> null[0m[0m
+      [31m-[0m[0m display_name          = "Starter" [90m-> null[0m[0m
+      [31m-[0m[0m id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/products/starter" [90m-> null[0m[0m
+      [31m-[0m[0m product_id            = "starter" [90m-> null[0m[0m
+      [31m-[0m[0m published             = true [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name   = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m subscription_required = true [90m-> null[0m[0m
+      [31m-[0m[0m subscriptions_limit   = 0 [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.apim.azurerm_api_management_product_api.echo[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management_product_api.echo is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management_product_api" "echo" {
+      [31m-[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m api_name            = "echo-api" [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/products/starter/apis/echo-api" [90m-> null[0m[0m
+      [31m-[0m[0m product_id          = "starter" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.apim.azurerm_api_management_subscription.echo[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_api_management_subscription.echo is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_api_management_subscription" "echo" {
+      [31m-[0m[0m allow_tracing       = false [90m-> null[0m[0m
+      [31m-[0m[0m api_management_name = "apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m display_name        = "Echo API" [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/subscriptions/3f3d6f9d-011b-4c57-870f-20db2c4c03d3" [90m-> null[0m[0m
+      [31m-[0m[0m primary_key         = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m product_id          = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-apim-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ApiManagement/service/apim-apimlzav2-dev-AustraliaEast-c6a/products/starter" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m secondary_key       = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m state               = "active" [90m-> null[0m[0m
+      [31m-[0m[0m subscription_id     = "3f3d6f9d-011b-4c57-870f-20db2c4c03d3" [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.apim.random_uuid.starter_key[0m will be [1m[31mdestroyed[0m
+  # (because random_uuid.starter_key is not in configuration)
+[0m  [31m-[0m[0m resource "random_uuid" "starter_key" {
+      [31m-[0m[0m id     = "d3db33c3-27d4-fb58-b9d4-070f4dd81bc7" [90m-> null[0m[0m
+      [31m-[0m[0m result = "d3db33c3-27d4-fb58-b9d4-070f4dd81bc7" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_a_record.dev_portal_record[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_a_record.dev_portal_record is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_a_record" "dev_portal_record" {
+      [31m-[0m[0m fqdn                = "portal.portal.azure-api.net." [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/portal.azure-api.net/A/portal" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "portal" [90m-> null[0m[0m
+      [31m-[0m[0m records             = [
+          [31m-[0m[0m "10.2.7.4",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+      [31m-[0m[0m ttl                 = 300 [90m-> null[0m[0m
+      [31m-[0m[0m zone_name           = "portal.azure-api.net" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_a_record.gateway_record[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_a_record.gateway_record is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_a_record" "gateway_record" {
+      [31m-[0m[0m fqdn                = "apim-apimlzav2-dev-australiaeast-c6a.azure-api.net." [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/azure-api.net/A/apim-apimlzav2-dev-australiaeast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "apim-apimlzav2-dev-australiaeast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m records             = [
+          [31m-[0m[0m "10.2.7.4",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+      [31m-[0m[0m ttl                 = 36000 [90m-> null[0m[0m
+      [31m-[0m[0m zone_name           = "azure-api.net" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_a_record.mgmt_portal_record[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_a_record.mgmt_portal_record is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_a_record" "mgmt_portal_record" {
+      [31m-[0m[0m fqdn                = "management.management.azure-api.net." [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/management.azure-api.net/A/management" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "management" [90m-> null[0m[0m
+      [31m-[0m[0m records             = [
+          [31m-[0m[0m "10.2.7.4",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+      [31m-[0m[0m ttl                 = 300 [90m-> null[0m[0m
+      [31m-[0m[0m zone_name           = "management.azure-api.net" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_a_record.new_dev_portal_record[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_a_record.new_dev_portal_record is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_a_record" "new_dev_portal_record" {
+      [31m-[0m[0m fqdn                = "developer.developer.azure-api.net." [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/developer.azure-api.net/A/developer" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "developer" [90m-> null[0m[0m
+      [31m-[0m[0m records             = [
+          [31m-[0m[0m "10.2.7.4",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+      [31m-[0m[0m ttl                 = 300 [90m-> null[0m[0m
+      [31m-[0m[0m zone_name           = "developer.azure-api.net" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_a_record.scm_record[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_a_record.scm_record is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_a_record" "scm_record" {
+      [31m-[0m[0m fqdn                = "scm.scm.azure-api.net." [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/scm.azure-api.net/A/scm" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "scm" [90m-> null[0m[0m
+      [31m-[0m[0m records             = [
+          [31m-[0m[0m "10.2.7.4",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+      [31m-[0m[0m ttl                 = 300 [90m-> null[0m[0m
+      [31m-[0m[0m zone_name           = "scm.azure-api.net" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone.dev_portal[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone.dev_portal is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone" "dev_portal" {
+      [31m-[0m[0m id                                                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/portal.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_record_sets                             = 25000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links                   = 1000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links_with_registration = 100 [90m-> null[0m[0m
+      [31m-[0m[0m name                                                  = "portal.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m number_of_record_sets                                 = 2 [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                                   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                                                  = {} [90m-> null[0m[0m
+
+      [31m-[0m[0m soa_record {
+          [31m-[0m[0m email         = "azureprivatedns-host.microsoft.com" [90m-> null[0m[0m
+          [31m-[0m[0m expire_time   = 2419200 [90m-> null[0m[0m
+          [31m-[0m[0m fqdn          = "portal.azure-api.net." [90m-> null[0m[0m
+          [31m-[0m[0m host_name     = "azureprivatedns.net" [90m-> null[0m[0m
+          [31m-[0m[0m minimum_ttl   = 10 [90m-> null[0m[0m
+          [31m-[0m[0m refresh_time  = 3600 [90m-> null[0m[0m
+          [31m-[0m[0m retry_time    = 300 [90m-> null[0m[0m
+          [31m-[0m[0m serial_number = 1 [90m-> null[0m[0m
+          [31m-[0m[0m tags          = {} [90m-> null[0m[0m
+          [31m-[0m[0m ttl           = 3600 [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone.gateway[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone.gateway is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone" "gateway" {
+      [31m-[0m[0m id                                                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_record_sets                             = 25000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links                   = 1000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links_with_registration = 100 [90m-> null[0m[0m
+      [31m-[0m[0m name                                                  = "azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m number_of_record_sets                                 = 2 [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                                   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                                                  = {} [90m-> null[0m[0m
+
+      [31m-[0m[0m soa_record {
+          [31m-[0m[0m email         = "azureprivatedns-host.microsoft.com" [90m-> null[0m[0m
+          [31m-[0m[0m expire_time   = 2419200 [90m-> null[0m[0m
+          [31m-[0m[0m fqdn          = "azure-api.net." [90m-> null[0m[0m
+          [31m-[0m[0m host_name     = "azureprivatedns.net" [90m-> null[0m[0m
+          [31m-[0m[0m minimum_ttl   = 10 [90m-> null[0m[0m
+          [31m-[0m[0m refresh_time  = 3600 [90m-> null[0m[0m
+          [31m-[0m[0m retry_time    = 300 [90m-> null[0m[0m
+          [31m-[0m[0m serial_number = 1 [90m-> null[0m[0m
+          [31m-[0m[0m tags          = {} [90m-> null[0m[0m
+          [31m-[0m[0m ttl           = 3600 [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone.mgmt_portal[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone.mgmt_portal is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone" "mgmt_portal" {
+      [31m-[0m[0m id                                                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/management.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_record_sets                             = 25000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links                   = 1000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links_with_registration = 100 [90m-> null[0m[0m
+      [31m-[0m[0m name                                                  = "management.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m number_of_record_sets                                 = 2 [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                                   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                                                  = {} [90m-> null[0m[0m
+
+      [31m-[0m[0m soa_record {
+          [31m-[0m[0m email         = "azureprivatedns-host.microsoft.com" [90m-> null[0m[0m
+          [31m-[0m[0m expire_time   = 2419200 [90m-> null[0m[0m
+          [31m-[0m[0m fqdn          = "management.azure-api.net." [90m-> null[0m[0m
+          [31m-[0m[0m host_name     = "azureprivatedns.net" [90m-> null[0m[0m
+          [31m-[0m[0m minimum_ttl   = 10 [90m-> null[0m[0m
+          [31m-[0m[0m refresh_time  = 3600 [90m-> null[0m[0m
+          [31m-[0m[0m retry_time    = 300 [90m-> null[0m[0m
+          [31m-[0m[0m serial_number = 1 [90m-> null[0m[0m
+          [31m-[0m[0m tags          = {} [90m-> null[0m[0m
+          [31m-[0m[0m ttl           = 3600 [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone.new_dev_portal[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone.new_dev_portal is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone" "new_dev_portal" {
+      [31m-[0m[0m id                                                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/developer.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_record_sets                             = 25000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links                   = 1000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links_with_registration = 100 [90m-> null[0m[0m
+      [31m-[0m[0m name                                                  = "developer.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m number_of_record_sets                                 = 2 [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                                   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                                                  = {} [90m-> null[0m[0m
+
+      [31m-[0m[0m soa_record {
+          [31m-[0m[0m email         = "azureprivatedns-host.microsoft.com" [90m-> null[0m[0m
+          [31m-[0m[0m expire_time   = 2419200 [90m-> null[0m[0m
+          [31m-[0m[0m fqdn          = "developer.azure-api.net." [90m-> null[0m[0m
+          [31m-[0m[0m host_name     = "azureprivatedns.net" [90m-> null[0m[0m
+          [31m-[0m[0m minimum_ttl   = 10 [90m-> null[0m[0m
+          [31m-[0m[0m refresh_time  = 3600 [90m-> null[0m[0m
+          [31m-[0m[0m retry_time    = 300 [90m-> null[0m[0m
+          [31m-[0m[0m serial_number = 1 [90m-> null[0m[0m
+          [31m-[0m[0m tags          = {} [90m-> null[0m[0m
+          [31m-[0m[0m ttl           = 3600 [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone.scm[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone.scm is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone" "scm" {
+      [31m-[0m[0m id                                                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/scm.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_record_sets                             = 25000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links                   = 1000 [90m-> null[0m[0m
+      [31m-[0m[0m max_number_of_virtual_network_links_with_registration = 100 [90m-> null[0m[0m
+      [31m-[0m[0m name                                                  = "scm.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m number_of_record_sets                                 = 2 [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                                   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                                                  = {} [90m-> null[0m[0m
+
+      [31m-[0m[0m soa_record {
+          [31m-[0m[0m email         = "azureprivatedns-host.microsoft.com" [90m-> null[0m[0m
+          [31m-[0m[0m expire_time   = 2419200 [90m-> null[0m[0m
+          [31m-[0m[0m fqdn          = "scm.azure-api.net." [90m-> null[0m[0m
+          [31m-[0m[0m host_name     = "azureprivatedns.net" [90m-> null[0m[0m
+          [31m-[0m[0m minimum_ttl   = 10 [90m-> null[0m[0m
+          [31m-[0m[0m refresh_time  = 3600 [90m-> null[0m[0m
+          [31m-[0m[0m retry_time    = 300 [90m-> null[0m[0m
+          [31m-[0m[0m serial_number = 1 [90m-> null[0m[0m
+          [31m-[0m[0m tags          = {} [90m-> null[0m[0m
+          [31m-[0m[0m ttl           = 3600 [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone_virtual_network_link.dev_portal_vnetlink[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone_virtual_network_link.dev_portal_vnetlink is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone_virtual_network_link" "dev_portal_vnetlink" {
+      [31m-[0m[0m id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/portal.azure-api.net/virtualNetworkLinks/portal-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "portal-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m private_dns_zone_name = "portal.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m registration_enabled  = false [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_id    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone_virtual_network_link.gateway_vnetlink[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone_virtual_network_link.gateway_vnetlink is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone_virtual_network_link" "gateway_vnetlink" {
+      [31m-[0m[0m id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/azure-api.net/virtualNetworkLinks/gateway-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "gateway-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m private_dns_zone_name = "azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m registration_enabled  = false [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_id    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone_virtual_network_link.mgmt_vnetlink[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone_virtual_network_link.mgmt_vnetlink is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone_virtual_network_link" "mgmt_vnetlink" {
+      [31m-[0m[0m id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/management.azure-api.net/virtualNetworkLinks/mgmt-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "mgmt-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m private_dns_zone_name = "management.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m registration_enabled  = false [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_id    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone_virtual_network_link.new_dev_portal_vnetlink[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone_virtual_network_link.new_dev_portal_vnetlink is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone_virtual_network_link" "new_dev_portal_vnetlink" {
+      [31m-[0m[0m id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/developer.azure-api.net/virtualNetworkLinks/dev-portal-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "dev-portal-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m private_dns_zone_name = "developer.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m registration_enabled  = false [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_id    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.dns.azurerm_private_dns_zone_virtual_network_link.scm_vnetlink[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_private_dns_zone_virtual_network_link.scm_vnetlink is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_private_dns_zone_virtual_network_link" "scm_vnetlink" {
+      [31m-[0m[0m id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/privateDnsZones/scm.azure-api.net/virtualNetworkLinks/scm-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "scm-vnet-link" [90m-> null[0m[0m
+      [31m-[0m[0m private_dns_zone_name = "scm.azure-api.net" [90m-> null[0m[0m
+      [31m-[0m[0m registration_enabled  = false [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name   = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_id    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.eventHub.azurerm_eventhub.eventHub[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_eventhub" "eventHub" {
+      [32m+[0m[0m id                  = (known after apply)
+      [32m+[0m[0m message_retention   = 7
+      [32m+[0m[0m name                = "apim-utilization-reporting"
+      [32m+[0m[0m namespace_name      = "eh-ns-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m partition_count     = 1
+      [32m+[0m[0m partition_ids       = (known after apply)
+      [32m+[0m[0m resource_group_name = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m status              = "Active"
+    }
+
+[1m  # module.eventHub.azurerm_eventhub_namespace.eventHubNamespace[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_eventhub_namespace" "eventHubNamespace" {
+      [32m+[0m[0m auto_inflate_enabled                      = false
+      [32m+[0m[0m capacity                                  = 1
+      [32m+[0m[0m default_primary_connection_string         = (sensitive value)
+      [32m+[0m[0m default_primary_connection_string_alias   = (sensitive value)
+      [32m+[0m[0m default_primary_key                       = (sensitive value)
+      [32m+[0m[0m default_secondary_connection_string       = (sensitive value)
+      [32m+[0m[0m default_secondary_connection_string_alias = (sensitive value)
+      [32m+[0m[0m default_secondary_key                     = (sensitive value)
+      [32m+[0m[0m id                                        = (known after apply)
+      [32m+[0m[0m local_authentication_enabled              = true
+      [32m+[0m[0m location                                  = "australiaeast"
+      [32m+[0m[0m maximum_throughput_units                  = (known after apply)
+      [32m+[0m[0m minimum_tls_version                       = (known after apply)
+      [32m+[0m[0m name                                      = "eh-ns-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m network_rulesets                          = (known after apply)
+      [32m+[0m[0m public_network_access_enabled             = true
+      [32m+[0m[0m resource_group_name                       = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m sku                                       = "Standard"
+      [32m+[0m[0m zone_redundant                            = false
+    }
+
+[1m  # module.eventHub.azurerm_role_assignment.assignEventHubsDataSenderToApiManagement[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_role_assignment" "assignEventHubsDataSenderToApiManagement" {
+      [32m+[0m[0m id                               = (known after apply)
+      [32m+[0m[0m name                             = (known after apply)
+      [32m+[0m[0m principal_id                     = "5b0279dc-91fd-4137-9668-94a14360ebe6"
+      [32m+[0m[0m principal_type                   = (known after apply)
+      [32m+[0m[0m role_definition_id               = (known after apply)
+      [32m+[0m[0m role_definition_name             = "Azure Event Hubs Data Sender"
+      [32m+[0m[0m scope                            = (known after apply)
+      [32m+[0m[0m skip_service_principal_aad_check = (known after apply)
+    }
+
+[1m  # module.gateway.azurerm_application_gateway.network[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_application_gateway.network is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_application_gateway" "network" {
+      [31m-[0m[0m enable_http2                      = true [90m-> null[0m[0m
+      [31m-[0m[0m fips_enabled                      = false [90m-> null[0m[0m
+      [31m-[0m[0m force_firewall_policy_association = false [90m-> null[0m[0m
+      [31m-[0m[0m id                                = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location                          = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                              = "appgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_connection       = [] [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name               = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                              = {} [90m-> null[0m[0m
+      [31m-[0m[0m zones                             = [] [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+
+      [31m-[0m[0m autoscale_configuration {
+          [31m-[0m[0m max_capacity = 3 [90m-> null[0m[0m
+          [31m-[0m[0m min_capacity = 2 [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m backend_address_pool {
+          [31m-[0m[0m fqdns        = [
+              [31m-[0m[0m "apim-apimlzav2-dev-AustraliaEast-c6a.azure-api.net",
+            ] [90m-> null[0m[0m
+          [31m-[0m[0m id           = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/backendAddressPools/apim" [90m-> null[0m[0m
+          [31m-[0m[0m ip_addresses = [] [90m-> null[0m[0m
+          [31m-[0m[0m name         = "apim" [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m backend_http_settings {
+          [31m-[0m[0m cookie_based_affinity               = "Disabled" [90m-> null[0m[0m
+          [31m-[0m[0m host_name                           = "apim-apimlzav2-dev-AustraliaEast-c6a.azure-api.net" [90m-> null[0m[0m
+          [31m-[0m[0m id                                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/backendHttpSettingsCollection/https" [90m-> null[0m[0m
+          [31m-[0m[0m name                                = "https" [90m-> null[0m[0m
+          [31m-[0m[0m pick_host_name_from_backend_address = false [90m-> null[0m[0m
+          [31m-[0m[0m port                                = 443 [90m-> null[0m[0m
+          [31m-[0m[0m probe_id                            = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/probes/APIM" [90m-> null[0m[0m
+          [31m-[0m[0m probe_name                          = "APIM" [90m-> null[0m[0m
+          [31m-[0m[0m protocol                            = "Https" [90m-> null[0m[0m
+          [31m-[0m[0m request_timeout                     = 20 [90m-> null[0m[0m
+          [31m-[0m[0m trusted_root_certificate_names      = [] [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+      [31m-[0m[0m backend_http_settings {
+          [31m-[0m[0m affinity_cookie_name                = "ApplicationGatewayAffinity" [90m-> null[0m[0m
+          [31m-[0m[0m cookie_based_affinity               = "Disabled" [90m-> null[0m[0m
+          [31m-[0m[0m id                                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/backendHttpSettingsCollection/default" [90m-> null[0m[0m
+          [31m-[0m[0m name                                = "default" [90m-> null[0m[0m
+          [31m-[0m[0m pick_host_name_from_backend_address = false [90m-> null[0m[0m
+          [31m-[0m[0m port                                = 80 [90m-> null[0m[0m
+          [31m-[0m[0m protocol                            = "Http" [90m-> null[0m[0m
+          [31m-[0m[0m request_timeout                     = 20 [90m-> null[0m[0m
+          [31m-[0m[0m trusted_root_certificate_names      = [] [90m-> null[0m[0m
+            [90m# (4 unchanged attributes hidden)[0m[0m
+        }
+
+      [31m-[0m[0m frontend_ip_configuration {
+          [31m-[0m[0m id                              = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/frontendIPConfigurations/appGwPublicFrontendIp" [90m-> null[0m[0m
+          [31m-[0m[0m name                            = "appGwPublicFrontendIp" [90m-> null[0m[0m
+          [31m-[0m[0m private_ip_address_allocation   = "Dynamic" [90m-> null[0m[0m
+          [31m-[0m[0m public_ip_address_id            = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/publicIPAddresses/pip-appgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+            [90m# (4 unchanged attributes hidden)[0m[0m
+        }
+
+      [31m-[0m[0m frontend_port {
+          [31m-[0m[0m id   = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/frontendPorts/port_443" [90m-> null[0m[0m
+          [31m-[0m[0m name = "port_443" [90m-> null[0m[0m
+          [31m-[0m[0m port = 443 [90m-> null[0m[0m
+        }
+      [31m-[0m[0m frontend_port {
+          [31m-[0m[0m id   = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/frontendPorts/port_80" [90m-> null[0m[0m
+          [31m-[0m[0m name = "port_80" [90m-> null[0m[0m
+          [31m-[0m[0m port = 80 [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m gateway_ip_configuration {
+          [31m-[0m[0m id        = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/gatewayIPConfigurations/appGatewayIpConfig" [90m-> null[0m[0m
+          [31m-[0m[0m name      = "appGatewayIpConfig" [90m-> null[0m[0m
+          [31m-[0m[0m subnet_id = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m http_listener {
+          [31m-[0m[0m frontend_ip_configuration_id   = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/frontendIPConfigurations/appGwPublicFrontendIp" [90m-> null[0m[0m
+          [31m-[0m[0m frontend_ip_configuration_name = "appGwPublicFrontendIp" [90m-> null[0m[0m
+          [31m-[0m[0m frontend_port_id               = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/frontendPorts/port_443" [90m-> null[0m[0m
+          [31m-[0m[0m frontend_port_name             = "port_443" [90m-> null[0m[0m
+          [31m-[0m[0m host_names                     = [] [90m-> null[0m[0m
+          [31m-[0m[0m id                             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/httpListeners/https" [90m-> null[0m[0m
+          [31m-[0m[0m name                           = "https" [90m-> null[0m[0m
+          [31m-[0m[0m protocol                       = "Https" [90m-> null[0m[0m
+          [31m-[0m[0m require_sni                    = false [90m-> null[0m[0m
+          [31m-[0m[0m ssl_certificate_id             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/sslCertificates/apim.example.com" [90m-> null[0m[0m
+          [31m-[0m[0m ssl_certificate_name           = "apim.example.com" [90m-> null[0m[0m
+            [90m# (4 unchanged attributes hidden)[0m[0m
+        }
+      [31m-[0m[0m http_listener {
+          [31m-[0m[0m frontend_ip_configuration_id   = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/frontendIPConfigurations/appGwPublicFrontendIp" [90m-> null[0m[0m
+          [31m-[0m[0m frontend_ip_configuration_name = "appGwPublicFrontendIp" [90m-> null[0m[0m
+          [31m-[0m[0m frontend_port_id               = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/frontendPorts/port_80" [90m-> null[0m[0m
+          [31m-[0m[0m frontend_port_name             = "port_80" [90m-> null[0m[0m
+          [31m-[0m[0m host_names                     = [] [90m-> null[0m[0m
+          [31m-[0m[0m id                             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/httpListeners/default" [90m-> null[0m[0m
+          [31m-[0m[0m name                           = "default" [90m-> null[0m[0m
+          [31m-[0m[0m protocol                       = "Http" [90m-> null[0m[0m
+          [31m-[0m[0m require_sni                    = false [90m-> null[0m[0m
+            [90m# (6 unchanged attributes hidden)[0m[0m
+        }
+
+      [31m-[0m[0m identity {
+          [31m-[0m[0m identity_ids = [
+              [31m-[0m[0m "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity-appgw-apimlzav2-dev-AustraliaEast-c6a",
+            ] [90m-> null[0m[0m
+          [31m-[0m[0m type         = "UserAssigned" [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+
+      [31m-[0m[0m probe {
+          [31m-[0m[0m host                                      = "apim-apimlzav2-dev-AustraliaEast-c6a.azure-api.net" [90m-> null[0m[0m
+          [31m-[0m[0m id                                        = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/probes/APIM" [90m-> null[0m[0m
+          [31m-[0m[0m interval                                  = 30 [90m-> null[0m[0m
+          [31m-[0m[0m minimum_servers                           = 0 [90m-> null[0m[0m
+          [31m-[0m[0m name                                      = "APIM" [90m-> null[0m[0m
+          [31m-[0m[0m path                                      = "/status-0123456789abcdef" [90m-> null[0m[0m
+          [31m-[0m[0m pick_host_name_from_backend_http_settings = false [90m-> null[0m[0m
+          [31m-[0m[0m port                                      = 0 [90m-> null[0m[0m
+          [31m-[0m[0m protocol                                  = "Https" [90m-> null[0m[0m
+          [31m-[0m[0m timeout                                   = 30 [90m-> null[0m[0m
+          [31m-[0m[0m unhealthy_threshold                       = 3 [90m-> null[0m[0m
+
+          [31m-[0m[0m match {
+              [31m-[0m[0m status_code = [
+                  [31m-[0m[0m "200-399",
+                ] [90m-> null[0m[0m
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            }
+        }
+
+      [31m-[0m[0m request_routing_rule {
+          [31m-[0m[0m backend_address_pool_id     = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/backendAddressPools/apim" [90m-> null[0m[0m
+          [31m-[0m[0m backend_address_pool_name   = "apim" [90m-> null[0m[0m
+          [31m-[0m[0m backend_http_settings_id    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/backendHttpSettingsCollection/https" [90m-> null[0m[0m
+          [31m-[0m[0m backend_http_settings_name  = "https" [90m-> null[0m[0m
+          [31m-[0m[0m http_listener_id            = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/httpListeners/https" [90m-> null[0m[0m
+          [31m-[0m[0m http_listener_name          = "https" [90m-> null[0m[0m
+          [31m-[0m[0m id                          = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/applicationGateways/appgw-apimlzav2-dev-AustraliaEast-c6a/requestRoutingRules/apim" [90m-> null[0m[0m
+          [31m-[0m[0m name                        = "apim" [90m-> null[0m[0m
+          [31m-[0m[0m priority                    = 100 [90m-> null[0m[0m
+          [31m-[0m[0m rule_type                   = "Basic" [90m-> null[0m[0m
+            [90m# (6 unchanged attributes hidden)[0m[0m
+        }
+
+      [31m-[0m[0m sku {
+          [31m-[0m[0m capacity = 0 [90m-> null[0m[0m
+          [31m-[0m[0m name     = "WAF_v2" [90m-> null[0m[0m
+          [31m-[0m[0m tier     = "WAF_v2" [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m ssl_certificate {
+          # At least one attribute in this block is (or was) sensitive,
+          # so its contents will not be displayed.
+        }
+
+      [31m-[0m[0m ssl_policy {
+          [31m-[0m[0m cipher_suites        = [] [90m-> null[0m[0m
+          [31m-[0m[0m disabled_protocols   = [] [90m-> null[0m[0m
+          [31m-[0m[0m policy_name          = "AppGwSslPolicy20150501" [90m-> null[0m[0m
+          [31m-[0m[0m policy_type          = "Predefined" [90m-> null[0m[0m
+            [90m# (1 unchanged attribute hidden)[0m[0m
+        }
+
+      [31m-[0m[0m waf_configuration {
+          [31m-[0m[0m enabled                  = true [90m-> null[0m[0m
+          [31m-[0m[0m file_upload_limit_mb     = 100 [90m-> null[0m[0m
+          [31m-[0m[0m firewall_mode            = "Detection" [90m-> null[0m[0m
+          [31m-[0m[0m max_request_body_size_kb = 128 [90m-> null[0m[0m
+          [31m-[0m[0m request_body_check       = true [90m-> null[0m[0m
+          [31m-[0m[0m rule_set_type            = "OWASP" [90m-> null[0m[0m
+          [31m-[0m[0m rule_set_version         = "3.0" [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.gateway.azurerm_key_vault_access_policy.user_assigned_identity_keyvault_permissions[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_key_vault_access_policy.user_assigned_identity_keyvault_permissions is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_permissions" {
+      [31m-[0m[0m certificate_permissions = [
+          [31m-[0m[0m "Import",
+          [31m-[0m[0m "Get",
+          [31m-[0m[0m "List",
+          [31m-[0m[0m "Update",
+          [31m-[0m[0m "Create",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m id                      = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral/objectId/22ee260d-8166-4af1-9e6d-ef90dcb2f6bf" [90m-> null[0m[0m
+      [31m-[0m[0m key_permissions         = [] [90m-> null[0m[0m
+      [31m-[0m[0m key_vault_id            = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral" [90m-> null[0m[0m
+      [31m-[0m[0m object_id               = "22ee260d-8166-4af1-9e6d-ef90dcb2f6bf" [90m-> null[0m[0m
+      [31m-[0m[0m secret_permissions      = [
+          [31m-[0m[0m "Get",
+          [31m-[0m[0m "List",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m storage_permissions     = [] [90m-> null[0m[0m
+      [31m-[0m[0m tenant_id               = "16b3c013-d300-468d-ac64-7eda0820b6d3" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.gateway.azurerm_key_vault_certificate.local_domain_certs[0][0m will be [1m[31mdestroyed[0m
+  # (because azurerm_key_vault_certificate.local_domain_certs is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_key_vault_certificate" "local_domain_certs" {
+      [31m-[0m[0m certificate_attribute           = [
+          [31m-[0m[0m {
+              [31m-[0m[0m created        = "2024-07-04T07:00:01Z"
+              [31m-[0m[0m enabled        = true
+              [31m-[0m[0m expires        = "2025-07-04T07:00:00Z"
+              [31m-[0m[0m not_before     = "2024-07-04T06:50:00Z"
+              [31m-[0m[0m recovery_level = "Recoverable+Purgeable"
+              [31m-[0m[0m updated        = "2024-07-04T07:00:01Z"
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m certificate_data                = "308203323082021AA003020102021003A87A423D424803AAF427CA83EB26A8300D06092A864886F70D01010B0500301B31193017060355040313106170696D2E6578616D706C652E636F6D301E170D3234303730343036353030305A170D3235303730343037303030305A301B31193017060355040313106170696D2E6578616D706C652E636F6D30820122300D06092A864886F70D01010105000382010F003082010A0282010100C6BB6B2A3DE18B9E92D358B72A9255DD504196C25038ED880EE6E2FB7D8D386AE73BE4D393283639EEE5FB0F4D8EC2525C204433CCC4A16C56DBC8D9BD03169D6A8054A54C81D634E5AE745CFB3536D5EA4BE421D865DF97361277D8C1251112F31961981843C10C610A98964C14727936B6EB70B0737526770D826917C3030E46E72350D3D9B4FBEF81E968BFAE28B5A6E8A7211DB2C2DAFFE4162D9407DA010D6E14BBD10F4A881B7C126F8FB3E5AEF17226BD3283450408702B2FC9D74594AC2A42D8BA7E2B511622A2D27ED26D0C8F5AB0EC97F17421CE0D146EFEB91A10F7D1A845FEF3DD95981A86575F4ABEDE3E8CB9F4706D0F7B38BD692FFAB88D850203010001A3723070300E0603551D0F0101FF0404030205A030090603551D130402300030130603551D25040C300A06082B06010505070301301F0603551D230418301680142EFB3CFE999C2E532F71A1E98BED2455850C7AD5301D0603551D0E041604142EFB3CFE999C2E532F71A1E98BED2455850C7AD5300D06092A864886F70D01010B050003820101007E465CF4E081B984CA97E52CA1F02E2BC881429366DA00B047F4F9F180337A3837BFE8E881CB378AC21153ACBA2B3664CAB1F7699B4D617F76233AD69377730E32F98E2A862C92773C5E92601A314189268243FB77B37CAA70283F0C083512A6ADBA84B8E526BB84E6A69126F1D4497D019F1D475DC0CC79A2AB9852A5186CFE3A06A04FFB57B516513056187E0C8C76265A22DA5C61968C02C1014BDF190841F90FD996C9596241325E8F3CD9674413BC72547C461BA55F3F775EEEB1CDC5F16EA3BFC491C06121701DEE45535B031434765D4230568F85D9D2750E29703D1589387EC077F418C3E6C57E9F4A1646BBF02F95D2E19ABB2970252AC9CAEDAD1E" [90m-> null[0m[0m
+      [31m-[0m[0m certificate_data_base64         = "MIIDMjCCAhqgAwIBAgIQA6h6Qj1CSAOq9CfKg+smqDANBgkqhkiG9w0BAQsFADAbMRkwFwYDVQQDExBhcGltLmV4YW1wbGUuY29tMB4XDTI0MDcwNDA2NTAwMFoXDTI1MDcwNDA3MDAwMFowGzEZMBcGA1UEAxMQYXBpbS5leGFtcGxlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMa7ayo94YuektNYtyqSVd1QQZbCUDjtiA7m4vt9jThq5zvk05MoNjnu5fsPTY7CUlwgRDPMxKFsVtvI2b0DFp1qgFSlTIHWNOWudFz7NTbV6kvkIdhl35c2EnfYwSUREvMZYZgYQ8EMYQqYlkwUcnk2tutwsHN1JncNgmkXwwMORucjUNPZtPvvgelov64otabopyEdssLa/+QWLZQH2gENbhS70Q9KiBt8Em+Ps+Wu8XImvTKDRQQIcCsvyddFlKwqQti6fitRFiKi0n7SbQyPWrDsl/F0Ic4NFG7+uRoQ99GoRf7z3ZWYGoZXX0q+3j6MufRwbQ97OL1pL/q4jYUCAwEAAaNyMHAwDgYDVR0PAQH/BAQDAgWgMAkGA1UdEwQCMAAwEwYDVR0lBAwwCgYIKwYBBQUHAwEwHwYDVR0jBBgwFoAULvs8/pmcLlMvcaHpi+0kVYUMetUwHQYDVR0OBBYEFC77PP6ZnC5TL3Gh6YvtJFWFDHrVMA0GCSqGSIb3DQEBCwUAA4IBAQB+Rlz04IG5hMqX5Syh8C4ryIFCk2baALBH9PnxgDN6ODe/6OiByzeKwhFTrLorNmTKsfdpm01hf3YjOtaTd3MOMvmOKoYsknc8XpJgGjFBiSaCQ/t3s3yqcCg/DAg1EqatuoS45Sa7hOamkSbx1El9AZ8dR13AzHmiq5hSpRhs/joGoE/7V7UWUTBWGH4MjHYmWiLaXGGWjALBAUvfGQhB+Q/ZlslZYkEyXo882WdEE7xyVHxGG6VfP3de7rHNxfFuo7/EkcBhIXAd7kVTWwMUNHZdQjBWj4XZ0nUOKXA9FYk4fsB39BjD5sV+n0oWRrvwL5XS4Zq7KXAlKsnK7a0e" [90m-> null[0m[0m
+      [31m-[0m[0m id                              = "https://kv-apimlzav2-dev-austral.vault.azure.net/certificates/generated-cert/8433fe0c4c1540c080f84dab7d8ab62a" [90m-> null[0m[0m
+      [31m-[0m[0m key_vault_id                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral" [90m-> null[0m[0m
+      [31m-[0m[0m name                            = "generated-cert" [90m-> null[0m[0m
+      [31m-[0m[0m resource_manager_id             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral/certificates/generated-cert/versions/8433fe0c4c1540c080f84dab7d8ab62a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_manager_versionless_id = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral/certificates/generated-cert" [90m-> null[0m[0m
+      [31m-[0m[0m secret_id                       = "https://kv-apimlzav2-dev-austral.vault.azure.net/secrets/generated-cert/8433fe0c4c1540c080f84dab7d8ab62a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                            = {} [90m-> null[0m[0m
+      [31m-[0m[0m thumbprint                      = "9550023F4F01A389B5B87633E518956F3698513C" [90m-> null[0m[0m
+      [31m-[0m[0m version                         = "8433fe0c4c1540c080f84dab7d8ab62a" [90m-> null[0m[0m
+      [31m-[0m[0m versionless_id                  = "https://kv-apimlzav2-dev-austral.vault.azure.net/certificates/generated-cert" [90m-> null[0m[0m
+      [31m-[0m[0m versionless_secret_id           = "https://kv-apimlzav2-dev-austral.vault.azure.net/secrets/generated-cert" [90m-> null[0m[0m
+
+      [31m-[0m[0m certificate_policy {
+          [31m-[0m[0m issuer_parameters {
+              [31m-[0m[0m name = "Self" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m key_properties {
+              [31m-[0m[0m exportable = true [90m-> null[0m[0m
+              [31m-[0m[0m key_size   = 2048 [90m-> null[0m[0m
+              [31m-[0m[0m key_type   = "RSA" [90m-> null[0m[0m
+              [31m-[0m[0m reuse_key  = true [90m-> null[0m[0m
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            }
+          [31m-[0m[0m lifetime_action {
+              [31m-[0m[0m action {
+                  [31m-[0m[0m action_type = "AutoRenew" [90m-> null[0m[0m
+                }
+              [31m-[0m[0m trigger {
+                  [31m-[0m[0m days_before_expiry  = 30 [90m-> null[0m[0m
+                  [31m-[0m[0m lifetime_percentage = 0 [90m-> null[0m[0m
+                }
+            }
+          [31m-[0m[0m secret_properties {
+              [31m-[0m[0m content_type = "application/x-pkcs12" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m x509_certificate_properties {
+              [31m-[0m[0m extended_key_usage = [
+                  [31m-[0m[0m "1.3.6.1.5.5.7.3.1",
+                ] [90m-> null[0m[0m
+              [31m-[0m[0m key_usage          = [
+                  [31m-[0m[0m "digitalSignature",
+                  [31m-[0m[0m "keyEncipherment",
+                ] [90m-> null[0m[0m
+              [31m-[0m[0m subject            = "CN=apim.example.com" [90m-> null[0m[0m
+              [31m-[0m[0m validity_in_months = 12 [90m-> null[0m[0m
+
+              [31m-[0m[0m subject_alternative_names {}
+            }
+        }
+    }
+
+[1m  # module.gateway.azurerm_public_ip.public_ip[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_public_ip.public_ip is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_public_ip" "public_ip" {
+      [31m-[0m[0m allocation_method       = "Static" [90m-> null[0m[0m
+      [31m-[0m[0m ddos_protection_mode    = "VirtualNetworkInherited" [90m-> null[0m[0m
+      [31m-[0m[0m id                      = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/publicIPAddresses/pip-appgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m idle_timeout_in_minutes = 4 [90m-> null[0m[0m
+      [31m-[0m[0m ip_address              = "4.147.68.2" [90m-> null[0m[0m
+      [31m-[0m[0m ip_tags                 = {} [90m-> null[0m[0m
+      [31m-[0m[0m ip_version              = "IPv4" [90m-> null[0m[0m
+      [31m-[0m[0m location                = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                    = "pip-appgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name     = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m sku                     = "Standard" [90m-> null[0m[0m
+      [31m-[0m[0m sku_tier                = "Regional" [90m-> null[0m[0m
+      [31m-[0m[0m tags                    = {} [90m-> null[0m[0m
+      [31m-[0m[0m zones                   = [
+          [31m-[0m[0m "1",
+          [31m-[0m[0m "2",
+          [31m-[0m[0m "3",
+        ] [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.gateway.azurerm_user_assigned_identity.user_assigned_identity[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_user_assigned_identity.user_assigned_identity is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_user_assigned_identity" "user_assigned_identity" {
+      [31m-[0m[0m client_id           = "af2ae487-0fea-4e58-a895-96fa3e205611" [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity-appgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location            = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "identity-appgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m principal_id        = "22ee260d-8166-4af1-9e6d-ef90dcb2f6bf" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+      [31m-[0m[0m tenant_id           = "16b3c013-d300-468d-ac64-7eda0820b6d3" [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_network_security_group.apim_snnsg_nsg[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_network_security_group.apim_snnsg_nsg is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_network_security_group" "apim_snnsg_nsg" {
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location            = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "nsg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m security_rule       = [
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "AzureKeyVault"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "443"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Outbound"
+              [31m-[0m[0m name                                       = "apim-azure-kv"
+              [31m-[0m[0m priority                                   = 2020
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "VirtualNetwork"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "SQL"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "1443"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Outbound"
+              [31m-[0m[0m name                                       = "apim-azure-sql"
+              [31m-[0m[0m priority                                   = 2010
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "VirtualNetwork"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "Storage"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "443"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Outbound"
+              [31m-[0m[0m name                                       = "apim-azure-storage"
+              [31m-[0m[0m priority                                   = 2000
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "VirtualNetwork"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "VirtualNetwork"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "3443"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Inbound"
+              [31m-[0m[0m name                                       = "AllowApimVnetInbound"
+              [31m-[0m[0m priority                                   = 2000
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "ApiManagement"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "VirtualNetwork"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "6390"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Inbound"
+              [31m-[0m[0m name                                       = "apim-azure-infra-lb"
+              [31m-[0m[0m priority                                   = 2010
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "AzureLoadBalancer"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_network_security_group.appgateway_nsg[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_network_security_group.appgateway_nsg is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_network_security_group" "appgateway_nsg" {
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location            = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "nsg-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m security_rule       = [
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "*"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "*"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Inbound"
+              [31m-[0m[0m name                                       = "AllowAzureLoadBalancerInbound"
+              [31m-[0m[0m priority                                   = 121
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "AzureLoadBalancer"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "*"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "443"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Inbound"
+              [31m-[0m[0m name                                       = "AllowTLSInbound"
+              [31m-[0m[0m priority                                   = 110
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "*"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "*"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "65200-65535"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Inbound"
+              [31m-[0m[0m name                                       = "AllowHealthProbesInbound"
+              [31m-[0m[0m priority                                   = 100
+              [31m-[0m[0m protocol                                   = "*"
+              [31m-[0m[0m source_address_prefix                      = "GatewayManager"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m access                                     = "Allow"
+              [31m-[0m[0m destination_address_prefix                 = "*"
+              [31m-[0m[0m destination_address_prefixes               = []
+              [31m-[0m[0m destination_application_security_group_ids = []
+              [31m-[0m[0m destination_port_range                     = "80"
+              [31m-[0m[0m destination_port_ranges                    = []
+              [31m-[0m[0m direction                                  = "Inbound"
+              [31m-[0m[0m name                                       = "AllowHTTPInbound"
+              [31m-[0m[0m priority                                   = 111
+              [31m-[0m[0m protocol                                   = "Tcp"
+              [31m-[0m[0m source_address_prefix                      = "*"
+              [31m-[0m[0m source_address_prefixes                    = []
+              [31m-[0m[0m source_application_security_group_ids      = []
+              [31m-[0m[0m source_port_range                          = "*"
+              [31m-[0m[0m source_port_ranges                         = []
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_network_security_group.private_endpoint_snnsg_nsg[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_network_security_group.private_endpoint_snnsg_nsg is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_network_security_group" "private_endpoint_snnsg_nsg" {
+      [31m-[0m[0m id                  = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-prep-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location            = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                = "nsg-prep-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m security_rule       = [] [90m-> null[0m[0m
+      [31m-[0m[0m tags                = {} [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_subnet.apim_subnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_subnet.apim_subnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_subnet" "apim_subnet" {
+      [31m-[0m[0m address_prefixes                               = [
+          [31m-[0m[0m "10.2.7.0/24",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m default_outbound_access_enabled                = true [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_endpoint_network_policies = false [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_service_network_policies  = false [90m-> null[0m[0m
+      [31m-[0m[0m id                                             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m name                                           = "snet-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies              = "Enabled" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies_enabled      = true [90m-> null[0m[0m
+      [31m-[0m[0m private_link_service_network_policies_enabled  = true [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                            = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoint_policy_ids                    = [] [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoints                              = [] [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_name                           = "vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_subnet.appgateway_subnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_subnet.appgateway_subnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_subnet" "appgateway_subnet" {
+      [31m-[0m[0m address_prefixes                               = [
+          [31m-[0m[0m "10.2.4.0/24",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m default_outbound_access_enabled                = true [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_endpoint_network_policies = false [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_service_network_policies  = false [90m-> null[0m[0m
+      [31m-[0m[0m id                                             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m name                                           = "snet-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies              = "Enabled" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies_enabled      = true [90m-> null[0m[0m
+      [31m-[0m[0m private_link_service_network_policies_enabled  = true [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                            = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoint_policy_ids                    = [] [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoints                              = [] [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_name                           = "vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_subnet.deploy_subnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_subnet.deploy_subnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_subnet" "deploy_subnet" {
+      [31m-[0m[0m address_prefixes                               = [
+          [31m-[0m[0m "10.2.8.0/24",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m default_outbound_access_enabled                = true [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_endpoint_network_policies = false [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_service_network_policies  = false [90m-> null[0m[0m
+      [31m-[0m[0m id                                             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-deploy-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m name                                           = "snet-deploy-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies              = "Enabled" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies_enabled      = true [90m-> null[0m[0m
+      [31m-[0m[0m private_link_service_network_policies_enabled  = true [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                            = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoint_policy_ids                    = [] [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoints                              = [
+          [31m-[0m[0m "Microsoft.Storage",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_name                           = "vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+
+      [31m-[0m[0m delegation {
+          [31m-[0m[0m name = "Microsoft.ContainerInstance.containerGroups" [90m-> null[0m[0m
+
+          [31m-[0m[0m service_delegation {
+              [31m-[0m[0m actions = [
+                  [31m-[0m[0m "Microsoft.Network/virtualNetworks/subnets/action",
+                ] [90m-> null[0m[0m
+              [31m-[0m[0m name    = "Microsoft.ContainerInstance/containerGroups" [90m-> null[0m[0m
+            }
+        }
+    }
+
+[1m  # module.networking.azurerm_subnet.private_endpoint_subnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_subnet.private_endpoint_subnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_subnet" "private_endpoint_subnet" {
+      [31m-[0m[0m address_prefixes                               = [
+          [31m-[0m[0m "10.2.5.0/24",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m default_outbound_access_enabled                = true [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_endpoint_network_policies = false [90m-> null[0m[0m
+      [31m-[0m[0m enforce_private_link_service_network_policies  = false [90m-> null[0m[0m
+      [31m-[0m[0m id                                             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m name                                           = "snet-prep-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies              = "Enabled" [90m-> null[0m[0m
+      [31m-[0m[0m private_endpoint_network_policies_enabled      = true [90m-> null[0m[0m
+      [31m-[0m[0m private_link_service_network_policies_enabled  = true [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                            = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoint_policy_ids                    = [] [90m-> null[0m[0m
+      [31m-[0m[0m service_endpoints                              = [] [90m-> null[0m[0m
+      [31m-[0m[0m virtual_network_name                           = "vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_subnet_network_security_group_association.apim_subnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_subnet_network_security_group_association.apim_subnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_subnet_network_security_group_association" "apim_subnet" {
+      [31m-[0m[0m id                        = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m network_security_group_id = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m subnet_id                 = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apim-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_subnet_network_security_group_association.appgateway_subnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_subnet_network_security_group_association.appgateway_subnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_subnet_network_security_group_association" "appgateway_subnet" {
+      [31m-[0m[0m id                        = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m network_security_group_id = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m subnet_id                 = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apgw-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_subnet_network_security_group_association.private_endpoint_subnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_subnet_network_security_group_association.private_endpoint_subnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_subnet_network_security_group_association" "private_endpoint_subnet" {
+      [31m-[0m[0m id                        = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m network_security_group_id = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-prep-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m subnet_id                 = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.networking.azurerm_virtual_network.apim_cs_vnet[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_virtual_network.apim_cs_vnet is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_virtual_network" "apim_cs_vnet" {
+      [31m-[0m[0m address_space           = [
+          [31m-[0m[0m "10.2.0.0/16",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m dns_servers             = [] [90m-> null[0m[0m
+      [31m-[0m[0m flow_timeout_in_minutes = 0 [90m-> null[0m[0m
+      [31m-[0m[0m guid                    = "bc0cadd8-2f0c-4f66-be68-54f4c34bd6d6" [90m-> null[0m[0m
+      [31m-[0m[0m id                      = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m location                = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                    = "vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name     = "rg-networking-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m subnet                  = [
+          [31m-[0m[0m {
+              [31m-[0m[0m address_prefix = "10.2.4.0/24"
+              [31m-[0m[0m id             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apgw-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m name           = "snet-apgw-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m security_group = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apgw-apimlzav2-dev-AustraliaEast-c6a"
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m address_prefix = "10.2.5.0/24"
+              [31m-[0m[0m id             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m name           = "snet-prep-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m security_group = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-prep-apimlzav2-dev-AustraliaEast-c6a"
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m address_prefix = "10.2.7.0/24"
+              [31m-[0m[0m id             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-apim-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m name           = "snet-apim-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m security_group = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/networkSecurityGroups/nsg-apim-apimlzav2-dev-AustraliaEast-c6a"
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m address_prefix = "10.2.8.0/24"
+              [31m-[0m[0m id             = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-deploy-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m name           = "snet-deploy-apimlzav2-dev-AustraliaEast-c6a"
+              [31m-[0m[0m security_group = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-australiaeast-c6a/providers/Microsoft.Network/networkSecurityGroups/AustraliaEast-c6a-snet-deploy-apimlzav2-dev-AustraliaEast-c6a-nsg-australiaeast"
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m tags                    = {
+          [31m-[0m[0m "Owner" = "APIM Const Set"
+        } [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.openai_private_dns_zone.azurerm_private_dns_zone.private_dns_zone[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_private_dns_zone" "private_dns_zone" {
+      [32m+[0m[0m id                                                    = (known after apply)
+      [32m+[0m[0m max_number_of_record_sets                             = (known after apply)
+      [32m+[0m[0m max_number_of_virtual_network_links                   = (known after apply)
+      [32m+[0m[0m max_number_of_virtual_network_links_with_registration = (known after apply)
+      [32m+[0m[0m name                                                  = "privatelink.openai.azure.com"
+      [32m+[0m[0m number_of_record_sets                                 = (known after apply)
+      [32m+[0m[0m resource_group_name                                   = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+    }
+
+[1m  # module.openai_private_dns_zone.azurerm_private_dns_zone_virtual_network_link.link[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_private_dns_zone_virtual_network_link" "link" {
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m name                  = "link_to_vnet-apim-cs-apimlzav2-dev-australiaeast-c6a"
+      [32m+[0m[0m private_dns_zone_name = "privatelink.openai.azure.com"
+      [32m+[0m[0m registration_enabled  = false
+      [32m+[0m[0m resource_group_name   = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m virtual_network_id    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a"
+    }
+
+[1m  # module.openai_simulatedPTUDeployment_private_endpoint.azurerm_private_endpoint.private_endpoint[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_private_endpoint" "private_endpoint" {
+      [32m+[0m[0m custom_dns_configs       = (known after apply)
+      [32m+[0m[0m id                       = (known after apply)
+      [32m+[0m[0m location                 = "australiaeast"
+      [32m+[0m[0m name                     = "pep-ptu-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m network_interface        = (known after apply)
+      [32m+[0m[0m private_dns_zone_configs = (known after apply)
+      [32m+[0m[0m resource_group_name      = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m subnet_id                = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a"
+
+      [32m+[0m[0m private_dns_zone_group {
+          [32m+[0m[0m id                   = (known after apply)
+          [32m+[0m[0m name                 = "OpenAiPrivateDnsZoneGroup"
+          [32m+[0m[0m private_dns_zone_ids = (known after apply)
+        }
+
+      [32m+[0m[0m private_service_connection {
+          [32m+[0m[0m is_manual_connection           = false
+          [32m+[0m[0m name                           = "pep-ptu-apimlzav2-dev-AustraliaEast-c6aConnection"
+          [32m+[0m[0m private_connection_resource_id = (known after apply)
+          [32m+[0m[0m private_ip_address             = (known after apply)
+          [32m+[0m[0m subresource_names              = [
+              [32m+[0m[0m "account",
+            ]
+        }
+    }
+
+[1m  # module.openai_simulatedPaygoOneDeployment_private_endpoint.azurerm_private_endpoint.private_endpoint[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_private_endpoint" "private_endpoint" {
+      [32m+[0m[0m custom_dns_configs       = (known after apply)
+      [32m+[0m[0m id                       = (known after apply)
+      [32m+[0m[0m location                 = "australiaeast"
+      [32m+[0m[0m name                     = "pep-paygo-one-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m network_interface        = (known after apply)
+      [32m+[0m[0m private_dns_zone_configs = (known after apply)
+      [32m+[0m[0m resource_group_name      = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m subnet_id                = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a"
+
+      [32m+[0m[0m private_dns_zone_group {
+          [32m+[0m[0m id                   = (known after apply)
+          [32m+[0m[0m name                 = "OpenAiPrivateDnsZoneGroup"
+          [32m+[0m[0m private_dns_zone_ids = (known after apply)
+        }
+
+      [32m+[0m[0m private_service_connection {
+          [32m+[0m[0m is_manual_connection           = false
+          [32m+[0m[0m name                           = "pep-paygo-one-apimlzav2-dev-AustraliaEast-c6aConnection"
+          [32m+[0m[0m private_connection_resource_id = (known after apply)
+          [32m+[0m[0m private_ip_address             = (known after apply)
+          [32m+[0m[0m subresource_names              = [
+              [32m+[0m[0m "account",
+            ]
+        }
+    }
+
+[1m  # module.openai_simulatedPaygoTwoDeployment_private_endpoint.azurerm_private_endpoint.private_endpoint[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_private_endpoint" "private_endpoint" {
+      [32m+[0m[0m custom_dns_configs       = (known after apply)
+      [32m+[0m[0m id                       = (known after apply)
+      [32m+[0m[0m location                 = "australiaeast"
+      [32m+[0m[0m name                     = "pep-paygo-two-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m network_interface        = (known after apply)
+      [32m+[0m[0m private_dns_zone_configs = (known after apply)
+      [32m+[0m[0m resource_group_name      = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m subnet_id                = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-networking-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Network/virtualNetworks/vnet-apim-cs-apimlzav2-dev-AustraliaEast-c6a/subnets/snet-prep-apimlzav2-dev-AustraliaEast-c6a"
+
+      [32m+[0m[0m private_dns_zone_group {
+          [32m+[0m[0m id                   = (known after apply)
+          [32m+[0m[0m name                 = "OpenAiPrivateDnsZoneGroup"
+          [32m+[0m[0m private_dns_zone_ids = (known after apply)
+        }
+
+      [32m+[0m[0m private_service_connection {
+          [32m+[0m[0m is_manual_connection           = false
+          [32m+[0m[0m name                           = "pep-paygo-two-apimlzav2-dev-AustraliaEast-c6aConnection"
+          [32m+[0m[0m private_connection_resource_id = (known after apply)
+          [32m+[0m[0m private_ip_address             = (known after apply)
+          [32m+[0m[0m subresource_names              = [
+              [32m+[0m[0m "account",
+            ]
+        }
+    }
+
+[1m  # module.shared.azurerm_application_insights.shared_apim_insight[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_application_insights.shared_apim_insight is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_application_insights" "shared_apim_insight" {
+      [31m-[0m[0m app_id                                = "40e9d4a7-4f63-41c3-a9ff-faaa0cc35be7" [90m-> null[0m[0m
+      [31m-[0m[0m application_type                      = "web" [90m-> null[0m[0m
+      [31m-[0m[0m connection_string                     = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m daily_data_cap_in_gb                  = 100 [90m-> null[0m[0m
+      [31m-[0m[0m daily_data_cap_notifications_disabled = false [90m-> null[0m[0m
+      [31m-[0m[0m disable_ip_masking                    = false [90m-> null[0m[0m
+      [31m-[0m[0m force_customer_storage_for_profiler   = false [90m-> null[0m[0m
+      [31m-[0m[0m id                                    = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.Insights/components/appi-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m instrumentation_key                   = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m internet_ingestion_enabled            = true [90m-> null[0m[0m
+      [31m-[0m[0m internet_query_enabled                = true [90m-> null[0m[0m
+      [31m-[0m[0m local_authentication_disabled         = false [90m-> null[0m[0m
+      [31m-[0m[0m location                              = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                                  = "appi-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                   = "rg-shared-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m retention_in_days                     = 90 [90m-> null[0m[0m
+      [31m-[0m[0m sampling_percentage                   = 100 [90m-> null[0m[0m
+      [31m-[0m[0m tags                                  = {} [90m-> null[0m[0m
+      [31m-[0m[0m workspace_id                          = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.OperationalInsights/workspaces/log-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+    }
+
+[1m  # module.shared.azurerm_key_vault.key_vault[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_key_vault.key_vault is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_key_vault" "key_vault" {
+      [31m-[0m[0m access_policy                   = [
+          [31m-[0m[0m {
+              [31m-[0m[0m certificate_permissions = [
+                  [31m-[0m[0m "Import",
+                  [31m-[0m[0m "Get",
+                  [31m-[0m[0m "List",
+                  [31m-[0m[0m "Update",
+                  [31m-[0m[0m "Create",
+                ]
+              [31m-[0m[0m key_permissions         = [
+                  [31m-[0m[0m "Get",
+                ]
+              [31m-[0m[0m object_id               = "dc2133aa-adce-459f-bc0d-32c06375d556"
+              [31m-[0m[0m secret_permissions      = [
+                  [31m-[0m[0m "Get",
+                ]
+              [31m-[0m[0m storage_permissions     = [
+                  [31m-[0m[0m "Get",
+                ]
+              [31m-[0m[0m tenant_id               = "16b3c013-d300-468d-ac64-7eda0820b6d3"
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m certificate_permissions = [
+                  [31m-[0m[0m "Import",
+                  [31m-[0m[0m "Get",
+                  [31m-[0m[0m "List",
+                  [31m-[0m[0m "Update",
+                  [31m-[0m[0m "Create",
+                ]
+              [31m-[0m[0m key_permissions         = []
+              [31m-[0m[0m object_id               = "22ee260d-8166-4af1-9e6d-ef90dcb2f6bf"
+              [31m-[0m[0m secret_permissions      = [
+                  [31m-[0m[0m "Get",
+                  [31m-[0m[0m "List",
+                ]
+              [31m-[0m[0m storage_permissions     = []
+              [31m-[0m[0m tenant_id               = "16b3c013-d300-468d-ac64-7eda0820b6d3"
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m enable_rbac_authorization       = false [90m-> null[0m[0m
+      [31m-[0m[0m enabled_for_deployment          = false [90m-> null[0m[0m
+      [31m-[0m[0m enabled_for_disk_encryption     = false [90m-> null[0m[0m
+      [31m-[0m[0m enabled_for_template_deployment = false [90m-> null[0m[0m
+      [31m-[0m[0m id                              = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral" [90m-> null[0m[0m
+      [31m-[0m[0m location                        = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                            = "kv-apimlzav2-dev-Austral" [90m-> null[0m[0m
+      [31m-[0m[0m public_network_access_enabled   = true [90m-> null[0m[0m
+      [31m-[0m[0m purge_protection_enabled        = false [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name             = "rg-shared-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m sku_name                        = "standard" [90m-> null[0m[0m
+      [31m-[0m[0m soft_delete_retention_days      = 90 [90m-> null[0m[0m
+      [31m-[0m[0m tags                            = {} [90m-> null[0m[0m
+      [31m-[0m[0m tenant_id                       = "16b3c013-d300-468d-ac64-7eda0820b6d3" [90m-> null[0m[0m
+      [31m-[0m[0m vault_uri                       = "https://kv-apimlzav2-dev-austral.vault.azure.net/" [90m-> null[0m[0m
+
+      [31m-[0m[0m network_acls {
+          [31m-[0m[0m bypass                     = "AzureServices" [90m-> null[0m[0m
+          [31m-[0m[0m default_action             = "Allow" [90m-> null[0m[0m
+          [31m-[0m[0m ip_rules                   = [] [90m-> null[0m[0m
+          [31m-[0m[0m virtual_network_subnet_ids = [] [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.shared.azurerm_key_vault_access_policy.deployment_spn_access_policy["dc2133aa-adce-459f-bc0d-32c06375d556"][0m will be [1m[31mdestroyed[0m
+  # (because azurerm_key_vault_access_policy.deployment_spn_access_policy is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_key_vault_access_policy" "deployment_spn_access_policy" {
+      [31m-[0m[0m certificate_permissions = [
+          [31m-[0m[0m "Import",
+          [31m-[0m[0m "Get",
+          [31m-[0m[0m "List",
+          [31m-[0m[0m "Update",
+          [31m-[0m[0m "Create",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m id                      = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral/objectId/dc2133aa-adce-459f-bc0d-32c06375d556" [90m-> null[0m[0m
+      [31m-[0m[0m key_permissions         = [
+          [31m-[0m[0m "Get",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m key_vault_id            = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.KeyVault/vaults/kv-apimlzav2-dev-Austral" [90m-> null[0m[0m
+      [31m-[0m[0m object_id               = "dc2133aa-adce-459f-bc0d-32c06375d556" [90m-> null[0m[0m
+      [31m-[0m[0m secret_permissions      = [
+          [31m-[0m[0m "Get",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m storage_permissions     = [
+          [31m-[0m[0m "Get",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m tenant_id               = "16b3c013-d300-468d-ac64-7eda0820b6d3" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.shared.azurerm_log_analytics_workspace.log_analytics_workspace[0m will be [1m[31mdestroyed[0m
+  # (because azurerm_log_analytics_workspace.log_analytics_workspace is not in configuration)
+[0m  [31m-[0m[0m resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
+      [31m-[0m[0m allow_resource_only_permissions         = true [90m-> null[0m[0m
+      [31m-[0m[0m cmk_for_query_forced                    = false [90m-> null[0m[0m
+      [31m-[0m[0m daily_quota_gb                          = -1 [90m-> null[0m[0m
+      [31m-[0m[0m id                                      = "/subscriptions/92170777-b8be-4435-ab21-5ffcb3dec92d/resourceGroups/rg-shared-apimlzav2-dev-AustraliaEast-c6a/providers/Microsoft.OperationalInsights/workspaces/log-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m immediate_data_purge_on_30_days_enabled = false [90m-> null[0m[0m
+      [31m-[0m[0m internet_ingestion_enabled              = true [90m-> null[0m[0m
+      [31m-[0m[0m internet_query_enabled                  = true [90m-> null[0m[0m
+      [31m-[0m[0m local_authentication_disabled           = false [90m-> null[0m[0m
+      [31m-[0m[0m location                                = "australiaeast" [90m-> null[0m[0m
+      [31m-[0m[0m name                                    = "log-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m primary_shared_key                      = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m resource_group_name                     = "rg-shared-apimlzav2-dev-AustraliaEast-c6a" [90m-> null[0m[0m
+      [31m-[0m[0m retention_in_days                       = 30 [90m-> null[0m[0m
+      [31m-[0m[0m secondary_shared_key                    = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m sku                                     = "PerGB2018" [90m-> null[0m[0m
+      [31m-[0m[0m tags                                    = {} [90m-> null[0m[0m
+      [31m-[0m[0m workspace_id                            = "af8d547d-b578-40f5-9802-44c05c907946" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.simulatedPTUDeployment.azurerm_cognitive_account.openai[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_cognitive_account" "openai" {
+      [32m+[0m[0m custom_subdomain_name              = "apimlzav2-dev-australiaeast-c6aopenai"
+      [32m+[0m[0m endpoint                           = (known after apply)
+      [32m+[0m[0m id                                 = (known after apply)
+      [32m+[0m[0m kind                               = "OpenAI"
+      [32m+[0m[0m local_auth_enabled                 = true
+      [32m+[0m[0m location                           = "australiaeast"
+      [32m+[0m[0m name                               = "ptu-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m outbound_network_access_restricted = false
+      [32m+[0m[0m primary_access_key                 = (sensitive value)
+      [32m+[0m[0m public_network_access_enabled      = true
+      [32m+[0m[0m resource_group_name                = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m secondary_access_key               = (sensitive value)
+      [32m+[0m[0m sku_name                           = "S0"
+
+      [32m+[0m[0m identity {
+          [32m+[0m[0m principal_id = (known after apply)
+          [32m+[0m[0m tenant_id    = (known after apply)
+          [32m+[0m[0m type         = "SystemAssigned"
+        }
+    }
+
+[1m  # module.simulatedPTUDeployment.azurerm_cognitive_deployment.deployment["gpt-35-turbo-16k"][0m will be created
+[0m  [32m+[0m[0m resource "azurerm_cognitive_deployment" "deployment" {
+      [32m+[0m[0m cognitive_account_id   = (known after apply)
+      [32m+[0m[0m id                     = (known after apply)
+      [32m+[0m[0m name                   = "gpt-35-turbo-16k"
+      [32m+[0m[0m version_upgrade_option = "OnceNewDefaultVersionAvailable"
+
+      [32m+[0m[0m model {
+          [32m+[0m[0m format  = "OpenAI"
+          [32m+[0m[0m name    = "gpt-35-turbo-16k"
+          [32m+[0m[0m version = "0613"
+        }
+
+      [32m+[0m[0m scale {
+          [32m+[0m[0m capacity = 1
+          [32m+[0m[0m type     = "Standard"
+        }
+    }
+
+[1m  # module.simulatedPaygoOneDeployment.azurerm_cognitive_account.openai[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_cognitive_account" "openai" {
+      [32m+[0m[0m custom_subdomain_name              = "apimlzav2-dev-australiaeast-c6aopenai"
+      [32m+[0m[0m endpoint                           = (known after apply)
+      [32m+[0m[0m id                                 = (known after apply)
+      [32m+[0m[0m kind                               = "OpenAI"
+      [32m+[0m[0m local_auth_enabled                 = true
+      [32m+[0m[0m location                           = "australiaeast"
+      [32m+[0m[0m name                               = "paygo-one-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m outbound_network_access_restricted = false
+      [32m+[0m[0m primary_access_key                 = (sensitive value)
+      [32m+[0m[0m public_network_access_enabled      = true
+      [32m+[0m[0m resource_group_name                = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m secondary_access_key               = (sensitive value)
+      [32m+[0m[0m sku_name                           = "S0"
+
+      [32m+[0m[0m identity {
+          [32m+[0m[0m principal_id = (known after apply)
+          [32m+[0m[0m tenant_id    = (known after apply)
+          [32m+[0m[0m type         = "SystemAssigned"
+        }
+    }
+
+[1m  # module.simulatedPaygoOneDeployment.azurerm_cognitive_deployment.deployment["gpt-35-turbo-16k"][0m will be created
+[0m  [32m+[0m[0m resource "azurerm_cognitive_deployment" "deployment" {
+      [32m+[0m[0m cognitive_account_id   = (known after apply)
+      [32m+[0m[0m id                     = (known after apply)
+      [32m+[0m[0m name                   = "gpt-35-turbo-16k"
+      [32m+[0m[0m version_upgrade_option = "OnceNewDefaultVersionAvailable"
+
+      [32m+[0m[0m model {
+          [32m+[0m[0m format  = "OpenAI"
+          [32m+[0m[0m name    = "gpt-35-turbo-16k"
+          [32m+[0m[0m version = "0613"
+        }
+
+      [32m+[0m[0m scale {
+          [32m+[0m[0m capacity = 1
+          [32m+[0m[0m type     = "Standard"
+        }
+    }
+
+[1m  # module.simulatedPaygoTwoDeployment.azurerm_cognitive_account.openai[0m will be created
+[0m  [32m+[0m[0m resource "azurerm_cognitive_account" "openai" {
+      [32m+[0m[0m custom_subdomain_name              = "apimlzav2-dev-australiaeast-c6aopenai"
+      [32m+[0m[0m endpoint                           = (known after apply)
+      [32m+[0m[0m id                                 = (known after apply)
+      [32m+[0m[0m kind                               = "OpenAI"
+      [32m+[0m[0m local_auth_enabled                 = true
+      [32m+[0m[0m location                           = "australiaeast"
+      [32m+[0m[0m name                               = "paygo-two-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m outbound_network_access_restricted = false
+      [32m+[0m[0m primary_access_key                 = (sensitive value)
+      [32m+[0m[0m public_network_access_enabled      = true
+      [32m+[0m[0m resource_group_name                = "rg-openai-apimlzav2-dev-AustraliaEast-c6a"
+      [32m+[0m[0m secondary_access_key               = (sensitive value)
+      [32m+[0m[0m sku_name                           = "S0"
+
+      [32m+[0m[0m identity {
+          [32m+[0m[0m principal_id = (known after apply)
+          [32m+[0m[0m tenant_id    = (known after apply)
+          [32m+[0m[0m type         = "SystemAssigned"
+        }
+    }
+
+[1m  # module.simulatedPaygoTwoDeployment.azurerm_cognitive_deployment.deployment["gpt-35-turbo-16k"][0m will be created
+[0m  [32m+[0m[0m resource "azurerm_cognitive_deployment" "deployment" {
+      [32m+[0m[0m cognitive_account_id   = (known after apply)
+      [32m+[0m[0m id                     = (known after apply)
+      [32m+[0m[0m name                   = "gpt-35-turbo-16k"
+      [32m+[0m[0m version_upgrade_option = "OnceNewDefaultVersionAvailable"
+
+      [32m+[0m[0m model {
+          [32m+[0m[0m format  = "OpenAI"
+          [32m+[0m[0m name    = "gpt-35-turbo-16k"
+          [32m+[0m[0m version = "0613"
+        }
+
+      [32m+[0m[0m scale {
+          [32m+[0m[0m capacity = 1
+          [32m+[0m[0m type     = "Standard"
+        }
+    }
+
+[1mPlan:[0m 32 to add, 0 to change, 47 to destroy.
+[0m[90m
+─────────────────────────────────────────────────────────────────────────────[0m
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

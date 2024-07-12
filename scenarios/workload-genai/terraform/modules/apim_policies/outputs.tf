@@ -3,7 +3,7 @@ output "apiManagementServiceName" {
   value       = var.apiManagementServiceName
 }
 
-output "apiManagementAzureOpenAIProductSubscriptionKey" {
-  description = "The primary key of the Azure Open AI Product Subscription"
-  # The value will depend on how you're creating the Azure Open AI Product Subscription in your Terraform code.
-}
+# output "apiManagementAzureOpenAIProductSubscriptionKey" {
+#   value = azurerm_api_management_subscription.example.primary_key
+#   description = "The primary key of the Azure OpenAI product subscription."
+# }
