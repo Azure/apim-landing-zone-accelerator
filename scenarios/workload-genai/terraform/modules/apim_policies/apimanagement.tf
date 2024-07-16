@@ -25,12 +25,13 @@ resource "azurerm_api_management_api" "azureOpenAIApi" {
   display_name        = "AzureOpenAI"
   path                = "openai"
   protocols           = ["https"]
-  subscription_required = true
+  # subscription_required = true
   # source               = "./api-specs/openapi-spec.json"
 
   import {
-    content_format = "swagger-link-json"
-    content_value  = "./api-specs/openapi-spec.json"
+    content_format = "openapi+json"
+    # content_value  = "./api-specs/openapi-spec.json"
+    content_value = file("modules/apim_policies/api-specs/openapi-spec.json")
   }
 }
 
@@ -44,11 +45,16 @@ resource "azurerm_api_management_product" "azureOpenAIProduct" {
 }
 
 resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
-  count               = length(local.azureOpenAIAPINames)
-  product_id          = azurerm_api_management_product.azureOpenAIProduct.id
-  api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[count.index]}"
+  # count               = length(local.azureOpenAIAPINames)
+  product_id          = azurerm_api_management_product.azureOpenAIProduct.product_id
+  # api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[count.index]}"
+  # api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[0]}"
+  api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
   resource_group_name = var.resourceGroupName
+  depends_on = [ 
+    azurerm_api_management_api.azureOpenAIApi 
+  ]
 }
 
 resource "azurerm_api_management_backend" "ptuBackendOne" {
@@ -89,20 +95,33 @@ resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragmen
   name              = "simple-round-robin"
   format            = "rawxml"
   value             = file("../policies/fragments/load-balancing/simple-round-robin.xml")
+  # value             = file("../policies/fragments/rate-limiting/adaptive-rate-limiting.xml")
+  depends_on = [
+    azurerm_api_management_backend.payAsYouGoBackendOne,
+    azurerm_api_management_backend.payAsYouGoBackendTwo
+  ]
 }
 
-resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
-  api_management_id = data.azurerm_api_management.apiManagementService.id
-  name              = "weighted-round-robin"
-  format            = "rawxml"
-  value             = file("../policies/fragments/load-balancing/weighted-round-robin.xml")
-}
+# resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
+#   api_management_id = data.azurerm_api_management.apiManagementService.id
+#   name              = "weighted-round-robin"
+#   format            = "rawxml"
+#   value             = file("../policies/fragments/load-balancing/weighted-round-robin.xml")
+#   depends_on = [
+#     azurerm_api_management_backend.payAsYouGoBackendOne,
+#     azurerm_api_management_backend.payAsYouGoBackendTwo
+#   ]
+# }
 
 resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
   name              = "adaptive-rate-limiting"
   format            = "rawxml"
   value             = file("../policies/fragments/rate-limiting/adaptive-rate-limiting.xml")
+  depends_on = [
+    azurerm_api_management_backend.payAsYouGoBackendOne,
+    azurerm_api_management_backend.payAsYouGoBackendTwo
+  ]
 }
 
 resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingWorkAroundPolicyFragment" {
@@ -110,6 +129,10 @@ resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingWorkAroun
   name              = "adaptive-rate-limiting-workaround"
   format            = "rawxml"
   value             = file("../policies/fragments/rate-limiting/adaptive-rate-limiting-workaround.xml")
+  depends_on = [
+    azurerm_api_management_backend.payAsYouGoBackendOne,
+    azurerm_api_management_backend.payAsYouGoBackendTwo
+  ]
 }
 
 resource "azurerm_api_management_policy_fragment" "retryWithPayAsYouGoPolicyFragment" {
@@ -124,6 +147,9 @@ resource "azurerm_api_management_policy_fragment" "usageTrackingEHPolicyFragment
   name              = "usage-tracking-with-eventhub"
   format            = "rawxml"
   value             = file("../policies/fragments/usage-tracking/usage-tracking-with-eventhub.xml")
+  depends_on = [
+    azurerm_api_management_logger.event_hub_logger
+  ]
 }
 
 resource "azurerm_api_management_policy_fragment" "usageTrackingWithAppInsightsPolicyFragment" {
@@ -131,11 +157,24 @@ resource "azurerm_api_management_policy_fragment" "usageTrackingWithAppInsightsP
   name              = "usage-tracking-with-appinsights"
   format            = "rawxml"
   value             = file("../policies/fragments/usage-tracking/usage-tracking-with-appinsights.xml")
+  depends_on = [
+    azurerm_api_management_logger.event_hub_logger
+  ]
 }
 
-resource "azurerm_api_management_policy" "azureOpenAIApiPolicy" {
-  api_management_id = data.azurerm_api_management.apiManagementService.id
+resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
+  api_name = azurerm_api_management_api.azureOpenAIApi.name
+  api_management_name = data.azurerm_api_management.apiManagementService.name
+  # api_management_id = data.azurerm_api_management.apiManagementService.id
+  resource_group_name = data.azurerm_api_management.apiManagementService.resource_group_name
   xml_content       = file("../policies/genai-policy.xml")
+  depends_on = [
+    azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment,
+    # azurerm_api_management_policy_fragment.weightedRoundRobinPolicyFragment,
+    azurerm_api_management_policy_fragment.adaptiveRateLimitingPolicyFragment,
+    azurerm_api_management_policy_fragment.retryWithPayAsYouGoPolicyFragment,
+    azurerm_api_management_policy_fragment.usageTrackingWithAppInsightsPolicyFragment
+  ]
 }
 
 resource "azurerm_api_management_named_value" "apimOpenaiApiUamiNamedValue" {

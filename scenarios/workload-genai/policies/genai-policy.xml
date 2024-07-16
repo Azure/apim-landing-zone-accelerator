@@ -13,7 +13,7 @@
         
         <!-- performs weighted round robin between payg-backend-1, payg-backend-2 
              weights are defined in the fragment itself -->
-        <include-fragment fragment-id="weighted-round-robin" />
+        <!-- <include-fragment fragment-id="weighted-round-robin" /> -->
 
         <!-- tracks token consumption as custom metrics in App insights -->
         <include-fragment fragment-id="usage-tracking-with-appinsights" />

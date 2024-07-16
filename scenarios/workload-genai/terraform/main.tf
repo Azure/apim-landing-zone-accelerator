@@ -1,5 +1,6 @@
 locals {
-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
+  # resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
+  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-m2b"
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   # sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"
@@ -163,7 +164,7 @@ module "simulatedPTUDeployment" {
   resource_group_name           = azurerm_resource_group.rg.name
   sku_name                      = var.openai_sku_name
   deployments                   = var.openai_deployments
-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}")
+  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-ptu")
   public_network_access_enabled = var.openai_public_network_access_enabled
 }
 
@@ -174,7 +175,7 @@ module "simulatedPaygoOneDeployment" {
   resource_group_name           = azurerm_resource_group.rg.name
   sku_name                      = var.openai_sku_name
   deployments                   = var.openai_deployments
-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}")
+  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
   public_network_access_enabled = var.openai_public_network_access_enabled
 }
 
@@ -185,7 +186,7 @@ module "simulatedPaygoTwoDeployment" {
   resource_group_name           = azurerm_resource_group.rg.name
   sku_name                      = var.openai_sku_name
   deployments                   = var.openai_deployments
-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}")
+  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
   public_network_access_enabled = var.openai_public_network_access_enabled
 }
 

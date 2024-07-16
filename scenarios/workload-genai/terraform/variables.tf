@@ -7,7 +7,7 @@
 variable "location" {
   type        = string
   description = "The Azure location in which the deployment is happening"
-  default     = "AustraliaEast"
+  default     = "eastus2"
 }
 
 variable "workloadName" {
