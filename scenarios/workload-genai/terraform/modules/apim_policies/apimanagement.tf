@@ -36,24 +36,24 @@ resource "azurerm_api_management_api" "azureOpenAIApi" {
 }
 
 resource "azurerm_api_management_product" "azureOpenAIProduct" {
-  product_id          = "aoai-product"
-  resource_group_name = var.resourceGroupName
-  api_management_name = data.azurerm_api_management.apiManagementService.name
-  display_name        = "aoai-product"
+  product_id            = "aoai-product"
+  resource_group_name   = var.resourceGroupName
+  api_management_name   = data.azurerm_api_management.apiManagementService.name
+  display_name          = "aoai-product"
   subscription_required = true
-  published            = true
+  published             = true
 }
 
 resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
   # count               = length(local.azureOpenAIAPINames)
-  product_id          = azurerm_api_management_product.azureOpenAIProduct.product_id
+  product_id = azurerm_api_management_product.azureOpenAIProduct.product_id
   # api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[count.index]}"
   # api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[0]}"
   api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
   resource_group_name = var.resourceGroupName
-  depends_on = [ 
-    azurerm_api_management_api.azureOpenAIApi 
+  depends_on = [
+    azurerm_api_management_api.azureOpenAIApi
   ]
 }
 
@@ -98,20 +98,22 @@ resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragmen
   # value             = file("../policies/fragments/rate-limiting/adaptive-rate-limiting.xml")
   depends_on = [
     azurerm_api_management_backend.payAsYouGoBackendOne,
-    azurerm_api_management_backend.payAsYouGoBackendTwo
+    azurerm_api_management_backend.payAsYouGoBackendTwo,
+    azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue
   ]
 }
 
-# resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
-#   api_management_id = data.azurerm_api_management.apiManagementService.id
-#   name              = "weighted-round-robin"
-#   format            = "rawxml"
-#   value             = file("../policies/fragments/load-balancing/weighted-round-robin.xml")
-#   depends_on = [
-#     azurerm_api_management_backend.payAsYouGoBackendOne,
-#     azurerm_api_management_backend.payAsYouGoBackendTwo
-#   ]
-# }
+resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
+  api_management_id = data.azurerm_api_management.apiManagementService.id
+  name              = "weighted-round-robin"
+  format            = "rawxml"
+  value             = file("../policies/fragments/load-balancing/weighted-round-robin.xml")
+  depends_on = [
+    azurerm_api_management_backend.payAsYouGoBackendOne,
+    azurerm_api_management_backend.payAsYouGoBackendTwo,
+    azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue
+  ]
+}
 
 resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
@@ -163,14 +165,14 @@ resource "azurerm_api_management_policy_fragment" "usageTrackingWithAppInsightsP
 }
 
 resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
-  api_name = azurerm_api_management_api.azureOpenAIApi.name
+  api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
   # api_management_id = data.azurerm_api_management.apiManagementService.id
   resource_group_name = data.azurerm_api_management.apiManagementService.resource_group_name
-  xml_content       = file("../policies/genai-policy.xml")
+  xml_content         = file("../policies/genai-policy.xml")
   depends_on = [
     azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment,
-    # azurerm_api_management_policy_fragment.weightedRoundRobinPolicyFragment,
+    azurerm_api_management_policy_fragment.weightedRoundRobinPolicyFragment,
     azurerm_api_management_policy_fragment.adaptiveRateLimitingPolicyFragment,
     azurerm_api_management_policy_fragment.retryWithPayAsYouGoPolicyFragment,
     azurerm_api_management_policy_fragment.usageTrackingWithAppInsightsPolicyFragment
@@ -178,13 +180,13 @@ resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
 }
 
 resource "azurerm_api_management_named_value" "apimOpenaiApiUamiNamedValue" {
-  name                = var.apimIdentityName
+  name                = "apim-identity"
   resource_group_name = var.resourceGroupName
   api_management_name = data.azurerm_api_management.apiManagementService.name
-  display_name        = var.apimIdentityName
+  display_name        = "apim-identity"
   # value               = data.azurerm_user_assigned_identity.apimIdentity.client_id
-  value               = var.apimIdentityName
-  secret              = true
+  value  = var.apimIdentityName
+  secret = true
 }
 
 resource "azurerm_api_management_logger" "event_hub_logger" {
@@ -192,7 +194,7 @@ resource "azurerm_api_management_logger" "event_hub_logger" {
   resource_group_name = var.resourceGroupName
   api_management_name = data.azurerm_api_management.apiManagementService.name
   eventhub {
-    name = var.eventHubName
+    name              = var.eventHubName
     connection_string = data.azurerm_eventhub_namespace.eventHubNamespace.default_primary_connection_string
   }
   # properties {
