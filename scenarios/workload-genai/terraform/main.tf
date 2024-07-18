@@ -1,6 +1,6 @@
 locals {
   # resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-m2b"
+  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-cpi"
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   # sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"

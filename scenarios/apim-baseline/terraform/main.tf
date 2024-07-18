@@ -1,14 +1,8 @@
 locals {
-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
+  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${var.identifier}"
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName       = "rg-apim-${local.resourceSuffix}"
-}
-
-resource "random_string" "random_identifier" {
-  length  = 3
-  special = false
-  upper   = false
 }
 
 resource "azurerm_resource_group" "networking" {
@@ -89,4 +83,3 @@ module "dns" {
   apimPrivateIp     = module.apim.apimPrivateIp
   apimVnetId        = module.networking.apimVnetId
 }
-

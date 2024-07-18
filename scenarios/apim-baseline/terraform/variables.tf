@@ -81,3 +81,8 @@ variable "certificatePath" {
   type        = string
   default     = "../../certs/appgw.pfx"
 }
+
+variable "identifier" {
+  description = "The identifier for the resource deployments"
+  type        = string
+}
