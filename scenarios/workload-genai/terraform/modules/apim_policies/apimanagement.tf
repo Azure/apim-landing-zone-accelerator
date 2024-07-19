@@ -7,10 +7,11 @@ data "azurerm_api_management" "apiManagementService" {
   resource_group_name = var.resourceGroupName
 }
 
-# data "azurerm_user_assigned_identity" "apimIdentity" {
-#   name                = var.apimIdentityName
-#   resource_group_name = var.resourceGroupName
-# }
+data "azurerm_user_assigned_identity" "apimIdentity" {
+  # name                = var.apimIdentityName
+  name                = "identity-apim-apimdemo-dev-eastus2-hte"
+  resource_group_name = var.resourceGroupName
+}
 
 data "azurerm_eventhub_namespace" "eventHubNamespace" {
   name                = var.eventHubNamespaceName
@@ -25,12 +26,9 @@ resource "azurerm_api_management_api" "azureOpenAIApi" {
   display_name        = "AzureOpenAI"
   path                = "openai"
   protocols           = ["https"]
-  # subscription_required = true
-  # source               = "./api-specs/openapi-spec.json"
 
   import {
     content_format = "openapi+json"
-    # content_value  = "./api-specs/openapi-spec.json"
     content_value = file("modules/apim_policies/api-specs/openapi-spec.json")
   }
 }
@@ -48,7 +46,6 @@ resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
   # count               = length(local.azureOpenAIAPINames)
   product_id = azurerm_api_management_product.azureOpenAIProduct.product_id
   # api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[count.index]}"
-  # api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[0]}"
   api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
   resource_group_name = var.resourceGroupName
@@ -95,7 +92,6 @@ resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragmen
   name              = "simple-round-robin"
   format            = "rawxml"
   value             = file("../policies/fragments/load-balancing/simple-round-robin.xml")
-  # value             = file("../policies/fragments/rate-limiting/adaptive-rate-limiting.xml")
   depends_on = [
     azurerm_api_management_backend.payAsYouGoBackendOne,
     azurerm_api_management_backend.payAsYouGoBackendTwo,
@@ -167,7 +163,6 @@ resource "azurerm_api_management_policy_fragment" "usageTrackingWithAppInsightsP
 resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
   api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
-  # api_management_id = data.azurerm_api_management.apiManagementService.id
   resource_group_name = data.azurerm_api_management.apiManagementService.resource_group_name
   xml_content         = file("../policies/genai-policy.xml")
   depends_on = [
@@ -184,9 +179,9 @@ resource "azurerm_api_management_named_value" "apimOpenaiApiUamiNamedValue" {
   resource_group_name = var.resourceGroupName
   api_management_name = data.azurerm_api_management.apiManagementService.name
   display_name        = "apim-identity"
-  # value               = data.azurerm_user_assigned_identity.apimIdentity.client_id
-  value  = var.apimIdentityName
-  secret = true
+  # value               = var.apimIdentityName
+  value               = data.azurerm_user_assigned_identity.apimIdentity.client_id
+  secret              = true
 }
 
 resource "azurerm_api_management_logger" "event_hub_logger" {
@@ -197,14 +192,4 @@ resource "azurerm_api_management_logger" "event_hub_logger" {
     name              = var.eventHubName
     connection_string = data.azurerm_eventhub_namespace.eventHubNamespace.default_primary_connection_string
   }
-  # properties {
-  #   logger_type = "azureEventHub"
-  #   description = "Event hub logger with system-assigned managed identity"
-
-  #   credentials {
-  #     endpoint_address   = "${var.event_hub_namespace_name}.servicebus.windows.net"
-  #     identity_client_id = data.local_file.apim_identity_client_id.content
-  #     name              = var.event_hub_name
-  #   }
-  # }
 }

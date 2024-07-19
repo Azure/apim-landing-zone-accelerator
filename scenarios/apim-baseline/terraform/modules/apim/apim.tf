@@ -1,6 +1,18 @@
 locals {
   apimName          = "apim-${var.resourceSuffix}"
   apimPipPrimaryPip = "pip-apim-${var.resourceSuffix}"
+  apimIdentityName  = "identity-${local.apimName}"
+}
+
+resource "azurerm_user_assigned_identity" "apimIdentity" {
+  name                = local.apimIdentityName
+  location            = var.location
+  resource_group_name = var.resourceGroupName
+}
+
+data "azurerm_key_vault" "keyVault" {
+  name                = trim(substr("kv-${var.resourceSuffix}", 0, 24), "-")
+  resource_group_name = var.sharedResourceGroupName
 }
 
 #-------------------------------
@@ -21,7 +33,8 @@ resource "azurerm_api_management" "apim_internal" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = ["${azurerm_user_assigned_identity.apimIdentity.id}"]
   }
 
   lifecycle {
@@ -196,4 +209,21 @@ resource "azurerm_api_management_product_api" "echo" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+
+resource "azurerm_key_vault_access_policy" "apim_access_policy" {
+  key_vault_id = data.azurerm_key_vault.keyVault.id
+  tenant_id    = azurerm_user_assigned_identity.apimIdentity.tenant_id
+  object_id    = azurerm_user_assigned_identity.apimIdentity.principal_id
+
+  secret_permissions = [
+    "Get",
+    "List"
+  ]
+
+  certificate_permissions = [
+    "Get",
+    "List"
+  ]
 }

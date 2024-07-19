@@ -17,3 +17,7 @@ output "apimPrivateIp" {
 output "apimName" {
   value = azurerm_api_management.apim_internal.name
 }
+
+output "apimIdentityName" {
+  value = azurerm_user_assigned_identity.apimIdentity.name
+}

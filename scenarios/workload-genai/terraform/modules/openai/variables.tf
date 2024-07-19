@@ -57,3 +57,13 @@ variable "deployments" {
     }
   ]
 }
+
+variable "apimIdentityName" {
+  description = "The name of the API Management Identity"
+  type        = string
+}
+
+variable "apimResourceGroupName" {
+  description = "The name of the resource group for the API Management Identity"
+  type        = string
+}

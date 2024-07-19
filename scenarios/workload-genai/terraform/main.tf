@@ -1,7 +1,6 @@
 locals {
   resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${var.identifier}"
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
-  # sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"
   apimName                     = "apim-${local.resourceSuffix}"
   openaiResourceGroupName      = "rg-openai-${local.resourceSuffix}"
@@ -9,12 +8,12 @@ locals {
   deploy_subnet_name           = "snet-deploy-${local.resourceSuffix}"
   private_endpoint_subnet_name = "snet-prep-${local.resourceSuffix}"
   eventHubNamespaceName        = "eh-ns-${local.resourceSuffix}"
+  apimIdentityName             = "identity-${local.apimName}"
 }
 
 data "azurerm_client_config" "current" {
 }
 
-# data retrieve apim resource
 data "azurerm_api_management" "apim" {
   name                = local.apimName
   resource_group_name = local.apimResourceGroupName
@@ -31,54 +30,7 @@ data "azurerm_resource_group" "networking" {
 
 data "azurerm_resource_group" "apim" {
   name = local.apimResourceGroupName
-  # location = var.location
 }
-
-# module "log_analytics_workspace" {
-#   source                           = "./modules/log_analytics"
-#   name                             = "${local.resourceSuffix}${var.log_analytics_workspace_name}"
-#   location                         = var.location
-#   resource_group_name              = azurerm_resource_group.rg.name
-# }
-
-# resource "azurerm_virtual_network" "apim_cs_vnet" {
-#   name                = local.apim_cs_vnet_name
-#   location            = var.location
-#   resource_group_name = azurerm_resource_group.networking.name
-#   address_space       = var.vnet_address_space
-# }
-
-# resource "azurerm_subnet" "deploy_subnet" {
-#   name                 = local.deploy_subnet_name
-#   resource_group_name  = azurerm_resource_group.networking.name
-#   virtual_network_name = azurerm_virtual_network.apim_cs_vnet.name
-#   address_prefixes     = [var.privateEndpointAddressPrefix]
-# }
-
-# module "virtual_network" {
-#   source                           = "./modules/virtual_network"
-#   resource_group_name              = azurerm_resource_group.networking.name
-#   vnet_name                        = local.apim_cs_vnet_name
-#   location                         = var.location
-#   address_space                    = var.vnet_address_space
-#   tags                             = var.tags
-#   log_analytics_workspace_id       = module.log_analytics_workspace.id
-
-#   subnets = [
-#     {
-#       name : var.aca_subnet_name
-#       address_prefixes : var.aca_subnet_address_prefix
-#       private_endpoint_network_policies_enabled : true
-#       private_link_service_network_policies_enabled : false
-#     },
-#     {
-#       name : var.private_endpoint_subnet_name
-#       address_prefixes : var.private_endpoint_subnet_address_prefix
-#       private_endpoint_network_policies_enabled : true
-#       private_link_service_network_policies_enabled : false
-#     }
-#   ]
-# }
 
 data "azurerm_virtual_network" "apim_cs_vnet" {
   name                = local.apim_cs_vnet_name
@@ -97,17 +49,16 @@ data "azurerm_subnet" "deploy_subnet" {
   virtual_network_name = local.apim_cs_vnet_name
 }
 
+data "azurerm_user_assigned_identity" "apimIdentity" {
+  name                = local.apimIdentityName
+  resource_group_name = local.apimResourceGroupName
+}
+
 module "openai_private_dns_zone" {
   source                      = "./modules/private_dns_zone"
   name                        = "privatelink.openai.azure.com"
   resource_group_name         = azurerm_resource_group.rg.name
   virtual_networks_to_link_id = data.azurerm_virtual_network.apim_cs_vnet.id
-  # virtual_networks_to_link = {
-  #   (local.apim_cs_vnet_name) = {
-  #     subscription_id     = data.azurerm_client_config.current.subscription_id
-  #     resource_group_name = azurerm_resource_group.rg.name
-  #   }
-  # }
 }
 
 module "openai_simulatedPTUDeployment_private_endpoint" {
@@ -150,36 +101,42 @@ module "openai_simulatedPaygoTwoDeployment_private_endpoint" {
 }
 
 module "simulatedPTUDeployment" {
-  source                = "./modules/openai"
-  name                  = "ptu-${local.resourceSuffix}"
-  location              = var.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  sku_name              = var.openai_sku_name
-  deployments           = var.openai_deployments
-  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-ptu")
-  # public_network_access_enabled = var.openai_public_network_access_enabled
+  source                        = "./modules/openai"
+  name                          = "ptu-${local.resourceSuffix}"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.rg.name
+  sku_name                      = var.openai_sku_name
+  deployments                   = var.openai_deployments
+  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-ptu")
+  public_network_access_enabled = var.openai_public_network_access_enabled
+  apimIdentityName              = data.azurerm_user_assigned_identity.apimIdentity.name
+  apimResourceGroupName         = local.apimResourceGroupName
 }
 
 module "simulatedPaygoOneDeployment" {
-  source                = "./modules/openai"
-  name                  = "paygo-one-${local.resourceSuffix}"
-  location              = var.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  sku_name              = var.openai_sku_name
-  deployments           = var.openai_deployments
-  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
-  # public_network_access_enabled = var.openai_public_network_access_enabled
+  source                        = "./modules/openai"
+  name                          = "paygo-one-${local.resourceSuffix}"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.rg.name
+  sku_name                      = var.openai_sku_name
+  deployments                   = var.openai_deployments
+  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
+  public_network_access_enabled = var.openai_public_network_access_enabled
+  apimIdentityName              = data.azurerm_user_assigned_identity.apimIdentity.name
+  apimResourceGroupName         = local.apimResourceGroupName
 }
 
 module "simulatedPaygoTwoDeployment" {
-  source                = "./modules/openai"
-  name                  = "paygo-two-${local.resourceSuffix}"
-  location              = var.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  sku_name              = var.openai_sku_name
-  deployments           = var.openai_deployments
-  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
-  # public_network_access_enabled = var.openai_public_network_access_enabled
+  source                        = "./modules/openai"
+  name                          = "paygo-two-${local.resourceSuffix}"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.rg.name
+  sku_name                      = var.openai_sku_name
+  deployments                   = var.openai_deployments
+  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
+  public_network_access_enabled = var.openai_public_network_access_enabled
+  apimIdentityName              = data.azurerm_user_assigned_identity.apimIdentity.name
+  apimResourceGroupName         = local.apimResourceGroupName
 }
 
 module "eventHub" {
@@ -187,7 +144,8 @@ module "eventHub" {
   eventHubName            = var.eventHubName
   eventHubNamespaceName   = local.eventHubNamespaceName
   location                = var.location
-  apimIdentityName        = data.azurerm_api_management.apim.identity[0].principal_id
+  # apimIdentityName        = data.azurerm_api_management.apim.identity[0].principal_id
+  apimIdentityName        = data.azurerm_user_assigned_identity.apimIdentity.name
   apimResourceGroupName   = data.azurerm_resource_group.apim.name
   openaiResourceGroupName = azurerm_resource_group.rg.name
 }
@@ -203,7 +161,8 @@ module "apiManagement" {
   payAsYouGoDeploymentTwoBaseUrl = "${module.simulatedPaygoTwoDeployment.endpoint}openai"
   eventHubNamespaceName          = module.eventHub.eventHubNamespaceName
   eventHubName                   = module.eventHub.eventHubName
-  apimIdentityName               = data.azurerm_api_management.apim.identity[0].principal_id
+  # apimIdentityName               = data.azurerm_api_management.apim.identity[0].principal_id
+  apimIdentityName               = data.azurerm_user_assigned_identity.apimIdentity.principal_id
 
   depends_on = [
     module.eventHub
