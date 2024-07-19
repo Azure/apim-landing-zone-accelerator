@@ -249,6 +249,10 @@ fi
 
 echo "== Completed terraform deployment"
 
+# remove the plan file, tfvars and terraform.tfstate
+rm -f "${ENVIRONMENT_TAG}.tfplan"
+rm -f terraform.tfstate
+rm -f "${ENVIRONMENT_TAG}.tfvars"
 
 # Setting variables
 APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
