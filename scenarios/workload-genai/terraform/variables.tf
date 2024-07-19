@@ -132,3 +132,9 @@ variable "eventHubName" {
   type        = string
   default     = "apim-utilization-reporting"
 }
+
+variable "apimIdentityName" {
+  description = "The name of the API Management Identity"
+  type        = string
+  default     = "apimIdentity"
+}

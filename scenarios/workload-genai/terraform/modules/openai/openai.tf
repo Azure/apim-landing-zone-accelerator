@@ -1,3 +1,11 @@
+data "azurerm_user_assigned_identity" "apimIdentity" {
+  name                = var.apimIdentityName
+  resource_group_name = var.apimResourceGroupName
+}
+
+data "azurerm_subscription" "primary" {
+}
+
 resource "azurerm_cognitive_account" "openai" {
   name                          = var.name
   location                      = var.location
@@ -34,4 +42,16 @@ resource "azurerm_cognitive_deployment" "deployment" {
   scale {
     type = "Standard"
   }
+}
+
+data "azurerm_role_definition" "cognitiveServicesOpenAIUser" {
+  name = "5e0bd9bd-7b93-4f28-af87-19fc36ad61bd"
+  scope = data.azurerm_subscription.primary.id
+}
+
+resource "azurerm_role_assignment" "roleAssignment" {
+  # name               = "${azurerm_cognitive_account.openai.id}-${data.azurerm_user_assigned_identity.apimIdentity.name}-${azurerm_role_definition.cognitiveServicesOpenAIUser.id}"
+  scope              = azurerm_cognitive_account.openai.id
+  role_definition_id = data.azurerm_role_definition.cognitiveServicesOpenAIUser.id
+  principal_id       = data.azurerm_user_assigned_identity.apimIdentity.principal_id
 }

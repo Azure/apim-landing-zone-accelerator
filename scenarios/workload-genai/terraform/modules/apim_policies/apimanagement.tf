@@ -8,7 +8,8 @@ data "azurerm_api_management" "apiManagementService" {
 }
 
 data "azurerm_user_assigned_identity" "apimIdentity" {
-  name                = var.apimIdentityName
+  # name                = var.apimIdentityName
+  name                = "identity-apim-apimdemo-dev-eastus2-hte"
   resource_group_name = var.resourceGroupName
 }
 

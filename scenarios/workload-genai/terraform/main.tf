@@ -1,6 +1,6 @@
 locals {
-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
-  # resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-m2b"
+  # resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
+  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-hte"
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"
   apimName                     = "apim-${local.resourceSuffix}"
@@ -9,6 +9,7 @@ locals {
   deploy_subnet_name           = "snet-deploy-${local.resourceSuffix}"
   private_endpoint_subnet_name = "snet-prep-${local.resourceSuffix}"
   eventHubNamespaceName        = "eh-ns-${local.resourceSuffix}"
+  apimIdentityName             = "identity-${local.apimName}"
 }
 
 data "azurerm_client_config" "current" {
@@ -56,8 +57,8 @@ data "azurerm_subnet" "deploy_subnet" {
 }
 
 data "azurerm_user_assigned_identity" "apimIdentity" {
-  name                = var.apimIdentityName
-  resource_group_name = var.apimResourceGroupName
+  name                = local.apimIdentityName
+  resource_group_name = local.apimResourceGroupName
 }
 
 module "openai_private_dns_zone" {
@@ -115,6 +116,8 @@ module "simulatedPTUDeployment" {
   deployments                   = var.openai_deployments
   custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-ptu")
   public_network_access_enabled = var.openai_public_network_access_enabled
+  apimIdentityName              = data.azurerm_user_assigned_identity.apimIdentity.name
+  apimResourceGroupName         = local.apimResourceGroupName
 }
 
 module "simulatedPaygoOneDeployment" {
@@ -126,6 +129,8 @@ module "simulatedPaygoOneDeployment" {
   deployments                   = var.openai_deployments
   custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
   public_network_access_enabled = var.openai_public_network_access_enabled
+  apimIdentityName              = data.azurerm_user_assigned_identity.apimIdentity.name
+  apimResourceGroupName         = local.apimResourceGroupName
 }
 
 module "simulatedPaygoTwoDeployment" {
@@ -137,6 +142,8 @@ module "simulatedPaygoTwoDeployment" {
   deployments                   = var.openai_deployments
   custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
   public_network_access_enabled = var.openai_public_network_access_enabled
+  apimIdentityName              = data.azurerm_user_assigned_identity.apimIdentity.name
+  apimResourceGroupName         = local.apimResourceGroupName
 }
 
 module "eventHub" {
@@ -145,7 +152,7 @@ module "eventHub" {
   eventHubNamespaceName   = local.eventHubNamespaceName
   location                = var.location
   # apimIdentityName        = data.azurerm_api_management.apim.identity[0].principal_id
-  apimIdentityName        = data.azurerm_user_assigned_identity.apimIdentity.principal_id
+  apimIdentityName        = data.azurerm_user_assigned_identity.apimIdentity.name
   apimResourceGroupName   = data.azurerm_resource_group.apim.name
   openaiResourceGroupName = azurerm_resource_group.rg.name
 }

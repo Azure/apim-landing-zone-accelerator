@@ -15,7 +15,7 @@ terraform {
     resource_group_name = "rg-tfstate-auseast"
     storage_account_name = "tfstateauseaststorage"
     container_name       = "apimlza"
-    key                  = "terraform-apimlza-dev-v6.tfstate" 
+    key                  = "terraform-apimlza-dev-v7.tfstate" 
   }
   required_providers {
     azurerm = {

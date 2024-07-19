@@ -1,7 +1,7 @@
 locals {
   apimName          = "apim-${var.resourceSuffix}"
   apimPipPrimaryPip = "pip-apim-${var.resourceSuffix}"
-  apimIdentityName  = "identity-${apimName}"
+  apimIdentityName  = "identity-${local.apimName}"
 }
 
 resource "azurerm_user_assigned_identity" "apimIdentity" {
