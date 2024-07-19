@@ -1,0 +1,292 @@
+diff --git a/scenarios/sample.tf.env b/scenarios/sample.tf.env
+index 79d4558..a66fad4 100644
+--- a/scenarios/sample.tf.env
++++ b/scenarios/sample.tf.env
+@@ -7,3 +7,4 @@ TF_BACKEND_RESOURCE_GROUP_NAME='rg-tfstate-auseast'
+ TF_BACKEND_STORAGE_ACCOUNT_NAME='tfstateauseaststorage'
+ TF_BACKEND_CONTAINER_NAME='apimlza_v3'
+ TF_BACKEND_KEY='terraform-apimlza-dev-v3.tfstate'
++OPENAI_PUBLIC_NETWORK_ACCESS_ENABLED='false'
+diff --git a/scenarios/scripts/terraform/deploy-apim-baseline.sh b/scenarios/scripts/terraform/deploy-apim-baseline.sh
+index f36d1be..8b6e8d2 100755
+--- a/scenarios/scripts/terraform/deploy-apim-baseline.sh
++++ b/scenarios/scripts/terraform/deploy-apim-baseline.sh
+@@ -265,3 +265,34 @@ else
+ 	echo "Exiting..."
+ 	exit 6
+ fi
++
++echo "== Completed terraform deployment"
++
++APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
++APIM_RESOURCE_GROUP="rg-apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
++NETWORK_RESOURCE_GROUP="rg-networking-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
++APPGATEWAY_PIP="pip-appgw-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
++SUBSCRIPTION_ID=$(az account show --query id -o tsv)
++API_SUBSCRIPTION_NAME="Echo API"
++
++# Get the access token
++TOKEN=$(az account get-access-token --query accessToken --output tsv)
++
++# get the subscription id based on the subscription display name
++API_SUBSCRIPTION_ID=$(curl -s -S -H "Authorization: Bearer $TOKEN" \
++	-H "Content-Type: application/json" \
++	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01" | jq -r --arg API_SUBSCRIPTION_NAME "$API_SUBSCRIPTION_NAME" '.value[] | select(.properties.displayName == $API_SUBSCRIPTION_NAME) | .name' )
++
++# Call the Azure REST API to get subscription keys
++output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
++	-H "Content-Type: application/json" \
++	-H "Content-Length: 0" \
++	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions/$API_SUBSCRIPTION_ID/listSecrets?api-version=2022-08-01")
++
++# Extract the subscription keys
++PRIMARY_KEY=$(echo "$output" | jq -r '.primaryKey')
++
++APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
++testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/echo/resource?param1=sample"
++echo "Test the deployment by running the following command: ${testUri}"
++echo -e "\n"
+diff --git a/scenarios/workload-genai/terraform/main.tf b/scenarios/workload-genai/terraform/main.tf
+index 65beef4..10ed904 100644
+--- a/scenarios/workload-genai/terraform/main.tf
++++ b/scenarios/workload-genai/terraform/main.tf
+@@ -1,6 +1,5 @@
+ locals {
+-  # resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
+-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-cpi"
++  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${var.identifier}"
+   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
+   # sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
+   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"
+@@ -21,13 +20,6 @@ data "azurerm_api_management" "apim" {
+   resource_group_name = local.apimResourceGroupName
+ }
+ 
+-
+-resource "random_string" "random_identifier" {
+-  length  = 3
+-  special = false
+-  upper   = false
+-}
+-
+ resource "azurerm_resource_group" "rg" {
+   name     = local.openaiResourceGroupName
+   location = var.location
+@@ -158,36 +150,36 @@ module "openai_simulatedPaygoTwoDeployment_private_endpoint" {
+ }
+ 
+ module "simulatedPTUDeployment" {
+-  source                        = "./modules/openai"
+-  name                          = "ptu-${local.resourceSuffix}"
+-  location                      = var.location
+-  resource_group_name           = azurerm_resource_group.rg.name
+-  sku_name                      = var.openai_sku_name
+-  deployments                   = var.openai_deployments
+-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-ptu")
+-  public_network_access_enabled = var.openai_public_network_access_enabled
++  source                = "./modules/openai"
++  name                  = "ptu-${local.resourceSuffix}"
++  location              = var.location
++  resource_group_name   = azurerm_resource_group.rg.name
++  sku_name              = var.openai_sku_name
++  deployments           = var.openai_deployments
++  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-ptu")
++  # public_network_access_enabled = var.openai_public_network_access_enabled
+ }
+ 
+ module "simulatedPaygoOneDeployment" {
+-  source                        = "./modules/openai"
+-  name                          = "paygo-one-${local.resourceSuffix}"
+-  location                      = var.location
+-  resource_group_name           = azurerm_resource_group.rg.name
+-  sku_name                      = var.openai_sku_name
+-  deployments                   = var.openai_deployments
+-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
+-  public_network_access_enabled = var.openai_public_network_access_enabled
++  source                = "./modules/openai"
++  name                  = "paygo-one-${local.resourceSuffix}"
++  location              = var.location
++  resource_group_name   = azurerm_resource_group.rg.name
++  sku_name              = var.openai_sku_name
++  deployments           = var.openai_deployments
++  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
++  # public_network_access_enabled = var.openai_public_network_access_enabled
+ }
+ 
+ module "simulatedPaygoTwoDeployment" {
+-  source                        = "./modules/openai"
+-  name                          = "paygo-two-${local.resourceSuffix}"
+-  location                      = var.location
+-  resource_group_name           = azurerm_resource_group.rg.name
+-  sku_name                      = var.openai_sku_name
+-  deployments                   = var.openai_deployments
+-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
+-  public_network_access_enabled = var.openai_public_network_access_enabled
++  source                = "./modules/openai"
++  name                  = "paygo-two-${local.resourceSuffix}"
++  location              = var.location
++  resource_group_name   = azurerm_resource_group.rg.name
++  sku_name              = var.openai_sku_name
++  deployments           = var.openai_deployments
++  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
++  # public_network_access_enabled = var.openai_public_network_access_enabled
+ }
+ 
+ module "eventHub" {
+diff --git a/scenarios/workload-genai/terraform/modules/openai/variables.tf b/scenarios/workload-genai/terraform/modules/openai/variables.tf
+index f35a001..458685e 100644
+--- a/scenarios/workload-genai/terraform/modules/openai/variables.tf
++++ b/scenarios/workload-genai/terraform/modules/openai/variables.tf
+@@ -1,22 +1,22 @@
+ variable "resource_group_name" {
+   description = "(Required) Specifies the resource group name"
+-  type = string
++  type        = string
+ }
+ 
+ variable "location" {
+   description = "(Required) Specifies the location of the Azure OpenAI Service"
+-  type = string
++  type        = string
+ }
+ 
+ variable "name" {
+   description = "(Required) Specifies the name of the Azure OpenAI Service"
+-  type = string
++  type        = string
+ }
+ 
+ variable "sku_name" {
+   description = "(Optional) Specifies the sku name for the Azure OpenAI Service"
+-  type = string
+-  default = "S0"
++  type        = string
++  default     = "S0"
+ }
+ 
+ variable "tags" {
+@@ -27,13 +27,13 @@ variable "tags" {
+ 
+ variable "custom_subdomain_name" {
+   description = "(Optional) Specifies the custom subdomain name of the Azure OpenAI Service"
+-  type = string
++  type        = string
+ }
+ 
+ variable "public_network_access_enabled" {
+   description = "(Optional) Specifies whether public network access is allowed for the Azure OpenAI Service"
+-  type = bool
+-  default = true
++  type        = bool
++  default     = false
+ }
+ 
+ variable "deployments" {
+@@ -41,19 +41,19 @@ variable "deployments" {
+   type = list(object({
+     name = string
+     model = object({
+-      name = string
++      name    = string
+       version = string
+     })
+-    rai_policy_name = string  
++    rai_policy_name = string
+   }))
+   default = [
+     {
+       name = "gpt-35-turbo"
+       model = {
+-        name = "gpt-35-turbo"
++        name    = "gpt-35-turbo"
+         version = "0301"
+       }
+       rai_policy_name = ""
+     }
+-  ] 
++  ]
+ }
+diff --git a/scenarios/workload-genai/terraform/provider.tf b/scenarios/workload-genai/terraform/provider.tf
+index 1ffb58c..b001b85 100644
+--- a/scenarios/workload-genai/terraform/provider.tf
++++ b/scenarios/workload-genai/terraform/provider.tf
+@@ -1,22 +1,25 @@
+ terraform {
+ 
+-  backend "azurerm" {
+-    # ----------------------
+-    # Will be passing in these arguments via CLI as the state file \
+-    #  is now being overwritten via local testing environments
+-    # > https://developer.hashicorp.com/terraform/language/settings/backends/configuration#command-line-key-value-pairs
+-    # ----------------------
+-    # e.g: terraform init \
+-    #        -backend-config="resource_group_name=rg-tfstate-auseast"     \
+-    #        -backend-config="storage_account_name=tfstateauseaststorage" \
+-    #        -backend-config="container_name=apimlza"       \
+-    #        -backend-config="key=terraform-apimlza-dev-v3.tfstate"
+-    # ----------------------
+-    resource_group_name  = "tfstate"
+-    storage_account_name = "tfsaeastus2001"
+-    container_name       = "tfstatus"
+-    key                  = "scenario3.tfstate"
+-  }
++  # backend "azurerm" {
++  # ----------------------
++  # Will be passing in these arguments via CLI as the state file \
++  #  is now being overwritten via local testing environments
++  # > https://developer.hashicorp.com/terraform/language/settings/backends/configuration#command-line-key-value-pairs
++  #
++  # Reading from backend-ENV.hcl
++  #
++  # ----------------------
++  # e.g: terraform init \
++  #        -backend-config="resource_group_name=rg-tfstate-auseast"     \
++  #        -backend-config="storage_account_name=tfstateauseaststorage" \
++  #        -backend-config="container_name=apimlza"       \
++  #        -backend-config="key=terraform-apimlza-dev-v3.tfstate"
++  # ----------------------
++  # resource_group_name  = "tfstate"
++  # storage_account_name = "tfsaeastus2001"
++  # container_name       = "tfstatus"
++  # key                  = "scenario3.tfstate"
++  # }
+   required_providers {
+     azurerm = {
+       source  = "hashicorp/azurerm"
+diff --git a/scenarios/workload-genai/terraform/variables.tf b/scenarios/workload-genai/terraform/variables.tf
+index 2e15ed2..3ae9194 100644
+--- a/scenarios/workload-genai/terraform/variables.tf
++++ b/scenarios/workload-genai/terraform/variables.tf
+@@ -1,9 +1,3 @@
+-# variable "name_prefix" {
+-#   description = "(Optional) A prefix for the name of all the resource groups and resources."
+-#   type        = string
+-#   nullable    = true
+-# }
+-
+ variable "location" {
+   type        = string
+   description = "The Azure location in which the deployment is happening"
+@@ -22,18 +16,14 @@ variable "environment" {
+   default     = "dev"
+ }
+ 
+-variable "resource_group_name" {
+-  description = "Name of the resource group in which the resources will be created"
+-  default     = "RG"
++variable "identifier" {
++  description = "The identifier for the resource deployments"
++  type        = string
+ }
+ 
+ variable "tags" {
+   description = "(Optional) Specifies tags for all the resources"
+-  default = {
+-    createdWith   = "Terraform",
+-    openAi        = "true",
+-    containerApps = "true"
+-  }
++  default = {}
+ }
+ 
+ variable "log_analytics_workspace_name" {

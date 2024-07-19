@@ -1,9 +1,3 @@
-# variable "name_prefix" {
-#   description = "(Optional) A prefix for the name of all the resource groups and resources."
-#   type        = string
-#   nullable    = true
-# }
-
 variable "location" {
   type        = string
   description = "The Azure location in which the deployment is happening"
@@ -22,18 +16,14 @@ variable "environment" {
   default     = "dev"
 }
 
-variable "resource_group_name" {
-  description = "Name of the resource group in which the resources will be created"
-  default     = "RG"
+variable "identifier" {
+  description = "The identifier for the resource deployments"
+  type        = string
 }
 
 variable "tags" {
   description = "(Optional) Specifies tags for all the resources"
-  default = {
-    createdWith   = "Terraform",
-    openAi        = "true",
-    containerApps = "true"
-  }
+  default = {}
 }
 
 variable "log_analytics_workspace_name" {

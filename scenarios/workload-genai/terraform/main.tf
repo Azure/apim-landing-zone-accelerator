@@ -1,6 +1,5 @@
 locals {
-  # resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${random_string.random_identifier.result}"
-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-cpi"
+  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${var.identifier}"
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   # sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"
@@ -19,13 +18,6 @@ data "azurerm_client_config" "current" {
 data "azurerm_api_management" "apim" {
   name                = local.apimName
   resource_group_name = local.apimResourceGroupName
-}
-
-
-resource "random_string" "random_identifier" {
-  length  = 3
-  special = false
-  upper   = false
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -158,36 +150,36 @@ module "openai_simulatedPaygoTwoDeployment_private_endpoint" {
 }
 
 module "simulatedPTUDeployment" {
-  source                        = "./modules/openai"
-  name                          = "ptu-${local.resourceSuffix}"
-  location                      = var.location
-  resource_group_name           = azurerm_resource_group.rg.name
-  sku_name                      = var.openai_sku_name
-  deployments                   = var.openai_deployments
-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-ptu")
-  public_network_access_enabled = var.openai_public_network_access_enabled
+  source                = "./modules/openai"
+  name                  = "ptu-${local.resourceSuffix}"
+  location              = var.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  sku_name              = var.openai_sku_name
+  deployments           = var.openai_deployments
+  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-ptu")
+  # public_network_access_enabled = var.openai_public_network_access_enabled
 }
 
 module "simulatedPaygoOneDeployment" {
-  source                        = "./modules/openai"
-  name                          = "paygo-one-${local.resourceSuffix}"
-  location                      = var.location
-  resource_group_name           = azurerm_resource_group.rg.name
-  sku_name                      = var.openai_sku_name
-  deployments                   = var.openai_deployments
-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
-  public_network_access_enabled = var.openai_public_network_access_enabled
+  source                = "./modules/openai"
+  name                  = "paygo-one-${local.resourceSuffix}"
+  location              = var.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  sku_name              = var.openai_sku_name
+  deployments           = var.openai_deployments
+  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-paygo-one")
+  # public_network_access_enabled = var.openai_public_network_access_enabled
 }
 
 module "simulatedPaygoTwoDeployment" {
-  source                        = "./modules/openai"
-  name                          = "paygo-two-${local.resourceSuffix}"
-  location                      = var.location
-  resource_group_name           = azurerm_resource_group.rg.name
-  sku_name                      = var.openai_sku_name
-  deployments                   = var.openai_deployments
-  custom_subdomain_name         = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
-  public_network_access_enabled = var.openai_public_network_access_enabled
+  source                = "./modules/openai"
+  name                  = "paygo-two-${local.resourceSuffix}"
+  location              = var.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  sku_name              = var.openai_sku_name
+  deployments           = var.openai_deployments
+  custom_subdomain_name = lower("${local.resourceSuffix}${var.openai_name}-paygo-two")
+  # public_network_access_enabled = var.openai_public_network_access_enabled
 }
 
 module "eventHub" {

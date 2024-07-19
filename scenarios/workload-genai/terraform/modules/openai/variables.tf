@@ -1,22 +1,22 @@
 variable "resource_group_name" {
   description = "(Required) Specifies the resource group name"
-  type = string
+  type        = string
 }
 
 variable "location" {
   description = "(Required) Specifies the location of the Azure OpenAI Service"
-  type = string
+  type        = string
 }
 
 variable "name" {
   description = "(Required) Specifies the name of the Azure OpenAI Service"
-  type = string
+  type        = string
 }
 
 variable "sku_name" {
   description = "(Optional) Specifies the sku name for the Azure OpenAI Service"
-  type = string
-  default = "S0"
+  type        = string
+  default     = "S0"
 }
 
 variable "tags" {
@@ -27,13 +27,13 @@ variable "tags" {
 
 variable "custom_subdomain_name" {
   description = "(Optional) Specifies the custom subdomain name of the Azure OpenAI Service"
-  type = string
+  type        = string
 }
 
 variable "public_network_access_enabled" {
   description = "(Optional) Specifies whether public network access is allowed for the Azure OpenAI Service"
-  type = bool
-  default = true
+  type        = bool
+  default     = false
 }
 
 variable "deployments" {
@@ -41,19 +41,19 @@ variable "deployments" {
   type = list(object({
     name = string
     model = object({
-      name = string
+      name    = string
       version = string
     })
-    rai_policy_name = string  
+    rai_policy_name = string
   }))
   default = [
     {
       name = "gpt-35-turbo"
       model = {
-        name = "gpt-35-turbo"
+        name    = "gpt-35-turbo"
         version = "0301"
       }
       rai_policy_name = ""
     }
-  ] 
+  ]
 }
