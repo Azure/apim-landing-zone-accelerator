@@ -57,16 +57,7 @@ variable "instrumentationKey" {
   description = "App insights instrumentation key"
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+variable "sharedResourceGroupName" {
+  type        = string
+  description = "The name of the shared resource group"
+}

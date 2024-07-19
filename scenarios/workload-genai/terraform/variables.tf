@@ -54,18 +54,6 @@ variable "vnet_address_space" {
   type        = list(string)
 }
 
-# variable "private_endpoint_subnet_name" {
-#   description = "Specifies the name of the subnet"
-#   default     = "PrivateEndpoints"
-#   type        = string
-# }
-
-# variable "private_endpoint_subnet_address_prefix" {
-#   description = "Specifies the address prefix of the private endpoints subnet"
-#   default     = ["10.0.16.0/24"]
-#   type        = list(string)
-# }
-
 variable "privateEndpointAddressPrefix" {
   description = "Private Endpoint Address Prefix"
   type        = string
@@ -144,8 +132,3 @@ variable "eventHubName" {
   type        = string
   default     = "apim-utilization-reporting"
 }
-
-# variable apimIdentityName {
-#   description = "The name of the API Management Identity"
-#   type        = string
-# }

@@ -5,8 +5,8 @@ data "azurerm_client_config" "current" {}
 #-------------------------------
 
 resource "azurerm_key_vault" "key_vault" {
-  # name                = trim(substr("kv-${var.resourceSuffix}", 0, 24), "-")
-  name                = "kv-apimdemo-dev-m2b"
+  name                = trim(substr("kv-${var.resourceSuffix}", 0, 24), "-")
+  # name                = "kv-apimdemo-dev-m2b"
   location            = var.location
   resource_group_name = var.resourceGroupName
   tenant_id           = data.azurerm_client_config.current.tenant_id

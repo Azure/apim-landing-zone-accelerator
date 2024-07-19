@@ -59,7 +59,7 @@ module "apim" {
   apimSubnetId       = module.networking.apimSubnetId
   instrumentationKey = module.shared.instrumentationKey
   workspaceId        = module.shared.workspaceId
-
+  sharedResourceGroupName = azurerm_resource_group.shared.name
 }
 
 module "gateway" {
