@@ -216,19 +216,10 @@ else
 fi
 
 echo "Backend resources are valid"
-echo "Creating backend configuration..."
 
-# create config.azurerm.tfbackend
-cat << EOF > "$script_dir/../../apim-baseline/terraform/backend-${ENVIRONMENT_TAG}.hcl"
-backend "azurerm" {
-	resource_group_name = "${TF_BACKEND_RESOURCE_GROUP_NAME}"
-	storage_account_name = "${TF_BACKEND_STORAGE_ACCOUNT_NAME}"
-	container_name       = "${TF_BACKEND_CONTAINER_NAME}"
-	key                  = "${TF_BACKEND_KEY}"
-}
-EOF
-
+# creating tfvars
 # create tfvars
+echo "Creating terraform variables file..."
 cat << EOF > "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}.tfvars"
 location           = "${AZURE_LOCATION}"
 workloadName       = "${RESOURCE_NAME_PREFIX}"
@@ -243,7 +234,11 @@ EOF
 
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../apim-baseline/terraform" || exit
-terraform init
+terraform init \
+	-backend-config="resource_group_name=${TF_BACKEND_RESOURCE_GROUP_NAME}" \
+	-backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT_NAME}" \
+	-backend-config="container_name=${TF_BACKEND_CONTAINER_NAME}" \
+	-backend-config="key=${TF_BACKEND_KEY}"
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"
@@ -284,11 +279,13 @@ API_SUBSCRIPTION_NAME="Echo API"
 TOKEN=$(az account get-access-token --query accessToken --output tsv)
 
 # get the subscription id based on the subscription display name
+echo "https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01"
 API_SUBSCRIPTION_ID=$(curl -s -S -H "Authorization: Bearer $TOKEN" \
 	-H "Content-Type: application/json" \
-	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01" | jq -r --arg API_SUBSCRIPTION_NAME "$API_SUBSCRIPTION_NAME" '.value[] | select(.properties.displayName == $API_SUBSCRIPTION_NAME) | .name' )
+	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01" | jq -r --arg API_SUBSCRIPTION_NAME "$API_SUBSCRIPTION_NAME" '.value[] | select(.properties.displayName == $API_SUBSCRIPTION_NAME) | .name' )
 
 # Call the Azure REST API to get subscription keys
+echo "https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions/$API_SUBSCRIPTION_ID/listSecrets?api-version=2022-08-01"
 output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
 	-H "Content-Type: application/json" \
 	-H "Content-Length: 0" \

@@ -204,16 +204,10 @@ else
 fi
 
 echo "Backend resources are valid"
-echo "Copying backend-${ENVIRONMENT_TAG}.hcl to genai context"
-# Check file exists
-if [ ! -f "$script_dir/../../apim-baseline/terraform/backend-${ENVIRONMENT_TAG}.hcl" ]; then
-  echo "File backend-${ENVIRONMENT_TAG}.hcl not found!" 1>&2
-  echo "Please create the baseline first" 1>&2
-  exit 6
-fi
-cp "$script_dir/../../apim-baseline/terraform/backend-${ENVIRONMENT_TAG}.hcl" "$script_dir/../../workload-genai/terraform/backend-${ENVIRONMENT_TAG}.hcl"
 
+# creating tfvars
 # create tfvars
+echo "Creating terraform variables file..."
 cat << EOF > "$script_dir/../../workload-genai/terraform/${ENVIRONMENT_TAG}.tfvars"
 location           	= "${AZURE_LOCATION}"
 workloadName       	= "${RESOURCE_NAME_PREFIX}"
@@ -224,7 +218,11 @@ EOF
 
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../workload-genai/terraform" || exit
-terraform init
+terraform init \
+	-backend-config="resource_group_name=${TF_BACKEND_RESOURCE_GROUP_NAME}" \
+	-backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT_NAME}" \
+	-backend-config="container_name=${TF_BACKEND_CONTAINER_NAME}" \
+	-backend-config="key=${TF_BACKEND_KEY}"
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"

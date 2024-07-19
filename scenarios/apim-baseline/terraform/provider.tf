@@ -1,22 +1,22 @@
 terraform {
 
-  # backend "azurerm" {
-  # ----------------------
-  # Will be passing in these arguments via CLI as the state file \
-  #  is now being overwritten via local testing environments
-  # > https://developer.hashicorp.com/terraform/language/settings/backends/configuration#command-line-key-value-pairs
-  # ----------------------
-  # e.g: terraform init \
-  #        -backend-config="resource_group_name=rg-tfstate-auseast"     \
-  #        -backend-config="storage_account_name=tfstateauseaststorage" \
-  #        -backend-config="container_name=apimlza"       \
-  #        -backend-config="key=terraform-apimlza-dev-v2.tfstate"
-  # ----------------------
-  # resource_group_name = "rg-tfstate-auseast"
-  # storage_account_name = "tfstateauseaststorage"
-  # container_name       = "apimlza"
-  # key                  = "terraform-apimlza-dev-v6.tfstate"
-  # }
+  backend "azurerm" {
+    # ----------------------
+    # Will be passing in these arguments via CLI as the state file \
+    #  is now being overwritten via local testing environments
+    # > https://developer.hashicorp.com/terraform/language/settings/backends/configuration#command-line-key-value-pairs
+    # ----------------------
+    # e.g: terraform init \
+    #        -backend-config="resource_group_name=rg-tfstate-auseast"     \
+    #        -backend-config="storage_account_name=tfstateauseaststorage" \
+    #        -backend-config="container_name=apimlza"       \
+    #        -backend-config="key=terraform-apimlza-dev-v2.tfstate"
+    # ----------------------
+    # resource_group_name = "rg-tfstate-auseast"
+    # storage_account_name = "tfstateauseaststorage"
+    # container_name       = "apimlza"
+    # key                  = "terraform-apimlza-dev-v6.tfstate"
+  }
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
