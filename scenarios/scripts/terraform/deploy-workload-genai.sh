@@ -273,6 +273,6 @@ output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
 PRIMARY_KEY=$(echo "$output" | jq -r '.primaryKey')
 
 APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
-testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/aoai/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
+testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
 echo "Test the deployment by running the following command: ${testUri}"
 echo -e "\n"
