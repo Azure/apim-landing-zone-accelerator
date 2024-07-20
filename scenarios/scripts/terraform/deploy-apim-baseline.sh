@@ -44,12 +44,12 @@ else
   TF_BACKEND_CONTAINER_NAME="${TF_BACKEND_CONTAINER_NAME%$'\r'}"
 fi
 
-if [[ ${#TF_BACKEND_KEY} -eq 0 ]]; then
-  echo 'ERROR: Missing environment variable TF_BACKEND_KEY' 1>&2
-  exit 6
-else
-  TF_BACKEND_KEY="${TF_BACKEND_KEY%$'\r'}"
-fi
+# if [[ ${#TF_BACKEND_KEY} -eq 0 ]]; then
+#   echo 'ERROR: Missing environment variable TF_BACKEND_KEY' 1>&2
+#   exit 6
+# else
+#   TF_BACKEND_KEY="${TF_BACKEND_KEY%$'\r'}"
+# fi
 
 if [[ ${#TF_BACKEND_RESOURCE_GROUP_NAME} -eq 0 ]]; then
   echo 'ERROR: Missing environment variable TF_BACKEND_RESOURCE_GROUP_NAME' 1>&2
@@ -221,15 +221,15 @@ echo "Backend resources are valid"
 # create tfvars
 echo "Creating terraform variables file..."
 cat << EOF > "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}.tfvars"
-location           = "${AZURE_LOCATION}"
-workloadName       = "${RESOURCE_NAME_PREFIX}"
-environment        = "${ENVIRONMENT_TAG}"
-identifier				 = "${random_string}"
-appGatewayFqdn     = "${APPGATEWAY_FQDN}"
-appGatewayCertType = "${CERT_TYPE}"
-certData					 = "${cert_data}"
-certKey 					 = "${cert_pwd}"
-enableTelemetry    = "${telemetry}"
+location           	= "${AZURE_LOCATION}"
+workloadName       	= "${RESOURCE_NAME_PREFIX}"
+environment        	= "${ENVIRONMENT_TAG}"
+identifier			= "${random_string}"
+appGatewayFqdn     	= "${APPGATEWAY_FQDN}"
+appGatewayCertType 	= "${CERT_TYPE}"
+certData			= "${cert_data}"
+certKey 			= "${cert_pwd}"
+enableTelemetry    	= "${telemetry}"
 EOF
 
 echo "Initializing Terraform backend..."
@@ -238,7 +238,7 @@ terraform init \
 	-backend-config="resource_group_name=${TF_BACKEND_RESOURCE_GROUP_NAME}" \
 	-backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT_NAME}" \
 	-backend-config="container_name=${TF_BACKEND_CONTAINER_NAME}" \
-	-backend-config="key=${TF_BACKEND_KEY}"
+	-backend-config="key=${ENVIRONMENT_TAG}-baseline.tfstate"
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"

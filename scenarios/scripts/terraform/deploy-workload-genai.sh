@@ -40,12 +40,12 @@ else
   TF_BACKEND_CONTAINER_NAME="${TF_BACKEND_CONTAINER_NAME%$'\r'}"
 fi
 
-if [[ ${#TF_BACKEND_KEY} -eq 0 ]]; then
-  echo 'ERROR: Missing environment variable TF_BACKEND_KEY' 1>&2
-  exit 6
-else
-  TF_BACKEND_KEY="${TF_BACKEND_KEY%$'\r'}"
-fi
+# if [[ ${#TF_BACKEND_KEY} -eq 0 ]]; then
+#   echo 'ERROR: Missing environment variable TF_BACKEND_KEY' 1>&2
+#   exit 6
+# else
+#   TF_BACKEND_KEY="${TF_BACKEND_KEY%$'\r'}"
+# fi
 
 if [[ ${#TF_BACKEND_RESOURCE_GROUP_NAME} -eq 0 ]]; then
   echo 'ERROR: Missing environment variable TF_BACKEND_RESOURCE_GROUP_NAME' 1>&2
@@ -222,7 +222,7 @@ terraform init \
 	-backend-config="resource_group_name=${TF_BACKEND_RESOURCE_GROUP_NAME}" \
 	-backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT_NAME}" \
 	-backend-config="container_name=${TF_BACKEND_CONTAINER_NAME}" \
-	-backend-config="key=${TF_BACKEND_KEY}"
+	-backend-config="key=${ENVIRONMENT_TAG}-genai.tfstate"
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"

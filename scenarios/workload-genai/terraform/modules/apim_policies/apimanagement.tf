@@ -8,9 +8,9 @@ data "azurerm_api_management" "apiManagementService" {
 }
 
 data "azurerm_user_assigned_identity" "apimIdentity" {
-  # name                = var.apimIdentityName
-  name                = "identity-apim-apimdemo-dev-eastus2-hte"
+  name                = var.apimIdentityName
   resource_group_name = var.resourceGroupName
+  # name                = "identity-apim-apimdemo-dev-eastus2-hte"
 }
 
 data "azurerm_eventhub_namespace" "eventHubNamespace" {
@@ -29,7 +29,7 @@ resource "azurerm_api_management_api" "azureOpenAIApi" {
 
   import {
     content_format = "openapi+json"
-    content_value = file("modules/apim_policies/api-specs/openapi-spec.json")
+    content_value  = file("modules/apim_policies/api-specs/openapi-spec.json")
   }
 }
 
@@ -180,8 +180,8 @@ resource "azurerm_api_management_named_value" "apimOpenaiApiUamiNamedValue" {
   api_management_name = data.azurerm_api_management.apiManagementService.name
   display_name        = "apim-identity"
   # value               = var.apimIdentityName
-  value               = data.azurerm_user_assigned_identity.apimIdentity.client_id
-  secret              = true
+  value  = data.azurerm_user_assigned_identity.apimIdentity.client_id
+  secret = true
 }
 
 resource "azurerm_api_management_logger" "event_hub_logger" {

@@ -1,6 +1,6 @@
 locals {
-  resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${var.identifier}"
-  networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
+  resourceSuffix               = "${var.workloadName}-${var.environment}-${var.location}-${var.identifier}"
+  networkingResourceGroupName  = "rg-networking-${local.resourceSuffix}"
   apimResourceGroupName        = "rg-apim-${local.resourceSuffix}"
   apimName                     = "apim-${local.resourceSuffix}"
   openaiResourceGroupName      = "rg-openai-${local.resourceSuffix}"
@@ -140,10 +140,10 @@ module "simulatedPaygoTwoDeployment" {
 }
 
 module "eventHub" {
-  source                  = "./modules/eventhub"
-  eventHubName            = var.eventHubName
-  eventHubNamespaceName   = local.eventHubNamespaceName
-  location                = var.location
+  source                = "./modules/eventhub"
+  eventHubName          = var.eventHubName
+  eventHubNamespaceName = local.eventHubNamespaceName
+  location              = var.location
   # apimIdentityName        = data.azurerm_api_management.apim.identity[0].principal_id
   apimIdentityName        = data.azurerm_user_assigned_identity.apimIdentity.name
   apimResourceGroupName   = data.azurerm_resource_group.apim.name
@@ -162,7 +162,7 @@ module "apiManagement" {
   eventHubNamespaceName          = module.eventHub.eventHubNamespaceName
   eventHubName                   = module.eventHub.eventHubName
   # apimIdentityName               = data.azurerm_api_management.apim.identity[0].principal_id
-  apimIdentityName               = data.azurerm_user_assigned_identity.apimIdentity.principal_id
+  apimIdentityName = data.azurerm_user_assigned_identity.apimIdentity.name
 
   depends_on = [
     module.eventHub

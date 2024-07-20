@@ -28,7 +28,7 @@ resource "azurerm_cognitive_account" "openai" {
 }
 
 resource "azurerm_cognitive_deployment" "deployment" {
-  for_each             = {for deployment in var.deployments: deployment.name => deployment}
+  for_each = { for deployment in var.deployments : deployment.name => deployment }
 
   name                 = each.key
   cognitive_account_id = azurerm_cognitive_account.openai.id
@@ -45,7 +45,7 @@ resource "azurerm_cognitive_deployment" "deployment" {
 }
 
 data "azurerm_role_definition" "cognitiveServicesOpenAIUser" {
-  name = "5e0bd9bd-7b93-4f28-af87-19fc36ad61bd"
+  name  = "Cognitive Services OpenAI User"
   scope = data.azurerm_subscription.primary.id
 }
 
