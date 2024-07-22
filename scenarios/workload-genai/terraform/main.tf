@@ -9,6 +9,12 @@ locals {
   private_endpoint_subnet_name = "snet-prep-${local.resourceSuffix}"
   eventHubNamespaceName        = "eh-ns-${local.resourceSuffix}"
   apimIdentityName             = "identity-${local.apimName}"
+  tags = {
+    enddate = "31/10/2024"
+    project = "asktelstrav2"
+    team    = "taipan"
+    creator = "nidhi"
+  }
 }
 
 data "azurerm_client_config" "current" {
@@ -22,6 +28,7 @@ data "azurerm_api_management" "apim" {
 resource "azurerm_resource_group" "rg" {
   name     = local.openaiResourceGroupName
   location = var.location
+  tags     = local.tags
 }
 
 data "azurerm_resource_group" "networking" {
