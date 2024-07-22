@@ -100,14 +100,14 @@ variable "openai_deployments" {
       }
       rai_policy_name = ""
     },
-    # {
-    #   name = "text-embedding-ada-002"
-    #   model = {
-    #     name = "text-embedding-ada-002"
-    #     version = "2"
-    #   }
-    #   rai_policy_name = ""
-    # }
+    {
+      name = "text-embedding-ada-002"
+      model = {
+        name    = "text-embedding-ada-002"
+        version = "2"
+      }
+      rai_policy_name = ""
+    }
   ]
 }
 

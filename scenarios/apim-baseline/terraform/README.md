@@ -1,10 +1,10 @@
-# Azure API Management - Secure Baseline [Bicep]
+# Azure API Management - Secure Baseline [Terraform]
 
-This is the Bicep-based deployment guide for [Scenario 1: Azure API Management - Secure Baseline](../README.md).
+This is the Terraform-based deployment guide for [Scenario 1: Azure API Management - Secure Baseline](../README.md).
 
 ## Prerequisites
 
-This is the starting point for the instructions on deploying this reference implementation. There is required access and tooling you'll need in order to accomplish this.
+This is the starting point for the instructions on deploying this reference implementation. There is the required access and tooling you'll need in order to accomplish this.
 
 - An Azure subscription
 - The following resource providers [registered](https://learn.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types#register-resource-provider):
@@ -39,29 +39,31 @@ This is the starting point for the instructions on deploying this reference impl
 
 1. Review and update deployment parameters.
 
-   Copy the `sample.bicep.env` into a new file called `.env` in the same directory.
+   Copy the `sample.terraform.env` into a new file called `.env` in the same directory. The main difference with the Bicep version is the need for a backend when deploying Terraform templates.
 
-   ```bash
    The [**.env**](../../.env) parameter file is where you can customize your deployment. The defaults are a suitable starting point, but feel free to adjust any to fit your requirements.
 
    **Deployment parameters**
 
-   | Name  | Description | Default | Example(s) |
-   | :---- | :---------- | :------ | :--------- |
-   | `AZURE_LOCATION` | The Azure location to deploy to. | **eastus** | **westus** |
-   | `RESOURCE_NAME_PREFIX` | A suffix for naming. | **apimdemo** | **appname** |
-   | `ENVIRONMENT_TAG` | A tag that will be included in the naming. | **dev** | **stage** |
-   | `APPGATEWAY_FQDN` | The Azure location to deploy to. | **apim.example.com** | **my.org.com** |
-   | `CERT_TYPE` | selfsigned will create a self-signed certificate for the APPGATEWAY_FQDN. custom will use an existing certificate in pfx format that needs to be available in the [certs](../../certs) folder and named appgw.pfx | **selfsigned** | **custom** |
-   | `CERT_PWD` | The password for the pfx certificate. Only required if CERT_TYPE is custom. | **N/A** | **password123** |
-   | `RANDOM_IDENTIFIER` | Optional 3 character random string to ensure deployments are unique. Automatically assigned if not provided | **abc** | **pqr** |
+    | Name  | Description | Default | Example(s) |
+    | :---- | :---------- | :------ | :--------- |
+    | `AZURE_LOCATION` | The Azure location to deploy to. | **eastus** | **westus** |
+    | `RESOURCE_NAME_PREFIX` | A suffix for naming. | **apimdemo** | **appname** |
+    | `ENVIRONMENT_TAG` | A tag that will be included in the naming. | **dev** | **stage** |
+    | `APPGATEWAY_FQDN` | The Azure location to deploy to. | **apim.example.com** | **my.org.com** |
+    | `CERT_TYPE` | selfsigned will create a self-signed certificate for the APPGATEWAY_FQDN. custom will use an existing certificate in pfx format that needs to be available in the [certs](../../certs) folder and named appgw.pfx | **selfsigned** | **custom** |
+    | `CERT_PWD` | The password for the pfx certificate. Only required if CERT_TYPE is custom. | **N/A** | **password123** |
+    | `RANDOM_IDENTIFIER` | Optional 3 character random string to ensure deployments are unique. Automatically assigned if not provided | **abc** | **pqr** |
+    | `TF_BACKEND_RESOURCE_GROUP_NAME` | The name of the resource group to store the Terraform state file. | **N/A** | **tfstate-rg** |
+    | `TF_BACKEND_STORAGE_ACCOUNT_NAME` | The name of the storage account to store the Terraform state file. | **N/A** | **tfstatestorage** |
+    | `TF_BACKEND_CONTAINER_NAME` | The name of the container to store the Terraform state file. | **N/A** | **tfstatecontainer** |
 
 1. Deploy the reference implementation.
 
    Run the following command to deploy the APIM baseline
 
     ```bash
-    ./scripts/bicep/deploy-apim-baseline.sh
+    ./scripts/terraform/deploy-apim-baseline.sh
     ```
 
 Test the echo api using the generated command from the output

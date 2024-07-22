@@ -24,7 +24,7 @@ By the end of this deployment guide, you would have deployed private Azure OpenA
 This reference implementation is provided with the following infrastructure as code options. Select the deployment guide you are interested in. They both deploy the same implementation.
 
 :arrow_forward: [Bicep-based deployment guide](./bicep/README.md)
-:arrow_forward: Terraform-based deployment guide (Work in progress)
+:arrow_forward: [Terraform-based deployment guide](./terraform/README.md)
 
 ## GenAI Gateway
 

@@ -1,17 +1,17 @@
 # Scenario 3: Azure API Management - Gen AI Backend  [Bicep]
 
-This is the Bicep-based deployment guide for [Scenario 3: Azure API Management - Gen AI Backend](../README.md).
+This is the Terraform-based deployment guide for [Scenario 3: Azure API Management - Gen AI Backend](../README.md).
 
 ## Prerequisites
 
-This scenario requires the completion of the [Azure API Management - Secure Baseline](../../apim-baseline/README.md) scenario.
+This scenario requires the completion of the [Azure API Management - Secure Baseline](../../apim-baseline/README.md) scenario ([using the terraform-based deployment](../../apim-baseline/terraform/README.md)).
 
 ## Steps
 
 Run the following command to deploy the scenarios
 
 ```bash
-./scripts/bicep/deploy-workload-genai.sh
+./scripts/terraform/deploy-workload-genai.sh
 ```
 
 Test the hello api using hte generated command from the output

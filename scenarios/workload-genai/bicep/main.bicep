@@ -1,4 +1,4 @@
-targetScope='subscription'
+targetScope = 'subscription'
 
 @description('The name of the API Management service instance')
 param apiManagementServiceName string
@@ -83,7 +83,7 @@ module simulatedPaygoOneDeployment './openai/openai.bicep' = {
     deploymentName: 'aoai'
     vnetName: vnetName
     privateEndpointSubnetid: privateEndpointSubnetid
-    networkingResourceGroupName: networkingResourceGroupName    
+    networkingResourceGroupName: networkingResourceGroupName
   }
   dependsOn: [
     dnsZone
@@ -101,7 +101,7 @@ module simulatedPaygoTwoDeployment './openai/openai.bicep' = {
     deploymentName: 'aoai'
     vnetName: vnetName
     privateEndpointSubnetid: privateEndpointSubnetid
-    networkingResourceGroupName: networkingResourceGroupName    
+    networkingResourceGroupName: networkingResourceGroupName
   }
   dependsOn: [
     dnsZone

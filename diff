@@ -1,0 +1,219 @@
+diff --git a/.devcontainer/devcontainer.json b/.devcontainer/devcontainer.json
+index 5cf661b..b19fe63 100644
+--- a/.devcontainer/devcontainer.json
++++ b/.devcontainer/devcontainer.json
+@@ -23,7 +23,6 @@
+ 		"ghcr.io/devcontainers/features/terraform:1": {}
+ 	},
+ 	"waitFor": "onCreateCommand",
+-	// "updateContentCommand": "python3 -m pip install -r requirements.txt",
+ 	"customizations": {
+ 		"vscode": {
+ 			"extensions": [
+diff --git a/scenarios/apim-baseline/README.md b/scenarios/apim-baseline/README.md
+index 091f791..64c2335 100644
+--- a/scenarios/apim-baseline/README.md
++++ b/scenarios/apim-baseline/README.md
+@@ -23,4 +23,4 @@ By the end of this deployment guide, you would have deployed an "internal mode"
+ This reference implementation is provided with the following infrastructure as code options. Select the deployment guide you are interested in. They both deploy the same implementation.
+ 
+ :arrow_forward: [Bicep-based deployment guide](./bicep/README.md)
+-:arrow_forward: Terraform-based deployment guide (Work in progress)
++:arrow_forward: [Terraform-based deployment guide](./terraform/README.md)
+diff --git a/scenarios/apim-baseline/bicep/README.md b/scenarios/apim-baseline/bicep/README.md
+index 03932cb..0a17bdf 100644
+--- a/scenarios/apim-baseline/bicep/README.md
++++ b/scenarios/apim-baseline/bicep/README.md
+@@ -39,7 +39,7 @@ This is the starting point for the instructions on deploying this reference impl
+ 
+ 1. Review and update deployment parameters.
+ 
+-   Copy the `sample.env` into a new file called `.env` in the same directory.
++   Copy the `sample.bicep.env` into a new file called `.env` in the same directory.
+ 
+    ```bash
+    The [**.env**](../../.env) parameter file is where you can customize your deployment. The defaults are a suitable starting point, but feel free to adjust any to fit your requirements.
+@@ -61,7 +61,7 @@ This is the starting point for the instructions on deploying this reference impl
+    Run the following command to deploy the APIM baseline
+ 
+     ```bash
+-    ./deploy-apim-baseline.sh
++    ./scripts/bicep/deploy-apim-baseline.sh
+     ```
+ 
+ Test the echo api using the generated command from the output
+diff --git a/scenarios/apim-baseline/bicep/main.bicep b/scenarios/apim-baseline/bicep/main.bicep
+index 5bec795..5578a4f 100644
+--- a/scenarios/apim-baseline/bicep/main.bicep
++++ b/scenarios/apim-baseline/bicep/main.bicep
+@@ -1,4 +1,4 @@
+-targetScope='subscription'
++targetScope = 'subscription'
+ 
+ // Parameters
+ @description('A short name for the workload being deployed alphanumberic only')
+@@ -86,7 +86,7 @@ module shared './shared/shared.bicep' = {
+   }
+ }
+ 
+-module apimModule 'apim/apim.bicep'  = {
++module apimModule 'apim/apim.bicep' = {
+   name: 'apimDeploy'
+   scope: resourceGroup(apimRG.name)
+   params: {
+@@ -111,20 +111,20 @@ module appgwModule 'gateway/appgw.bicep' = {
+     apimModule
+   ]
+   params: {
+-    appGatewayName:                 appGatewayName
+-    appGatewayFQDN:                 appGatewayFqdn
+-    location:                       location
+-    appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
+-    primaryBackendEndFQDN:          '${apimName}.azure-api.net'
+-    keyVaultName:                   shared.outputs.keyVaultName
+-    keyVaultResourceGroupName:      sharedRG.name
+-    appGatewayCertType:             appGatewayCertType
+-    certKey:                        certKey
+-    certData:                       certData
+-    appGatewayPublicIpName:         networking.outputs.appGatewayPublicIpName
+-    deploymentIdentityName:         shared.outputs.deploymentIdentityName
+-    deploymentSubnetId:             networking.outputs.deploymentSubnetId
+-    deploymentStorageName:          shared.outputs.deploymentStorageName
++    appGatewayName: appGatewayName
++    appGatewayFQDN: appGatewayFqdn
++    location: location
++    appGatewaySubnetId: networking.outputs.appGatewaySubnetid
++    primaryBackendEndFQDN: '${apimName}.azure-api.net'
++    keyVaultName: shared.outputs.keyVaultName
++    keyVaultResourceGroupName: sharedRG.name
++    appGatewayCertType: appGatewayCertType
++    certKey: certKey
++    certData: certData
++    appGatewayPublicIpName: networking.outputs.appGatewayPublicIpName
++    deploymentIdentityName: shared.outputs.deploymentIdentityName
++    deploymentSubnetId: networking.outputs.deploymentSubnetId
++    deploymentStorageName: shared.outputs.deploymentStorageName
+   }
+ }
+ 
+@@ -154,7 +154,7 @@ output vnetName string = networking.outputs.apimCSVNetName
+ output privateEndpointSubnetid string = networking.outputs.privateEndpointSubnetid
+ output deploymentIdentityName string = shared.outputs.deploymentIdentityName
+ output deploymentSubnetId string = networking.outputs.deploymentSubnetId
+-output deploymentStorageName string =shared.outputs.deploymentStorageName
++output deploymentStorageName string = shared.outputs.deploymentStorageName
+ output keyVaultName string = shared.outputs.keyVaultName
+ output appGatewayName string = appGatewayName
+ output appGatewayPublicIpAddress string = appgwModule.outputs.appGatewayPublicIpAddress
+diff --git a/scenarios/scripts/terraform/deploy-apim-baseline.sh b/scenarios/scripts/terraform/deploy-apim-baseline.sh
+index c7caa73..ad2c6b4 100755
+--- a/scenarios/scripts/terraform/deploy-apim-baseline.sh
++++ b/scenarios/scripts/terraform/deploy-apim-baseline.sh
+@@ -228,7 +228,13 @@ EOF
+ echo "Initializing Terraform backend..."
+ cd "$script_dir/../../apim-baseline/terraform" || exit
+ 
++echo "=="
++echo "== Starting terraform deployment baseline"
++echo "=="
++
++
+ # Delete local state files
++echo "== deleting local state files"
+ rm -rf .terraform
+ rm -f terraform.lock.hcl
+ rm -f terraform.tfstate
+diff --git a/scenarios/workload-functions/bicep/README.md b/scenarios/workload-functions/bicep/README.md
+index dd5819d..f7f138c 100644
+--- a/scenarios/workload-functions/bicep/README.md
++++ b/scenarios/workload-functions/bicep/README.md
+@@ -11,7 +11,7 @@ This scenario requires the completion of the [Azure API Management - Secure Base
+ Run the following command to deploy the scenarios
+ 
+ ```bash
+-./scripts/deploy-workload-function.sh
++./scripts/bicep/deploy-workload-function.sh
+ ```
+ 
+ Test the hello api using hte generated command from the output
+diff --git a/scenarios/workload-genai/README.md b/scenarios/workload-genai/README.md
+index 082e241..c06d126 100644
+--- a/scenarios/workload-genai/README.md
++++ b/scenarios/workload-genai/README.md
+@@ -24,7 +24,7 @@ By the end of this deployment guide, you would have deployed private Azure OpenA
+ This reference implementation is provided with the following infrastructure as code options. Select the deployment guide you are interested in. They both deploy the same implementation.
+ 
+ :arrow_forward: [Bicep-based deployment guide](./bicep/README.md)
+-:arrow_forward: Terraform-based deployment guide (Work in progress)
++:arrow_forward: [Terraform-based deployment guide](./terraform/README.md)
+ 
+ ## GenAI Gateway
+ 
+diff --git a/scenarios/workload-genai/bicep/README.md b/scenarios/workload-genai/bicep/README.md
+index 3ef3859..883ba1e 100644
+--- a/scenarios/workload-genai/bicep/README.md
++++ b/scenarios/workload-genai/bicep/README.md
+@@ -11,7 +11,7 @@ This scenario requires the completion of the [Azure API Management - Secure Base
+ Run the following command to deploy the scenarios
+ 
+ ```bash
+-./scripts/deploy-workload-genai.sh
++./scripts/bicep/deploy-workload-genai.sh
+ ```
+ 
+ Test the hello api using hte generated command from the output
+diff --git a/scenarios/workload-genai/bicep/main.bicep b/scenarios/workload-genai/bicep/main.bicep
+index c3dff4f..ac4af17 100644
+--- a/scenarios/workload-genai/bicep/main.bicep
++++ b/scenarios/workload-genai/bicep/main.bicep
+@@ -1,4 +1,4 @@
+-targetScope='subscription'
++targetScope = 'subscription'
+ 
+ @description('The name of the API Management service instance')
+ param apiManagementServiceName string
+@@ -83,7 +83,7 @@ module simulatedPaygoOneDeployment './openai/openai.bicep' = {
+     deploymentName: 'aoai'
+     vnetName: vnetName
+     privateEndpointSubnetid: privateEndpointSubnetid
+-    networkingResourceGroupName: networkingResourceGroupName    
++    networkingResourceGroupName: networkingResourceGroupName
+   }
+   dependsOn: [
+     dnsZone
+@@ -101,7 +101,7 @@ module simulatedPaygoTwoDeployment './openai/openai.bicep' = {
+     deploymentName: 'aoai'
+     vnetName: vnetName
+     privateEndpointSubnetid: privateEndpointSubnetid
+-    networkingResourceGroupName: networkingResourceGroupName    
++    networkingResourceGroupName: networkingResourceGroupName
+   }
+   dependsOn: [
+     dnsZone
+diff --git a/scenarios/workload-genai/terraform/variables.tf b/scenarios/workload-genai/terraform/variables.tf
+index 141ab34..3eebe43 100644
+--- a/scenarios/workload-genai/terraform/variables.tf
++++ b/scenarios/workload-genai/terraform/variables.tf
+@@ -100,14 +100,14 @@ variable "openai_deployments" {
+       }
+       rai_policy_name = ""
+     },
+-    # {
+-    #   name = "text-embedding-ada-002"
+-    #   model = {
+-    #     name = "text-embedding-ada-002"
+-    #     version = "2"
+-    #   }
+-    #   rai_policy_name = ""
+-    # }
++    {
++      name = "text-embedding-ada-002"
++      model = {
++        name    = "text-embedding-ada-002"
++        version = "2"
++      }
++      rai_policy_name = ""
++    }
+   ]
+ }
+ 

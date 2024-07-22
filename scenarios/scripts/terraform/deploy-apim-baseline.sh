@@ -228,7 +228,13 @@ EOF
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../apim-baseline/terraform" || exit
 
+echo "=="
+echo "== Starting terraform deployment baseline"
+echo "=="
+
+
 # Delete local state files
+echo "== deleting local state files"
 rm -rf .terraform
 rm -f terraform.lock.hcl
 rm -f terraform.tfstate
