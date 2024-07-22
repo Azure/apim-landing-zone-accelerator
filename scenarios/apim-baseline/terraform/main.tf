@@ -3,21 +3,30 @@ locals {
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName       = "rg-apim-${local.resourceSuffix}"
+  tags = {
+    enddate = "31/10/2024"
+    project = "asktelstrav2"
+    team    = "taipan"
+    creator = "nidhi"
+  }
 }
 
 resource "azurerm_resource_group" "networking" {
   name     = local.networkingResourceGroupName
   location = var.location
+  tags     = local.tags
 }
 
 resource "azurerm_resource_group" "shared" {
   name     = local.sharedResourceGroupName
   location = var.location
+  tags     = local.tags
 }
 
 resource "azurerm_resource_group" "apim" {
   name     = local.apimResourceGroupName
   location = var.location
+  tags     = local.tags
 }
 
 module "networking" {
@@ -44,15 +53,15 @@ module "shared" {
 }
 
 module "apim" {
-  depends_on         = [module.shared, module.networking]
-  source             = "./modules/apim"
-  location           = var.location
-  resourceGroupName  = azurerm_resource_group.apim.name
-  resourceSuffix     = local.resourceSuffix
-  environment        = var.environment
-  apimSubnetId       = module.networking.apimSubnetId
-  instrumentationKey = module.shared.instrumentationKey
-  workspaceId        = module.shared.workspaceId
+  depends_on              = [module.shared, module.networking]
+  source                  = "./modules/apim"
+  location                = var.location
+  resourceGroupName       = azurerm_resource_group.apim.name
+  resourceSuffix          = local.resourceSuffix
+  environment             = var.environment
+  apimSubnetId            = module.networking.apimSubnetId
+  instrumentationKey      = module.shared.instrumentationKey
+  workspaceId             = module.shared.workspaceId
   sharedResourceGroupName = azurerm_resource_group.shared.name
 }
 

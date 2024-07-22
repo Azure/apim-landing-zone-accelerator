@@ -147,7 +147,7 @@ else
 	fi
 	if [[ $response =~ ^[Yy]$ ]]; then
 		echo "Creating resource group $TF_BACKEND_RESOURCE_GROUP_NAME"
-		az group create --name "$TF_BACKEND_RESOURCE_GROUP_NAME" --location "$AZURE_LOCATION" > /dev/null
+		az group create --name "$TF_BACKEND_RESOURCE_GROUP_NAME" --location "$AZURE_LOCATION" --tags "enddate=31/10/2024" "project=asktelstrav2" "team=taipan" "creator=nidhi" > /dev/null
 		echo "Resource group $TF_BACKEND_RESOURCE_GROUP_NAME created."
 	else
 		echo "Exiting..."
@@ -227,6 +227,14 @@ EOF
 
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../apim-baseline/terraform" || exit
+
+# Delete local state files
+rm -rf .terraform
+rm -f terraform.lock.hcl
+rm -f terraform.tfstate
+rm -f terraform.tfstate.backup
+
+
 terraform init \
 	-backend-config="resource_group_name=${TF_BACKEND_RESOURCE_GROUP_NAME}" \
 	-backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT_NAME}" \

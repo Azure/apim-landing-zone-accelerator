@@ -211,6 +211,13 @@ EOF
 
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../workload-genai/terraform" || exit
+
+# Delete local state files
+rm -rf .terraform
+rm -f terraform.lock.hcl
+rm -f terraform.tfstate
+rm -f terraform.tfstate.backup
+
 terraform init \
 	-backend-config="resource_group_name=${TF_BACKEND_RESOURCE_GROUP_NAME}" \
 	-backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT_NAME}" \
