@@ -1,10 +1,10 @@
 <policies>
     <inbound>
         <base />
-        <!-- applies tokens constraint defined as per the fragment, doesn't set the backend-->
-        <include-fragment fragment-id="adaptive-rate-limiting" />
-        <!-- this can be used for new ratelimiting isn't available in the region -->
-        <!-- <include-fragment fragment-id="adaptive-rate-limiting-workaround" /> -->
+        
+        <!-- Rate limiting: applies tokens constraint defined as per the fragment, doesn't set the backend-->
+        <!-- there are other variants that can be used as well-->
+        <include-fragment fragment-id="rate-limiting-by-tokens" />
 
         <!-- START: set backend service -->
 

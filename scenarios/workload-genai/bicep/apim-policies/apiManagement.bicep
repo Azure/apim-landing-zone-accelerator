@@ -117,6 +117,16 @@ resource weightedRoundRobinPolicyFragment 'Microsoft.ApiManagement/service/polic
   dependsOn: [payAsYouGoBackendOne, payAsYouGoBackendTwo]
 }
 
+resource simpleRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'rate-limiting-by-tokens'
+  properties: {
+    value: loadTextContent('../../policies/fragments/rate-limiting/rate-limiting-by-tokens.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
+}
+
 resource adaptiveRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
   name: 'adaptive-rate-limiting'
@@ -129,9 +139,9 @@ resource adaptiveRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/pol
 
 resource adaptiveRateLimitingWorkAroundPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
-  name: 'adaptive-rate-limiting-workaround'
+  name: 'rate-limiting-workaround'
   properties: {
-    value: loadTextContent('../../policies/fragments/rate-limiting/adaptive-rate-limiting-workaround.xml')
+    value: loadTextContent('../../policies/fragments/rate-limiting/rate-limiting-workaround.xml')
     format: 'rawxml'
   }
   dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
