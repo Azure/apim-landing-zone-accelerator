@@ -40,13 +40,6 @@ else
   TF_BACKEND_CONTAINER_NAME="${TF_BACKEND_CONTAINER_NAME%$'\r'}"
 fi
 
-# if [[ ${#TF_BACKEND_KEY} -eq 0 ]]; then
-#   echo 'ERROR: Missing environment variable TF_BACKEND_KEY' 1>&2
-#   exit 6
-# else
-#   TF_BACKEND_KEY="${TF_BACKEND_KEY%$'\r'}"
-# fi
-
 if [[ ${#TF_BACKEND_RESOURCE_GROUP_NAME} -eq 0 ]]; then
   echo 'ERROR: Missing environment variable TF_BACKEND_RESOURCE_GROUP_NAME' 1>&2
   exit 6

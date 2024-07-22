@@ -6,7 +6,6 @@ terraform {
     #  is now being overwritten via local testing environments
     # > https://developer.hashicorp.com/terraform/language/settings/backends/configuration#command-line-key-value-pairs
     #
-    # Reading from backend-ENV.hcl
     #
     # ----------------------
     # e.g: terraform init \
@@ -19,6 +18,9 @@ terraform {
     # storage_account_name = "tfsaeastus2001"
     # container_name       = "tfstatus"
     # key                  = "scenario3.tfstate"
+    # ------
+    # for this repository we are setting it up during the execution of the deployment script
+    # it takes as an input the .env values
   }
   required_providers {
     azurerm = {

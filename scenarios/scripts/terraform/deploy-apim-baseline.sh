@@ -44,13 +44,6 @@ else
   TF_BACKEND_CONTAINER_NAME="${TF_BACKEND_CONTAINER_NAME%$'\r'}"
 fi
 
-# if [[ ${#TF_BACKEND_KEY} -eq 0 ]]; then
-#   echo 'ERROR: Missing environment variable TF_BACKEND_KEY' 1>&2
-#   exit 6
-# else
-#   TF_BACKEND_KEY="${TF_BACKEND_KEY%$'\r'}"
-# fi
-
 if [[ ${#TF_BACKEND_RESOURCE_GROUP_NAME} -eq 0 ]]; then
   echo 'ERROR: Missing environment variable TF_BACKEND_RESOURCE_GROUP_NAME' 1>&2
   exit 6
@@ -265,7 +258,6 @@ echo "== Completed terraform deployment"
 
 # remove the plan file, tfvars and terraform.tfstate
 rm -f "${ENVIRONMENT_TAG}.tfplan"
-rm -f terraform.tfstate
 rm -f "${ENVIRONMENT_TAG}.tfvars"
 
 APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
@@ -279,13 +271,11 @@ API_SUBSCRIPTION_NAME="Echo API"
 TOKEN=$(az account get-access-token --query accessToken --output tsv)
 
 # get the subscription id based on the subscription display name
-echo "https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01"
 API_SUBSCRIPTION_ID=$(curl -s -S -H "Authorization: Bearer $TOKEN" \
 	-H "Content-Type: application/json" \
 	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01" | jq -r --arg API_SUBSCRIPTION_NAME "$API_SUBSCRIPTION_NAME" '.value[] | select(.properties.displayName == $API_SUBSCRIPTION_NAME) | .name' )
 
 # Call the Azure REST API to get subscription keys
-echo "https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions/$API_SUBSCRIPTION_ID/listSecrets?api-version=2022-08-01"
 output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
 	-H "Content-Type: application/json" \
 	-H "Content-Length: 0" \

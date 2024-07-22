@@ -23,7 +23,7 @@ variable "identifier" {
 
 variable "tags" {
   description = "(Optional) Specifies tags for all the resources"
-  default = {}
+  default     = {}
 }
 
 variable "log_analytics_workspace_name" {
@@ -78,7 +78,7 @@ variable "openai_custom_subdomain_name" {
 variable "openai_public_network_access_enabled" {
   description = "(Optional) Specifies whether public network access is allowed for the Azure OpenAI Service"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "openai_deployments" {
