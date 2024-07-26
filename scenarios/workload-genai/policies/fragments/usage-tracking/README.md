@@ -17,6 +17,8 @@ customMetrics
 
 ```
 
+This policy supports streaming endpoints in Azure OpenAI.
+
 ## Using Azure Event Hub
 
 ### Azure EventHub over Custom Metrics to Azure Monitor
