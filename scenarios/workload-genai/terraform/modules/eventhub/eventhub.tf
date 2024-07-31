@@ -28,5 +28,4 @@ resource "azurerm_role_assignment" "assignEventHubsDataSenderToApiManagement" {
   scope                = azurerm_eventhub_namespace.eventHubNamespace.id
   role_definition_name = data.azurerm_role_definition.eventHubsDataSenderRoleDefinition.name
   principal_id         = data.azurerm_user_assigned_identity.apimIdentity.principal_id
-  # principal_id = var.apimIdentityName
 }

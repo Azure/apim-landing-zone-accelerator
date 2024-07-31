@@ -13,6 +13,7 @@ variable "tags" {
   default     = {}
 }
 
+# To check
 # variable "virtual_networks_to_link" {
 #   description = "(Optional) Specifies the subscription id, resource group name, and name of the virtual networks to which create a virtual network link"
 #   type        = map(any)

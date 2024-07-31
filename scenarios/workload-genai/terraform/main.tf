@@ -9,12 +9,6 @@ locals {
   private_endpoint_subnet_name = "snet-prep-${local.resourceSuffix}"
   eventHubNamespaceName        = "eh-ns-${local.resourceSuffix}"
   apimIdentityName             = "identity-${local.apimName}"
-  tags = {
-    enddate = "31/10/2024"
-    project = "asktelstrav2"
-    team    = "taipan"
-    creator = "nidhi"
-  }
 }
 
 data "azurerm_client_config" "current" {
@@ -23,12 +17,6 @@ data "azurerm_client_config" "current" {
 data "azurerm_api_management" "apim" {
   name                = local.apimName
   resource_group_name = local.apimResourceGroupName
-}
-
-resource "azurerm_resource_group" "rg" {
-  name     = local.openaiResourceGroupName
-  location = var.location
-  tags     = local.tags
 }
 
 data "azurerm_resource_group" "networking" {
@@ -151,7 +139,6 @@ module "eventHub" {
   eventHubName          = var.eventHubName
   eventHubNamespaceName = local.eventHubNamespaceName
   location              = var.location
-  # apimIdentityName        = data.azurerm_api_management.apim.identity[0].principal_id
   apimIdentityName        = data.azurerm_user_assigned_identity.apimIdentity.name
   apimResourceGroupName   = data.azurerm_resource_group.apim.name
   openaiResourceGroupName = azurerm_resource_group.rg.name
@@ -168,8 +155,7 @@ module "apiManagement" {
   payAsYouGoDeploymentTwoBaseUrl = "${module.simulatedPaygoTwoDeployment.endpoint}openai"
   eventHubNamespaceName          = module.eventHub.eventHubNamespaceName
   eventHubName                   = module.eventHub.eventHubName
-  # apimIdentityName               = data.azurerm_api_management.apim.identity[0].principal_id
-  apimIdentityName = data.azurerm_user_assigned_identity.apimIdentity.name
+  apimIdentityName               = data.azurerm_user_assigned_identity.apimIdentity.name
 
   depends_on = [
     module.eventHub

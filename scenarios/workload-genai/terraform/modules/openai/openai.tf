@@ -50,7 +50,6 @@ data "azurerm_role_definition" "cognitiveServicesOpenAIUser" {
 }
 
 resource "azurerm_role_assignment" "roleAssignment" {
-  # name               = "${azurerm_cognitive_account.openai.id}-${data.azurerm_user_assigned_identity.apimIdentity.name}-${azurerm_role_definition.cognitiveServicesOpenAIUser.id}"
   scope              = azurerm_cognitive_account.openai.id
   role_definition_id = data.azurerm_role_definition.cognitiveServicesOpenAIUser.id
   principal_id       = data.azurerm_user_assigned_identity.apimIdentity.principal_id

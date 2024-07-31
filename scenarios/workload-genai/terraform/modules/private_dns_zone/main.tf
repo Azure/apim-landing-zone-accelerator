@@ -10,7 +10,7 @@ resource "azurerm_private_dns_zone" "private_dns_zone" {
   }
 }
 
-
+# To check
 resource "azurerm_private_dns_zone_virtual_network_link" "link" {
   # for_each = var.virtual_networks_to_link
 
