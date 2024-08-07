@@ -28,7 +28,7 @@ output "primary_access_key" {
   sensitive = true
   description = "Specifies the primary access key of the Azure OpenAI Service."
 }
-
+# To check
 # output "secondary_access_key" {
 #   value = azurerm_cognitive_account.openai.secondary_access_key
 #   sensitive = true
