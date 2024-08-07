@@ -3,6 +3,7 @@ locals {
   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
   sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName       = "rg-apim-${local.resourceSuffix}"
+  keyVaultName                = "kv-${var.workloadName}-${var.environment}-${var.identifier}"
   tags = {
     enddate = "31/10/2024"
     project = "asktelstrav2"
@@ -49,6 +50,7 @@ module "shared" {
   resourceGroupName   = azurerm_resource_group.shared.name
   resourceSuffix      = local.resourceSuffix
   additionalClientIds = var.additionalClientIds
+  keyVaultName        = local.keyVaultName
   keyVaultSku         = var.keyVaultSku
 }
 
@@ -63,6 +65,7 @@ module "apim" {
   instrumentationKey      = module.shared.instrumentationKey
   workspaceId             = module.shared.workspaceId
   sharedResourceGroupName = azurerm_resource_group.shared.name
+  keyVaultName            = local.keyVaultName
 }
 
 module "gateway" {

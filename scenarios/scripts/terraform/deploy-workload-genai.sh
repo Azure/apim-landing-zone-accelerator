@@ -24,29 +24,6 @@ fi
 
 
 #### VALIDATE VARIABLES:
-
-# tf backend
-if [[ ${#TF_BACKEND_STORAGE_ACCOUNT_NAME} -eq 0 ]]; then
-  echo 'ERROR: Missing environment variable TF_BACKEND_STORAGE_ACCOUNT_NAME' 1>&2
-  exit 6
-else
-  TF_BACKEND_STORAGE_ACCOUNT_NAME="${TF_BACKEND_STORAGE_ACCOUNT_NAME%$'\r'}"
-fi
-
-if [[ ${#TF_BACKEND_CONTAINER_NAME} -eq 0 ]]; then
-  echo 'ERROR: Missing environment variable TF_BACKEND_CONTAINER_NAME' 1>&2
-  exit 6
-else
-  TF_BACKEND_CONTAINER_NAME="${TF_BACKEND_CONTAINER_NAME%$'\r'}"
-fi
-
-if [[ ${#TF_BACKEND_RESOURCE_GROUP_NAME} -eq 0 ]]; then
-  echo 'ERROR: Missing environment variable TF_BACKEND_RESOURCE_GROUP_NAME' 1>&2
-  exit 6
-else
-  TF_BACKEND_RESOURCE_GROUP_NAME="${TF_BACKEND_RESOURCE_GROUP_NAME%$'\r'}"
-fi
-
 if [[ ${#AZURE_LOCATION} -eq 0 ]]; then
   echo 'ERROR: Missing environment variable AZURE_LOCATION' 1>&2
   exit 6
@@ -120,84 +97,6 @@ else
 fi
 
 
-# VALIDATE BACKEND RESOURCES EXIST
-echo "Reusing backend resources..."
-if [ "$(az group exists --name "$TF_BACKEND_RESOURCE_GROUP_NAME")" = true ]; then
-  echo "Resource group $TF_BACKEND_RESOURCE_GROUP_NAME exists."
-else
-  echo "Resouce group $TF_BACKEND_RESOURCE_GROUP_NAME not found" 1>&2
-  if [[ $auto_confirm == true ]]; then
-		echo "auto-confirmation enabled ... continuing"
-		response="y"
-	else
-		echo "Do you want to create it? (y/n)"
-		read -r response
-	fi
-	if [[ $response =~ ^[Yy]$ ]]; then
-		echo "Creating resource group $TF_BACKEND_RESOURCE_GROUP_NAME"
-		az group create --name "$TF_BACKEND_RESOURCE_GROUP_NAME" --location "$AZURE_LOCATION" > /dev/null
-		echo "Resource group $TF_BACKEND_RESOURCE_GROUP_NAME created."
-	else
-		echo "Exiting..."
-		exit 6
-	fi
-fi
-
-echo "validating storage account $TF_BACKEND_STORAGE_ACCOUNT_NAME"
-if az storage account show --name "$TF_BACKEND_STORAGE_ACCOUNT_NAME" --resource-group "$TF_BACKEND_RESOURCE_GROUP_NAME" > /dev/null 2>&1; then
-    echo "Storage account $TF_BACKEND_STORAGE_ACCOUNT_NAME exists in resource group $TF_BACKEND_RESOURCE_GROUP_NAME."
-else
-	echo "Storage account $TF_BACKEND_STORAGE_ACCOUNT_NAME does not exist in resource group $TF_BACKEND_RESOURCE_GROUP_NAME or an error occurred."
-	if [[ $auto_confirm == true ]]; then
-		echo "auto-confirmation enabled ... continuing"
-		response="y"
-	else
-		echo "Do you want to create it? (y/n)"
-		read -r response
-	fi
-	if [[ $response =~ ^[Yy]$ ]]; then
-		echo "Checking if storage account name is available..."
-		if az storage account check-name --name "$TF_BACKEND_STORAGE_ACCOUNT_NAME" --query "nameAvailable" --output tsv; then
-			echo "Storage account name $TF_BACKEND_STORAGE_ACCOUNT_NAME is available."
-		else
-			echo "Storage account name $TF_BACKEND_STORAGE_ACCOUNT_NAME is not available. Exiting..."
-			exit 6
-		fi
-		echo "Creating storage account $TF_BACKEND_STORAGE_ACCOUNT_NAME"
-		az storage account create --name "$TF_BACKEND_STORAGE_ACCOUNT_NAME" --resource-group "$TF_BACKEND_RESOURCE_GROUP_NAME" --location "$AZURE_LOCATION" --sku Standard_LRS > /dev/null
-		az storage container create --name "$TF_BACKEND_CONTAINER_NAME" --account-name "$TF_BACKEND_STORAGE_ACCOUNT_NAME" > /dev/null
-		echo "Storage account $TF_BACKEND_STORAGE_ACCOUNT_NAME created."
-	else
-		echo "Exiting..."
-		exit 6
-	fi
-fi
-
-echo "validating container $TF_BACKEND_CONTAINER_NAME"
-
-if az storage container show --name "$TF_BACKEND_CONTAINER_NAME" --account-name "$TF_BACKEND_STORAGE_ACCOUNT_NAME" > /dev/null 2>&1; then
-  echo "Container $TF_BACKEND_CONTAINER_NAME exists in storage account $TF_BACKEND_STORAGE_ACCOUNT_NAME."
-else
-	echo "Container $TF_BACKEND_CONTAINER_NAME not found in storage account $TF_BACKEND_STORAGE_ACCOUNT_NAME"
-  if [[ $auto_confirm == true ]]; then
-		echo "auto-confirmation enabled ... continuing"
-		response="y"
-	else
-		echo "Do you want to create it? (y/n)"
-		read -r response
-	fi
-	if [[ $response =~ ^[Yy]$ ]]; then
-		echo "Creating container $TF_BACKEND_CONTAINER_NAME"
-		az storage container create --name "$TF_BACKEND_CONTAINER_NAME" --account-name "$TF_BACKEND_STORAGE_ACCOUNT_NAME" > /dev/null
-		echo "Container $TF_BACKEND_CONTAINER_NAME created."
-	else
-		echo "Exiting..."
-		exit 6
-	fi
-fi
-
-echo "Backend resources are valid"
-
 # creating tfvars
 # create tfvars
 echo "Creating terraform variables file..."
@@ -209,6 +108,10 @@ identifier			= "${random_string}"
 enableTelemetry    	= "${telemetry}"
 EOF
 
+echo "Copying backend file to terraform directory..."
+cp "$script_dir/../../${ENVIRONMENT_TAG}-backend.hcl" "$script_dir/../../workload-genai/terraform/${ENVIRONMENT_TAG}-backend.hcl"
+
+
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../workload-genai/terraform" || exit
 
@@ -219,10 +122,8 @@ rm -f terraform.tfstate
 rm -f terraform.tfstate.backup
 
 terraform init \
-	-backend-config="resource_group_name=${TF_BACKEND_RESOURCE_GROUP_NAME}" \
-	-backend-config="storage_account_name=${TF_BACKEND_STORAGE_ACCOUNT_NAME}" \
-	-backend-config="container_name=${TF_BACKEND_CONTAINER_NAME}" \
-	-backend-config="key=${ENVIRONMENT_TAG}-genai.tfstate"
+	-backend-config="${ENVIRONMENT_TAG}-backend.hcl" \
+	-backend-config="key=${ENVIRONMENT_TAG}-genai-lza.tfstate"
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"
@@ -251,6 +152,7 @@ echo "== Completed terraform deployment"
 rm -f "${ENVIRONMENT_TAG}.tfplan"
 rm -f terraform.tfstate
 rm -f "${ENVIRONMENT_TAG}.tfvars"
+rm -f "${ENVIRONMENT_TAG}-backend.hcl"
 
 # Setting variables
 APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"

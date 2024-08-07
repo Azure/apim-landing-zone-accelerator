@@ -24,6 +24,11 @@ variable "resourceGroupName" {
 # APIM specific variables
 #-------------------------------
 
+variable "keyVaultName" {
+  description = "The name of the Key Vault"
+  type        = string
+}
+
 variable "publisherName" {
   description = "The name of the publisher/company"
   type        = string

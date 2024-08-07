@@ -11,12 +11,12 @@ resource "azurerm_user_assigned_identity" "apimIdentity" {
 }
 
 data "azurerm_key_vault" "keyVault" {
-  name                = trim(substr("kv-${var.resourceSuffix}", 0, 24), "-")
+  name                = var.keyVaultName
   resource_group_name = var.sharedResourceGroupName
 }
 
 #-------------------------------
-# Creation of an internal APIM instance 
+# Creation of an internal APIM instance
 #-------------------------------
 resource "azurerm_api_management" "apim_internal" {
   name                 = local.apimName
@@ -33,7 +33,7 @@ resource "azurerm_api_management" "apim_internal" {
   }
 
   identity {
-    type = "UserAssigned"
+    type         = "UserAssigned"
     identity_ids = ["${azurerm_user_assigned_identity.apimIdentity.id}"]
   }
 

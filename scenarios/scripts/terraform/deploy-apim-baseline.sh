@@ -26,7 +26,6 @@ else
   random_string="${RANDOM_IDENTIFIER}"
 fi
 
-
 #### VALIDATE VARIABLES:
 
 if [[ ${#AZURE_LOCATION} -eq 0 ]]; then
@@ -123,6 +122,9 @@ certKey 			= "${cert_pwd}"
 enableTelemetry    	= "${telemetry}"
 EOF
 
+echo "Copying backend file to terraform directory..."
+cp "$script_dir/../../${ENVIRONMENT_TAG}-backend.hcl" "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.hcl"
+
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../apim-baseline/terraform" || exit
 
@@ -140,7 +142,8 @@ rm -f terraform.tfstate.backup
 
 
 terraform init \
-	-backend-config="key=${ENVIRONMENT_TAG}-baseline.tfstate"
+	-backend-config="${ENVIRONMENT_TAG}-backend.hcl" \
+	-backend-config="key=${ENVIRONMENT_TAG}-baseline-lza.tfstate"
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"
@@ -168,6 +171,7 @@ echo "== Completed terraform deployment"
 # remove the plan file, tfvars and terraform.tfstate
 rm -f "${ENVIRONMENT_TAG}.tfplan"
 rm -f "${ENVIRONMENT_TAG}.tfvars"
+rm -f "${ENVIRONMENT_TAG}-backend.hcl"
 
 APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
 APIM_RESOURCE_GROUP="rg-apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"

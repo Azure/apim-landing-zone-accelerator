@@ -9,6 +9,8 @@ set -e
 # --storage-account or -s: The Azure storage account name for the Terraform backend.
 # --container or -c: The Azure storage container name for the Terraform backend.
 # --auto-confirm or -y: Automatically confirm prompts without user interaction.
+# Example execution:
+# ./azure-backend-sample.sh --resource-group my-resource-group --storage-account my-storage-account --container my-container --auto-confirm
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do

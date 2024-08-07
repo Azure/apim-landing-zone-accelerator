@@ -20,6 +20,11 @@ variable "resourceGroupName" {
   description = "The name of the resource group"
 }
 
+variable "keyVaultName" {
+  type        = string
+  description = "The name of the Key Vault"
+}
+
 variable "keyVaultSku" {
   type        = string
   description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
@@ -31,15 +36,3 @@ variable "additionalClientIds" {
   type        = list(string)
   default     = []
 }
-
-
-
-
-
-
-
-
-
-
-
-

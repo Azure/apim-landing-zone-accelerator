@@ -343,4 +343,4 @@ scenarios/apim-baseline/bicep/parameters.json
 # Rest client test files
 *.http
 
-backend-*.hcl
+*-backend.hcl
