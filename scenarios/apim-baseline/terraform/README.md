@@ -39,7 +39,7 @@ This is the starting point for the instructions on deploying this reference impl
 
 1. Review and update deployment parameters.
 
-   Copy the `sample.terraform.env` into a new file called `.env` in the same directory. The main difference with the Bicep version is the need for a backend when deploying Terraform templates.
+   Copy the `sample.env` into a new file called `.env` in the same directory. The main difference with the Bicep version is the need for a backend when deploying Terraform templates.
 
    The [**.env**](../../.env) parameter file is where you can customize your deployment. The defaults are a suitable starting point, but feel free to adjust any to fit your requirements.
 
@@ -54,9 +54,24 @@ This is the starting point for the instructions on deploying this reference impl
     | `CERT_TYPE` | selfsigned will create a self-signed certificate for the APPGATEWAY_FQDN. custom will use an existing certificate in pfx format that needs to be available in the [certs](../../certs) folder and named appgw.pfx | **selfsigned** | **custom** |
     | `CERT_PWD` | The password for the pfx certificate. Only required if CERT_TYPE is custom. | **N/A** | **password123** |
     | `RANDOM_IDENTIFIER` | Optional 3 character random string to ensure deployments are unique. Automatically assigned if not provided | **abc** | **pqr** |
-    | `TF_BACKEND_RESOURCE_GROUP_NAME` | The name of the resource group to store the Terraform state file. | **N/A** | **tfstate-rg** |
-    | `TF_BACKEND_STORAGE_ACCOUNT_NAME` | The name of the storage account to store the Terraform state file. | **N/A** | **tfstatestorage** |
-    | `TF_BACKEND_CONTAINER_NAME` | The name of the container to store the Terraform state file. | **N/A** | **tfstatecontainer** |
+
+1. For terraform to work, you'll need to setup the [tf backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration). As part of the repository we provide a `azure-backend-sample.sh` script. This script will create a storage account and a container to store the terraform state. You can run the script with the following command:
+
+    ```bash
+    ./azure-backend-sample.sh \
+         --resource-group my-resource-group \
+         --storage-account my-storage-account \
+         --container my-container
+    ```
+
+1. After setting up your backend, create a `${ENVIRONMENT_TAG}-backend.hcl` file in the same directory as your `.env`. Don't include the key value, as it is hardcoded in the script. If you are using the sample script (TF Backend in Azure), the file should look like the `sample.backend.hcl` file. So if you are going to use an Azure Backend for your Terraform provider and your ENVIRONMENT_TAG is `dev`, you should have a `dev-backend.hcl` file in the same directory as your `.env` file that looks like this:
+
+   ```hcl
+   resource_group_name  = "my-resource-group"
+   storage_account_name = "mystorageaccount"
+   container_name       = "my-container"
+   ```
+
 
 1. Deploy the reference implementation.
 

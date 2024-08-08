@@ -49,6 +49,12 @@ data "azurerm_user_assigned_identity" "apimIdentity" {
   resource_group_name = local.apimResourceGroupName
 }
 
+resource "azurerm_resource_group" "rg" {
+  name     = local.openaiResourceGroupName
+  location = var.location
+}
+
+
 module "openai_private_dns_zone" {
   source                      = "./modules/private_dns_zone"
   name                        = "privatelink.openai.azure.com"
@@ -135,10 +141,10 @@ module "simulatedPaygoTwoDeployment" {
 }
 
 module "eventHub" {
-  source                = "./modules/eventhub"
-  eventHubName          = var.eventHubName
-  eventHubNamespaceName = local.eventHubNamespaceName
-  location              = var.location
+  source                  = "./modules/eventhub"
+  eventHubName            = var.eventHubName
+  eventHubNamespaceName   = local.eventHubNamespaceName
+  location                = var.location
   apimIdentityName        = data.azurerm_user_assigned_identity.apimIdentity.name
   apimResourceGroupName   = data.azurerm_resource_group.apim.name
   openaiResourceGroupName = azurerm_resource_group.rg.name

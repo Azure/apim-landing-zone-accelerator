@@ -39,7 +39,7 @@ This is the starting point for the instructions on deploying this reference impl
 
 1. Review and update deployment parameters.
 
-   Copy the `sample.bicep.env` into a new file called `.env` in the same directory.
+   Copy the `sample.env` into a new file called `.env` in the same directory.
 
    ```bash
    The [**.env**](../../.env) parameter file is where you can customize your deployment. The defaults are a suitable starting point, but feel free to adjust any to fit your requirements.
