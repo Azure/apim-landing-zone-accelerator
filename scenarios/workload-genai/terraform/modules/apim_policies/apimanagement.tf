@@ -41,11 +41,8 @@ resource "azurerm_api_management_product" "azureOpenAIProduct" {
   published             = true
 }
 
-# To check
 resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
-  # count               = length(local.azureOpenAIAPINames)
   product_id = azurerm_api_management_product.azureOpenAIProduct.product_id
-  # api_name            = "${data.azurerm_api_management.apiManagementService.name}/${azurerm_api_management_product.azureOpenAIProduct.display_name}/${local.azureOpenAIAPINames[count.index]}"
   api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
   resource_group_name = var.resourceGroupName
