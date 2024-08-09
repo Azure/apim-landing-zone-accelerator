@@ -5,10 +5,6 @@ locals {
   apimResourceGroupName       = "rg-apim-${local.resourceSuffix}"
   keyVaultName                = "kv-${var.workloadName}-${var.environment}-${var.identifier}"
   tags = {
-    enddate = "31/10/2024"
-    project = "asktelstrav2"
-    team    = "taipan"
-    creator = "nidhi"
   }
 }
 
