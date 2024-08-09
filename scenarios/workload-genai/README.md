@@ -40,7 +40,7 @@ This repo currently contains the policies showing how to implement these GenAI G
 
 | Capability                                                                      | Description                                                             |
 | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| [Load balancing (round-robin)](./policies/fragments/load-balancing/Readme.md) | Load balance traffic across PAYG endpoints using simple and weighted round-robin algorithm. |
+| [Load balancing (round-robin)](./policies/fragments/load-balancing/README.md) | Load balance traffic across PAYG endpoints using simple and weighted round-robin algorithm. |
 | [Managing spikes with PAYG](./policies/fragments/manage-spikes-with-payg/README.md) | Manage spikes in traffic by routing traffic to PAYG endpoints when a PTU is out of capacity. |
 | [Adaptive rate limiting](./policies/fragments/rate-limiting/README.md) | Dynamically adjust rate-limits applied to different workloads|
 | [Tracking token usage](./policies/fragments/usage-tracking//README.md) | Record the token consumption for usage tracking and attribution|
