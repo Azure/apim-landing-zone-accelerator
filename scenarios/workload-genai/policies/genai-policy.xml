@@ -1,13 +1,9 @@
 <policies>
     <inbound>
         <base />
-        <!-- MSI authentication to the backends-->
-        <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" client-id="{{apim-identity}}" ignore-error="false" />
-        <set-header name="Authorization" exists-action="override">
-            <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
-        </set-header>
-        <set-backend-service id="apim-generated-policy" backend-id="aoai-lb-pool" />
-        
+        <!-- sets the backed to the load balanced pool-->
+        <include-fragment fragment-id="simple-priority-weighted" />
+
         <!-- applies tokens constraint defined as per the fragment, doesn't set the backend-->
         <include-fragment fragment-id="adaptive-rate-limiting" />
 
@@ -17,8 +13,6 @@
     <backend>
         <!-- either base or the fragment needs to be present.  -->
         <!-- <base /> -->
-        <!-- sets backend to PTU endpoint by default and retries with PAYG when PTU return 429 -->
-        <!-- <include-fragment fragment-id="retry-with-payg" /> -->
 
         <!-- set the count to the number of backends-->
         <retry condition="@(context.Response.StatusCode == 429)" count="3" interval="1" first-fast-retry="true">
@@ -28,27 +22,7 @@
     </backend>
     <outbound>
         <base />
-        <!--
-         <set-header name="x-apim-backend" exists-action="override">
-            <value>@((string)context.Variables["selected-backend-id"])</value>
-        </set-header>
-        <choose>
-            <when condition="@(context.Response.StatusCode == 200)"> -->
-                <!--
-					NOTE: To retrieve context.Response.Body in inbound section, this object needs to be accessed first in the outbound section of the policy. Not doing so will return null body in Inbound section.
-					We are using preserveContent=true when deserializing response body stream into a JSON object since we intend to access it again. See details on htTPM://docs.microsoft.com/en-us/azure/api-management/api-management-transformation-policies#SetBody 
-				-->
-                <!--Response Modification:
-					Checks if the response status code is 200.
-					Converts the response body into a JSON object to be returned as a string.-->
-               <!-- <set-body>@{                   
-                JObject api_response = context.Response.Body.As&lt;JObject&gt;(preserveContent: true);                
-                return api_response.ToString();                         
-                }</set-body>
-            </when>
-        </choose>-->
-        <!-- tracks token consumption using the event hub, this can be used as a workaround if the 
-        new policy isn't available in the region yet. -->
+        <!-- tracks token consumption using the event hub, this can be used as a workaround. -->
         <!-- <include-fragment fragment-id="usage-tracking-with-eventhub" /> -->
     </outbound>
     <on-error>

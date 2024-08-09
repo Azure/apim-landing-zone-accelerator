@@ -99,23 +99,15 @@ resource azureOpenAIProductSubscription 'Microsoft.ApiManagement/service/subscri
 
 resource simpleRoundRobinPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
-  name: 'simple-round-robin'
+  name: 'simple-priority-weighted'
   properties: {
-    value: loadTextContent('../../policies/fragments/load-balancing/simple-round-robin.xml')
+    value: loadTextContent('../../policies/fragments/load-balancing/simple-priority-weighted.xml')
     format: 'rawxml'
   }
   dependsOn: [payAsYouGoBackendOne, payAsYouGoBackendTwo]
 }
 
-resource weightedRoundRobinPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
-  parent: apiManagementService
-  name: 'weighted-round-robin'
-  properties: {
-    value: loadTextContent('../../policies/fragments/load-balancing/weighted-round-robin.xml')
-    format: 'rawxml'
-  }
-  dependsOn: [payAsYouGoBackendOne, payAsYouGoBackendTwo]
-}
+
 
 resource adaptiveRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
@@ -135,16 +127,6 @@ resource adaptiveRateLimitingWorkAroundPolicyFragment 'Microsoft.ApiManagement/s
     format: 'rawxml'
   }
   dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
-}
-
-
-resource retryWithPayAsYouGoPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
-  parent: apiManagementService
-  name: 'retry-with-payg'
-  properties: {
-    value: loadTextContent('../../policies/fragments/manage-spikes-with-payg/retry-with-payg.xml')
-    format: 'rawxml'
-  }
 }
 
 resource usageTrackingEHPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
@@ -198,9 +180,7 @@ resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@202
   }
   dependsOn: [
     simpleRoundRobinPolicyFragment
-    weightedRoundRobinPolicyFragment
     adaptiveRateLimitingPolicyFragment
-    retryWithPayAsYouGoPolicyFragment
     usageTrackingWithAppInsightsPolicyFragment]
 }
 
