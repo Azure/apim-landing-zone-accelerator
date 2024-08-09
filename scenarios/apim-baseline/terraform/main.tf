@@ -45,6 +45,7 @@ module "networking" {
 }
 
 module "shared" {
+  depends_on          = [module.networking]
   source              = "./modules/shared"
   location            = var.location
   resourceGroupName   = azurerm_resource_group.shared.name

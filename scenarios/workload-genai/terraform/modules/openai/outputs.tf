@@ -23,12 +23,16 @@ output "endpoint" {
   description = "Specifies the endpoint of the Azure OpenAI Service."
 }
 
-output "primary_access_key" {
-  value = azurerm_cognitive_account.openai.primary_access_key
-  sensitive = true
-  description = "Specifies the primary access key of the Azure OpenAI Service."
-}
-# To check
+# This is in bicep - but we are using AZ CLI in the deployment script
+# to get the key instead of exposing it in the output
+# output "primary_access_key" {
+#   value = azurerm_cognitive_account.openai.primary_access_key
+#   sensitive = true
+#   description = "Specifies the primary access key of the Azure OpenAI Service."
+# }
+
+# This is in bicep - but we are using AZ CLI in the deployment script
+# to get the key instead of exposing it in the output
 # output "secondary_access_key" {
 #   value = azurerm_cognitive_account.openai.secondary_access_key
 #   sensitive = true
