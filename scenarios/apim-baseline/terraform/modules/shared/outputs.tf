@@ -11,3 +11,15 @@ output "instrumentationKey" {
 output "keyVaultId" {
   value = azurerm_key_vault.key_vault.id
 }
+
+output "keyVaultName" {
+  value = azurerm_key_vault.key_vault.name
+}
+
+output "deploymentIdentityName" {
+  value = azurerm_user_assigned_identity.privatedeploymanagedidentity.name
+}
+
+output "deploymentStorageName" {
+  value = azurerm_storage_account.privatedeploystorage.name
+}

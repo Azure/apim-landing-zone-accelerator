@@ -31,6 +31,16 @@ variable "keyvaultId" {
   default     = null
 }
 
+variable "keyVaultName" {
+  type        = string
+  description = ""
+}
+
+variable "deploymentIdentityName" {
+  type        = string
+  description = "deployment identity name"
+}
+
 variable "appGatewayFqdn" {
   type        = string
   description = "The Azure location to deploy to"
@@ -64,6 +74,17 @@ variable "probe_url" {
   default     = "/status-0123456789abcdef"
 }
 
+variable "sharedResourceGroupName" {
+  type        = string
+  description = "Resource group with deploymnent Identity"
+}
 
+variable "deploymentSubnetId" {
+  type        = string
+  description = "The subnet id where the deployment will run"
+}
 
-
+variable "deploymentStorageName" {
+  type        = string
+  description = "The name of the storage account to use for deployment"
+}

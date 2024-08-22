@@ -15,7 +15,7 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
 }
 
 #-------------------------------
-# Creation of an application inisight instance
+# Creation of an application insight instance
 #-------------------------------
 
 resource "azurerm_application_insights" "shared_apim_insight" {

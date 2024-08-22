@@ -41,14 +41,16 @@ module "networking" {
 }
 
 module "shared" {
-  depends_on          = [module.networking]
-  source              = "./modules/shared"
-  location            = var.location
-  resourceGroupName   = azurerm_resource_group.shared.name
-  resourceSuffix      = local.resourceSuffix
-  additionalClientIds = var.additionalClientIds
-  keyVaultName        = local.keyVaultName
-  keyVaultSku         = var.keyVaultSku
+  depends_on           = [module.networking]
+  source               = "./modules/shared"
+  location             = var.location
+  resourceGroupName    = azurerm_resource_group.shared.name
+  resourceSuffix       = local.resourceSuffix
+  additionalClientIds  = var.additionalClientIds
+  keyVaultName         = local.keyVaultName
+  keyVaultSku          = var.keyVaultSku
+  deploymentSubnetId   = module.networking.deploymentSubnetId
+  storage_account_name = substr(lower(replace("stdep${local.resourceSuffix}", "-", "")), 0, 21)
 }
 
 module "apim" {
@@ -66,19 +68,24 @@ module "apim" {
 }
 
 module "gateway" {
-  depends_on            = [module.networking, module.apim, module.shared]
-  source                = "./modules/gateway"
-  location              = var.location
-  resourceGroupName     = azurerm_resource_group.networking.name
-  resourceSuffix        = local.resourceSuffix
-  environment           = var.environment
-  appGatewayFqdn        = var.appGatewayFqdn
-  appGatewayCertType    = var.appGatewayCertType
-  certificate_password  = var.certificatePassword
-  certificate_path      = var.certificatePath
-  subnetId              = module.networking.appGatewaySubnetId
-  primaryBackendendFqdn = module.apim.bakendUrl
-  keyvaultId            = module.shared.keyVaultId
+  depends_on              = [module.networking, module.apim, module.shared]
+  source                  = "./modules/gateway"
+  location                = var.location
+  resourceGroupName       = azurerm_resource_group.networking.name
+  resourceSuffix          = local.resourceSuffix
+  environment             = var.environment
+  appGatewayFqdn          = var.appGatewayFqdn
+  appGatewayCertType      = var.appGatewayCertType
+  certificate_password    = var.certificatePassword
+  certificate_path        = var.certificatePath
+  subnetId                = module.networking.appGatewaySubnetId
+  primaryBackendendFqdn   = module.apim.bakendUrl
+  keyvaultId              = module.shared.keyVaultId
+  keyVaultName            = module.shared.keyVaultName
+  sharedResourceGroupName = azurerm_resource_group.shared.name
+  deploymentIdentityName  = module.shared.deploymentIdentityName
+  deploymentSubnetId      = module.networking.deploymentSubnetId
+  deploymentStorageName   = module.shared.deploymentStorageName
 }
 
 module "dns" {

@@ -42,7 +42,7 @@ resource "azurerm_api_management_product" "azureOpenAIProduct" {
 }
 
 resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
-  product_id = azurerm_api_management_product.azureOpenAIProduct.product_id
+  product_id          = azurerm_api_management_product.azureOpenAIProduct.product_id
   api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
   resource_group_name = var.resourceGroupName
@@ -86,9 +86,9 @@ resource "azurerm_api_management_subscription" "azureOpenAIProductSubscription" 
 
 resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
-  name              = "simple-round-robin"
+  name              = "simple-priority-weighted"
   format            = "rawxml"
-  value             = file("../policies/fragments/load-balancing/simple-round-robin.xml")
+  value             = file("../policies/fragments/load-balancing/simple-priority-weighted.xml")
   depends_on = [
     azurerm_api_management_backend.payAsYouGoBackendOne,
     azurerm_api_management_backend.payAsYouGoBackendTwo,
@@ -96,17 +96,17 @@ resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragmen
   ]
 }
 
-resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
-  api_management_id = data.azurerm_api_management.apiManagementService.id
-  name              = "weighted-round-robin"
-  format            = "rawxml"
-  value             = file("../policies/fragments/load-balancing/weighted-round-robin.xml")
-  depends_on = [
-    azurerm_api_management_backend.payAsYouGoBackendOne,
-    azurerm_api_management_backend.payAsYouGoBackendTwo,
-    azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue
-  ]
-}
+# resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
+#   api_management_id = data.azurerm_api_management.apiManagementService.id
+#   name              = "weighted-round-robin"
+#   format            = "rawxml"
+#   value             = file("../policies/fragments/load-balancing/weighted-round-robin.xml")
+#   depends_on = [
+#     azurerm_api_management_backend.payAsYouGoBackendOne,
+#     azurerm_api_management_backend.payAsYouGoBackendTwo,
+#     azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue
+#   ]
+# }
 
 resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
@@ -130,12 +130,12 @@ resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingWorkAroun
   ]
 }
 
-resource "azurerm_api_management_policy_fragment" "retryWithPayAsYouGoPolicyFragment" {
-  api_management_id = data.azurerm_api_management.apiManagementService.id
-  name              = "retry-with-payg"
-  format            = "rawxml"
-  value             = file("../policies/fragments/manage-spikes-with-payg/retry-with-payg.xml")
-}
+# resource "azurerm_api_management_policy_fragment" "retryWithPayAsYouGoPolicyFragment" {
+#   api_management_id = data.azurerm_api_management.apiManagementService.id
+#   name              = "retry-with-payg"
+#   format            = "rawxml"
+#   value             = file("../policies/fragments/manage-spikes-with-payg/retry-with-payg.xml")
+# }
 
 resource "azurerm_api_management_policy_fragment" "usageTrackingEHPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
@@ -157,6 +157,29 @@ resource "azurerm_api_management_policy_fragment" "usageTrackingWithAppInsightsP
   ]
 }
 
+//Load-balancing with Circuit Breaker policy
+module "api_backend" {
+  source                      = "./load-balancing/backends"
+  api_management_service_name = data.azurerm_api_management.apiManagementService.name
+  backend_uris = [
+    "${var.ptuDeploymentOneBaseUrl}/",
+    "${var.payAsYouGoDeploymentOneBaseUrl}/",
+    "${var.payAsYouGoDeploymentTwoBaseUrl}/"
+  ]
+  depends_on = [
+    data.azurerm_api_management.apiManagementService
+  ]
+}
+
+module "api_lb_pool" {
+  source                      = "./load-balancing/lb-pool"
+  api_management_service_name = data.azurerm_api_management.apiManagementService.name
+  backends                    = module.api_backend.outputs.backend_names
+  depends_on = [
+    module.api_backend
+  ]
+}
+
 resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
   api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
@@ -164,9 +187,9 @@ resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
   xml_content         = file("../policies/genai-policy.xml")
   depends_on = [
     azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment,
-    azurerm_api_management_policy_fragment.weightedRoundRobinPolicyFragment,
+    # azurerm_api_management_policy_fragment.weightedRoundRobinPolicyFragment,
     azurerm_api_management_policy_fragment.adaptiveRateLimitingPolicyFragment,
-    azurerm_api_management_policy_fragment.retryWithPayAsYouGoPolicyFragment,
+    # azurerm_api_management_policy_fragment.retryWithPayAsYouGoPolicyFragment,
     azurerm_api_management_policy_fragment.usageTrackingWithAppInsightsPolicyFragment
   ]
 }

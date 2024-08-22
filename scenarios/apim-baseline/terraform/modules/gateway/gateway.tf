@@ -4,9 +4,14 @@ locals {
   appGatewayIdentityId  = "identity-${local.appGatewayName}"
   httpsBackendProbeName = "APIM"
   isLocalCertificate    = var.appGatewayCertType == "custom"
-  certificateSecretId   = local.isLocalCertificate ? azurerm_key_vault_certificate.kv_domain_certs[0].secret_id : azurerm_key_vault_certificate.local_domain_certs[0].secret_id
-  secretName            = replace(var.appGatewayFqdn, ".", "-")
+  # certificateSecretId   = local.isLocalCertificate ? azurerm_key_vault_certificate.kv_domain_certs[0].secret_id : azurerm_key_vault_certificate.local_domain_certs[0].secret_id
+  secretName     = replace(var.appGatewayFqdn, ".", "-")
+  subjectName    = "CN=${var.appGatewayFqdn}"
+  certPwd        = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_password
+  certDataString = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_path
 }
+
+
 
 resource "azurerm_user_assigned_identity" "user_assigned_identity" {
   resource_group_name = var.resourceGroupName
@@ -42,84 +47,19 @@ resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_perm
   }
 }
 
-resource "azurerm_key_vault_certificate" "kv_domain_certs" {
-  count        = local.isLocalCertificate ? 1 : 0
-  name         = local.secretName
-  key_vault_id = var.keyvaultId
-
-  certificate {
-    contents = filebase64(var.certificate_path)
-    password = var.certificate_password
-  }
-
-  certificate_policy {
-    issuer_parameters {
-      name = "Self"
-    }
-
-    key_properties {
-      exportable = true
-      key_size   = 256
-      key_type   = "EC"
-      reuse_key  = false
-      curve      = "P-256"
-    }
-
-    secret_properties {
-      content_type = "application/x-pkcs12"
-    }
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-
-resource "azurerm_key_vault_certificate" "local_domain_certs" {
-  count        = !local.isLocalCertificate ? 1 : 0
-  name         = "generated-cert"
-  key_vault_id = var.keyvaultId
-
-  certificate_policy {
-    issuer_parameters {
-      name = "Self"
-    }
-
-    key_properties {
-      exportable = true
-      key_size   = 2048
-      key_type   = "RSA"
-      reuse_key  = true
-    }
-
-    lifetime_action {
-      action {
-        action_type = "AutoRenew"
-      }
-
-      trigger {
-        days_before_expiry = 30
-      }
-    }
-
-    secret_properties {
-      content_type = "application/x-pkcs12"
-    }
-
-    x509_certificate_properties {
-      extended_key_usage = ["1.3.6.1.5.5.7.3.1"]
-      key_usage = [
-        "digitalSignature",
-        "keyEncipherment"
-      ]
-      subject            = "CN=${var.appGatewayFqdn}"
-      validity_in_months = 12
-    }
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
+module "certificate" {
+  source                  = "./certificate"
+  location                = var.location
+  sharedResourceGroupName = var.sharedResourceGroupName
+  keyVaultName            = var.keyVaultName
+  deploymentIdentityName  = var.deploymentIdentityName
+  keyvaultId              = var.keyvaultId
+  appGatewayFqdn          = var.appGatewayFqdn
+  certificate_path        = var.certificate_path
+  certificate_password    = var.certificate_password
+  appGatewayCertType      = var.appGatewayCertType
+  deploymentSubnetId      = var.deploymentSubnetId
+  deploymentStorageName   = var.deploymentStorageName
 }
 
 //Public IP
@@ -145,7 +85,7 @@ resource "azurerm_application_gateway" "network" {
 
   depends_on = [
     azurerm_key_vault_access_policy.user_assigned_identity_keyvault_permissions,
-    azurerm_key_vault_certificate.kv_domain_certs
+    module.certificate
   ]
 
   identity {
@@ -160,7 +100,7 @@ resource "azurerm_application_gateway" "network" {
 
   ssl_certificate {
     name                = var.appGatewayFqdn
-    key_vault_secret_id = local.certificateSecretId
+    key_vault_secret_id = module.certificate.secret_id
   }
 
   gateway_ip_configuration {

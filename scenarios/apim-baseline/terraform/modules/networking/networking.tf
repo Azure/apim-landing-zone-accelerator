@@ -243,4 +243,3 @@ resource "azurerm_subnet_network_security_group_association" "apim_subnet" {
     prevent_destroy = true
   }
 }
-

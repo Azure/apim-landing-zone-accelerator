@@ -36,3 +36,11 @@ variable "additionalClientIds" {
   type        = list(string)
   default     = []
 }
+
+variable "deploymentSubnetId" {
+  type = string
+}
+
+variable "storage_account_name" {
+  type = string
+}

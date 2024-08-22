@@ -31,6 +31,9 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.6.0"
     }
+    azapi = {
+      source = "azure/azapi"
+    }
   }
 }
 
@@ -42,4 +45,7 @@ provider "azurerm" {
     }
   }
   use_oidc = true
+}
+
+provider "azapi" {
 }

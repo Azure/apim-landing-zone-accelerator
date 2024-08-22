@@ -12,11 +12,11 @@ resource "azurerm_key_vault" "key_vault" {
   sku_name            = var.keyVaultSku
   # -> Bicep has keyvault as private, should we change this?
   # -> This will need the certificate to be created through a azurerm_template_deployment resource
-  # public_network_access_enabled = false
-  # network_acls {
-  #   bypass = "AzureServices"
-  #   default_action = "Deny"
-  # }
+  public_network_access_enabled = false
+  network_acls {
+    bypass         = "AzureServices"
+    default_action = "Deny"
+  }
 }
 
 locals {
@@ -27,9 +27,9 @@ locals {
   #   )
   # )
   privateEndpoint_keyvault_Name = "pep-kv-${var.resourceSuffix}"
-  apim_cs_vnet_name            = "vnet-apim-cs-${var.resourceSuffix}"
-  networkingResourceGroupName  = "rg-networking-${var.resourceSuffix}"
-  private_endpoint_subnet_name = "snet-prep-${var.resourceSuffix}"
+  apim_cs_vnet_name             = "vnet-apim-cs-${var.resourceSuffix}"
+  networkingResourceGroupName   = "rg-networking-${var.resourceSuffix}"
+  private_endpoint_subnet_name  = "snet-prep-${var.resourceSuffix}"
 }
 
 # created as a seperate resource, as managed identity uses the azurerm_key_vault_access_policy as well. See note at https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy

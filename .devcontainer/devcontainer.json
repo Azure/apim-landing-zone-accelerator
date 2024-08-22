@@ -6,13 +6,9 @@
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {
-			"installZsh": true,
 			"configureZshAsDefaultShell": true,
 			"installOhMyZsh": true,
-			"installOhMyZshConfig": true,
-			"username": "automatic",
-			"userUid": "automatic",
-			"userGid": "automatic"
+			"installOhMyZshConfig": true
 		},
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
 		"ghcr.io/devcontainers/features/azure-cli:1": {
@@ -42,7 +38,7 @@
 			"settings": {
 				"files.insertFinalNewline": true,
 				"github.copilot.enable": {
-					"markdown": "true"
+					"markdown": true
 				}
 			}
 		}
