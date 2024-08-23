@@ -159,22 +159,24 @@ resource "azurerm_api_management_policy_fragment" "usageTrackingWithAppInsightsP
 
 //Load-balancing with Circuit Breaker policy
 module "api_backend" {
-  source                      = "./load-balancing/backends"
+  source                      = "./backends"
   api_management_service_name = data.azurerm_api_management.apiManagementService.name
   backend_uris = [
     "${var.ptuDeploymentOneBaseUrl}/",
     "${var.payAsYouGoDeploymentOneBaseUrl}/",
     "${var.payAsYouGoDeploymentTwoBaseUrl}/"
   ]
+  resource_group_name = var.resourceGroupName
   depends_on = [
     data.azurerm_api_management.apiManagementService
   ]
 }
 
 module "api_lb_pool" {
-  source                      = "./load-balancing/lb-pool"
+  source                      = "./lb_pool"
   api_management_service_name = data.azurerm_api_management.apiManagementService.name
-  backends                    = module.api_backend.outputs.backend_names
+  backends                    = module.api_backend.backend_names
+  resource_group_name         = var.resourceGroupName
   depends_on = [
     module.api_backend
   ]
