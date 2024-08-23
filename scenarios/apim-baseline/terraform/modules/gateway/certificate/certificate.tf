@@ -93,43 +93,7 @@
 # doesn't have the option to run from a subnet          #
 #########################################################
 
-# locals
-locals {
-  secretName     = replace(var.appGatewayFqdn, ".", "-")
-  subjectName    = "CN=${var.appGatewayFqdn}"
-  certPwd        = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_password
-  certDataString = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_path
-}
 
-
-# data userasignedidentity for deployment
-data "azurerm_user_assigned_identity" "deploymentIdentity" {
-  resource_group_name = var.sharedResourceGroupName
-  name                = var.deploymentIdentityName
-}
-
-resource "azurerm_key_vault_access_policy" "user_assigned_deployment_keyvault_permissions" {
-  key_vault_id = var.keyvaultId
-  tenant_id    = data.azurerm_user_assigned_identity.deploymentIdentity.tenant_id
-  object_id    = data.azurerm_user_assigned_identity.deploymentIdentity.principal_id
-
-  certificate_permissions = [
-    "Import",
-    "Get",
-    "List",
-    "Update",
-    "Create"
-  ]
-
-  secret_permissions = [
-    "Get",
-    "List",
-  ]
-
-  lifecycle {
-    prevent_destroy = true
-  }
-}
 
 # resource "azurerm_resource_deployment_script_azure_power_shell" "appGatewayCertificate" {
 #   name                = "${local.secretName}-certificate"
@@ -202,6 +166,45 @@ resource "azurerm_key_vault_access_policy" "user_assigned_deployment_keyvault_pe
 # Trying azapi approach #
 #########################
 
+# locals
+locals {
+  secretName     = replace(var.appGatewayFqdn, ".", "-")
+  subjectName    = "CN=${var.appGatewayFqdn}"
+  certPwd        = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_password
+  certDataString = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_path
+}
+
+
+# data userasignedidentity for deployment
+data "azurerm_user_assigned_identity" "deploymentIdentity" {
+  resource_group_name = var.sharedResourceGroupName
+  name                = var.deploymentIdentityName
+}
+
+resource "azurerm_key_vault_access_policy" "user_assigned_deployment_keyvault_permissions" {
+  key_vault_id = var.keyvaultId
+  tenant_id    = data.azurerm_user_assigned_identity.deploymentIdentity.tenant_id
+  object_id    = data.azurerm_user_assigned_identity.deploymentIdentity.principal_id
+
+  certificate_permissions = [
+    "Import",
+    "Get",
+    "List",
+    "Update",
+    "Create"
+  ]
+
+  secret_permissions = [
+    "Get",
+    "List",
+  ]
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+
 # get the ide of the resource group
 data "azurerm_resource_group" "sharedResourceGroup" {
   name = var.sharedResourceGroupName
@@ -212,7 +215,6 @@ resource "azapi_resource" "appGatewayCertificate" {
   type       = "Microsoft.Resources/deploymentScripts@2023-08-01"
   name       = "${local.secretName}-certificate"
   depends_on = [azurerm_key_vault_access_policy.user_assigned_deployment_keyvault_permissions]
-  location   = var.location
   parent_id  = data.azurerm_resource_group.sharedResourceGroup.id
   identity {
     type         = "UserAssigned"
@@ -220,7 +222,9 @@ resource "azapi_resource" "appGatewayCertificate" {
   }
 
   body = jsonencode({
-    kind = "AzurePowerShell"
+    kind     = "AzurePowerShell"
+    location = var.location
+
     properties = {
       storageAccountSettings = {
         storageAccountName = var.deploymentStorageName
@@ -277,20 +281,17 @@ resource "azapi_resource" "appGatewayCertificate" {
           $ss = Convertto-SecureString -String $certPwd -AsPlainText -Force;
           Import-AzKeyVaultCertificate -Name $certificateName -VaultName $vaultName -CertificateString $certDataString -Password $ss
         }
+        $certificateIdOutput = $(Get-AzKeyVaultCertificate -VaultName $vaultName -Name $certificateName).id
+        Write-Output "certificateId: $certificateIdOutput"
+        $DeploymentScriptOutputs = @{}
+        $DeploymentScriptOutputs['certificateId'] = $certificateIdOutput
       EOT
       retentionInterval = "P1D"
     }
   })
-}
-
-data "azurerm_key_vault_secret" "certificateSecret" {
-  name         = local.secretName
-  key_vault_id = var.keyvaultId
-  depends_on = [
-    azapi_resource.appGatewayCertificate
-  ]
+  response_export_values = ["*"]
 }
 
 output "secret_id" {
-  value = data.azurerm_key_vault_secret.certificateSecret.properties.secretUriWithVersion
+  value = jsondecode(azapi_resource.appGatewayCertificate.output).properties.outputs.certificateId
 }

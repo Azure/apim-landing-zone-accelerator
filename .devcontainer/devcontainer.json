@@ -33,7 +33,8 @@
 				"GitHub.vscode-pull-request-github",
 				"humao.rest-client",
 				"ms-azuretools.vscode-bicep",
-				"ms-azuretools.vscode-azureterraform"
+				"ms-azuretools.vscode-azureterraform",
+				"azapi-vscode.azapi"
 			],
 			"settings": {
 				"files.insertFinalNewline": true,

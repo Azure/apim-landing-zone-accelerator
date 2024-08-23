@@ -100,7 +100,7 @@ resource "azurerm_application_gateway" "network" {
 
   ssl_certificate {
     name                = var.appGatewayFqdn
-    key_vault_secret_id = module.certificate.secret_id
+    key_vault_secret_id = "https://${var.keyVaultName}.vault.azure.net:443/secrets/${local.secretName}"
   }
 
   gateway_ip_configuration {
