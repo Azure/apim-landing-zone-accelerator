@@ -149,13 +149,13 @@ resource usageTrackingWithAppInsightsPolicyFragment 'Microsoft.ApiManagement/ser
   dependsOn: [eventHubLogger]
 }
 
-//Load-balancing with Circuit Breaker policy 
+//Load-balancing with Circuit Breaker policy
 module apiBackend './load-balancing/backends.bicep' = {
   name: 'apiBackend'
   params: {
     apiManagementServiceName: apiManagementServiceName
     backendUris: ['${ptuDeploymentOneBaseUrl}/', '${payAsYouGoDeploymentOneBaseUrl}/', '${payAsYouGoDeploymentTwoBaseUrl}/']
-  }  
+  }
 }
 
 module apiLBPool './load-balancing/lb-pool.bicep' = {
@@ -163,14 +163,13 @@ module apiLBPool './load-balancing/lb-pool.bicep' = {
   params: {
     apiManagementServiceName: apiManagementServiceName
     backends: apiBackend.outputs.backendNames
-  }  
+  }
   dependsOn: [
     apiBackend
   ]
 }
 
 //Load the policies
-
 resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2023-05-01-preview' = {
   parent: azureOpenAIApi
   name: 'policy'

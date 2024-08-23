@@ -47,7 +47,8 @@ resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
   api_management_name = data.azurerm_api_management.apiManagementService.name
   resource_group_name = var.resourceGroupName
   depends_on = [
-    azurerm_api_management_api.azureOpenAIApi
+    azurerm_api_management_api.azureOpenAIApi,
+    azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment
   ]
 }
 
@@ -95,18 +96,6 @@ resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragmen
     azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue
   ]
 }
-
-# resource "azurerm_api_management_policy_fragment" "weightedRoundRobinPolicyFragment" {
-#   api_management_id = data.azurerm_api_management.apiManagementService.id
-#   name              = "weighted-round-robin"
-#   format            = "rawxml"
-#   value             = file("../policies/fragments/load-balancing/weighted-round-robin.xml")
-#   depends_on = [
-#     azurerm_api_management_backend.payAsYouGoBackendOne,
-#     azurerm_api_management_backend.payAsYouGoBackendTwo,
-#     azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue
-#   ]
-# }
 
 resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
