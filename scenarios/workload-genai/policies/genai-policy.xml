@@ -9,15 +9,6 @@
         <!-- there are other variants that can be used as well-->
         <include-fragment fragment-id="rate-limiting-by-tokens" />
 
-        <!-- START: set backend service -->
-
-        <!-- performs simple round robin between payg-backend-1, payg-backend-2 -->
-        <!-- <include-fragment fragment-id="simple-round-robin" /> -->
-        
-        <!-- performs weighted round robin between payg-backend-1, payg-backend-2 
-             weights are defined in the fragment itself -->
-        <include-fragment fragment-id="weighted-round-robin" />
-
         <!-- tracks token consumption as custom metrics in App insights -->
         <include-fragment fragment-id="usage-tracking-with-appinsights" />
     </inbound>
