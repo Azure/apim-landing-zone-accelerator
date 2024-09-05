@@ -1,0 +1,10 @@
+<fragment>
+    <!-- Rate limit configuration at a subscription level. Works for Azure OpenAI endpoint, 
+         both streaming and non-streaming endpoints.
+         allows 500 tokens per 60 seconds. -->
+    <azure-openai-token-limit counter-key="@(String.Concat(context.Subscription.Id,"-max-token"))"
+        tokens-per-minute="500"
+        estimate-prompt-tokens="true"
+        remaining-tokens-header-name="x-apim-max-remaining-tokens"
+        tokens-consumed-header-name="x-apim-max-consumed-tokens"/>
+</fragment>
