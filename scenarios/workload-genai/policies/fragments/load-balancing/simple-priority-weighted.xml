@@ -1,0 +1,14 @@
+<!-- 
+    Policy fragment to implement a load balancing algorithm.
+
+    Expected named values
+    - The Pool backed that load balances the endpoints.
+ -->
+<fragment>
+    <!-- MSI authentication to the backends-->
+    <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" client-id="{{apim-identity}}" ignore-error="false" />
+    <set-header name="Authorization" exists-action="override">
+        <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+    </set-header>
+    <set-backend-service id="apim-generated-policy" backend-id="aoai-lb-pool" />
+</fragment>

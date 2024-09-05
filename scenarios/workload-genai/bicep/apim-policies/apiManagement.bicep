@@ -99,23 +99,15 @@ resource azureOpenAIProductSubscription 'Microsoft.ApiManagement/service/subscri
 
 resource simpleRoundRobinPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
-  name: 'simple-round-robin'
+  name: 'simple-priority-weighted'
   properties: {
-    value: loadTextContent('../../policies/fragments/load-balancing/simple-round-robin.xml')
+    value: loadTextContent('../../policies/fragments/load-balancing/simple-priority-weighted.xml')
     format: 'rawxml'
   }
   dependsOn: [payAsYouGoBackendOne, payAsYouGoBackendTwo]
 }
 
-resource weightedRoundRobinPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
-  parent: apiManagementService
-  name: 'weighted-round-robin'
-  properties: {
-    value: loadTextContent('../../policies/fragments/load-balancing/weighted-round-robin.xml')
-    format: 'rawxml'
-  }
-  dependsOn: [payAsYouGoBackendOne, payAsYouGoBackendTwo]
-}
+
 
 resource simpleRateLimitingPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
@@ -147,16 +139,6 @@ resource adaptiveRateLimitingWorkAroundPolicyFragment 'Microsoft.ApiManagement/s
   dependsOn: [payAsYouGoBackendOne, ptuBackendOne]
 }
 
-
-resource retryWithPayAsYouGoPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
-  parent: apiManagementService
-  name: 'retry-with-payg'
-  properties: {
-    value: loadTextContent('../../policies/fragments/manage-spikes-with-payg/retry-with-payg.xml')
-    format: 'rawxml'
-  }
-}
-
 resource usageTrackingEHPolicyFragment 'Microsoft.ApiManagement/service/policyFragments@2023-05-01-preview' = {
   parent: apiManagementService
   name: 'usage-tracking-with-eventhub'
@@ -177,6 +159,28 @@ resource usageTrackingWithAppInsightsPolicyFragment 'Microsoft.ApiManagement/ser
   dependsOn: [eventHubLogger]
 }
 
+//Load-balancing with Circuit Breaker policy 
+module apiBackend './load-balancing/backends.bicep' = {
+  name: 'apiBackend'
+  params: {
+    apiManagementServiceName: apiManagementServiceName
+    backendUris: ['${ptuDeploymentOneBaseUrl}/', '${payAsYouGoDeploymentOneBaseUrl}/', '${payAsYouGoDeploymentTwoBaseUrl}/']
+  }  
+}
+
+module apiLBPool './load-balancing/lb-pool.bicep' = {
+  name: 'apimLBPool'
+  params: {
+    apiManagementServiceName: apiManagementServiceName
+    backends: apiBackend.outputs.backendNames
+  }  
+  dependsOn: [
+    apiBackend
+  ]
+}
+
+//Load the policies
+
 resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2023-05-01-preview' = {
   parent: azureOpenAIApi
   name: 'policy'
@@ -186,9 +190,7 @@ resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@202
   }
   dependsOn: [
     simpleRoundRobinPolicyFragment
-    weightedRoundRobinPolicyFragment
     adaptiveRateLimitingPolicyFragment
-    retryWithPayAsYouGoPolicyFragment
     usageTrackingWithAppInsightsPolicyFragment]
 }
 
