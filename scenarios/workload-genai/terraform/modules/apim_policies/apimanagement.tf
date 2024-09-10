@@ -97,6 +97,17 @@ resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragmen
   ]
 }
 
+resource "azurerm_api_management_policy_fragment" "simpleRateLimitingPolicyFragment" {
+  api_management_id = data.azurerm_api_management.apiManagementService.id
+  name              = "rate-limiting-by-tokens"
+  format            = "rawxml"
+  value             = file("../policies/fragments/rate-limiting/rate-limiting-by-tokens.xml")
+  depends_on = [
+    azurerm_api_management_backend.payAsYouGoBackendOne,
+    azurerm_api_management_backend.payAsYouGoBackendTwo
+  ]
+}
+
 resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
   name              = "adaptive-rate-limiting"
@@ -110,9 +121,9 @@ resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingPolicyFra
 
 resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingWorkAroundPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
-  name              = "adaptive-rate-limiting-workaround"
+  name              = "rate-limiting-workaround"
   format            = "rawxml"
-  value             = file("../policies/fragments/rate-limiting/adaptive-rate-limiting-workaround.xml")
+  value             = file("../policies/fragments/rate-limiting/rate-limiting-workaround.xml")
   depends_on = [
     azurerm_api_management_backend.payAsYouGoBackendOne,
     azurerm_api_management_backend.payAsYouGoBackendTwo

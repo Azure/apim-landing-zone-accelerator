@@ -1,4 +1,4 @@
-# Scenario 3: Azure API Management - Gen AI Backend  [Bicep]
+# Scenario 3: Azure API Management - Gen AI Backend  [Terraform]
 
 This is the Terraform-based deployment guide for [Scenario 3: Azure API Management - Gen AI Backend](../README.md).
 
