@@ -1,0 +1,17 @@
+<fragment>
+    <!-- This is an alternate approach for scenarios where the `azure-openai-token-limit` policy can't be used 
+    ex. DallE Endpoints where the image size from the request can be used to increment the counter.
+    Non Azure openAI endpoints, where the response structure containing the token is different.-->
+
+    <!-- Rate limit configuration for global tokens. 
+         Allows 500 tokens per 60 seconds. 
+         The count is incremented if the response status code is between 200 and 400 by any request -->
+    
+    <rate-limit-by-key calls="500"
+        renewal-period="60"
+        counter-key="GlobalTokensLimit"
+        increment-condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 400)"
+        increment-count="@(context.Response.Body.As<JObject>(true).SelectToken("usage.total_tokens").ToObject<int>())"
+        remaining-calls-variable-name="globalRemainingTokens"
+        remaining-calls-header-name="x-apim-global-remaining-tokens"/>
+</fragment>

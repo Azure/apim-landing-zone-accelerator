@@ -1,11 +1,13 @@
 <policies>
     <inbound>
         <base />
+        
         <!-- sets the backed to the load balanced pool-->
         <include-fragment fragment-id="simple-priority-weighted" />
 
-        <!-- applies tokens constraint defined as per the fragment, doesn't set the backend-->
-        <include-fragment fragment-id="adaptive-rate-limiting" />
+        <!-- Rate limiting: applies tokens constraint defined as per the fragment, doesn't set the backend-->
+        <!-- there are other variants that can be used as well-->
+        <include-fragment fragment-id="rate-limiting-by-tokens" />
 
         <!-- tracks token consumption as custom metrics in App insights -->
         <include-fragment fragment-id="usage-tracking-with-appinsights" />
