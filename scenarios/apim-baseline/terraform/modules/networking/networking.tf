@@ -132,6 +132,19 @@ resource "azurerm_network_security_group" "apim_snnsg_nsg" {
     source_address_prefix      = "VirtualNetwork"
     destination_address_prefix = "AzureKeyVault"
   }
+
+  security_rule {
+    name                       = "apim-azure-monitor"
+    priority                   = 2030
+    protocol                   = "Tcp"
+    destination_port_range     = "443"
+    access                     = "Allow"
+    direction                  = "Outbound"
+    source_port_range          = "*"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "AzureMonitor"
+  }
+
   lifecycle {
     prevent_destroy = true
   }

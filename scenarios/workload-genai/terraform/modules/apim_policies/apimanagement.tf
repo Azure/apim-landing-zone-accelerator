@@ -93,7 +93,8 @@ resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragmen
   depends_on = [
     azurerm_api_management_backend.payAsYouGoBackendOne,
     azurerm_api_management_backend.payAsYouGoBackendTwo,
-    azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue
+    azurerm_api_management_named_value.apimOpenaiApiUamiNamedValue,
+    module.api_lb_pool
   ]
 }
 
@@ -130,12 +131,6 @@ resource "azurerm_api_management_policy_fragment" "adaptiveRateLimitingWorkAroun
   ]
 }
 
-# resource "azurerm_api_management_policy_fragment" "retryWithPayAsYouGoPolicyFragment" {
-#   api_management_id = data.azurerm_api_management.apiManagementService.id
-#   name              = "retry-with-payg"
-#   format            = "rawxml"
-#   value             = file("../policies/fragments/manage-spikes-with-payg/retry-with-payg.xml")
-# }
 
 resource "azurerm_api_management_policy_fragment" "usageTrackingEHPolicyFragment" {
   api_management_id = data.azurerm_api_management.apiManagementService.id
@@ -189,9 +184,7 @@ resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
   xml_content         = file("../policies/genai-policy.xml")
   depends_on = [
     azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment,
-    # azurerm_api_management_policy_fragment.weightedRoundRobinPolicyFragment,
     azurerm_api_management_policy_fragment.adaptiveRateLimitingPolicyFragment,
-    # azurerm_api_management_policy_fragment.retryWithPayAsYouGoPolicyFragment,
     azurerm_api_management_policy_fragment.usageTrackingWithAppInsightsPolicyFragment
   ]
 }
