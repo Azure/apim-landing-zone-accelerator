@@ -14,7 +14,7 @@ Run the following command to deploy the scenarios
 ./scripts/terraform/deploy-workload-genai.sh
 ```
 
-Test the hello api using hte generated command from the output
+Test the hello api using the generated command from the output
 
 ## Troubleshooting
 

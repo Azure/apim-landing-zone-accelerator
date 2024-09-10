@@ -21,6 +21,7 @@ This is the starting point for the instructions on deploying this reference impl
    ```bash
    sudo apt-get install jq
    ```
+- Terraform installed. You can download the latest version from the [Terraform website](https://www.terraform.io/downloads.html). However, if using the dev container, this will not need to be downloaded and installed separately. 
 
 ## Steps
 
@@ -60,7 +61,7 @@ This is the starting point for the instructions on deploying this reference impl
     ```bash
     ./azure-backend-sample.sh \
          --resource-group my-resource-group \
-         --storage-account my-storage-account \
+         --storage-account mystorageaccount \
          --container my-container
     ```
 
@@ -81,7 +82,9 @@ This is the starting point for the instructions on deploying this reference impl
     ./scripts/terraform/deploy-apim-baseline.sh
     ```
 
-Test the echo api using the generated command from the output
+During script execution, you will encounter prompts and will need to respond with a 'y' to continue.
+
+Test the echo api using the generated command from the output.
 
 ## Troubleshooting
 
