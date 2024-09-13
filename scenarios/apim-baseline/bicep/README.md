@@ -61,7 +61,7 @@ This is the starting point for the instructions on deploying this reference impl
    Run the following command to deploy the APIM baseline
 
     ```bash
-    ./deploy-apim-baseline.sh
+    ./scripts/bicep/deploy-apim-baseline.sh
     ```
 
 Test the echo api using the generated command from the output

@@ -1,4 +1,4 @@
-targetScope='subscription'
+targetScope = 'subscription'
 
 // Parameters
 @description('A short name for the workload being deployed alphanumberic only')
@@ -86,7 +86,7 @@ module shared './shared/shared.bicep' = {
   }
 }
 
-module apimModule 'apim/apim.bicep'  = {
+module apimModule 'apim/apim.bicep' = {
   name: 'apimDeploy'
   scope: resourceGroup(apimRG.name)
   params: {
@@ -111,20 +111,20 @@ module appgwModule 'gateway/appgw.bicep' = {
     apimModule
   ]
   params: {
-    appGatewayName:                 appGatewayName
-    appGatewayFQDN:                 appGatewayFqdn
-    location:                       location
-    appGatewaySubnetId:             networking.outputs.appGatewaySubnetid
-    primaryBackendEndFQDN:          '${apimName}.azure-api.net'
-    keyVaultName:                   shared.outputs.keyVaultName
-    keyVaultResourceGroupName:      sharedRG.name
-    appGatewayCertType:             appGatewayCertType
-    certKey:                        certKey
-    certData:                       certData
-    appGatewayPublicIpName:         networking.outputs.appGatewayPublicIpName
-    deploymentIdentityName:         shared.outputs.deploymentIdentityName
-    deploymentSubnetId:             networking.outputs.deploymentSubnetId
-    deploymentStorageName:          shared.outputs.deploymentStorageName
+    appGatewayName: appGatewayName
+    appGatewayFQDN: appGatewayFqdn
+    location: location
+    appGatewaySubnetId: networking.outputs.appGatewaySubnetid
+    primaryBackendEndFQDN: '${apimName}.azure-api.net'
+    keyVaultName: shared.outputs.keyVaultName
+    keyVaultResourceGroupName: sharedRG.name
+    appGatewayCertType: appGatewayCertType
+    certKey: certKey
+    certData: certData
+    appGatewayPublicIpName: networking.outputs.appGatewayPublicIpName
+    deploymentIdentityName: shared.outputs.deploymentIdentityName
+    deploymentSubnetId: networking.outputs.deploymentSubnetId
+    deploymentStorageName: shared.outputs.deploymentStorageName
   }
 }
 
@@ -154,7 +154,7 @@ output vnetName string = networking.outputs.apimCSVNetName
 output privateEndpointSubnetid string = networking.outputs.privateEndpointSubnetid
 output deploymentIdentityName string = shared.outputs.deploymentIdentityName
 output deploymentSubnetId string = networking.outputs.deploymentSubnetId
-output deploymentStorageName string =shared.outputs.deploymentStorageName
+output deploymentStorageName string = shared.outputs.deploymentStorageName
 output keyVaultName string = shared.outputs.keyVaultName
 output appGatewayName string = appGatewayName
 output appGatewayPublicIpAddress string = appgwModule.outputs.appGatewayPublicIpAddress

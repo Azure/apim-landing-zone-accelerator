@@ -1,0 +1,54 @@
+{
+	"name": "Getting Started",
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"hostRequirements": {
+	  "cpus": 4
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"configureZshAsDefaultShell": true,
+			"installOhMyZsh": true,
+			"installOhMyZshConfig": true
+		},
+		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+		"ghcr.io/devcontainers/features/azure-cli:1": {
+			"installBicep": true,
+			"version": "latest"
+		},
+		"ghcr.io/stuartleeks/dev-container-features/azure-cli-persistence:0": {},
+		"ghcr.io/devcontainers/features/terraform:1": {}
+	},
+	"waitFor": "onCreateCommand",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"eamodio.gitlens",
+				"GitHub.copilot",
+				"Gruntfuggly.todo-tree",
+				"ionutvmi.path-autocomplete",
+				"mechatroner.rainbow-csv",
+				"ms-vsliveshare.vsliveshare",
+				"redhat.vscode-yaml",
+				"timonwong.shellcheck",
+				"GitHub.vscode-pull-request-github",
+				"humao.rest-client",
+				"ms-azuretools.vscode-bicep",
+				"ms-azuretools.vscode-azureterraform",
+				"azapi-vscode.azapi"
+			],
+			"settings": {
+				"files.insertFinalNewline": true,
+				"github.copilot.enable": {
+					"markdown": true
+				}
+			}
+		}
+	},
+	"remoteEnv": {
+        "HOST_PROJECT_PATH": "${localWorkspaceFolder}"
+    },
+	"mounts": [
+		// map host ssh to container
+		"source=${env:HOME}${env:USERPROFILE}/.ssh,target=/home/codespace/.ssh,type=bind,consistency=cached"
+	]
+}

@@ -11,7 +11,7 @@ This scenario requires the completion of the [Azure API Management - Secure Base
 Run the following command to deploy the scenarios
 
 ```bash
-./scripts/deploy-workload-genai.sh
+./scripts/bicep/deploy-workload-genai.sh
 ```
 
 Test the hello api using hte generated command from the output
