@@ -1,6 +1,6 @@
 # Scenario 1: Azure API Management - Secure Baseline
 
-This reference implementation demonstrates a *secure baseline infrastructure architecture* for provisioning [Azure API Management](https://learn.microsoft.com/azure/api-management/). Specifically this scenario addresses deploying Azure Container Apps into a [virtual network](https://learn.microsoft.com/azure/api-management/api-management-using-with-internal-vnet?tabs=stv2), in an internal mode where you can only access the API Management endpoints like API gateway, developer portal, Direct management and Git within a VNet whose access you control.
+This reference implementation demonstrates a *secure baseline infrastructure architecture* for provisioning [Azure API Management](https://learn.microsoft.com/azure/api-management/). Specifically this scenario addresses deploying Azure API Management into a [virtual network](https://learn.microsoft.com/azure/api-management/api-management-using-with-internal-vnet?tabs=stv2), in an internal mode where you can only access the API Management endpoints like API gateway, developer portal, Direct management and Git within a VNet whose access you control.
 
 By the end of this deployment guide, you would have deployed an "internal mode" Azure API Management premium instance.
 
