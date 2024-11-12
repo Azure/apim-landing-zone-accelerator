@@ -28,6 +28,8 @@ resource "azurerm_api_management" "apim_internal" {
 
   sku_name = var.skuName
 
+  min_api_version = "2019-12-01"
+
   virtual_network_configuration {
     subnet_id = var.apimSubnetId
   }

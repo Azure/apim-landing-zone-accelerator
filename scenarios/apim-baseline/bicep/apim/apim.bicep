@@ -70,6 +70,9 @@ resource apimName_resource 'Microsoft.ApiManagement/service@2020-12-01' = {
     virtualNetworkConfiguration: {
       subnetResourceId: apimSubnetId
     }
+    apiVersionConstraint: {
+      minApiVersion: '2019-12-01'
+    }
   }
 }
 

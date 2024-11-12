@@ -65,7 +65,7 @@ create_storage_account() {
 }
 
 # Validate or create resource group
-if [[ $(az group exists --name "$TF_BACKEND_RESOURCE_GROUP_NAME") == "false" ]]; then
+if [[ $(az group exists --name "$TF_BACKEND_RESOURCE_GROUP_NAME" --output tsv) == "false" ]]; then
   if [[ $auto_confirm == true ]]; then
     create_resource_group
   else
