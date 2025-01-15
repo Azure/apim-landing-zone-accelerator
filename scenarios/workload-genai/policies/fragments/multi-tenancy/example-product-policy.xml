@@ -1,0 +1,39 @@
+<!--
+    - Policies are applied in the order they appear.
+    - Position <base/> inside a section to inherit policies from the outer scope.
+    - Comments within policies are not preserved.
+-->
+<!-- Add policies as children to the <inbound>, <outbound>, <backend>, and <on-error> elements -->
+<policies>
+    <!-- Throttle, authorize, validate, cache, or transform the requests -->
+    <inbound>
+        <base />
+        <!-- Define a backend-pool variable for this product, for eg: if it's a freemium product
+        then this can be a PAYG pool, similarly if it's a premium product it can be a PTU pool -->
+        <!-- This variable can thus be used in the other policy fragments e.g retry-with-payg.xml accordingly-->
+        <set-variable name="backend-pool" value="<your_backend_pool_id>" />
+        <!-- Similarly we can also define a standby-pool when our main backend pool starts returning 429 or is not available-->
+        <!-- We can use both these varaibles in our retry policy to switch to these define backends based on the respective conditions-->
+        <set-variable name="standby-pool" value="<your_backend_pool_id>" />
+
+
+        <!-- Define the Quota and Rate limiting policies(we have used some example) for that Product
+        Here we are using subscriptionId as counter-key but it can be any identifier -->
+        <!-- We have used some example values here to define an example rate limitin g -->
+        <azure-openai-token-limit counter-key="@(context.Subscription.Id)" tokens-per-minute="10000" estimate-prompt-tokens="false" remaining-tokens-header-name="x-oai-tpm-remaining-tokens" tokens-consumed-header-name="x-oai-tpm-tokens-consumed" />
+        <quota-by-key calls="1000" renewal-period="300" counter-key="@(context.Subscription.Id)" />
+
+    </inbound>
+    <!-- Control if and how the requests are forwarded to services  -->
+    <backend>
+        <base />
+    </backend>
+    <!-- Customize the responses -->
+    <outbound>
+        <base />
+    </outbound>
+    <!-- Handle exceptions and customize error responses  -->
+    <on-error>
+        <base />
+    </on-error>
+</policies>
