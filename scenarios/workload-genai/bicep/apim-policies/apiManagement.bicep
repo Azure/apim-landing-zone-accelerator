@@ -50,6 +50,28 @@ resource azureOpenAIProduct 'Microsoft.ApiManagement/service/products@2023-05-01
   }
 }
 
+resource multiTenantProduct1 'Microsoft.ApiManagement/service/products@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'multi-tenant-product1'
+  properties: {
+    displayName: 'multi-tenant-product1'
+    subscriptionRequired: true
+    state: 'published'
+    approvalRequired: false
+  }
+}
+
+resource multiTenantProduct2 'Microsoft.ApiManagement/service/products@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'multi-tenant-product2'
+  properties: {
+    displayName: 'multi-tenant-product2'
+    subscriptionRequired: true
+    state: 'published'
+    approvalRequired: false
+  }
+}
+
 var azureOpenAIAPINames = [
   azureOpenAIApi.name
 ]
@@ -57,6 +79,18 @@ var azureOpenAIAPINames = [
 resource azureOpenAIProductAPIAssociation 'Microsoft.ApiManagement/service/products/apis@2023-05-01-preview' = [
   for apiName in azureOpenAIAPINames: {
     name: '${apiManagementServiceName}/${azureOpenAIProduct.name}/${apiName}'
+  }
+]
+
+resource multiTenantProduct1APIAssociation 'Microsoft.ApiManagement/service/products/apis@2023-05-01-preview' = [
+  for apiName in azureOpenAIAPINames: {
+    name: '${apiManagementServiceName}/${multiTenantProduct1.name}/${apiName}'
+  }
+]
+
+resource multiTenantProduct2APIAssociation 'Microsoft.ApiManagement/service/products/apis@2023-05-01-preview' = [
+  for apiName in azureOpenAIAPINames: {
+    name: '${apiManagementServiceName}/${multiTenantProduct2.name}/${apiName}'
   }
 ]
 
@@ -94,6 +128,26 @@ resource azureOpenAIProductSubscription 'Microsoft.ApiManagement/service/subscri
     displayName: 'aoai-product-subscription'
     state: 'active'
     scope: azureOpenAIProduct.id
+  }
+}
+
+resource multiTenantProduct1Subscription 'Microsoft.ApiManagement/service/subscriptions@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'multi-tenant-product1-subscription'
+  properties: {
+    displayName: 'multi-tenant-product1-subscription'
+    state: 'active'
+    scope: multiTenantProduct1.id
+  }
+}
+
+resource multiTenantProduct2Subscription 'Microsoft.ApiManagement/service/subscriptions@2023-05-01-preview' = {
+  parent: apiManagementService
+  name: 'multi-tenant-product2-subscription'
+  properties: {
+    displayName: 'multi-tenant-product2-subscription'
+    state: 'active'
+    scope: multiTenantProduct2.id
   }
 }
 
@@ -193,6 +247,26 @@ resource azureOpenAIApiPolicy 'Microsoft.ApiManagement/service/apis/policies@202
     usageTrackingWithAppInsightsPolicyFragment]
 }
 
+resource multiTenantProduct1Policy 'Microsoft.ApiManagement/service/products/policies@2024-06-01-preview' = {
+  parent: multiTenantProduct1
+  name: 'policy'
+  properties: {
+    value: loadTextContent('../../policies/multi-tenancy/multi-tenant-product1-policy.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [apiBackend]
+}
+
+resource multiTenantProduct2Policy 'Microsoft.ApiManagement/service/products/policies@2024-06-01-preview' = {
+  parent: multiTenantProduct2
+  name: 'policy'
+  properties: {
+    value: loadTextContent('../../policies/multi-tenancy/multi-tenant-product2-policy.xml')
+    format: 'rawxml'
+  }
+  dependsOn: [apiBackend]
+}
+
 resource apimOpenaiApiUamiNamedValue 'Microsoft.ApiManagement/service/namedValues@2022-08-01' = {
   name: apimIdentityNameValue
   parent: apiManagementService
@@ -219,3 +293,5 @@ resource eventHubLogger 'Microsoft.ApiManagement/service/loggers@2022-04-01-prev
 
 output apiManagementServiceName string = apiManagementService.name
 output apiManagementAzureOpenAIProductSubscriptionKey string = azureOpenAIProductSubscription.listSecrets().primaryKey
+output apiManagementMultitenantProduct1SubscriptionKey string = multiTenantProduct1Subscription.listSecrets().primaryKey
+output apiManagementMultitenantProduct2SubscriptionKey string = multiTenantProduct2Subscription.listSecrets().primaryKey
