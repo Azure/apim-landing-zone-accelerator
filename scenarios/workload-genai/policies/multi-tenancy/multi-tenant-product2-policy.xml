@@ -8,11 +8,6 @@
     <!-- Throttle, authorize, validate, cache, or transform the requests -->
     <inbound>
         <base />
-        <!-- Define a backend-pool variable for this product, for eg: if it's a freemium product
-        then this can be a PAYG pool, similarly if it's a premium product it can be a PTU pool -->
-        <!-- This variable can thus be used in the other policy fragments e.g retry-with-payg.xml accordingly-->
-        <set-variable name="backend-pool" value="aoai-lb-pool" />
-
         <!-- Define the Quota/ Rate limiting policies here..
         Here we are using subscriptionId as counter-key but it can be any identifier -->
         <!-- We have used some example values here to define an example rate limiter -->
