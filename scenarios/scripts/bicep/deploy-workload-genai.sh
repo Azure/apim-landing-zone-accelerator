@@ -23,38 +23,38 @@ else
     exit 6
 fi
 
-# cat << EOF > "$script_dir/../../workload-genai/bicep/parameters.json"
-# {
-#   "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-#   "contentVersion": "1.0.0.0",
-#   "parameters": {
-#     "apiManagementServiceName" :{
-#         "value": "${apimName}"
-#     },
-#     "resourceSuffix" :{
-#         "value": "${resourceSuffix}"
-#     },
-#     "apimResourceGroupName" :{
-#         "value": "${apimResourceGroupName}"
-#     },
-#     "apimIdentityName" :{
-#         "value": "${apimIdentityName}"
-#     },
-#     "vnetName" :{
-#         "value": "${vnetName}"
-#     },
-#     "privateEndpointSubnetid" :{
-#         "value": "${privateEndpointSubnetid}"
-#     },
-#     "networkingResourceGroupName" :{
-#         "value": "${networkingResourceGroupName}"
-#     },
-#     "enableTelemetry" :{
-#         "value": ${telemetry}
-#     }
-#   }
-# }
-# EOF
+cat << EOF > "$script_dir/../../workload-genai/bicep/parameters.json"
+{
+  "\$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiManagementServiceName" :{
+        "value": "${apimName}"
+    },
+    "resourceSuffix" :{
+        "value": "${resourceSuffix}"
+    },
+    "apimResourceGroupName" :{
+        "value": "${apimResourceGroupName}"
+    },
+    "apimIdentityName" :{
+        "value": "${apimIdentityName}"
+    },
+    "vnetName" :{
+        "value": "${vnetName}"
+    },
+    "privateEndpointSubnetid" :{
+        "value": "${privateEndpointSubnetid}"
+    },
+    "networkingResourceGroupName" :{
+        "value": "${networkingResourceGroupName}"
+    },
+    "enableTelemetry" :{
+        "value": ${telemetry}
+    }
+  }
+}
+EOF
 
 deployment_name="workload-genai-${RESOURCE_NAME_PREFIX}"
 
