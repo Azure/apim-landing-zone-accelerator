@@ -83,9 +83,9 @@ echo "Test the deployment by running the following command: ${testUri}"
 echo -e "\n"
 
 multiTenantProduct1TestUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${multiTenantProduct1SubscriptionKey}' -H 'Content-Type: application/json' https://${appGatewayPublicIpAddress}/openai/deployments/aoai/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
-echo "Test the deployment by running the following command for multi-tenant Product1 following command: ${multiTenantProduct1TestUri}"
+echo "Test the deployment for multi-tenant Product1 by running the following command: ${multiTenantProduct1TestUri}"
 echo -e "\n"
 
 multiTenantProduct2TestUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${multiTenantProduct2SubscriptionKey}' -H 'Content-Type: application/json' https://${appGatewayPublicIpAddress}/openai/deployments/aoai/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
-echo "Test the deployment by running the following command for multi-tenant Product2 following command: ${multiTenantProduct2TestUri}"
+echo "Test the deployment for multi-tenant Product2 by running the following command: ${multiTenantProduct2TestUri}"
 echo -e "\n"
