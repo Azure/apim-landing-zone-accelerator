@@ -1,43 +1,60 @@
 # Multi-Tenancy using Azure API Management
 
 Customers may sometimes would also like to have a multi-tenancy model on top of their backend APIs.
-This is a typical requirement for customers/businesses operating in SaaS based models, which is essentially defined using following 2 business concepts:
+This is a typical requirement for customers/businesses operating in SaaS based models. Multi-tenancy in such scenarios is typically defined using following 2 business concepts:
 
 1. **Tiers**:
-Tiers govern the _quality of service_ exposed based on the pricing model.
-For instance, a _Freemium_ tier can be thought of as for consumer groups who would like to explore the service at no cost and with very limited quota and rate limiting , likewise a _Premium_ tier can be defined for consumers who would like to have the most premium service experience with the maximum possible rate limiting and quota.
+Tiers govern the _quality of service_ exposed to the users based on their pricing model.
+For instance, a _Freemium_ tier can be thought of as for consumer groups who would like to explore the service at no cost thus having very limited quota and rate limiting , likewise a _Premium_ tier can be defined for consumers who would like to have the most premium-grade service experience with the maximum possible rate limiting and quota.
 
-2. **Entitlements**: Apart from _tiers_, businesses would also like to define _entitlements_ which means _giving access of only selected APIs_ for a particular consumer group. For instance, access to only chat based APIs for consumer A or embedding only APIs for consumer B.
+2. **Entitlements**: Apart from _tiers_, businesses would also like to define _entitlements_ which means _giving access of only selected APIs_ for a particular consumer group. For instance, access to only chat based APIs for consumer A or only image APIs for consumer B.
 
-An initial solution can be thought of by defining separate APIs for different customers based on their _tiers_ and defining the policies at the API level. Following image describes this appraoch.
+## Initial Approach
 
-![Rudimentary Solution Approach](../../../../../docs/images/multi-tenancy-without-products.png)
+An initial approach can be to define separate APIs for different customers based on their _tiers_ & _entitlement_ combinations by defining the policies at the API level.Following image describes this approach -
 
-However, as we can easily observe this solution results in a lot of redundancy of APIs and API policies and a very convoluted design. Also, it's hard to define entitlements using this model.
+![Rudimentary Solution Approach](../../../../docs/images/multi-tenancy-without-products.png)
 
-A better and effective solution can instead be built by leveraging the concept of APIM "Products" which would help us to cater our  _entitlement_ requirement by grouping APIs related to that specific entitlement in a logical container and cater to our requirement of _tier_ by leveraging Product's policies for the respective tier (like quota, rate limiting along with the respective backend model for e.g.: either a PAYG or PTU), and by defining "subscriptions" at the Product level and giving access of Product subscription IDs to the end user group, the users can only interact with the service via the specific product for which they have the subscription to.
+### Downsides
 
-![Solution Approach using Products](../../../../../docs/images/multi-tenancy-using-products.png)
+As we can clearly observe, this solution results in a lot of redundancy of APIs and API policies, overall resulting in a very convoluted design. The API's policy code is also now bloated with unnecessary responsibilities which does not falls under the scope of API(for e.g: with the above design, any new policy we want to include has to be defined as part of the API policies). Further, it's also hard to define the entitlements using this model.
 
-This solution not only helps to cater to the multi-tenancy requirement in an effective manner but also makes the overall solution design modular and extensible by having the capability to define n-number of products and APIs and their combinations.
+## Solution Approach
 
-Following blog post further describes this problem and solution approach in more detail -
-https://devblogs.microsoft.com/ise/multitenant-genai-gateway-using-apim/
+A better and effective solution can be built by leveraging the concept of APIM [Products](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-add-products?tabs=azure-portal&pivots=interactive), helping us to cater our "_entitlement_" requirement by grouping APIs related to that specific entitlement in a logical container and cater to our requirement of "_tier_" by leveraging Product's policies for the respective tier (like quota, rate limiting along with the respective backend model for e.g.: either a PAYG or PTU). Lastly, by defining [subscriptions](https://learn.microsoft.com/en-us/azure/api-management/api-management-subscriptions) at the Product level and giving access of only the Product's subscriptions to the end user group, the users can only interact with the service via the specific product's subscription.
+Following design demonstrates this approach further -
+![Solution Approach using Products](../../../../docs/images/multi-tenancy-using-products.png)
+
+_Products essentially here are helping us to define our "tenant" specific policies._
+
+### Benefits
+
+This solution not only helps to cater to the multi-tenancy requirement in an effective manner but also makes the overall design modular and extensible by having the capability to define n-number of products and APIs and their different combinations with clear separation of concerns and adherence to the DRY(Do not Reapeat Yourself) principle.
 
 _Note:
-As this a general pattern, this solution is not specifically tied to the GenAI backened scenario but can be used with any general API backend._
+As this a general pattern, this solution is not only limited to the GenAI backened but can be used with any general backend as well._
+
+### References
+
+Following blog post further describes this scenario in detail -
+https://devblogs.microsoft.com/ise/multitenant-genai-gateway-using-apim/
 
 ## Products and Policies
 
-- Products: Acts as logical container of APIs that should be part of a specific entitlement (e.g., Chat APIs for a chat-based entitlement). As Product here is another APIM resource, sample code for defining a Product & Product API association is in the bicep/terraform scripts.
+- Products: Acts as logical container of APIs for a specific consumer group(e.g., Chat APIs or Embedding APIs).
 
-- Product Policies: For defining tier-wise policies (e.g., rate limits, quotas).
+- Product Policies: For defining tenant policies (e.g., rate limits, quotas).
 
-Policy reference: [`example-product-policy.xml`](example-product-policy.xml)
+Example Policy references:-
 
-The policy defines following elements:
+- [`multi-tenant-product1-policy.xml`](multi-tenant-product1-policy.xml)
+- [`multi-tenant-product2-policy.xml`](multi-tenant-product2-policy.xml)
 
-- A backend pool variable: For e.g.: if it's a Freemium Tier product
-        then this can be a PAYG pool, similarly if it's a Premium Tier product, then it can be a PTU pool.
-- A standby pool variable
-- Quota and Rate limiting policies using subscriptionId as counterKey
+To demonstrate an example multi-tenancy feature, both the product policies currently define a single cross cutting concern("Rate limter") at the Product Level on two sample products.
+However, as we discussed above, the Product Policy can accordingly be extended with other elements like defining of a backend-pool variable name or other policies which help us define our overall tenant-specific policies.
+
+## Note
+
+This capability/pattern is over the top of the existing core capabilities, which can be played around & tested separately and hence does not impacts the existing setup.
+
+However, if we do not want to have this capability i.e. these resources created as part of our deployment, then we can uncomment the respective code blocks from the bicep and terraform scripts.
