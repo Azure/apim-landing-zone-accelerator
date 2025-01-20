@@ -50,8 +50,9 @@ Example Policy references:-
 - [`multi-tenant-product1-policy.xml`](multi-tenant-product1-policy.xml)
 - [`multi-tenant-product2-policy.xml`](multi-tenant-product2-policy.xml)
 
-To demonstrate an example multi-tenancy feature, both the product policies currently define a single cross cutting concern("Rate limter") at the Product Level on two sample products.
-However, as we discussed above, the Product Policy can accordingly be extended with other elements like defining of a backend-pool variable name or other policies which help us define our overall tenant-specific policies.
+To demonstrate an example multi-tenancy feature, both the product policies currently define a single cross cutting concern("Rate limter") at the Product Level on two sample products(`multi-tenant-product1`,`multi-tenant-product2`) with different counter keys(`<subscription_id>-mt-product1`,`<subscription_id>-mt-product2`) respectively. With this, we now have a new rate limiter policy which supersedes the existing rate limiting policies of API.
+
+ To summarise, a Product Policy can be extended with any number of higher level policies and attributes (for e.g., defining of a backend-pool variable name)  as per the respective  _tenant-specific policies_ requirement.
 
 ## Note
 
