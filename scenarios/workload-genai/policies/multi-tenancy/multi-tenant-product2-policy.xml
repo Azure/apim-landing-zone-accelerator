@@ -11,10 +11,10 @@
         <!-- Define the Quota/Rate limiting policies or any multi-tenant specific policies here..
         Here, we are using subscriptionId as counter-key but it can be any unique identifier -->
         <azure-openai-token-limit counter-key="@(String.Concat(context.Subscription.Id,"-mt-product2"))"
-            tokens-per-minute="100"
+            tokens-per-minute="200"
             estimate-prompt-tokens="true"
-            remaining-tokens-header-name="x-apim-max-remaining-tokens"
-            tokens-consumed-header-name="x-apim-max-consumed-tokens"/>
+            remaining-tokens-header-name="x-apim-remaining-tokens-mt-product2"
+            tokens-consumed-header-name="x-apim-consumed-tokens-mt-product2"/>
     </inbound>
     <!-- Control if and how the requests are forwarded to services  -->
     <backend>
