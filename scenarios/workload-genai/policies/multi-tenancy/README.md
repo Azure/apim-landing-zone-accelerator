@@ -25,7 +25,7 @@ A better and effective solution can be built by leveraging the concept of APIM [
 Following design demonstrates this approach further -
 ![Solution Approach using Products](../../../../docs/images/multi-tenancy-using-products.png)
 
-_Products essentially here are helping us to define our "tenant" specific policies._
+Product policy essentially here is helping us to define our "tenant" specific policies.
 
 ### Benefits
 
@@ -41,18 +41,20 @@ https://devblogs.microsoft.com/ise/multitenant-genai-gateway-using-apim/
 
 ## Products and Policies
 
+To summarise:
+
 - Products: Acts as logical container of APIs for a specific consumer group(e.g., Chat APIs or Embedding APIs).
 
 - Product Policies: For defining tenant policies (e.g., rate limits, quotas).
 
-Example Policy references:-
+And as part of this capability's example scenario, we will apply a "new rate limiter policy" (different from existing API's rate limiter policy) at the product level, the value of this rate limiter at the product level will be intentionally kept lesser than what is defined for existing API's rate limiter policy fragment, such that it starts returning 429 error as soon as we hit these limits.
+
+For this setup, we create two sample products(`multi-tenant-product1`,`multi-tenant-product2`) with different counter keys(`<subscription_id>-mt-product1`,`<subscription_id>-mt-product2`) respectively and with following policies :
 
 - [`multi-tenant-product1-policy.xml`](multi-tenant-product1-policy.xml)
 - [`multi-tenant-product2-policy.xml`](multi-tenant-product2-policy.xml)
 
-To demonstrate an example multi-tenancy feature, both the product policies currently define a single cross cutting concern("Rate limter") at the Product Level on two sample products(`multi-tenant-product1`,`multi-tenant-product2`) with different counter keys(`<subscription_id>-mt-product1`,`<subscription_id>-mt-product2`) respectively. With this, we now have a new rate limiter policy which supersedes the existing rate limiting policies of API.
-
- To summarise, a Product Policy can be extended with any number of higher level policies and attributes (for e.g., defining of a backend-pool variable name)  as per the respective  _tenant-specific policies_ requirement.
+The Product Policy can thus be extended with any number of higher level policies and attributes (for e.g., defining quota or rate limits or the name of the backend-pool) as per the respective  _tenant-specific policies_ requirement.
 
 ## Note
 
