@@ -47,17 +47,17 @@ To summarise:
 
 - Product Policies: For defining tenant policies (e.g., rate limits, quotas).
 
-And as part of this capability's example scenario, we will apply a "new rate limiter policy" (different from existing API's rate limiter policy) at the product level, the value of this rate limiter at the product level will be intentionally kept lesser than what is defined for existing API's rate limiter policy fragment, such that it starts returning 429 error as soon as we hit these limits.
+And as part of this capability's example scenario, we will apply a new _quota policy_ at the product level, such that if the number of requests to APIM via that product's subscription exceed as per the defined "calls" attribute's value, then the product policy will accordingly block the subsequent requests from that subscription until the quota is refreshed based on the defined "renewal-period" and "counter-key" attribute.
 
 For this setup, we create two sample products(`multi-tenant-product1`,`multi-tenant-product2`) with different counter keys(`<subscription_id>-mt-product1`,`<subscription_id>-mt-product2`) respectively and with following policies :
 
 - [`multi-tenant-product1-policy.xml`](multi-tenant-product1-policy.xml)
 - [`multi-tenant-product2-policy.xml`](multi-tenant-product2-policy.xml)
 
-The Product Policy can thus be extended with any number of higher level policies and attributes (for e.g., defining quota or rate limits or the name of the backend-pool) as per the respective  _tenant-specific policies_ requirement.
+The Product Policy can thus be extended with any number of higher level policies (for e.g., defining quota or rate limits) and any attributes (for e.g., setting the name of the backend-pool) as per the respective _tenant's_ requirement.
 
 ## Note
 
 This capability/pattern is over the top of the existing core capabilities, which can be played around & tested separately and hence does not impacts the existing setup.
 
-However, if we do not want to have this capability i.e. these resources created as part of our deployment, then we can uncomment the respective code blocks from the bicep and terraform scripts.
+However, if we do not want to have this capability i.e. these resources created as part of our deployment, then we can comment the respective code blocks from the bicep and terraform scripts.
