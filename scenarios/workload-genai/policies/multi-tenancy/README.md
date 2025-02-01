@@ -60,4 +60,4 @@ The Product Policy can thus be extended with any number of higher-level policies
 
 This capability/pattern is over the top of the existing core capabilities, which can be played around & tested separately and hence does not impact the existing setup.
 
-However, if we do not want to have this capability i.e. these resources created as part of our deployment, then we can comment the respective code blocks from the bicep and terraform scripts.
+However, ifmulti-tenancy capability is not needed i.e. these resources created as part of our deployment, then the respective code blocks can be commented from the bicep and terraform scripts.
