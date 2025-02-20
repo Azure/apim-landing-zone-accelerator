@@ -161,6 +161,8 @@ NETWORK_RESOURCE_GROUP="rg-networking-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}
 APPGATEWAY_PIP="pip-appgw-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 API_SUBSCRIPTION_ID="aoai-product-subscription"
+MT_PRODUCT1_SUBSCRIPTION_ID="multi-tenant-product1-subscription"
+MT_PRODUCT2_SUBSCRIPTION_ID="multi-tenant-product2-subscription"
 
 # Get the access token
 TOKEN=$(az account get-access-token --query accessToken --output tsv)
@@ -177,4 +179,30 @@ PRIMARY_KEY=$(echo "$output" | jq -r '.primaryKey')
 APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
 testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
 echo "Test the deployment by running the following command: ${testUri}"
+echo -e "\n"
+
+# Call the Azure REST API to get subscription key of multi-tenant product1
+mt_product1_sub_output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
+	-H "Content-Type: application/json" \
+	-H "Content-Length: 0" \
+	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions/$MT_PRODUCT1_SUBSCRIPTION_ID/listSecrets?api-version=2022-08-01")
+
+# Extract the subscription keys
+MT_PRODUCT1_SUB_PRIMARY_KEY=$(echo "$mt_product1_sub_output" | jq -r '.primaryKey')
+
+testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${MT_PRODUCT1_SUB_PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
+echo "Test the deployment for multi-tenant Product1 by running the following command: ${testUri}"
+echo -e "\n"
+
+# Call the Azure REST API to get subscription key of multi-tenant product2
+mt_product2_sub_output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
+	-H "Content-Type: application/json" \
+	-H "Content-Length: 0" \
+	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions/$MT_PRODUCT2_SUBSCRIPTION_ID/listSecrets?api-version=2022-08-01")
+
+# Extract the subscription keys
+MT_PRODUCT2_SUB_PRIMARY_KEY=$(echo "$mt_product2_sub_output" | jq -r '.primaryKey')
+
+testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${MT_PRODUCT2_SUB_PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
+echo "Test the deployment for multi-tenant Product2 by running the following command: ${testUri}"
 echo -e "\n"

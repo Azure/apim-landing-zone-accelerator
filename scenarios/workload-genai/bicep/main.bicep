@@ -139,3 +139,5 @@ resource telemetrydeployment 'Microsoft.Resources/deployments@2021-04-01' = if (
 
 output apiManagementName string = apiManagement.outputs.apiManagementServiceName
 output apiManagementAzureOpenAIProductSubscriptionKey string = apiManagement.outputs.apiManagementAzureOpenAIProductSubscriptionKey
+output apiManagementMultitenantProduct1SubscriptionKey string = apiManagement.outputs.apiManagementMultitenantProduct1SubscriptionKey
+output apiManagementMultitenantProduct2SubscriptionKey string = apiManagement.outputs.apiManagementMultitenantProduct2SubscriptionKey

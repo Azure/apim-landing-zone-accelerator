@@ -121,6 +121,6 @@ echo "$output" | jq "[.properties.outputs | to_entries | .[] | {key:.key, value:
 appGatewayPublicIpAddress=$(cat "$script_dir/../../apim-baseline/bicep/output.json" | jq -r '.appGatewayPublicIpAddress')
 apimStarterSubscriptionKey=$(cat "$script_dir/../../apim-baseline/bicep/output.json" | jq -r '.apimStarterSubscriptionKey')
 
-testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${apimStarterSubscriptionKey}' https://${appGatewayPublicIpAddress}/echo/resource?param1=sample"
+testUri="curl -k -v -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${apimStarterSubscriptionKey}' https://${appGatewayPublicIpAddress}/echo/resource?param1=sample"
 echo "Test the deployment by running the following command: ${testUri}"
 echo -e "\n"

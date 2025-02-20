@@ -41,8 +41,48 @@ resource "azurerm_api_management_product" "azureOpenAIProduct" {
   published             = true
 }
 
+resource "azurerm_api_management_product" "multiTenantProduct1" {
+  product_id            = "multi-tenant-product1"
+  resource_group_name   = var.resourceGroupName
+  api_management_name   = data.azurerm_api_management.apiManagementService.name
+  display_name          = "multi-tenant-product1"
+  subscription_required = true
+  published             = true
+}
+
+resource "azurerm_api_management_product" "multiTenantProduct2" {
+  product_id            = "multi-tenant-product2"
+  resource_group_name   = var.resourceGroupName
+  api_management_name   = data.azurerm_api_management.apiManagementService.name
+  display_name          = "multi-tenant-product2"
+  subscription_required = true
+  published             = true
+}
+
 resource "azurerm_api_management_product_api" "azureOpenAIProductAPI" {
   product_id          = azurerm_api_management_product.azureOpenAIProduct.product_id
+  api_name            = azurerm_api_management_api.azureOpenAIApi.name
+  api_management_name = data.azurerm_api_management.apiManagementService.name
+  resource_group_name = var.resourceGroupName
+  depends_on = [
+    azurerm_api_management_api.azureOpenAIApi,
+    azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment
+  ]
+}
+
+resource "azurerm_api_management_product_api" "multiTenantProduct1API" {
+  product_id          = azurerm_api_management_product.multiTenantProduct1.product_id
+  api_name            = azurerm_api_management_api.azureOpenAIApi.name
+  api_management_name = data.azurerm_api_management.apiManagementService.name
+  resource_group_name = var.resourceGroupName
+  depends_on = [
+    azurerm_api_management_api.azureOpenAIApi,
+    azurerm_api_management_policy_fragment.simpleRoundRobinPolicyFragment
+  ]
+}
+
+resource "azurerm_api_management_product_api" "multiTenantProduct2API" {
+  product_id          = azurerm_api_management_product.multiTenantProduct2.product_id
   api_name            = azurerm_api_management_api.azureOpenAIApi.name
   api_management_name = data.azurerm_api_management.apiManagementService.name
   resource_group_name = var.resourceGroupName
@@ -83,6 +123,24 @@ resource "azurerm_api_management_subscription" "azureOpenAIProductSubscription" 
   display_name        = "aoai-product-subscription"
   state               = "active"
   product_id          = azurerm_api_management_product.azureOpenAIProduct.id
+}
+
+resource "azurerm_api_management_subscription" "multiTenantProduct1Subscription" {
+  subscription_id     = "multi-tenant-product1-subscription"
+  resource_group_name = var.resourceGroupName
+  api_management_name = data.azurerm_api_management.apiManagementService.name
+  display_name        = "multi-tenant-product1-subscription"
+  state               = "active"
+  product_id          = azurerm_api_management_product.multiTenantProduct1.id
+}
+
+resource "azurerm_api_management_subscription" "multiTenantProduct2Subscription" {
+  subscription_id     = "multi-tenant-product2-subscription"
+  resource_group_name = var.resourceGroupName
+  api_management_name = data.azurerm_api_management.apiManagementService.name
+  display_name        = "multi-tenant-product2-subscription"
+  state               = "active"
+  product_id          = azurerm_api_management_product.multiTenantProduct2.id
 }
 
 resource "azurerm_api_management_policy_fragment" "simpleRoundRobinPolicyFragment" {
@@ -187,6 +245,20 @@ resource "azurerm_api_management_api_policy" "azureOpenAIApiPolicy" {
     azurerm_api_management_policy_fragment.adaptiveRateLimitingPolicyFragment,
     azurerm_api_management_policy_fragment.usageTrackingWithAppInsightsPolicyFragment
   ]
+}
+
+resource "azurerm_api_management_product_policy" "multiTenantProduct1Policy" {
+  product_id          = azurerm_api_management_product.multiTenantProduct1.product_id
+  api_management_name = data.azurerm_api_management.apiManagementService.name
+  resource_group_name = data.azurerm_api_management.apiManagementService.resource_group_name
+  xml_content         = file("../policies/multi-tenancy/multi-tenant-product1-policy.xml")
+}
+
+resource "azurerm_api_management_product_policy" "multiTenantProduct2Policy" {
+  product_id          = azurerm_api_management_product.multiTenantProduct2.product_id
+  api_management_name = data.azurerm_api_management.apiManagementService.name
+  resource_group_name = data.azurerm_api_management.apiManagementService.resource_group_name
+  xml_content         = file("../policies/multi-tenancy/multi-tenant-product2-policy.xml")
 }
 
 resource "azurerm_api_management_named_value" "apimOpenaiApiUamiNamedValue" {
