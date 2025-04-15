@@ -28,7 +28,6 @@ resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
   parent: apimDnsZone
   name: '@'
   dependsOn: [
-    apim
     dnsZone
   ]
   properties: {
@@ -45,7 +44,6 @@ resource developerRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
   parent: apimDnsZone
   name: 'developer'
   dependsOn: [
-    apim
     dnsZone
   ]
   properties: {

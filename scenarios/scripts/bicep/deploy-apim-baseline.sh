@@ -50,7 +50,7 @@ fi
 
 if [[ "$CERT_TYPE" == "selfsigned" ]]; then
   cert_data=''
-  cert_Pwd=''
+  cert_pwd=''
 else
   cert_data=$(base64 -w 0 "$script_dir/../../certs/appgw.pfx")
   cert_pwd=$(CERT_PWD)
@@ -59,7 +59,7 @@ fi
 if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
   chars="abcdefghijklmnopqrstuvwxyz"
   random_string=""
-  for i in {1..3}; do
+  for _ in {1..3}; do
       random_char="${chars:RANDOM%${#chars}:1}"
       random_string+="$random_char"
   done

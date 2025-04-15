@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 // Parameters
-@description('A short name for the workload being deployed alphanumberic only')
+@description('A short name for the workload being deployed alphanumeric only')
 @maxLength(8)
 param workloadName string
 
@@ -67,9 +67,6 @@ module networking './networking/networking.bicep' = {
 }
 
 module shared './shared/shared.bicep' = {
-  dependsOn: [
-    networking
-  ]
   name: 'sharedresources'
   scope: resourceGroup(sharedRG.name)
   params: {
