@@ -12,7 +12,9 @@ legacy
 |-- configuration.extractor.yaml
 |-- configuration.prod.yaml
 |-- file-map.txt
+|-- secrets-scan.json
+|-- secrets-scan.txt
 `-- tools
     `-- pipelines
 
-10 directories, 5 files
+10 directories, 7 files
