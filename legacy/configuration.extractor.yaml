@@ -1,0 +1,33 @@
+# Whitelist api names and other associated items in this file
+
+apiNames:
+  - ai-toolkit
+  - am
+  - aprec
+  - bp
+  - bpm
+  - car-worker
+  - cognitive-cache
+  - completions
+  - content-server
+  - dart
+  - dcdashboard
+  - dq
+  - drilling
+  - dsc-odata-client
+  - dsurv
+  - enterprise-notification-services
+  - innfrac-dev
+  - ipoint
+  - maphub
+  - on-prem-fme
+  - pi-2-azure
+  - pi-drilling
+  - sap-ldar
+  - sap-m1-notification
+  - sap-ma-notification
+  - sap-work-order
+  - ss-fme-tools
+
+subscriptionNames:
+  - no-subs-need-to-be-extracted

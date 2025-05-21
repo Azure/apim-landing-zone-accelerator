@@ -1,0 +1,52 @@
+################
+# Notes:
+# For KV overrides
+# identityClientId: represents the system assigned identity of the targeted apim instance
+# or the user managed identity assigned to the targeted apim instance
+# secretIdentifier: the full url (containing the kv name) associated with the kv secret
+# https://apim-dvn-pre-kv.vault.azure.net/secrets/secretName
+#
+# token replacement values
+# "{#tokenName#}" is replaced with the value associated with an environment in the pipeline
+# In general, it should be tied to a library variable name
+################
+
+apimServiceName: apiservicejx6p2m5bi3lky
+namedValues:
+  - name: test
+    properties:
+      displayName: test
+      value: "{#test#}"
+  - name: ai-toolkit-audience
+    properties:
+      displayName: ai-toolkit-audience
+      value: "{#aiToolkitAudience#}"
+  - name: cognitive-cache-audience
+    properties:
+      displayName: ai-toolkit-audience
+      value: "{#cognitiveCacheAudience#}"
+  - name: content-server-api-url
+    properties:
+      displayName: content-server-api-url
+      value: "{#contentServerApiUrl#}"
+  - name: deva-audience
+    properties:
+      displayName: deva-audience
+      value: "{#devaAudience#}"
+  - name: ai-toolkit-key
+    properties:
+      displayName: ai-toolkit-key
+      keyVault:
+        identityClientId: "{#apimIdentityId#}"
+        secretIdentifier: https://apim-dvn-pre-kv.vault.azure.net/secrets/aiToolkitKey
+  # to be removed, just testing kv override
+  - name: test-key
+    properties:
+      displayName: test-key
+      keyVault:
+        identityClientId: "{#apimIdentityId#}"
+        secretIdentifier: https://apim-dvn-pre-kv.vault.azure.net/secrets/aiToolkitKey
+loggers:
+  - name: app-insights
+    properties: 
+      resourceId: "{#appInsightsResourceId#}"
