@@ -1,0 +1,18 @@
+legacy
+|-- README.md
+|-- artifacts
+|   |-- apis
+|   |-- diagnostics
+|   |-- groups
+|   |-- loggers
+|   |-- named values
+|   |-- policy.xml
+|   |-- products
+|   `-- tags
+|-- configuration.extractor.yaml
+|-- configuration.prod.yaml
+|-- file-map.txt
+`-- tools
+    `-- pipelines
+
+10 directories, 5 files
