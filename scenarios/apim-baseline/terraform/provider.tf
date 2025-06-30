@@ -1,6 +1,6 @@
 terraform {
 
-  backend "azurerm" {
+  #backend "azurerm" {
     # ----------------------
     # Will be passing in these arguments via CLI as the state file \
     #  is now being overwritten via local testing environments
@@ -16,11 +16,11 @@ terraform {
     # storage_account_name = "tfstateauseaststorage"
     # container_name       = "apimlza"
     # key                  = "terraform-apimlza-dev-v6.tfstate"
-  }
+  #}
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.1"
+      version = ">= 3.1"
     }
     random = {
       source  = "hashicorp/random"
@@ -42,7 +42,7 @@ provider "azurerm" {
   }
   use_oidc = true
 
-  # subscription_id = var.subscription_id
+  subscription_id = var.subscription_id
   # client_id       = var.client_id
   # client_secret   = var.client_secret
   # tenant_id       = var.tenant_id

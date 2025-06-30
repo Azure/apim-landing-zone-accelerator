@@ -4,6 +4,13 @@ variable "location" {
   default     = "eastus2"
 }
 
+variable "locationSecond" {
+  type        = string
+  description = "The Azure location in which the secondary deployment is happening"
+  default     = "centralus"
+}
+
+
 variable "workloadName" {
   type        = string
   description = "A suffix for naming"
@@ -91,26 +98,6 @@ variable "deploymentAddressPrefix" {
 
 # HA Scenarios Variables
 
-# This will deploy APIM to primary region and extend a location to a secondary region.
-# This uses the Premium V1 SKU of APIM.
-variable "multiRegionEnabled" {
-  description = "Boolean to indicate if the deployment is multi-region"
-  type        = bool
-  default     = false
-}
-
-variable "zoneRedundantEnabled" {
-  description = "Boolean to indicate if the deployment is zone redundant"
-  type        = bool
-  default     = false
-}
-
-variable "locationSecond" {
-  type        = string
-  description = "The Azure location in which the secondary deployment is happening"
-  default     = "centralus"
-}
-
 # Secondary Region Network
 
 variable "apimCSVNetNameSecondAddressPrefix" {
@@ -143,10 +130,17 @@ variable "deploymentSecondAddressPrefix" {
   default     = "10.3.8.0/24"
 }
 
-variable "subscription_id" {
-  type        = string
-  description = "The Azure subscription ID to deploy to"
+# This will deploy APIM to primary region and extend a location to a secondary region.
+# This uses the Premium V1 SKU of APIM.
+variable "multiRegionEnabled" {
+  description = "Boolean to indicate if the deployment is multi-region"
+  type        = bool
+  default     = true
 }
 
-
+variable "zoneRedundantEnabled" {
+  description = "Boolean to indicate if the deployment is zone redundant"
+  type        = bool
+  default     = false
+}
 

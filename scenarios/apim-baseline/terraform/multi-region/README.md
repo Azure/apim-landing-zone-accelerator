@@ -1,9 +1,4 @@
 # Azure API Management - Secure Baseline [Terraform]
-- Single Region Deployment
-- Optional Multi-Region High Availability
-- Optional Zone Redundancy
-
-
 
 This is the Terraform-based deployment guide for [Scenario 1: Azure API Management - Secure Baseline](../README.md).
 
@@ -54,9 +49,6 @@ This is the starting point for the instructions on deploying this reference impl
     | Name  | Description | Default | Example(s) |
     | :---- | :---------- | :------ | :--------- |
     | `AZURE_LOCATION` | The Azure location to deploy to. | **eastus** | **westus** |
-    | `MULT_REGION`| Should this deployment extend to a secondary location? |  false          | true |
-    | `AZURE_LOCATION2`| The Azure secondary location to deploy to? |            | **westus** |
-    | `ZONE_REDUNDANT` | Should the deployment be zone redundant. | **false** | **true** |
     | `RESOURCE_NAME_PREFIX` | A suffix for naming. | **apimdemo** | **appname** |
     | `ENVIRONMENT_TAG` | A tag that will be included in the naming. | **dev** | **stage** |
     | `APPGATEWAY_FQDN` | The Azure location to deploy to. | **apim.example.com** | **my.org.com** |

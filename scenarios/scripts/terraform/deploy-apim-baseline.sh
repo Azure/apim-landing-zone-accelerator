@@ -28,13 +28,6 @@ fi
 
 #### VALIDATE VARIABLES:
 
-if [[ ${#AZURE_LOCATION} -eq 0 ]]; then
-  echo 'ERROR: Missing environment variable AZURE_LOCATION' 1>&2
-  exit 6
-else
-  AZURE_LOCATION="${AZURE_LOCATION%$'\r'}"
-fi
-
 # params
 if [[ ${#AZURE_LOCATION} -eq 0 ]]; then
   echo 'ERROR: Missing environment variable AZURE_LOCATION' 1>&2
@@ -83,6 +76,31 @@ else
   cert_pwd=$(CERT_PWD)
 fi
 
+### MULTI REGION AND ZONE REDUNDANT UPDATES
+if [[ "$MULTI_REGION" == "true" ]]; then
+
+  if [[ ${#AZURE_LOCATION2} -eq 0 ]]; then
+    echo 'ERROR: Multi Region was set to true, however environment variable AZURE_LOCATION2 is missing' 1>&2
+    exit 6
+  else
+    AZURE_LOCATION2="${AZURE_LOCATION2%$'\r'}"
+    MULTI_REGION="${MULTI_REGION%$'\r'}"
+  fi
+else
+  MULTI_REGION="${MULTI_REGION%$'\r'}"
+  AZURE_LOCATION2=""
+fi
+
+if [[ ${#ZONE_REDUNDANT} -eq 0 ]]; then
+  # Assume false if not set
+  ZONE_REDUNDANT="false"
+else
+  ZONE_REDUNDANT="${ZONE_REDUNDANT%$'\r'}"
+fi
+
+
+
+
 
 
 ### VALIDATE IF AZ LOGIN IS REQUIRED, SHOW THE SUBSCRIPTION AND CONFIRM IF WANT TO CONTINUE
@@ -106,20 +124,27 @@ else
 	fi
 fi
 
+# Get the current subscription ID
+SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
 
 # creating tfvars
 # create tfvars
 echo "Creating terraform variables file..."
 cat << EOF > "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}.tfvars"
-location           	= "${AZURE_LOCATION}"
-workloadName       	= "${RESOURCE_NAME_PREFIX}"
-environment        	= "${ENVIRONMENT_TAG}"
-identifier			= "${random_string}"
-appGatewayFqdn     	= "${APPGATEWAY_FQDN}"
-appGatewayCertType 	= "${CERT_TYPE}"
-certData			= "${cert_data}"
-certKey 			= "${cert_pwd}"
-enableTelemetry    	= "${telemetry}"
+location           	 = "${AZURE_LOCATION}"
+workloadName       	 = "${RESOURCE_NAME_PREFIX}"
+environment        	 = "${ENVIRONMENT_TAG}"
+identifier			     = "${random_string}"
+appGatewayFqdn     	 = "${APPGATEWAY_FQDN}"
+appGatewayCertType 	 = "${CERT_TYPE}"
+certData			       = "${cert_data}"
+certKey 			       = "${cert_pwd}"
+enableTelemetry    	 = "${telemetry}"
+multiRegionEnabled 	 = "${MULTI_REGION}"
+zoneRedundantEnabled = "${ZONE_REDUNDANT}"
+locationSecond 	     = "${AZURE_LOCATION2}"
+subscription_id      = "${SUBSCRIPTION_ID}"
 EOF
 
 echo "Copying backend file to terraform directory..."
