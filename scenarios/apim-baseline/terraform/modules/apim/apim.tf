@@ -2,6 +2,9 @@ locals {
   apimName          = "apim-${var.resourceSuffix}"
   apimPipPrimaryPip = "pip-apim-${var.resourceSuffix}"
   apimIdentityName  = "identity-${local.apimName}"
+  skuCount          = var.zoneRedundantEnabled ? 3 : 1
+  skuNameAuto       = var.zoneRedundantEnabled ? "Premium_${local.skuCount}" : var.skuName
+  zones             = var.zoneRedundantEnabled ? ["1", "2", "3"] : ["1"]
 }
 
 resource "azurerm_user_assigned_identity" "apimIdentity" {
@@ -26,7 +29,9 @@ resource "azurerm_api_management" "apim_internal" {
   publisher_email      = var.publisherEmail
   virtual_network_type = "Internal"
 
-  sku_name = var.skuName
+  sku_name = local.skuNameAuto
+
+  zones = local.zones
 
   min_api_version = "2019-12-01"
 

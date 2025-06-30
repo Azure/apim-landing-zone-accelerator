@@ -86,3 +86,10 @@ variable "identifier" {
   description = "The identifier for the resource deployments"
   type        = string
 }
+
+variable "zoneRedundantEnabled" {
+  description = "Boolean to indicate if the deployment is zone redundant"
+  type        = bool
+  default     = false
+}
+
