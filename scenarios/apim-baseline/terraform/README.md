@@ -53,9 +53,9 @@ This is the starting point for the instructions on deploying this reference impl
 
     | Name  | Description | Default | Example(s) |
     | :---- | :---------- | :------ | :--------- |
-    | `AZURE_LOCATION` | The Azure location to deploy to. | **eastus** | **westus** |
-    | `MULT_REGION`| Should this deployment extend to a secondary location? |  false          | true |
-    | `AZURE_LOCATION2`| The Azure secondary location to deploy to? |            | **westus** |
+    | `AZURE_LOCATION` | The Azure location to deploy to. | **eastus2** | **eastus2** |
+    | `MULT_REGION`| Should this deployment extend to a secondary location? |  **false**          | **true** |
+    | `AZURE_LOCATION2`| The Azure secondary location to deploy to? |  **centralus**          | **centralus** |
     | `ZONE_REDUNDANT` | Should the deployment be zone redundant. | **false** | **true** |
     | `RESOURCE_NAME_PREFIX` | A suffix for naming. | **apimdemo** | **appname** |
     | `ENVIRONMENT_TAG` | A tag that will be included in the naming. | **dev** | **stage** |

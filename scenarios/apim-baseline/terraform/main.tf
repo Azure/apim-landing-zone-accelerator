@@ -1,15 +1,3 @@
-# locals {
-#   resourceSuffix              = "${var.workloadName}-${var.environment}-${var.location}-${var.identifier}"
-#   networkingResourceGroupName = "rg-networking-${local.resourceSuffix}"
-#   sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
-#   apimResourceGroupName       = "rg-apim-${local.resourceSuffix}"
-#   keyVaultName                = "kv-${var.workloadName}-${var.environment}-${var.identifier}"
-#   resourceSuffixSecond        = "${var.workloadName}-${var.environment}-${var.locationSecond}-${var.identifier}"
-
-#   tags = {
-#   }
-# }
-
 # This module deploys an Azure API Management (APIM) service in a single region.
 module "apim_baseline_single_region" {
 
@@ -27,11 +15,7 @@ module "apim_baseline_single_region" {
     apimAddressPrefix           = var.apimAddressPrefix
     privateEndpointAddressPrefix = var.privateEndpointAddressPrefix
     deploymentAddressPrefix     = var.deploymentAddressPrefix
-    additionalClientIds          = var.additionalClientIds
-#    keyVaultName                = local.keyVaultName
-#    keyVaultSku                 = var.keyVaultSku
-#    resourceSuffix              = local.resourceSuffix
-#    tags                        = local.tags  
+    additionalClientIds          = var.additionalClientIds 
     certificatePassword        = var.certificatePassword
     certificatePath            = var.certificatePath
     identifier                 = var.identifier    
@@ -56,10 +40,6 @@ module "apim_baseline_multi_region" {
     privateEndpointAddressPrefix = var.privateEndpointAddressPrefix
     deploymentAddressPrefix     = var.deploymentAddressPrefix
     additionalClientIds          = var.additionalClientIds
-#    keyVaultName                = local.keyVaultName
-#    keyVaultSku                 = var.keyVaultSku
-#    resourceSuffix              = local.resourceSuffix
-#    tags                        = local.tags  
     certificatePassword        = var.certificatePassword
     certificatePath            = var.certificatePath
     identifier                 = var.identifier
@@ -70,7 +50,5 @@ module "apim_baseline_multi_region" {
     deploymentSecondAddressPrefix = var.deploymentSecondAddressPrefix
     locationSecond = var.locationSecond
     zoneRedundantEnabled = var.zoneRedundantEnabled
-        
-
 }
 
