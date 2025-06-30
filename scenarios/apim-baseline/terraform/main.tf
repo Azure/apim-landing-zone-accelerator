@@ -18,7 +18,8 @@ module "apim_baseline_single_region" {
     additionalClientIds          = var.additionalClientIds 
     certificatePassword        = var.certificatePassword
     certificatePath            = var.certificatePath
-    identifier                 = var.identifier    
+    identifier                 = var.identifier
+    zoneRedundantEnabled       = var.zoneRedundantEnabled
 
 }
 
