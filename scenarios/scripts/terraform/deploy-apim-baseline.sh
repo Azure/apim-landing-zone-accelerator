@@ -198,31 +198,47 @@ rm -f "${ENVIRONMENT_TAG}.tfplan"
 rm -f "${ENVIRONMENT_TAG}.tfvars"
 rm -f "${ENVIRONMENT_TAG}-backend.hcl"
 
-APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
-APIM_RESOURCE_GROUP="rg-apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
-NETWORK_RESOURCE_GROUP="rg-networking-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
-APPGATEWAY_PIP="pip-appgw-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
-SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-API_SUBSCRIPTION_NAME="Echo API"
+if [[ "$MULTI_REGION" == "true" ]]; then
+  
+  APPGWNAME_UNDERSCORES="${APPGATEWAY_FQDN//./_}"
+  TRAFFIC_MANAGER_FQDN="${APPGWNAME_UNDERSCORES}.trafficmanager.net"
+  testUri="curl -k -v https://${TRAFFIC_MANAGER_FQDN}/status-0123456789abcdef"
+  echo "Test the deployment by running the following command: ${testUri}"
+  echo -e "\n"
 
-# Get the access token
-TOKEN=$(az account get-access-token --query accessToken --output tsv)
+else
+  APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
+  APIM_RESOURCE_GROUP="rg-apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
+  NETWORK_RESOURCE_GROUP="rg-networking-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
+  APPGATEWAY_PIP="pip-appgw-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
 
-# get the subscription id based on the subscription display name
-API_SUBSCRIPTION_ID=$(curl -s -S -H "Authorization: Bearer $TOKEN" \
-	-H "Content-Type: application/json" \
-	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01" | jq -r --arg API_SUBSCRIPTION_NAME "$API_SUBSCRIPTION_NAME" '.value[] | select(.properties.displayName == $API_SUBSCRIPTION_NAME) | .name' )
+  SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  API_SUBSCRIPTION_NAME="Echo API"
 
-# Call the Azure REST API to get subscription keys
-output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
-	-H "Content-Type: application/json" \
-	-H "Content-Length: 0" \
-	"https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions/$API_SUBSCRIPTION_ID/listSecrets?api-version=2022-08-01")
+  # Get the access token
+  TOKEN=$(az account get-access-token --query accessToken --output tsv)
 
-# Extract the subscription keys
-PRIMARY_KEY=$(echo "$output" | jq -r '.primaryKey')
+  # get the subscription id based on the subscription display name
+  API_SUBSCRIPTION_ID=$(curl -s -S -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    "https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions?api-version=2022-08-01" | jq -r --arg API_SUBSCRIPTION_NAME "$API_SUBSCRIPTION_NAME" '.value[] | select(.properties.displayName == $API_SUBSCRIPTION_NAME) | .name' )
 
-APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
-testUri="curl -k -v -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/echo/resource?param1=sample"
-echo "Test the deployment by running the following command: ${testUri}"
-echo -e "\n"
+  # Call the Azure REST API to get subscription keys
+  output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "Content-Length: 0" \
+    "https://management.azure.com/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$APIM_RESOURCE_GROUP/providers/Microsoft.ApiManagement/service/$APIM_SERVICE_NAME/subscriptions/$API_SUBSCRIPTION_ID/listSecrets?api-version=2022-08-01")
+
+  # Extract the subscription keys
+  PRIMARY_KEY=$(echo "$output" | jq -r '.primaryKey')
+
+  APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
+  testUri="curl -k -v -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/echo/resource?param1=sample"
+  echo "Test the deployment by running the following command: ${testUri}"
+  echo -e "\n"
+
+fi
+
+
+
+

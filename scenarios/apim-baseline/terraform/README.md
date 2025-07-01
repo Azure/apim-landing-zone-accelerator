@@ -37,13 +37,13 @@ This is the starting point for the instructions on deploying this reference impl
    cd apim-landing-zone-accelerator/scenarios/scripts
    ```
 
-1. Log into Azure from the AZ CLI and select your subscription.
+2. Log into Azure from the AZ CLI and select your subscription.
 
    ```bash
    az login
    ```
 
-1. Review and update deployment parameters.
+3. Review and update deployment parameters.
 
    Copy the `sample.env` into a new file called `.env` in the same directory. The main difference with the Bicep version is the need for a backend when deploying Terraform templates.
 
@@ -64,7 +64,42 @@ This is the starting point for the instructions on deploying this reference impl
     | `CERT_PWD` | The password for the pfx certificate. Only required if CERT_TYPE is custom. | **N/A** | **password123** |
     | `RANDOM_IDENTIFIER` | Optional 3 character random string to ensure deployments are unique. Automatically assigned if not provided | **abc** | **pqr** |
 
-1. For terraform to work, you'll need to setup the [tf backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration). As part of the repository we provide a `azure-backend-sample.sh` script. This script will create a storage account and a container to store the terraform state. You can run the script with the following command:
+   ### examples `.env` file
+   - Single region, Single Zone deployment with Developer SKU
+   ```bash
+      AZURE_LOCATION='eastus2'
+      RESOURCE_NAME_PREFIX='lzv01'
+      ENVIRONMENT_TAG='dev'
+      APPGATEWAY_FQDN='apim.example.com'
+      CERT_TYPE='selfsigned'
+      ZONE_REDUNDANT='false'
+      MULTI_REGION='false'
+      AZURE_LOCATION2=''
+   ```
+   - Single region and Zone redundant deployment with Premium SKU
+   ```bash
+      AZURE_LOCATION='eastus2'
+      RESOURCE_NAME_PREFIX='lzv01'
+      ENVIRONMENT_TAG='dev'
+      APPGATEWAY_FQDN='apim.example.com'
+      CERT_TYPE='selfsigned'
+      ZONE_REDUNDANT='true'
+      MULTI_REGION='false'
+   ```
+   - Multi-region and Zone Redundant deployment with Premium SKU
+   ```bash
+      AZURE_LOCATION='eastus2'
+      RESOURCE_NAME_PREFIX='lzv01'
+      ENVIRONMENT_TAG='dev'
+      APPGATEWAY_FQDN='apim.example.com'
+      CERT_TYPE='selfsigned'
+      ZONE_REDUNDANT='true'
+      MULTI_REGION='true'
+      AZURE_LOCATION2='centralus'
+   ```
+
+
+4. For terraform to work, you'll need to setup the [tf backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration). As part of the repository we provide a `azure-backend-sample.sh` script. This script will create a storage account and a container to store the terraform state. You can run the script with the following command:
 
     ```bash
     ./azure-backend-sample.sh \
@@ -73,7 +108,7 @@ This is the starting point for the instructions on deploying this reference impl
          --container my-container
     ```
 
-1. After setting up your backend, create a `${ENVIRONMENT_TAG}-backend.hcl` file in the same directory as your `.env`. Don't include the key value, as it is hardcoded in the script. If you are using the sample script (TF Backend in Azure), the file should look like the `sample.backend.hcl` file. So if you are going to use an Azure Backend for your Terraform provider and your ENVIRONMENT_TAG is `dev`, you should have a `dev-backend.hcl` file in the same directory as your `.env` file that looks like this:
+5. After setting up your backend, create a `${ENVIRONMENT_TAG}-backend.hcl` file in the same directory as your `.env`. Don't include the key value, as it is hardcoded in the script. If you are using the sample script (TF Backend in Azure), the file should look like the `sample.backend.hcl` file. So if you are going to use an Azure Backend for your Terraform provider and your ENVIRONMENT_TAG is `dev`, you should have a `dev-backend.hcl` file in the same directory as your `.env` file that looks like this:
 
    ```hcl
    resource_group_name  = "my-resource-group"
@@ -82,7 +117,7 @@ This is the starting point for the instructions on deploying this reference impl
    ```
 
 
-1. Deploy the reference implementation.
+6. Deploy the reference implementation.
 
    Run the following command to deploy the APIM baseline
 
