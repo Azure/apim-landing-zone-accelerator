@@ -33,7 +33,7 @@
 #   }
 
 #   lifecycle {
-#     prevent_destroy = true
+#     #prevent_destroy = true
 #   }
 # }
 
@@ -80,7 +80,7 @@
 #   }
 
 #   lifecycle {
-#     prevent_destroy = true
+#     #prevent_destroy = true
 #   }
 # }
 
@@ -200,7 +200,7 @@ resource "azurerm_key_vault_access_policy" "user_assigned_deployment_keyvault_pe
   ]
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 

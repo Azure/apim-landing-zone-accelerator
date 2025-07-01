@@ -21,7 +21,7 @@ resource "azurerm_user_assigned_identity" "user_assigned_identity" {
   name = local.appGatewayIdentityId
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 
@@ -44,7 +44,7 @@ resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_perm
   ]
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 
@@ -76,7 +76,7 @@ resource "azurerm_public_ip" "public_ip" {
   domain_name_label   = local.appGatewayName
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 
@@ -262,6 +262,6 @@ resource "azurerm_application_gateway" "network" {
   }
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }

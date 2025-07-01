@@ -13,7 +13,7 @@ resource "azurerm_private_dns_zone" "gateway" {
   resource_group_name = var.resourceGroupName
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 
@@ -29,7 +29,7 @@ resource "azurerm_private_dns_a_record" "gateway_record" {
   records             = [var.apimPrivateIp]
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 
@@ -41,7 +41,7 @@ resource "azurerm_private_dns_a_record" "gateway_second_record" {
   records             = [var.apimSecondPrivateIp]
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 
@@ -55,7 +55,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "gateway_vnetlink" {
   virtual_network_id    = var.apimVnetId
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 
@@ -66,7 +66,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "gateway_second_vnetlin
   virtual_network_id    = var.apimSecondVnetId
 
   lifecycle {
-    #prevent_destroy = true
+    ##prevent_destroy = true
   }
 }
 

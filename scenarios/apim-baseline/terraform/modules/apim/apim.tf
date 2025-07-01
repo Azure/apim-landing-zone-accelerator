@@ -45,7 +45,7 @@ resource "azurerm_api_management" "apim_internal" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -64,7 +64,7 @@ resource "azurerm_api_management_logger" "apim_logger" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -119,7 +119,7 @@ resource "azurerm_api_management_diagnostic" "apim_diagnostic" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -131,13 +131,13 @@ resource "azurerm_api_management_product" "starter" {
   published           = true
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
 resource "random_uuid" "starter_key" {
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -151,7 +151,7 @@ resource "azurerm_api_management_subscription" "echo" {
   state               = "active"
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -169,7 +169,7 @@ resource "azurerm_api_management_api" "echo_api" {
   service_url         = "http://echoapi.cloudapp.net/api"
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -202,7 +202,7 @@ resource "azurerm_api_management_api_operation" "echo_api_operation" {
   operation_id = "retrieve-resource"
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 
 }
@@ -214,7 +214,7 @@ resource "azurerm_api_management_product_api" "echo" {
   resource_group_name = azurerm_api_management.apim_internal.resource_group_name
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
