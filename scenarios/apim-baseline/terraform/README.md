@@ -16,7 +16,17 @@ This is the starting point for the instructions on deploying this reference impl
   - `Microsoft.ApiManagement`
   - `Microsoft.Network`
   - `Microsoft.KeyVault`
-- The user or service principal initiating the deployment process must have the [owner role](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) at the subscription level to have the ability to create resource groups and to delegate access to others (Azure Managed Identities created from the IaC deployment).
+- The user or service principal initiating the deployment process must either the [owner role](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner) or the permissions below for a least privilege setup:
+
+    | Role  | Level | Why |
+    | :---- | :---------- | :------ |
+    | Contributor | Subscription | The plan needs the ability to create resource groups |
+    | User Access Administrator | Subscription | The plan delegate access to Azure Managed Identities created by the deployment. The UAA role can be scoped to just "Storage File Data Privileged Contributor" for security hardening.  | 
+
+
+
+
+
 - Access to Bash command line to run the deployment script.
 - Latest [Azure CLI installed](https://learn.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) (must be at least 2.40), or you can perform this from Azure Cloud Shell by clicking below.
 
