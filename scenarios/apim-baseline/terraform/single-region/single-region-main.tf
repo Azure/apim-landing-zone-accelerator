@@ -28,7 +28,7 @@ resource "azurerm_resource_group" "apim" {
 
 module "networking" {
   depends_on                   = [azurerm_resource_group.networking]
-  source                       = "./modules/networking"
+  source                       = "../modules/networking"
   location                     = var.location
   resourceGroupName            = azurerm_resource_group.networking.name
   resourceSuffix               = local.resourceSuffix
@@ -42,7 +42,7 @@ module "networking" {
 
 module "shared" {
   depends_on           = [module.networking]
-  source               = "./modules/shared"
+  source               = "../modules/shared"
   location             = var.location
   resourceGroupName    = azurerm_resource_group.shared.name
   resourceSuffix       = local.resourceSuffix
@@ -55,7 +55,7 @@ module "shared" {
 
 module "apim" {
   depends_on              = [module.shared, module.networking]
-  source                  = "./modules/apim"
+  source                  = "../modules/apim"
   location                = var.location
   resourceGroupName       = azurerm_resource_group.apim.name
   resourceSuffix          = local.resourceSuffix
@@ -65,11 +65,12 @@ module "apim" {
   workspaceId             = module.shared.workspaceId
   sharedResourceGroupName = azurerm_resource_group.shared.name
   keyVaultName            = local.keyVaultName
+  zoneRedundantEnabled    = var.zoneRedundantEnabled
 }
 
 module "gateway" {
   depends_on              = [module.networking, module.apim, module.shared]
-  source                  = "./modules/gateway"
+  source                  = "../modules/gateway"
   location                = var.location
   resourceGroupName       = azurerm_resource_group.networking.name
   resourceSuffix          = local.resourceSuffix
@@ -90,7 +91,7 @@ module "gateway" {
 
 module "dns" {
   depends_on        = [module.apim, module.gateway]
-  source            = "./modules/dns"
+  source            = "../modules/dns"
   location          = var.location
   resourceGroupName = azurerm_resource_group.networking.name
   resourceSuffix    = local.resourceSuffix
