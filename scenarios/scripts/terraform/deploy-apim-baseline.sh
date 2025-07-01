@@ -149,7 +149,7 @@ EOF
 
 echo "Copying backend file to terraform directory..."
 cp "$script_dir/../../${ENVIRONMENT_TAG}-backend.hcl" "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.hcl"
-
+cat "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.hcl"
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../apim-baseline/terraform" || exit
 
