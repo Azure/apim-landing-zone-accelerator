@@ -2,21 +2,16 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "location":            { "value": "eastus2" },
-    "apiManagementName":   { "value": "apim-sbx-devon" },
-    "sku":                 { "value": "Developer" },
-    "virtualNetworkType":  { "value": "Internal" },
-    "vnetAddressPrefix":   { "value": "10.0.0.0/16" },
-    "subnetPrefix":        { "value": "10.0.0.0/24" },
-    "logAnalyticsWorkspace": { "value": "law-apim-sbx" },
-    "keyVaultName":        { "value": "kv-apim-sbx" },
-    "workloadName":        { "value": "devon" },
-    "environment":         { "value": "sbx" },
-    "identifier":          { "value": "devon" },
-    "appGatewayName":      { "value": "agw-sbx-devon" },
-    "appGatewayFQDN":      { "value": "agw-sbx.devon.local" },
-    "appGatewayCertType":  { "value": "SelfSigned" },
-    "certKey":             { "value": "" },
-    "certData":            { "value": "" }
+    "location":          { "value": "eastus2" },
+    "workloadName":      { "value": "devon" },
+    "environment":       { "value": "dev" },
+    "identifier":        { "value": "devon" },
+
+    "appGatewayFqdn":    { "value": "agw-sbx.devon.local" },
+    "appGatewayCertType":{ "value": "SelfSigned" },
+    "certKey":           { "value": "" },
+    "certData":          { "value": "" },
+
+    "enableTelemetry":   { "value": false }
   }
 }
