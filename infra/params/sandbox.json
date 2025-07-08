@@ -12,6 +12,7 @@
     "certKey":           { "value": "" },
     "certData":          { "value": "" },
 
-    "enableTelemetry":   { "value": false }
+    "enableTelemetry":   { "value": false },
+    "certPwd": { "value": "Dev0n!Passw0rd" }
   }
 }
