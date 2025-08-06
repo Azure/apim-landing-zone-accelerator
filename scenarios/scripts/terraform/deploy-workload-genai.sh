@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Not updated yet..."
+exit 0
+
 set -e
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

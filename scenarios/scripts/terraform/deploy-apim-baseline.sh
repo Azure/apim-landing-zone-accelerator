@@ -3,16 +3,38 @@
 set -e
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+env_file="./.env"
 
-# if the script is run with -y flag, it will not prompt for confirmation
-if [[ $1 == "-y" ]]; then
-	auto_confirm=true
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --auto-confirm|-y) auto_confirm=true; shift 2 ;;
+    --delete-local-state|-d) delete_local_state=true; shift ;;
+    *) echo "Invalid argument: $1"; exit 1 ;;
+  esac
+done
+
+# show a message if auto confirm or delete local state is set
+if [[ $auto_confirm == true ]]; then
+  echo "Auto-confirmation enabled, proceeding without prompts."
+fi
+if [[ $delete_local_state == true ]]; then
+  echo "Delete local state enabled, local Terraform state files will be removed."
 fi
 
-if [[ -f "$script_dir/../../.env" ]]; then
-	echo "Loading .env"
-	source "$script_dir/../../.env"
+
+
+
+if [[ -f "$env_file" ]]; then
+	echo "Found .env, sourcing it..."
+  cat "$env_file"
+	source "$env_file"
+else
+  echo "###########################"
+  echo "Error: .env file not found in the current directory."
+  echo "###########################"
+  exit 1
 fi
+
 
 if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
   chars="abcdefghijklmnopqrstuvwxyz"
@@ -21,7 +43,7 @@ if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
       random_char="${chars:RANDOM%${#chars}:1}"
       random_string+="$random_char"
   done
-  echo "RANDOM_IDENTIFIER='$random_string'" >> "$script_dir/../../.env"
+  echo "RANDOM_IDENTIFIER='$random_string'" >> "$env_file"
 else
   random_string="${RANDOM_IDENTIFIER}"
 fi
@@ -78,15 +100,17 @@ fi
 
 ### MULTI REGION AND ZONE REDUNDANT UPDATES
 if [[ "$MULTI_REGION" == "true" ]]; then
-
+  echo "Multi Region is enabled, checking for AZURE_LOCATION2..."
   if [[ ${#AZURE_LOCATION2} -eq 0 ]]; then
     echo 'ERROR: Multi Region was set to true, however environment variable AZURE_LOCATION2 is missing' 1>&2
     exit 6
   else
     AZURE_LOCATION2="${AZURE_LOCATION2%$'\r'}"
     MULTI_REGION="${MULTI_REGION%$'\r'}"
+    echo "Multi Region is enabled, using AZURE_LOCATION2: ${AZURE_LOCATION2}"
   fi
 else
+  echo "Multi Region is not enabled, AZURE_LOCATION2 will not be used."
   MULTI_REGION="${MULTI_REGION%$'\r'}"
   AZURE_LOCATION2=""
 fi
@@ -99,19 +123,19 @@ else
 fi
 
 
-
-
-
-
 ### VALIDATE IF AZ LOGIN IS REQUIRED, SHOW THE SUBSCRIPTION AND CONFIRM IF WANT TO CONTINUE
 az account show > /dev/null
 if [ $? -ne 0 ]; then
   echo "You need to login to Azure CLI. Run 'az login' and try again."
   exit 6
 fi
-
-echo "Using subscription:"
+echo -e "\n"
+echo "Currently selected subscription:"
 az account show --query "{subscriptionId:id, subscriptionName:name}" --output table
+echo -e "\n"
+echo "If you want to change the subscription, run 'az account set --subscription <subscriptionId>'"
+echo -e "\n"
+
 
 if [[ $auto_confirm == true ]]; then
 	echo "auto-confirmation enabled ... continuing"
@@ -147,32 +171,64 @@ locationSecond 	     = "${AZURE_LOCATION2}"
 subscription_id      = "${SUBSCRIPTION_ID}"
 EOF
 
-echo "Copying backend file to terraform directory..."
-cp "$script_dir/../../${ENVIRONMENT_TAG}-backend.hcl" "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.hcl"
-cat "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.hcl"
-echo "Initializing Terraform backend..."
-cd "$script_dir/../../apim-baseline/terraform" || exit
+cat "$script_dir/../../apim-baseline/terraform/${ENVIRONMENT_TAG}.tfvars"
 
-echo "=="
-echo "== Starting terraform deployment baseline"
-echo "=="
+#### Init Terraform with Backend or local storage based on presence of backend.hcl file
+backend_hcl_file="./${ENVIRONMENT_TAG}-backend.hcl"
+
+if [[ -f "$backend_hcl_file" ]]; then
+  echo "Found existing backend file, using it..."
+
+  echo "Copying backend file to terraform directory..."
+  cp "$backend_hcl_file" "../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.hcl"
+  cat "../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.hcl"
+  echo "Initializing Terraform backend..."
+  cd "../../apim-baseline/terraform" || exit
+
+  echo "=="
+  echo "== Starting terraform deployment baseline"
+  echo "=="
+
+  # Delete local state files
+  echo "== deleting local state files"
+  rm -rf .terraform
+  rm -f terraform.lock.hcl
+  rm -f terraform.tfstate
+  rm -f terraform.tfstate.backup
 
 
-# Delete local state files
-echo "== deleting local state files"
-rm -rf .terraform
-rm -f terraform.lock.hcl
-rm -f terraform.tfstate
-rm -f terraform.tfstate.backup
+  terraform init \
+    -backend-config="${ENVIRONMENT_TAG}-backend.hcl" \
+    -backend-config="key=${ENVIRONMENT_TAG}-baseline-lza.tfstate"
 
 
-terraform init \
-	-backend-config="${ENVIRONMENT_TAG}-backend.hcl" \
-	-backend-config="key=${ENVIRONMENT_TAG}-baseline-lza.tfstate"
+else
+
+  echo "Initializing Terraform with local backend..."
+  cd "../../apim-baseline/terraform" || exit
+  terraform init -backend=false
+
+fi
+
+# Check if there is an existing local state file
+if [[ -f "${ENVIRONMENT_TAG}.tfstate" ]]; then
+  echo -n "Found existing local state files..."
+  if [[ "$delete_local_state" == "true" ]]; then
+    echo "Deleting local Terraform state files..."
+    rm -f "${ENVIRONMENT_TAG}.tfplan"
+    rm -f "${ENVIRONMENT_TAG}.tfvars"
+    rm -f "${ENVIRONMENT_TAG}-backend.hcl"
+  else
+    echo "and reusing it. Use --delete-local-state to remove it."
+  fi
+fi
+
+### Create the Terraform plan
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"
 echo "Terraform plan created"
+
 
 # validate if wants to proceed
 if [[ $auto_confirm == true ]]; then
@@ -193,10 +249,7 @@ fi
 
 echo "== Completed terraform deployment"
 
-# remove the plan file, tfvars and terraform.tfstate
-rm -f "${ENVIRONMENT_TAG}.tfplan"
-rm -f "${ENVIRONMENT_TAG}.tfvars"
-rm -f "${ENVIRONMENT_TAG}-backend.hcl"
+
 
 if [[ "$MULTI_REGION" == "true" ]]; then
   

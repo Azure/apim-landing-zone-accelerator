@@ -44,7 +44,7 @@ This is the starting point for the instructions on deploying this reference impl
 
    ```bash
    git clone https://github.com/Azure/apim-landing-zone-accelerator.git
-   cd apim-landing-zone-accelerator/scenarios/scripts
+   cd apim-landing-zone-accelerator/scenarios/scripts/terraform
    ```
 
 2. Log into Azure from the AZ CLI and select your subscription.
@@ -55,9 +55,12 @@ This is the starting point for the instructions on deploying this reference impl
 
 3. Review and update deployment parameters.
 
-   Copy the `sample.env` into a new file called `.env` in the same directory. The main difference with the Bicep version is the need for a backend when deploying Terraform templates.
+   Copy the [`sample.env`](../../scripts/terraform/sample.env) into a new file called `.env` in the same directory. The main difference with the Bicep version is the need for a backend when deploying Terraform templates.
+   ```bash
+   cp sample.env .env
+   ```
 
-   The [**.env**](../../.env) parameter file is where you can customize your deployment. The defaults are a suitable starting point, but feel free to adjust any to fit your requirements.
+   The **.env** parameter file is where you can customize your deployment. The defaults are a suitable starting point, but feel free to adjust any to fit your requirements.
 
    **Deployment parameters**
 
@@ -109,16 +112,16 @@ This is the starting point for the instructions on deploying this reference impl
    ```
 
 
-4. For terraform to work, you'll need to setup the [tf backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration). As part of the repository we provide a `azure-backend-sample.sh` script. This script will create a storage account and a container to store the terraform state. You can run the script with the following command:
+4. For terraform, you have the option to setup a backend [tf backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration). As part of the repository we provide a `azure-backend-sample.sh` script. This script will create a storage account and a container to store the terraform state. You can run the script with the following command:
 
     ```bash
     ./azure-backend-sample.sh \
          --resource-group my-resource-group \
          --storage-account mystorageaccount \
-         --container my-container
+         --container my-container 
     ```
 
-5. After setting up your backend, create a `${ENVIRONMENT_TAG}-backend.hcl` file in the same directory as your `.env`. Don't include the key value, as it is hardcoded in the script. If you are using the sample script (TF Backend in Azure), the file should look like the `sample.backend.hcl` file. So if you are going to use an Azure Backend for your Terraform provider and your ENVIRONMENT_TAG is `dev`, you should have a `dev-backend.hcl` file in the same directory as your `.env` file that looks like this:
+5. An `${ENVIRONMENT_TAG}-backend.hcl` file will be created automatically in the same directory as your `.env`. The file looks like this:
 
    ```hcl
    resource_group_name  = "my-resource-group"
@@ -126,13 +129,17 @@ This is the starting point for the instructions on deploying this reference impl
    container_name       = "my-container"
    ```
 
+   Note: When using an AZURERM Backend and if your deployment is using a service principal vs a user account to login, make sure to also follow the terraform guidance here:
+   https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret#configuring-the-service-principal-in-terraform
+
+
 
 6. Deploy the reference implementation.
 
    Run the following command to deploy the APIM baseline
 
     ```bash
-    ./scripts/terraform/deploy-apim-baseline.sh
+    ./deploy-apim-baseline.sh
     ```
 
 During script execution, you will encounter prompts and will need to respond with a 'y' to continue.
