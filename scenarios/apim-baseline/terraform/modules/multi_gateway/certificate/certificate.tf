@@ -229,7 +229,7 @@ resource "azapi_resource" "appGatewayCertificate" {
       storageAccountSettings = {
         storageAccountName = var.deploymentStorageName
       }
-      azPowerShellVersion = "6.6"
+      azPowerShellVersion = "14.3"
       containerSettings = {
         subnetIds = [
           {

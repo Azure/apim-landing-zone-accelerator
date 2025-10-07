@@ -4,7 +4,7 @@ locals {
   apimIdentityName  = "identity-${local.apimName}"
   skuCount          = var.zoneRedundantEnabled ? 3 : 1
   skuNameAuto       = var.zoneRedundantEnabled ? "Premium_${local.skuCount}" : var.skuName
-  zones             = var.zoneRedundantEnabled ? ["1", "2", "3"] : ["1"]
+  zones             = var.zoneRedundantEnabled ? ["1", "2", "3"] : null
 }
 
 resource "azurerm_user_assigned_identity" "apimIdentity" {

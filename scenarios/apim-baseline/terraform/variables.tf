@@ -148,5 +148,10 @@ variable "subscription_id" {
   description = "The Azure subscription ID to deploy to"
 }
 
+# To avoid Terraform missing variable warnings
+variable "certData"        { default="" }
+variable "certKey"         { default="" }
+variable "enableTelemetry" { default="" }
+
 
 

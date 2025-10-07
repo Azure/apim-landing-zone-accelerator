@@ -22,6 +22,7 @@ locals {
   
 
   tags = {
+    SecurityControl=Ignore
   }
 }
 

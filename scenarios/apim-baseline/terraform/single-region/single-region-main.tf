@@ -5,6 +5,7 @@ locals {
   apimResourceGroupName       = "rg-apim-${local.resourceSuffix}"
   keyVaultName                = "kv-${var.workloadName}-${var.environment}-${var.identifier}"
   tags = {
+    SecurityControl = "Ignore"
   }
 }
 
