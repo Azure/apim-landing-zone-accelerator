@@ -21,12 +21,6 @@ locals {
   storageAccountName2nd          = substr(lower(replace("sadep2${var.workloadName}${random_string.suffix.result}", "-", "")), 0, 21)
   tags = {}
 
-<<<<<<< HEAD
-=======
-  tags = {
-    
-  }
->>>>>>> c87d28a64ffd8bb97e41b4397e6434d29240e967
 }
 
 
