@@ -50,6 +50,7 @@ variable "additionalClientIds" {
 variable "certificatePassword" {
   description = "Password for the certificate"
   type        = string
+  sensitive   = true
   default     = ""
 }
 

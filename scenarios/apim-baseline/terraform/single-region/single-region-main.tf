@@ -4,9 +4,7 @@ locals {
   sharedResourceGroupName     = "rg-shared-${local.resourceSuffix}"
   apimResourceGroupName       = "rg-apim-${local.resourceSuffix}"
   keyVaultName                = "kv-${var.workloadName}-${var.environment}-${var.identifier}"
-  tags = {
-    SecurityControl = "Ignore"
-  }
+  tags = {}
 }
 
 resource "azurerm_resource_group" "networking" {

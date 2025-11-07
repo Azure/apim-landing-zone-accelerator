@@ -19,11 +19,8 @@ locals {
   apimResourceGroupName2nd       = "rg-apim-${local.resourceSuffix2nd}"  
   keyVaultName2nd                = substr(lower(replace("kv-${var.workloadName}${random_string.suffix.result}-2nd", "-", "")), 0, 23)
   storageAccountName2nd          = substr(lower(replace("sadep2${var.workloadName}${random_string.suffix.result}", "-", "")), 0, 21)
-  
+  tags = {}
 
-  tags = {
-    SecurityControl=Ignore
-  }
 }
 
 

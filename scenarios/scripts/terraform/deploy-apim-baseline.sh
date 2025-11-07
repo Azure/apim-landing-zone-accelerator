@@ -31,6 +31,7 @@ if [[ -f "$env_file" ]]; then
 else
   echo "###########################"
   echo "Error: .env file not found in the current directory."
+  echo "       a sample is available at ./sample.env"
   echo "###########################"
   exit 1
 fi
@@ -116,20 +117,26 @@ subjectAltName = @alt_names
 DNS.1 = ${APPGATEWAY_FQDN}
 EOF
 
-openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
+  openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
   -keyout "$script_dir/apim-self-signed.key" \
   -out "$script_dir/apim-self-signed.crt" \
   -config "$script_dir/tmp-self-signed-cert.conf" 
 
-openssl pkcs12 -export \
-  -out "$script_dir/../../apim-baseline/terraform/modules/gateway/apim-self-signed-cert.pfx" \
-  -inkey "$script_dir/apim-self-signed.key" \
-  -in "$script_dir/apim-self-signed.crt" \
-  -passout pass:SelfSignedForLabPurposesChangeMe!
+  cert_pwd=$(tr -dc 'A-Za-z0-9!@#$%^&*()_+{}|:<>?' < /dev/urandom | head -c 16)
+  cert_file="$script_dir/../../certs/self-signed-cert.pfx"
+
+  openssl pkcs12 -export \
+    -out "$cert_file" \
+    -inkey "$script_dir/apim-self-signed.key" \
+    -in "$script_dir/apim-self-signed.crt" \
+    -passout pass:"$cert_pwd"
+
+  
+
 
 
 else
-  cert_data=$(base64 -w 0 "$script_dir/../../certs/appgw.pfx")
+  cert_file="$script_dir/../../certs/appgw.pfx"
   cert_pwd=$(CERT_PWD)
 fi
 
@@ -197,8 +204,8 @@ environment        	 = "${ENVIRONMENT_TAG}"
 identifier			     = "${random_string}"
 appGatewayFqdn     	 = "${APPGATEWAY_FQDN}"
 appGatewayCertType 	 = "${CERT_TYPE}"
-certData			       = "${cert_data}"
-certKey 			       = "${cert_pwd}"
+certificatePath      = "${cert_file}"
+certificatePassword  = "${cert_pwd}"
 enableTelemetry    	 = "${telemetry}"
 multiRegionEnabled 	 = "${MULTI_REGION}"
 zoneRedundantEnabled = "${ZONE_REDUNDANT}"

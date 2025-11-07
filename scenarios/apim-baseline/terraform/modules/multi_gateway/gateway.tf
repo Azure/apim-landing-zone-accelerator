@@ -7,8 +7,8 @@ locals {
   # certificateSecretId   = local.isLocalCertificate ? azurerm_key_vault_certificate.kv_domain_certs[0].secret_id : azurerm_key_vault_certificate.local_domain_certs[0].secret_id
   secretName     = replace(var.appGatewayFqdn, ".", "-")
   subjectName    = "CN=${var.appGatewayFqdn}"
-  certPwd        = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_password
-  certDataString = var.appGatewayCertType == "selfsigned" ? "null" : var.certificate_path
+  certPwd        = var.certificate_password
+  certDataString = var.certificate_path
   trafficManagerName = "${replace(var.appGatewayFqdn,".","-")}.trafficmanager.net"
 }
 
@@ -48,20 +48,20 @@ resource "azurerm_key_vault_access_policy" "user_assigned_identity_keyvault_perm
   }
 }
 
-module "certificate" {
-  source                  = "./certificate"
-  location                = var.location
-  sharedResourceGroupName = var.sharedResourceGroupName
-  keyVaultName            = var.keyVaultName
-  deploymentIdentityName  = var.deploymentIdentityName
-  keyvaultId              = var.keyvaultId
-  appGatewayFqdn          = var.appGatewayFqdn
-  certificate_path        = var.certificate_path
-  certificate_password    = var.certificate_password
-  appGatewayCertType      = var.appGatewayCertType
-  deploymentSubnetId      = var.deploymentSubnetId
-  deploymentStorageName   = var.deploymentStorageName
-}
+# module "certificate" {
+#   source                  = "./certificate"
+#   location                = var.location
+#   sharedResourceGroupName = var.sharedResourceGroupName
+#   keyVaultName            = var.keyVaultName
+#   deploymentIdentityName  = var.deploymentIdentityName
+#   keyvaultId              = var.keyvaultId
+#   appGatewayFqdn          = var.appGatewayFqdn
+#   certificate_path        = var.certificate_path
+#   certificate_password    = var.certificate_password
+#   appGatewayCertType      = var.appGatewayCertType
+#   deploymentSubnetId      = var.deploymentSubnetId
+#   deploymentStorageName   = var.deploymentStorageName
+# }
 
 //Public IP
 resource "azurerm_public_ip" "public_ip" {
@@ -86,8 +86,8 @@ resource "azurerm_application_gateway" "network" {
   location            = var.location
 
   depends_on = [
-    azurerm_key_vault_access_policy.user_assigned_identity_keyvault_permissions,
-    module.certificate
+    azurerm_key_vault_access_policy.user_assigned_identity_keyvault_permissions
+    #,    module.certificate
   ]
 
   identity {
@@ -102,7 +102,9 @@ resource "azurerm_application_gateway" "network" {
 
   ssl_certificate {
     name                = var.appGatewayFqdn
-    key_vault_secret_id = "https://${var.keyVaultName}.vault.azure.net:443/secrets/${local.secretName}"
+    #key_vault_secret_id = "https://${var.keyVaultName}.vault.azure.net:443/secrets/${local.secretName}"
+    data = local.certDataString
+    password = local.certPwd
   }
 
   gateway_ip_configuration {
