@@ -103,7 +103,7 @@ resource "azurerm_application_gateway" "network" {
   ssl_certificate {
     name                = var.appGatewayFqdn
     #key_vault_secret_id = "https://${var.keyVaultName}.vault.azure.net:443/secrets/${local.secretName}"
-    data = local.certDataString
+    data = filebase64(local.certDataString)
     password = local.certPwd
   }
 

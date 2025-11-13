@@ -1,5 +1,7 @@
 terraform {
 
+  # for storage backends, see backend.tf.sample
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"

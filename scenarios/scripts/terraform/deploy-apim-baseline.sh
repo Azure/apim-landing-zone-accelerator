@@ -292,19 +292,8 @@ fi
 echo "== Completed terraform deployment"
 
 
+# Testing the deployment
 echo "Validating deployment..."
-if [[ "$MULTI_REGION" == "true" ]]; then
-  
-  APPGWNAME_UNDERSCORES="${APPGATEWAY_FQDN//./_}"
-  TRAFFIC_MANAGER_FQDN="${APPGWNAME_UNDERSCORES}.trafficmanager.net"
-  testUri="curl -k -v https://${TRAFFIC_MANAGER_FQDN}/status-0123456789abcdef"
-  echo "Test the deployment by running the following command: ${testUri}"
-  echo -e "\n"
-  
-  echo "Testing against ${TRAFFIC_MANAGER_FQDN}"
-  ${testUri}
-
-else
   APIM_SERVICE_NAME="apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
   APIM_RESOURCE_GROUP="rg-apim-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
   NETWORK_RESOURCE_GROUP="rg-networking-${RESOURCE_NAME_PREFIX}-${ENVIRONMENT_TAG}-${AZURE_LOCATION}-${RANDOM_IDENTIFIER}"
@@ -335,16 +324,30 @@ else
   # Extract the subscription keys
   PRIMARY_KEY=$(echo "$output" | jq -r '.primaryKey')
 
-  
-  APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
-  testUri="curl -k -v -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/echo/resource?param1=sample"
-  echo "Test the deployment by running the following command: ${testUri}"
-  echo -e "\n"
 
-  echo "Testing against ${APPGATEWAY_FQDN}"
-  eval ${testUri}
+  if [[ "$MULTI_REGION" == "true" ]]; then
+    
+    APPGWNAME_DASHES="${APPGATEWAY_FQDN//./-}"
+    TRAFFIC_MANAGER_FQDN="${APPGWNAME_DASHES}.trafficmanager.net"
+    #testUri="curl -k -v https://${TRAFFIC_MANAGER_FQDN}/status-0123456789abcdef"
+    testUri="curl -k -v -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${TRAFFIC_MANAGER_FQDN}/echo/resource?param1=sample"
+    echo "Testing against ${TRAFFIC_MANAGER_FQDN}"
+    eval ${testUri}
 
-fi
+    echo "Test the deployment by running the following command: ${testUri}"
+    echo -e "\n"
+
+  else
+    
+    APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
+    testUri="curl -k -v -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/echo/resource?param1=sample"
+    echo "Testing against ${APPGATEWAY_FQDN}"
+    eval ${testUri}
+
+    echo "Test the deployment by running the following command: ${testUri}"
+    echo -e "\n"
+
+  fi
 
 
 
