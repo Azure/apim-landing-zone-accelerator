@@ -166,7 +166,7 @@ resource "azurerm_api_management_api" "echo_api" {
   display_name        = "Echo API"
   path                = "echo"
   protocols           = ["https"]
-  service_url         = "http://echoapi.cloudapp.net/api"
+  service_url         = "https://httpbin.io/anything"
 
   lifecycle {
     #prevent_destroy = true

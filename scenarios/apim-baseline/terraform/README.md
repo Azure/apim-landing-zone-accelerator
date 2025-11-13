@@ -7,7 +7,8 @@ This is the Terraform-based deployment guide for [Scenario 1: Azure API Manageme
 
 ## Sections
 - [Prerequisites](#prerequisites)
-- [Deployment Configuration](#deployment-configuration)
+- [Quick Start](#quick-start)
+- [Deployment Customization](#deployment-customization)
 - [Deployment Steps](#deployment-steps)
 - [Using a Terraform AzureRM backend](#using-a-terraform-azurerm-backend)
 - [Troubleshooting](#troubleshooting)
@@ -43,8 +44,31 @@ This is the starting point for the instructions on deploying this reference impl
    ```
 - Terraform installed. You can download the latest version from the [Terraform website](https://www.terraform.io/downloads.html). However, if using the dev container, this will not need to be downloaded and installed separately. 
 
+## Quick Start
+This will yield a working deployment for testing/poc, with no customizations.
+ ```bash
 
-## Deployment Configuration
+   # Login to Azure
+   az login
+
+   # Clone the repo
+   #git clone https://github.com/Azure/apim-landing-zone-accelerator.git     
+   git clone https://github.com/luisfeliz79/apim-landing-zone-accelerator --branch wip/apim-lza
+   
+   # Change into the scripts/terraform directory
+   cd apim-landing-zone-accelerator/scenarios/scripts/terraform
+   
+   # Use the provided sample environment file
+   cp sample.env .env  to create one and edit as needed
+
+   # Deploy the APIM baseline
+   ./deploy-apim-baseline.sh
+
+   # Follow on screen prompts
+   ```
+
+
+## Deployment Customization
 
 Review and update deployment parameters.
 
@@ -132,6 +156,10 @@ Review and update deployment parameters.
    Run the following command to deploy the APIM baseline
 
     ```bash
+
+     # Note, you haven't created an .env file as explained above
+     # use  cp sample.env .env  to create one and edit as needed
+
     ./deploy-apim-baseline.sh
     ```
 Notes:
