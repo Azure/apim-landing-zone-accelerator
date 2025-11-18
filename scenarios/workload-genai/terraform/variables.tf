@@ -93,10 +93,10 @@ variable "openai_deployments" {
   }))
   default = [
     {
-      name = "gpt-35-turbo-16k"
+      name = "gpt-4o-mini"
       model = {
-        name    = "gpt-35-turbo-16k"
-        version = "0613"
+        name    = "gpt-4o-mini"
+        version = "2024-07-18"
       }
       rai_policy_name = ""
     },
