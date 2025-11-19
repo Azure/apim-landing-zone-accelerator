@@ -52,9 +52,8 @@ This will yield a working deployment for testing/poc, with no customizations.
    az login
 
    # Clone the repo
-   #git clone https://github.com/Azure/apim-landing-zone-accelerator.git     
-   git clone https://github.com/luisfeliz79/apim-landing-zone-accelerator --branch wip/apim-lza
-   
+   git clone https://github.com/Azure/apim-landing-zone-accelerator.git --branch wip/apim-lza    
+
    # Change into the scripts/terraform directory
    cd apim-landing-zone-accelerator/scenarios/scripts/terraform
    
@@ -135,10 +134,7 @@ Review and update deployment parameters.
 1. Clone/download this repo locally, or even better fork this repository.
 
    ```bash
-   #git clone https://github.com/Azure/apim-landing-zone-accelerator.git
-   
-   # For testing purposes only
-   git clone https://github.com/luisfeliz79/apim-landing-zone-accelerator --branch wip/apim-lza
+   git clone https://github.com/Azure/apim-landing-zone-accelerator.git --branch wip/apim-lza    
 
    cd apim-landing-zone-accelerator/scenarios/scripts/terraform
    ```
