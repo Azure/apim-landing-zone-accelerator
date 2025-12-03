@@ -32,10 +32,30 @@ fi
 
 # Source .env to get Azure location
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-if [[ -f "$script_dir/../../.env" ]]; then
-	echo "Loading .env"
-	source "$script_dir/../../.env"
+env_file="./.env"
+
+if [[ -f "$env_file" ]]; then
+	echo "Found .env, sourcing it..."
+  cat "$env_file"
+	source "$env_file"
+else
+  echo "###########################"
+  echo "Error: .env file not found in the current directory."
+  echo "###########################"
 fi
+
+# Validate if needed environment variables are set
+if [[ -z "$AZURE_LOCATION" ]]; then
+  echo "Error: AZURE_LOCATION is not set in the .env file."
+  exit 1
+fi
+
+if [[ -z "$ENVIRONMENT_TAG" ]]; then
+  echo "Error: ENVIRONMENT_TAG is not set in the .env file."
+  exit 1
+fi
+
+
 
 # Ensure user is logged into Azure CLI
 if ! az account show > /dev/null 2>&1; then
@@ -96,3 +116,27 @@ if ! az storage container show --name "$TF_BACKEND_CONTAINER_NAME" --account-nam
 fi
 
 echo "Backend resources are ready."
+
+# Create needed backend.hcl file
+backend_hcl_file="./${ENVIRONMENT_TAG}-backend.hcl"
+
+cat <<EOF > "$backend_hcl_file"
+resource_group_name  = "$TF_BACKEND_RESOURCE_GROUP_NAME"
+storage_account_name = "$TF_BACKEND_STORAGE_ACCOUNT_NAME"
+container_name       = "$TF_BACKEND_CONTAINER_NAME"
+EOF
+
+echo "Backend configuration written to $backend_hcl_file."
+
+backend_tf_file="../../apim-baseline/terraform/${ENVIRONMENT_TAG}-backend.tf"
+
+cat <<EOF > "$backend_tf_file"
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "$TF_BACKEND_RESOURCE_GROUP_NAME"
+    storage_account_name = "$TF_BACKEND_STORAGE_ACCOUNT_NAME"
+    container_name       = "$TF_BACKEND_CONTAINER_NAME"
+  }
+}
+EOF
+echo "Terraform backend configuration written to $backend_tf_file."

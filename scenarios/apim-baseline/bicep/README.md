@@ -1,5 +1,9 @@
 # Azure API Management - Secure Baseline [Bicep]
 
+**Note:**
+This template may be out of date temporarily.  Please use the [Terraform version](../terraform/README.md) of this scenario for the most up-to-date implementation.
+
+
 This is the Bicep-based deployment guide for [Scenario 1: Azure API Management - Secure Baseline](../README.md).
 
 ## Prerequisites

@@ -1,17 +1,32 @@
 #!/bin/bash
 
+#echo "Not updated yet..."
+#exit 0
+
 set -e
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+env_file="./.env"
+
+echo "Script directory: $script_dir"
+echo "Current directory: $(pwd)"
 
 # if the script is run with -y flag, it will not prompt for confirmation
 if [[ $1 == "-y" ]]; then
 	auto_confirm=true
 fi
 
-if [[ -f "$script_dir/../../.env" ]]; then
+if [[ -f "$env_file" ]]; then
 	echo "Loading .env"
-	source "$script_dir/../../.env"
+	# Convert Windows line endings to Unix if needed
+	sed -i 's/\r$//' "$env_file" 2>/dev/null || true
+	source "$env_file"
+else
+  echo "###########################"
+  echo "Error: .env file not found in the current directory."
+  echo "       a sample is available at ./sample.env"
+  echo "###########################"
+  exit 1
 fi
 
 if [[ ${#RANDOM_IDENTIFIER} -eq 0 ]]; then
@@ -109,21 +124,38 @@ enableTelemetry    	= "${telemetry}"
 EOF
 
 echo "Copying backend file to terraform directory..."
-cp "$script_dir/../../${ENVIRONMENT_TAG}-backend.hcl" "$script_dir/../../workload-genai/terraform/${ENVIRONMENT_TAG}-backend.hcl"
+backend_hcl_file="./${ENVIRONMENT_TAG}-backend.hcl"
+
+if [[ -f "$backend_hcl_file" ]]; then
+  echo "Found existing backend file, using it..."
+  cp "$backend_hcl_file" "../../workload-genai/terraform/${ENVIRONMENT_TAG}-backend.hcl"
+else
+  echo "No backend file found at $backend_hcl_file, skipping backend configuration..."
+fi
 
 
 echo "Initializing Terraform backend..."
 cd "$script_dir/../../workload-genai/terraform" || exit
 
-# Delete local state files
-rm -rf .terraform
-rm -f terraform.lock.hcl
-rm -f terraform.tfstate
-rm -f terraform.tfstate.backup
-
-terraform init \
-	-backend-config="${ENVIRONMENT_TAG}-backend.hcl" \
-	-backend-config="key=${ENVIRONMENT_TAG}-genai-lza.tfstate"
+if [[ -f "${ENVIRONMENT_TAG}-backend.hcl" ]]; then
+  echo "Using backend configuration..."
+  # Delete local state files only when using remote backend
+  rm -rf .terraform
+  rm -f terraform.lock.hcl
+  #rm -f terraform.tfstate
+  rm -f terraform.tfstate.backup
+  
+  terraform init \
+    -backend-config="${ENVIRONMENT_TAG}-backend.hcl" \
+    -backend-config="key=${ENVIRONMENT_TAG}-genai-lza.tfstate"
+else
+  echo "Using local state..."
+  # Only delete .terraform directory to force re-initialization
+  rm -rf .terraform
+  rm -f terraform.lock.hcl
+  
+  terraform init
+fi
 
 echo "Creating Terraform plan..."
 terraform plan -var-file="${ENVIRONMENT_TAG}.tfvars" -out="${ENVIRONMENT_TAG}.tfplan"
@@ -177,7 +209,7 @@ output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
 PRIMARY_KEY=$(echo "$output" | jq -r '.primaryKey')
 
 APPGATEWAYPUBLICIPADDRESS=$(az network public-ip show --resource-group "$NETWORK_RESOURCE_GROUP" --name "$APPGATEWAY_PIP" --query ipAddress -o tsv)
-testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
+testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
 echo "Test the deployment by running the following command: ${testUri}"
 echo -e "\n"
 
@@ -190,7 +222,7 @@ mt_product1_sub_output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
 # Extract the subscription keys
 MT_PRODUCT1_SUB_PRIMARY_KEY=$(echo "$mt_product1_sub_output" | jq -r '.primaryKey')
 
-testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${MT_PRODUCT1_SUB_PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
+testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${MT_PRODUCT1_SUB_PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
 echo "Test the deployment for multi-tenant Product1 by running the following command: ${testUri}"
 echo -e "\n"
 
@@ -203,6 +235,6 @@ mt_product2_sub_output=$(curl -s -S -X POST -H "Authorization: Bearer $TOKEN" \
 # Extract the subscription keys
 MT_PRODUCT2_SUB_PRIMARY_KEY=$(echo "$mt_product2_sub_output" | jq -r '.primaryKey')
 
-testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${MT_PRODUCT2_SUB_PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
+testUri="curl -k -H 'Host: ${APPGATEWAY_FQDN}' -H 'Ocp-Apim-Subscription-Key: ${MT_PRODUCT2_SUB_PRIMARY_KEY}' -H 'Content-Type: application/json' https://${APPGATEWAYPUBLICIPADDRESS}/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview -d '{\"messages\": [{\"role\":\"system\",\"content\":\"You are an AI assistant that helps people find information.\"}]}'"
 echo "Test the deployment for multi-tenant Product2 by running the following command: ${testUri}"
 echo -e "\n"

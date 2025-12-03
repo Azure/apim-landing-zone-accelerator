@@ -275,7 +275,8 @@ resource "azurerm_api_management_logger" "event_hub_logger" {
   resource_group_name = var.resourceGroupName
   api_management_name = data.azurerm_api_management.apiManagementService.name
   eventhub {
-    name              = var.eventHubName
-    connection_string = data.azurerm_eventhub_namespace.eventHubNamespace.default_primary_connection_string
+    name                            = var.eventHubName
+    endpoint_uri                    = "${data.azurerm_eventhub_namespace.eventHubNamespace.name}.servicebus.windows.net"
+    user_assigned_identity_client_id = data.azurerm_user_assigned_identity.apimIdentity.client_id
   }
 }

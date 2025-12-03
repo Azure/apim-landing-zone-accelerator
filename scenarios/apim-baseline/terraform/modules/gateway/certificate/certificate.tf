@@ -33,7 +33,7 @@
 #   }
 
 #   lifecycle {
-#     prevent_destroy = true
+#     #prevent_destroy = true
 #   }
 # }
 
@@ -80,7 +80,7 @@
 #   }
 
 #   lifecycle {
-#     prevent_destroy = true
+#     #prevent_destroy = true
 #   }
 # }
 
@@ -162,6 +162,23 @@
 #   ]
 # }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #########################
 # Trying azapi approach #
 #########################
@@ -200,7 +217,7 @@ resource "azurerm_key_vault_access_policy" "user_assigned_deployment_keyvault_pe
   ]
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -229,7 +246,7 @@ resource "azapi_resource" "appGatewayCertificate" {
       storageAccountSettings = {
         storageAccountName = var.deploymentStorageName
       }
-      azPowerShellVersion = "6.6"
+      azPowerShellVersion = "14.3"
       containerSettings = {
         subnetIds = [
           {
