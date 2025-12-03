@@ -80,19 +80,19 @@ Review and update deployment parameters.
    ```
 
    **Deployment parameters**
-
-    | Name  | Description | Default | Example(s) |
-    | :---- | :---------- | :------ | :--------- |
-    | `AZURE_LOCATION` | The Azure location to deploy to. | **eastus2** | **eastus2** |
-    | `MULT_REGION`| Should this deployment extend to a secondary location? |  **false**          | **true** |
-    | `AZURE_LOCATION2`| The Azure secondary location to deploy to? |  **centralus**          | **centralus** |
-    | `ZONE_REDUNDANT` | Should the deployment be zone redundant. | **false** | **true** |
-    | `RESOURCE_NAME_PREFIX` | A suffix for naming. | **apimdemo** | **appname** |
-    | `ENVIRONMENT_TAG` | A tag that will be included in the naming. | **dev** | **stage** |
-    | `APPGATEWAY_FQDN` | The Azure location to deploy to. | **apim.example.com** | **my.org.com** |
-    | `CERT_TYPE` | selfsigned will create a self-signed certificate for the APPGATEWAY_FQDN. custom will use an existing certificate in pfx format that needs to be available in the [certs](../../certs) folder and named appgw.pfx | **selfsigned** | **custom** |
-    | `CERT_PWD` | The password for the pfx certificate. Only required if CERT_TYPE is custom. | **N/A** | **password123** |
-    | `RANDOM_IDENTIFIER` | Optional 3 character random string to ensure deployments are unique. Automatically assigned if not provided | **abc** | **pqr** |
+   
+   | Name  | Description | Default | Example(s) |
+   | :---- | :---------- | :------ | :--------- |
+   | `AZURE_LOCATION` | The Azure location to deploy to. | **eastus2** | **eastus2** |
+   | `MULT_REGION`| Should this deployment extend to a secondary location? |  **false**          | **true** |
+   | `AZURE_LOCATION2`| The Azure secondary location to deploy to? |  **centralus**          | **centralus** |
+   | `ZONE_REDUNDANT` | Should the deployment be zone redundant. | **false** | **true** |
+   | `RESOURCE_NAME_PREFIX` | A suffix for naming. | **apimdemo** | **appname** |
+   | `ENVIRONMENT_TAG` | A tag that will be included in the naming. | **dev** | **stage** |
+   | `APPGATEWAY_FQDN` | The Azure location to deploy to. | **apim.example.com** | **my.org.com** |
+   | `CERT_TYPE` | selfsigned will create a self-signed certificate for the APPGATEWAY_FQDN. custom will use an existing certificate in pfx format that needs to be available in the [certs](../../certs) folder and named appgw.pfx | **selfsigned** | **custom** |
+   | `CERT_PWD` | The password for the pfx certificate. Only required if CERT_TYPE is custom. | **N/A** | **password123** |
+   | `RANDOM_IDENTIFIER` | Optional 3 character random string to ensure deployments are unique. Automatically assigned if not provided | **abc** | **pqr** |
 
    ### examples `.env` file
    - Single region, Single Zone deployment with Developer SKU

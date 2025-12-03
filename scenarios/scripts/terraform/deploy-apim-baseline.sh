@@ -9,6 +9,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --auto-confirm|-y) auto_confirm=true; shift 2 ;;
     --delete-local-state|-d) delete_local_state=true; shift ;;
+    --validate-commit|-t) validate_commit=true; shift ;;
     *) echo "Invalid argument: $1"; exit 1 ;;
   esac
 done
@@ -164,35 +165,39 @@ else
   ZONE_REDUNDANT="${ZONE_REDUNDANT%$'\r'}"
 fi
 
-
-### VALIDATE IF AZ LOGIN IS REQUIRED, SHOW THE SUBSCRIPTION AND CONFIRM IF WANT TO CONTINUE
-az account show > /dev/null
-if [ $? -ne 0 ]; then
-  echo "You need to login to Azure CLI. Run 'az login' and try again."
-  exit 6
-fi
-echo -e "\n"
-echo "Currently selected subscription:"
-az account show --query "{subscriptionId:id, subscriptionName:name}" --output table
-echo -e "\n"
-echo "If you want to change the subscription, run 'az account set --subscription <subscriptionId>'"
-echo -e "\n"
-
-
-if [[ $auto_confirm == true ]]; then
-	echo "auto-confirmation enabled ... continuing"
+if [[ $validate_commit == true ]]; then
+  echo "Performing commit validation checks ..."
+  echo "Setting up ficticious subscription_id"
+  SUBSCRIPTION_ID="00000000-0000-0000-0000-000000000000"
 else
-	echo "Do you want to continue? (y/n)"
-	read -r response
-	if [[ ! $response =~ ^[Yy]$ ]]; then
-		echo "Exiting..."
-		exit 6
-	fi
+  ### VALIDATE IF AZ LOGIN IS REQUIRED, SHOW THE SUBSCRIPTION AND CONFIRM IF WANT TO CONTINUE
+  az account show > /dev/null
+  if [ $? -ne 0 ]; then
+    echo "You need to login to Azure CLI. Run 'az login' and try again."
+    exit 6
+  fi
+  echo -e "\n"
+  echo "Currently selected subscription:"
+  az account show --query "{subscriptionId:id, subscriptionName:name}" --output table
+  echo -e "\n"
+  echo "If you want to change the subscription, run 'az account set --subscription <subscriptionId>'"
+  echo -e "\n"
+
+
+  if [[ $auto_confirm == true ]]; then
+    echo "auto-confirmation enabled ... continuing"
+  else
+    echo "Do you want to continue? (y/n)"
+    read -r response
+    if [[ ! $response =~ ^[Yy]$ ]]; then
+      echo "Exiting..."
+      exit 6
+    fi
+  fi
+
+  # Get the current subscription ID
+  SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 fi
-
-# Get the current subscription ID
-SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-
 
 # creating tfvars
 # create tfvars
@@ -263,6 +268,18 @@ if [[ -f "${ENVIRONMENT_TAG}.tfstate" ]]; then
   else
     echo "and reusing it. Use --delete-local-state to remove it."
   fi
+fi
+
+# If the validate commit flag is set, run terraform validate and exit
+if [[ $validate_commit == true ]]; then
+  echo "Running Terraform validate and quitting ..."
+  terraform validate
+  if [[ $? -ne 0 ]]; then
+    echo "Terraform validation failed."
+    exit 7
+  fi
+  echo "Terraform validation succeeded."
+  exit 0
 fi
 
 ### Create the Terraform plan
