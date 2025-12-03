@@ -5,10 +5,10 @@ name: LZA-Validation
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "wip/apim-lza" ]
-  pull_request:
-    branches: [ "wip/apim-lza" ]
+  #push:
+  #  branches: [ "wip/apim-lza" ]
+  #pull_request:
+  #  branches: [ "wip/apim-lza" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,6 +33,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Performing Validation....
-          cd apim-landing-zone-accelerator/scenarios/scripts/terraform
+          ls -la
+          cd scenarios/scripts/terraform
           cp sample.env .env
           ./deploy-apim-baseline.sh --validate-commit
