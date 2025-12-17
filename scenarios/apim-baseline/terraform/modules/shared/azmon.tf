@@ -10,7 +10,7 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
   retention_in_days   = 30
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -26,6 +26,6 @@ resource "azurerm_application_insights" "shared_apim_insight" {
   workspace_id        = azurerm_log_analytics_workspace.log_analytics_workspace.id
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }

@@ -64,7 +64,7 @@ resource "azurerm_network_security_group" "appgateway_nsg" {
     destination_address_prefix = "*"
   }
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -146,7 +146,7 @@ resource "azurerm_network_security_group" "apim_snnsg_nsg" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -156,7 +156,7 @@ resource "azurerm_network_security_group" "private_endpoint_snnsg_nsg" {
   resource_group_name = var.resourceGroupName
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -171,7 +171,7 @@ resource "azurerm_virtual_network" "apim_cs_vnet" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -182,7 +182,7 @@ resource "azurerm_subnet" "appgateway_subnet" {
   address_prefixes     = [var.appGatewayAddressPrefix]
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -191,7 +191,7 @@ resource "azurerm_subnet_network_security_group_association" "appgateway_subnet"
   network_security_group_id = azurerm_network_security_group.appgateway_nsg.id
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -202,7 +202,7 @@ resource "azurerm_subnet" "private_endpoint_subnet" {
   address_prefixes     = [var.privateEndpointAddressPrefix]
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -211,7 +211,7 @@ resource "azurerm_subnet_network_security_group_association" "private_endpoint_s
   network_security_group_id = azurerm_network_security_group.private_endpoint_snnsg_nsg.id
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -233,7 +233,7 @@ resource "azurerm_subnet" "deploy_subnet" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -244,7 +244,7 @@ resource "azurerm_subnet" "apim_subnet" {
   address_prefixes     = [var.apimAddressPrefix]
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }
 
@@ -253,6 +253,6 @@ resource "azurerm_subnet_network_security_group_association" "apim_subnet" {
   network_security_group_id = azurerm_network_security_group.apim_snnsg_nsg.id
 
   lifecycle {
-    prevent_destroy = true
+    #prevent_destroy = true
   }
 }

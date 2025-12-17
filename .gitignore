@@ -344,3 +344,7 @@ scenarios/apim-baseline/bicep/parameters.json
 *.http
 
 *-backend.hcl
+scenarios/scripts/terraform/apim-self-signed.crt
+scenarios/scripts/terraform/apim-self-signed.key
+scenarios/scripts/terraform/tmp-self-signed-cert.conf
+scenarios/scripts/terraform/.env

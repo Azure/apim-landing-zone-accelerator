@@ -28,6 +28,38 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "keyVaultSku" {
+  type        = string
+  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
+  default     = "standard"
+}
+
+variable "additionalClientIds" {
+  description = "List of additional clients to add to the Key Vault access policy."
+  type        = list(string)
+  default     = []
+}
+
+variable "certificatePassword" {
+  description = "Password for the certificate"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "certificatePath" {
+  description = "Path to the certificate"
+  type        = string
+  default     = "../../certs/appgw.pfx"
+}
+
+variable "identifier" {
+  description = "The identifier for the resource deployments"
+  type        = string
+}
+
+# Primary Region Network
+
 variable "apimCSVNetNameAddressPrefix" {
   description = "APIM CSV Net Name Address Prefix"
   type        = string
@@ -58,31 +90,69 @@ variable "deploymentAddressPrefix" {
   default     = "10.2.8.0/24"
 }
 
-variable "keyVaultSku" {
-  type        = string
-  description = "The Name of the SKU used for this Key Vault. Possible values are standard and premium"
-  default     = "standard"
+# HA Scenarios Variables
+
+# This will deploy APIM to primary region and extend a location to a secondary region.
+# This uses the Premium V1 SKU of APIM.
+variable "multiRegionEnabled" {
+  description = "Boolean to indicate if the deployment is multi-region"
+  type        = bool
+  default     = false
 }
 
-variable "additionalClientIds" {
-  description = "List of additional clients to add to the Key Vault access policy."
-  type        = list(string)
-  default     = []
+variable "zoneRedundantEnabled" {
+  description = "Boolean to indicate if the deployment is zone redundant"
+  type        = bool
+  default     = false
 }
 
-variable "certificatePassword" {
-  description = "Password for the certificate"
+variable "locationSecond" {
   type        = string
-  default     = ""
+  description = "The Azure location in which the secondary deployment is happening"
+  default     = "centralus"
 }
 
-variable "certificatePath" {
-  description = "Path to the certificate"
+# Secondary Region Network
+
+variable "apimCSVNetNameSecondAddressPrefix" {
+  description = "APIM CSV Net Name Address Prefix"
   type        = string
-  default     = "../../certs/appgw.pfx"
+  default     = "10.3.0.0/16"
 }
 
-variable "identifier" {
-  description = "The identifier for the resource deployments"
+variable "appGatewaySecondAddressPrefix" {
+  description = "App Gateway Address Prefix"
   type        = string
+  default     = "10.3.4.0/24"
 }
+
+variable "apimSecondAddressPrefix" {
+  description = "APIM Address Prefix"
+  type        = string
+  default     = "10.3.7.0/24"
+}
+
+variable "privateEndpointSecondAddressPrefix" {
+  description = "Private Endpoint Address Prefix"
+  type        = string
+  default     = "10.3.5.0/24"
+}
+
+variable "deploymentSecondAddressPrefix" {
+  description = "Deployment Address Prefix"
+  type        = string
+  default     = "10.3.8.0/24"
+}
+
+variable "subscription_id" {
+  type        = string
+  description = "The Azure subscription ID to deploy to"
+}
+
+# To avoid Terraform missing variable warnings
+variable "certData"        { default="" }
+variable "certKey"         { default="" }
+variable "enableTelemetry" { default="" }
+
+
+

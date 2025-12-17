@@ -55,6 +55,7 @@ variable "certificate_path" {
 
 variable "certificate_password" {
   type        = string
+  sensitive   = true
   description = ""
 }
 

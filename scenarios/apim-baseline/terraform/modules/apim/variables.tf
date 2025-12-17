@@ -66,3 +66,10 @@ variable "sharedResourceGroupName" {
   type        = string
   description = "The name of the shared resource group"
 }
+
+variable "zoneRedundantEnabled" {
+  description = "Boolean to indicate if the deployment is zone redundant"
+  type        = bool
+  default     = false
+}
+
