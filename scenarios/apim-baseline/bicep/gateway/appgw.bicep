@@ -87,9 +87,6 @@ resource appgw_waf_Pol 'Microsoft.Network/ApplicationGatewayWebApplicationFirewa
 resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-01' = {
   name: appGatewayName
   location: location
-  dependsOn: [
-    certificate
-  ]
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
@@ -296,7 +293,7 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
                   )
                 }
               }
-            }            
+            }
             {
               name: 'default'
               properties: {
@@ -318,7 +315,7 @@ resource appGatewayName_resource 'Microsoft.Network/applicationGateways@2019-09-
                   )
                 }
               }
-            }            
+            }
           ]
         }
       }
